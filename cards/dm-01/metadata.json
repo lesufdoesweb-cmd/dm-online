@@ -1,0 +1,2050 @@
+[
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 7,
+    "name": "Hanusa, Radiance Elemental",
+    "power": "9500",
+    "subtypes": [
+      "Angel Command"
+    ],
+    "text": "Double breaker (This creature breaks 2 shields.)",
+    "type": "Creature",
+    "id": "S1/110",
+    "rarity": "Super Rare",
+    "illustrator": "Masaki Hirooka",
+    "flavor": "The sky was scorched by Dragons' fire, and the earth gouged by elementals' rays. The battle raged for seven nights and seven days.",
+    "image_file": "hanusa-radiance-elemental.jpg"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 6,
+    "name": "Urth, Purifying Elemental",
+    "power": "6000",
+    "subtypes": [
+      "Angel Command"
+    ],
+    "text": "Double breaker (This creature breaks 2 shields.)\nAt the end of each of your turns, you may untap this creature.",
+    "type": "Creature",
+    "id": "S2/110",
+    "rarity": "Super Rare",
+    "illustrator": "Akifumi Yamamoto",
+    "flavor": "It is said the destruction of the Ancient Empire was caused by the descent of the elementals.",
+    "image_file": "urth-purifying-elemental.jpg"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 8,
+    "name": "Aqua Sniper",
+    "power": "5000",
+    "subtypes": [
+      "Liquid People"
+    ],
+    "text": "When you put this creature into the battle zone, choose up to 2 creatures in the battle zone and return them to their owners' hands.",
+    "type": "Creature",
+    "id": "S3/110",
+    "rarity": "Super Rare",
+    "illustrator": "Seki",
+    "flavor": "Water surrounds, enfolds, buoys...and attacks.",
+    "image_file": "aqua-sniper.jpg"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 7,
+    "name": "King Depthcon",
+    "power": "6000",
+    "subtypes": [
+      "Leviathan"
+    ],
+    "text": "Double breaker (This creature breaks 2 shields.)\nThis creature can't be blocked.",
+    "type": "Creature",
+    "id": "S4/110",
+    "rarity": "Super Rare",
+    "illustrator": "Ryoya Yuki",
+    "flavor": "Leviathans are just like storms. All you can do is wait until they pass.",
+    "image_file": "king-depthcon.jpg"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 7,
+    "name": "Deathliger, Lion of Chaos",
+    "power": "9000",
+    "subtypes": [
+      "Demon Command"
+    ],
+    "text": "Double breaker (This creature breaks 2 shields.)",
+    "type": "Creature",
+    "id": "S5/110",
+    "rarity": "Super Rare",
+    "illustrator": "Atsushi Kawasaki",
+    "flavor": "The world is deafened by the roar of the deathliger.",
+    "image_file": "deathliger-lion-of-chaos.jpg"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 6,
+    "name": "Zagaan, Knight of Darkness",
+    "power": "7000",
+    "subtypes": [
+      "Demon Command"
+    ],
+    "text": "Double breaker (This creature breaks 2 shields.)",
+    "type": "Creature",
+    "id": "S6/110",
+    "rarity": "Super Rare",
+    "illustrator": "Tsutomu Kawade",
+    "flavor": "\"If I were to send him to the field, he would overwhelm the enemy in an instant. Where is the fun in that?\" \u00e2\u20ac\u201dBallom, Master of Death",
+    "image_file": "zagaan-knight-of-darkness.jpg"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 7,
+    "name": "Astrocomet Dragon",
+    "power": "6000+",
+    "subtypes": [
+      "Armored Dragon"
+    ],
+    "text": "Power attacker +4000 (While attacking, this creature gets +4000 power.)\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature",
+    "id": "S7/110",
+    "rarity": "Super Rare",
+    "illustrator": "Yusaku Nakaaki",
+    "flavor": "Even the smallest weapon attached to it has enough firepower to lay waste to an entire nation.",
+    "image_file": "astrocomet-dragon.jpg"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 8,
+    "name": "Scarlet Skyterror",
+    "power": "3000",
+    "subtypes": [
+      "Armored Wyvern"
+    ],
+    "text": "When you put this creature into the battle zone, destroy all creatures that have \"blocker.\"",
+    "type": "Creature",
+    "id": "S8/110",
+    "rarity": "Super Rare",
+    "illustrator": "Tomofumi Ogasawara",
+    "flavor": "The forces of Fire will never relent.",
+    "image_file": "scarlet-skyterror.jpg"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 5,
+    "name": "Deathblade Beetle",
+    "power": "3000+",
+    "subtypes": [
+      "Giant Insect"
+    ],
+    "text": "Power attacker +4000 (While attacking, this creature gets +4000 power.)\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature",
+    "id": "S9/110",
+    "rarity": "Super Rare",
+    "illustrator": "Dustmoss",
+    "flavor": "It devours all.",
+    "image_file": "deathblade-beetle.jpg"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 7,
+    "name": "Roaring Great-Horn",
+    "power": "8000+",
+    "subtypes": [
+      "Horned Beast"
+    ],
+    "text": "Power attacker +2000 (While attacking, this creature gets +2000 power.)\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature",
+    "id": "S10/110",
+    "rarity": "Super Rare",
+    "illustrator": "Ittoku",
+    "flavor": "With a mighty, earthshaking roar, the King of Beasts arose.",
+    "image_file": "roaring-great-horn.jpg"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 4,
+    "name": "Chilias, the Oracle",
+    "power": "2500",
+    "subtypes": [
+      "Light Bringer"
+    ],
+    "text": "When this creature would be destroyed, put it into your hand instead.",
+    "type": "Creature",
+    "id": "1/110",
+    "rarity": "Rare",
+    "illustrator": "Akira Hamada",
+    "flavor": "The shining towers in the sky exist to protect the oracles.",
+    "image_file": "chilias-the-oracle.jpg"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 4,
+    "name": "Dia Nork, Moonlight Guardian",
+    "power": "5000",
+    "subtypes": [
+      "Guardian"
+    ],
+    "text": "Blocker (When an opponent's creature attacks, you may tap this creature to stop the attack. Then the two creatures battle.)\nThis creature can't attack players.",
+    "type": "Creature",
+    "id": "2/110",
+    "rarity": "Rare",
+    "illustrator": "Tomofumi Ogasawara",
+    "flavor": "Flying is the greatest taboo of any race that has encountered the Guardians.",
+    "image_file": "dia-nork-moonlight-guardian.jpg"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 2,
+    "name": "Emerald Grass",
+    "power": "3000",
+    "subtypes": [
+      "Starlight Tree"
+    ],
+    "text": "Blocker (When an opponent's creature attacks, you may tap this creature to stop the attack. Then the two creatures battle.)\nThis creature can't attack players.",
+    "type": "Creature",
+    "id": "3/110",
+    "rarity": "Common",
+    "illustrator": "Daisuke Izuka",
+    "flavor": null,
+    "image_file": "emerald-grass.jpg"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 4,
+    "name": "Frei, Vizier of Air",
+    "power": "3000",
+    "subtypes": [
+      "Initiate"
+    ],
+    "text": "At the end of each of your turns, you may untap this creature.",
+    "type": "Creature",
+    "id": "4/110",
+    "rarity": "Uncommon",
+    "illustrator": "Yusaku Nakaaki",
+    "flavor": "\"Vizier of Air, arise. Your fingers are sacred swords.\" \u00e2\u20ac\u201dHanusa, Radiance Elemental",
+    "image_file": "frei-vizier-of-air.jpg"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 6,
+    "name": "Gran Gure, Space Guardian",
+    "power": "9000",
+    "subtypes": [
+      "Guardian"
+    ],
+    "text": "Blocker (When an opponent's creature attacks, you may tap this creature to stop the attack. Then the two creatures battle.)\nThis creature can't attack players.",
+    "type": "Creature",
+    "id": "5/110",
+    "rarity": "Very Rare",
+    "illustrator": "D-Suzuki",
+    "flavor": "Those who defile the Sky Castle are doomed, for they shall know the wrath of the Guardians.",
+    "image_file": "gran-gure-space-guardian.jpg"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 6,
+    "name": "Holy Awe",
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nTap all your opponent's creatures in the battle zone.",
+    "type": "Spell",
+    "id": "6/110",
+    "rarity": "Rare",
+    "illustrator": "Naoki Saito",
+    "flavor": null,
+    "image_file": "holy-awe.jpg"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 3,
+    "name": "Iere, Vizier of Bullets",
+    "power": "3000",
+    "subtypes": [
+      "Initiate"
+    ],
+    "type": "Creature",
+    "id": "7/110",
+    "rarity": "Common",
+    "illustrator": "Akira Hamada",
+    "flavor": "\"Vizier of Bullets, arise. Your will is an arrow that never misses the target.\" \u00e2\u20ac\u201dHanusa, Radiance Elemental",
+    "image_file": "iere-vizier-of-bullets.jpg"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 2,
+    "name": "Iocant, the Oracle",
+    "power": "2000+",
+    "subtypes": [
+      "Light Bringer"
+    ],
+    "text": "Blocker (When an opponent's creature attacks, you may tap this creature to stop the attack. Then the two creatures battle.)\nWhile you have at least 1 Angel Command in the battle zone, this creature gets +2000 power.\nThis creature can't attack players.",
+    "type": "Creature",
+    "id": "8/110",
+    "rarity": "Uncommon",
+    "illustrator": "Naoki Saito",
+    "flavor": null,
+    "image_file": "iocant-the-oracle.jpg"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 1,
+    "name": "La Ura Giga, Sky Guardian",
+    "power": "2000",
+    "subtypes": [
+      "Guardian"
+    ],
+    "text": "Blocker (When an opponent's creature attacks, you may tap this creature to stop the attack. Then the two creatures battle.)\nThis creature can't attack players.",
+    "type": "Creature",
+    "id": "9/110",
+    "rarity": "Common",
+    "illustrator": "Kou1",
+    "flavor": "To protect their floating cities, Guardians are gifted with shining wings.",
+    "image_file": "la-ura-giga-sky-guardian.jpg"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 5,
+    "name": "Lah, Purification Enforcer",
+    "power": "5500",
+    "subtypes": [
+      "Berserker"
+    ],
+    "type": "Creature",
+    "id": "10/110",
+    "rarity": "Rare",
+    "illustrator": "Hideaki Takamura",
+    "flavor": "Those who have seen this Enforcer believe that eclipses are omens of disaster.",
+    "image_file": "lah-purification-enforcer.jpg"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 5,
+    "name": "Laser Wing",
+    "text": "Choose up to 2 of your creatures in the battle zone. They can't be blocked this turn.",
+    "type": "Spell",
+    "id": "11/110",
+    "rarity": "Rare",
+    "illustrator": "Gyokan",
+    "flavor": "This is light speed.",
+    "image_file": "laser-wing.jpg"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 4,
+    "name": "Lok, Vizier of Hunting",
+    "power": "4000",
+    "subtypes": [
+      "Initiate"
+    ],
+    "type": "Creature",
+    "id": "12/110",
+    "rarity": "Uncommon",
+    "illustrator": "Hisanobu Kometani",
+    "flavor": "\"Vizier of Hunting, arise. Your words are arrows of light.\" \u00e2\u20ac\u201dHanusa, Radiance Elemental",
+    "image_file": "lok-vizier-of-hunting.jpg"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 3,
+    "name": "Miele, Vizier of Lightning",
+    "power": "1000",
+    "subtypes": [
+      "Initiate"
+    ],
+    "text": "When you put this creature into the battle zone, you may choose 1 of your opponent's creatures in the battle zone and tap it.",
+    "type": "Creature",
+    "id": "13/110",
+    "rarity": "Common",
+    "illustrator": "Dai",
+    "flavor": "\"Vizier of Lightning, arise. Your eyes are a bow of judgment.\" \u00e2\u20ac\u201dHanusa, Radiance Elemental",
+    "image_file": "miele-vizier-of-lightning.jpg"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 4,
+    "name": "Moonlight Flash",
+    "text": "Choose up to 2 of your opponent's creatures in the battle zone and tap them.",
+    "type": "Spell",
+    "id": "14/110",
+    "rarity": "Uncommon",
+    "illustrator": "Hisanobu Kometani",
+    "flavor": "Cower before the purity of the Angel Commands!",
+    "image_file": "moonlight-flash.jpg"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 6,
+    "name": "Rayla, Truth Enforcer",
+    "power": "3000",
+    "subtypes": [
+      "Berserker"
+    ],
+    "text": "When you put this creature into the battle zone, search your deck. You may take a spell from your deck, show that spell to your opponent, and put it into your hand. Then shuffle your deck.",
+    "type": "Creature",
+    "id": "15/110",
+    "rarity": "Very Rare",
+    "illustrator": "Dai",
+    "flavor": "The Enforcers deliver the oracles' words, which bear the power of truth.",
+    "image_file": "rayla-truth-enforcer.jpg"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 2,
+    "name": "Reusol, the Oracle",
+    "power": "2000",
+    "subtypes": [
+      "Light Bringer"
+    ],
+    "type": "Creature",
+    "id": "16/110",
+    "rarity": "Common",
+    "illustrator": "Soushi Hirose",
+    "flavor": "Soul and light enmeshed in a web of glory.",
+    "image_file": "reusol-the-oracle.jpg"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 3,
+    "name": "Ruby Grass",
+    "power": "3000",
+    "subtypes": [
+      "Starlight Tree"
+    ],
+    "text": "Blocker (When an opponent's creature attacks, you may tap this creature to stop the attack. Then the two creatures battle.)\nThis creature can't attack players.\nAt the end of each of your turns, you may untap this creature.",
+    "type": "Creature",
+    "id": "17/110",
+    "rarity": "Uncommon",
+    "illustrator": "Naoki Saito",
+    "flavor": null,
+    "image_file": "ruby-grass.jpg"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 3,
+    "name": "Senatine Jade Tree",
+    "power": "4000",
+    "subtypes": [
+      "Starlight Tree"
+    ],
+    "text": "Blocker (When an opponent's creature attacks, you may tap this creature to stop the attack. Then the two creatures battle.)\nThis creature can't attack players.",
+    "type": "Creature",
+    "id": "18/110",
+    "rarity": "Common",
+    "illustrator": "Norikatsu Miyoshi",
+    "flavor": "Floating trees in the sky generate beautiful light from poisoned air.",
+    "image_file": "senatine-jade-tree.jpg"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 2,
+    "name": "Solar Ray",
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nChoose 1 of your opponent's creatures in the battle zone and tap it.",
+    "type": "Spell",
+    "id": "19/110",
+    "rarity": "Common",
+    "illustrator": "Jason",
+    "flavor": null,
+    "image_file": "solar-ray.jpg"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 3,
+    "name": "Sonic Wing",
+    "text": "Choose 1 of your creatures in the battle zone. It can't be blocked this turn.",
+    "type": "Spell",
+    "id": "20/110",
+    "rarity": "Common",
+    "illustrator": "Masaki Hirooka",
+    "flavor": "\"Can't catch me!\"",
+    "image_file": "sonic-wing.jpg"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 5,
+    "name": "Szubs Kin, Twilight Guardian",
+    "power": "6000",
+    "subtypes": [
+      "Guardian"
+    ],
+    "text": "Blocker (When an opponent's creature attacks, you may tap this creature to stop the attack. Then the two creatures battle.)\nThis creature can't attack players.",
+    "type": "Creature",
+    "id": "21/110",
+    "rarity": "Rare",
+    "illustrator": "Ittoku",
+    "flavor": "Those who dwell in the sky towers eradicate all intruders.",
+    "image_file": "szubs-kin-twilight-guardian.jpg"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 5,
+    "name": "Toel, Vizier of Hope",
+    "power": "2000",
+    "subtypes": [
+      "Initiate"
+    ],
+    "text": "At the end of each of your turns, you may untap all your creatures in the battle zone.",
+    "type": "Creature",
+    "id": "22/110",
+    "rarity": "Uncommon",
+    "illustrator": "Masaki Hirooka",
+    "flavor": "\"Vizier of Hope, arise. Your singing voice is a breeze of dawn.\" \u00e2\u20ac\u201dHanusa, Radiance Elemental",
+    "image_file": "toel-vizier-of-hope.jpg"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 3,
+    "name": "Aqua Hulcus",
+    "power": "2000",
+    "subtypes": [
+      "Liquid People"
+    ],
+    "text": "When you put this creature into the battle zone, you may draw a card.",
+    "type": "Creature",
+    "id": "23/110",
+    "rarity": "Common",
+    "illustrator": "Eiji Kaneda",
+    "flavor": "Liquid People freely control liquid. For them, water is armor and shield.",
+    "image_file": "aqua-hulcus.jpg"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 5,
+    "name": "Aqua Knight",
+    "power": "4000",
+    "subtypes": [
+      "Liquid People"
+    ],
+    "text": "When this creature would be destroyed, return it to your hand instead.",
+    "type": "Creature",
+    "id": "24/110",
+    "rarity": "Rare",
+    "illustrator": "D-Suzuki",
+    "flavor": "Like a whirlpool, it never seems to end.",
+    "image_file": "aqua-knight.jpg"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 3,
+    "name": "Aqua Soldier",
+    "power": "1000",
+    "subtypes": [
+      "Liquid People"
+    ],
+    "text": "When this creature would be destroyed, return it to your hand instead.",
+    "type": "Creature",
+    "id": "25/110",
+    "rarity": "Uncommon",
+    "illustrator": "Jason",
+    "flavor": "\"What a spirit for such a skinny little thing.\" \u00e2\u20ac\u201dBrawler Zyler",
+    "image_file": "aqua-soldier.jpg"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 2,
+    "name": "Aqua Vehicle",
+    "power": "1000",
+    "subtypes": [
+      "Liquid People"
+    ],
+    "type": "Creature",
+    "id": "26/110",
+    "rarity": "Common",
+    "illustrator": "Atsushi Kawasaki",
+    "flavor": "The chip implanted in its head lets the Cyber Lords control its brain waves.",
+    "image_file": "aqua-vehicle.jpg"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 4,
+    "name": "Brain Serum",
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nDraw up to 2 cards.",
+    "type": "Spell",
+    "id": "27/110",
+    "rarity": "Uncommon",
+    "illustrator": "Dreamwave",
+    "flavor": null,
+    "image_file": "brain-serum.jpg"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 3,
+    "name": "Candy Drop",
+    "power": "1000",
+    "subtypes": [
+      "Cyber Virus"
+    ],
+    "text": "This creature can't be blocked.",
+    "type": "Creature",
+    "id": "28/110",
+    "rarity": "Common",
+    "illustrator": "Gyokan",
+    "flavor": "No mouth. Big bite.",
+    "image_file": "candy-drop.jpg"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 4,
+    "name": "Crystal Memory",
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nSearch your deck. You may take a card from your deck and put it into your hand. Then shuffle your deck.",
+    "type": "Spell",
+    "id": "29/110",
+    "rarity": "Rare",
+    "illustrator": "Ryoya Yuki",
+    "flavor": null,
+    "image_file": "crystal-memory.jpg"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 4,
+    "name": "Faerie Child",
+    "power": "2000",
+    "subtypes": [
+      "Cyber Virus"
+    ],
+    "text": "This creature can't be blocked.",
+    "type": "Creature",
+    "id": "30/110",
+    "rarity": "Uncommon",
+    "illustrator": "Hisanobu Kometani",
+    "flavor": "A school of teeny, tiny points of light. Stopping them all is impossible.",
+    "image_file": "faerie-child.jpg"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 2,
+    "name": "Hunter Fish",
+    "power": "3000",
+    "subtypes": [
+      "Fish"
+    ],
+    "text": "Blocker (When an opponent's creature attacks, you may tap this creature to stop the attack. Then the two creatures battle.)\nThis creature can't attack.",
+    "type": "Creature",
+    "id": "31/110",
+    "rarity": "Common",
+    "illustrator": "Masateru Ikeda",
+    "flavor": "It lies in wait, hidden in coral reefs, lashing out ferociously when it senses prey.",
+    "image_file": "hunter-fish.jpg"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 5,
+    "name": "Illusionary Merfolk",
+    "power": "4000",
+    "subtypes": [
+      "Gel Fish"
+    ],
+    "text": "When you put this creature into the battle zone, if you have a Cyber Lord in the battle zone, draw up to 3 cards.",
+    "type": "Creature",
+    "id": "32/110",
+    "rarity": "Uncommon",
+    "illustrator": "Kou1",
+    "flavor": "The Cyber Lords' devotion to beauty is so extreme, they even designed their warrior race to have a pleasant appearance.",
+    "image_file": "illusionary-merfolk.jpg"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 3,
+    "name": "King Coral",
+    "power": "1000",
+    "subtypes": [
+      "Leviathan"
+    ],
+    "text": "Blocker (When an opponent's creature attacks, you may tap this creature to stop the attack. Then the two creatures battle.)",
+    "type": "Creature",
+    "id": "33/110",
+    "rarity": "Uncommon",
+    "illustrator": "Hideaki Takamura",
+    "flavor": "Leviathans mature slowly, eventually growing to become the largest creatures in the world.",
+    "image_file": "king-coral.jpg"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 7,
+    "name": "King Ripped-Hide",
+    "power": "5000",
+    "subtypes": [
+      "Leviathan"
+    ],
+    "text": "When you put this creature into the battle zone, draw up to 2 cards.",
+    "type": "Creature",
+    "id": "34/110",
+    "rarity": "Very Rare",
+    "illustrator": "Miho Midorikawa",
+    "flavor": "Long ago, the Cyber Lords built a city on his back.",
+    "image_file": "king-ripped-hide.jpg"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 1,
+    "name": "Marine Flower",
+    "power": "2000",
+    "subtypes": [
+      "Cyber Virus"
+    ],
+    "text": "Blocker (When an opponent's creature attacks, you may tap this creature to stop the attack. Then the two creatures battle.)\nThis creature can't attack.",
+    "type": "Creature",
+    "id": "35/110",
+    "rarity": "Common",
+    "illustrator": "Hikaru Ikusa",
+    "flavor": "It blooms in the ocean depths, far from any light.",
+    "image_file": "marine-flower.jpg"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 3,
+    "name": "Phantom Fish",
+    "power": "4000",
+    "subtypes": [
+      "Gel Fish"
+    ],
+    "text": "Blocker (When an opponent's creature attacks, you may tap this creature to stop the attack. Then the two creatures battle.)\nThis creature can't attack.",
+    "type": "Creature",
+    "id": "36/110",
+    "rarity": "Common",
+    "illustrator": "Ittoku",
+    "flavor": null,
+    "image_file": "phantom-fish.jpg"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 4,
+    "name": "Revolver Fish",
+    "power": "5000",
+    "subtypes": [
+      "Gel Fish"
+    ],
+    "text": "Blocker (When an opponent's creature attacks, you may tap this creature to stop the attack. Then the two creatures battle.)\nThis creature can't attack.",
+    "type": "Creature",
+    "id": "37/110",
+    "rarity": "Uncommon",
+    "illustrator": "Naoki Saito",
+    "flavor": null,
+    "image_file": "revolver-fish.jpg"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 5,
+    "name": "Saucer-Head Shark",
+    "power": "3000",
+    "subtypes": [
+      "Gel Fish"
+    ],
+    "text": "When you put this creature into the battle zone, return each creature in the battle zone that has power 2000 or less to its owner's hand.",
+    "type": "Creature",
+    "id": "38/110",
+    "rarity": "Rare",
+    "illustrator": "Naoki Saito",
+    "flavor": "\"Isn't it cool? The heads can be combined.\" \u00e2\u20ac\u201dTropico",
+    "image_file": "saucer-head-shark.jpg"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 6,
+    "name": "Seamine",
+    "power": "4000",
+    "subtypes": [
+      "Fish"
+    ],
+    "text": "Blocker (When an opponent's creature attacks, you may tap this creature to stop the attack. Then the two creatures battle.)",
+    "type": "Creature",
+    "id": "39/110",
+    "rarity": "Very Rare",
+    "illustrator": "Tomofumi Ogasawara",
+    "flavor": "If the last thing in your life you want to see is something beautiful, attack an underwater city.",
+    "image_file": "seamine.jpg"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 2,
+    "name": "Spiral Gate",
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nChoose a creature in the battle zone and return it to its owner's hand.",
+    "type": "Spell",
+    "id": "40/110",
+    "rarity": "Common",
+    "illustrator": "Tomofumi Ogasawara",
+    "flavor": null,
+    "image_file": "spiral-gate.jpg"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 5,
+    "name": "Teleportation",
+    "text": "Choose up to 2 creatures in the battle zone and return them to their owners' hands.",
+    "type": "Spell",
+    "id": "41/110",
+    "rarity": "Rare",
+    "illustrator": "Akifumi Yamamoto",
+    "flavor": "\"Start all over from your previous life!\" \u00e2\u20ac\u201dCrystal Lancer",
+    "image_file": "teleportation.jpg"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 5,
+    "name": "Tropico",
+    "power": "3000",
+    "subtypes": [
+      "Cyber Lord"
+    ],
+    "text": "This creature can't be blocked while you have at least 2 other creatures in the battle zone.",
+    "type": "Creature",
+    "id": "42/110",
+    "rarity": "Rare",
+    "illustrator": "Jason",
+    "flavor": "\"I will lead you into battle.\"",
+    "image_file": "tropico.jpg"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 4,
+    "name": "Unicorn Fish",
+    "power": "1000",
+    "subtypes": [
+      "Fish"
+    ],
+    "text": "When you put this creature into the battle zone, you may choose 1 creature in the battle zone and return it to its owner's hand.",
+    "type": "Creature",
+    "id": "43/110",
+    "rarity": "Rare",
+    "illustrator": "Hisanobu Kometani",
+    "flavor": "It attacks anything that enters its territory, even Leviathans.",
+    "image_file": "unicorn-fish.jpg"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 3,
+    "name": "Virtual Tripwire",
+    "text": "Choose 1 of your opponent's creatures in the battle zone and tap it.",
+    "type": "Spell",
+    "id": "44/110",
+    "rarity": "Common",
+    "illustrator": "Akifumi Yamamoto",
+    "flavor": "It will stay until it dies.",
+    "image_file": "virtual-tripwire.jpg"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 1,
+    "name": "Black Feather, Shadow of Rage",
+    "power": "3000",
+    "subtypes": [
+      "Ghost"
+    ],
+    "text": "When you put this creature into the battle zone, destroy 1 of your creatures.",
+    "type": "Creature",
+    "id": "45/110",
+    "rarity": "Common",
+    "illustrator": "Soushi Hirose",
+    "flavor": null,
+    "image_file": "black-feather-shadow-of-rage.jpg"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 2,
+    "name": "Bloody Squito",
+    "power": "4000",
+    "subtypes": [
+      "Brain Jacker"
+    ],
+    "text": "Blocker (When an opponent's creature attacks, you may tap this creature to stop the attack. Then the two creatures battle.)\nThis creature can't attack.\nWhen this creature wins a battle, destroy it.",
+    "type": "Creature",
+    "id": "46/110",
+    "rarity": "Common",
+    "illustrator": "Atsushi Kawasaki",
+    "flavor": null,
+    "image_file": "bloody-squito.jpg"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 4,
+    "name": "Bone Assassin, the Ripper",
+    "power": "2000",
+    "subtypes": [
+      "Living Dead"
+    ],
+    "text": "Slayer (When this creature loses a battle, destroy the other creature.)",
+    "type": "Creature",
+    "id": "47/110",
+    "rarity": "Common",
+    "illustrator": "Nottsuo",
+    "flavor": "Commanders send them to the front line. It's too dangerous to have them close.",
+    "image_file": "bone-assassin-the-ripper.jpg"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 3,
+    "name": "Bone Spider",
+    "power": "5000",
+    "subtypes": [
+      "Living Dead"
+    ],
+    "text": "When this creature wins a battle, destroy it.",
+    "type": "Creature",
+    "id": "48/110",
+    "rarity": "Uncommon",
+    "illustrator": "Dai",
+    "flavor": "They can wait forever, for they know they will not die alone.",
+    "image_file": "bone-spider.jpg"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 1,
+    "name": "Creeping Plague",
+    "text": "Whenever any of your creatures becomes blocked this turn, it gets \"slayer\" until the end of the turn. (When a creature that has \"slayer\" loses a battle, destroy the other creature.)",
+    "type": "Spell",
+    "id": "49/110",
+    "rarity": "Rare",
+    "illustrator": "Ryoya Yuki",
+    "flavor": "Witness the power of the Dark!",
+    "image_file": "creeping-plague.jpg"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 4,
+    "name": "Dark Clown",
+    "power": "6000",
+    "subtypes": [
+      "Brain Jacker"
+    ],
+    "text": "Blocker (When an opponent's creature attacks, you may tap this creature to stop the attack. Then the two creatures battle.)\nThis creature can't attack.\nWhen this creature wins a battle, destroy it.",
+    "type": "Creature",
+    "id": "50/110",
+    "rarity": "Rare",
+    "illustrator": "Jason",
+    "flavor": null,
+    "image_file": "dark-clown.jpg"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 4,
+    "name": "Dark Raven, Shadow of Grief",
+    "power": "1000",
+    "subtypes": [
+      "Ghost"
+    ],
+    "text": "Blocker (When an opponent's creature attacks, you may tap this creature to stop the attack. Then the two creatures battle.)",
+    "type": "Creature",
+    "id": "51/110",
+    "rarity": "Uncommon",
+    "illustrator": "Norikatsu Miyoshi",
+    "flavor": "If you've ever thought there was something hiding in the dark, you were right.",
+    "image_file": "dark-raven-shadow-of-grief.jpg"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 2,
+    "name": "Dark Reversal",
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nReturn a creature from your graveyard to your hand.",
+    "type": "Spell",
+    "id": "52/110",
+    "rarity": "Uncommon",
+    "illustrator": "Nottsuo",
+    "flavor": null,
+    "image_file": "dark-reversal.jpg"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 4,
+    "name": "Death Smoke",
+    "text": "Destroy one of your opponent's untapped creatures.",
+    "type": "Spell",
+    "id": "53/110",
+    "rarity": "Common",
+    "illustrator": "Dustmoss",
+    "flavor": "Savor the taste of fear!",
+    "image_file": "death-smoke.jpg"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 2,
+    "name": "Ghost Touch",
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nYour opponent discards a card at random from his hand.",
+    "type": "Spell",
+    "id": "54/110",
+    "rarity": "Common",
+    "illustrator": "Soushi Hirose",
+    "flavor": null,
+    "image_file": "ghost-touch.jpg"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 5,
+    "name": "Gigaberos",
+    "power": "8000",
+    "subtypes": [
+      "Chimera"
+    ],
+    "text": "When you put this creature into the battle zone, destroy 2 of your other creatures or destroy this creature.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature",
+    "id": "55/110",
+    "rarity": "Rare",
+    "illustrator": "Katsuya",
+    "flavor": null,
+    "image_file": "gigaberos.jpg"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 5,
+    "name": "Gigagiele",
+    "power": "3000",
+    "subtypes": [
+      "Chimera"
+    ],
+    "text": "Slayer (When this creature loses a battle, destroy the other creature.)",
+    "type": "Creature",
+    "id": "56/110",
+    "rarity": "Rare",
+    "illustrator": "Hisashi Momose",
+    "flavor": "By assembling parts of different magical beasts, the Dark Lords created a nightmare.",
+    "image_file": "gigagiele.jpg"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 8,
+    "name": "Gigargon",
+    "power": "3000",
+    "subtypes": [
+      "Chimera"
+    ],
+    "text": "When you put this creature into the battle zone, return up to 2 creatures from your graveyard to your hand.",
+    "type": "Creature",
+    "id": "57/110",
+    "rarity": "Very Rare",
+    "illustrator": "Tsutomu Kawade",
+    "flavor": "There is no rest in the Dark Realm, even after death.",
+    "image_file": "gigargon.jpg"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 5,
+    "name": "Masked Horror, Shadow of Scorn",
+    "power": "1000",
+    "subtypes": [
+      "Ghost"
+    ],
+    "text": "When you put this creature into the battle zone, your opponent discards a card at random from his hand.",
+    "type": "Creature",
+    "id": "58/110",
+    "rarity": "Uncommon",
+    "illustrator": "Gyokan",
+    "flavor": "Seeking to live forever, they left their bodies behind.",
+    "image_file": "masked-horror-shadow-of-scorn.jpg"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 6,
+    "name": "Night Master, Shadow of Decay",
+    "power": "3000",
+    "subtypes": [
+      "Ghost"
+    ],
+    "text": "Blocker (When an opponent's creature attacks, you may tap this creature to stop the attack. Then the two creatures battle.)",
+    "type": "Creature",
+    "id": "59/110",
+    "rarity": "Rare",
+    "illustrator": "Hideaki Takamura",
+    "flavor": "Don't turn around. You wouldn't want to see what's behind you.",
+    "image_file": "night-master-shadow-of-decay.jpg"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 4,
+    "name": "Skeleton Soldier, the Defiled",
+    "power": "3000",
+    "subtypes": [
+      "Living Dead"
+    ],
+    "type": "Creature",
+    "id": "60/110",
+    "rarity": "Common",
+    "illustrator": "Katsuya",
+    "flavor": "\"Rip. Tear. Gnash. They all make the same delightful noises.\"",
+    "image_file": "skeleton-soldier-the-defiled.jpg"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 3,
+    "name": "Stinger Worm",
+    "power": "5000",
+    "subtypes": [
+      "Parasite Worm"
+    ],
+    "text": "When you put this creature into the battle zone, destroy 1 of your creatures.",
+    "type": "Creature",
+    "id": "61/110",
+    "rarity": "Uncommon",
+    "illustrator": "Norikatsu Miyoshi",
+    "flavor": "When worms kill a creature, they can still make it move.",
+    "image_file": "stinger-worm.jpg"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 7,
+    "name": "Swamp Worm",
+    "power": "2000",
+    "subtypes": [
+      "Parasite Worm"
+    ],
+    "text": "When you put this creature into the battle zone, your opponent chooses 1 of his creatures and destroys it.",
+    "type": "Creature",
+    "id": "62/110",
+    "rarity": "Uncommon",
+    "illustrator": "Youichi Kai",
+    "flavor": "Flesh is its food. Bones are its toothpicks.",
+    "image_file": "swamp-worm.jpg"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 6,
+    "name": "Terror Pit",
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nDestroy 1 of your opponent's creatures.",
+    "type": "Spell",
+    "id": "63/110",
+    "rarity": "Rare",
+    "illustrator": "Yusaku Nakaaki",
+    "flavor": null,
+    "image_file": "terror-pit.jpg"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 8,
+    "name": "Vampire Silphy",
+    "power": "4000",
+    "subtypes": [
+      "Dark Lord"
+    ],
+    "text": "When you put this creature into the battle zone, destroy all creatures that have power 3000 or less.",
+    "type": "Creature",
+    "id": "64/110",
+    "rarity": "Very Rare",
+    "illustrator": "Masaki Hirooka",
+    "flavor": "Dark Lords have no mercy for the weak.",
+    "image_file": "vampire-silphy.jpg"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 2,
+    "name": "Wandering Braineater",
+    "power": "2000",
+    "subtypes": [
+      "Living Dead"
+    ],
+    "text": "Blocker (When an opponent's creature attacks, you may tap this creature to stop the attack. Then the two creatures battle.)\nThis creature can't attack.",
+    "type": "Creature",
+    "id": "65/110",
+    "rarity": "Common",
+    "illustrator": "Youichi Kai",
+    "flavor": "Devouring nice, fresh brains is all they know . . . and all they care about.",
+    "image_file": "wandering-braineater.jpg"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 2,
+    "name": "Writhing Bone Ghoul",
+    "power": "2000",
+    "subtypes": [
+      "Living Dead"
+    ],
+    "type": "Creature",
+    "id": "66/110",
+    "rarity": "Common",
+    "illustrator": "Eiji Kaneda",
+    "flavor": "Seeking power, they gave up their intelligence. What they found was pain.",
+    "image_file": "writhing-bone-ghoul.jpg"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 4,
+    "name": "Armored Walker Urherion",
+    "power": "3000+",
+    "subtypes": [
+      "Armorloid"
+    ],
+    "text": "While you have at least 1 Human in the battle zone, this creature gets +2000 power during its attacks.",
+    "type": "Creature",
+    "id": "67/110",
+    "rarity": "Uncommon",
+    "illustrator": "Tsutomu Kawade",
+    "flavor": "\"The world at peace? I'd rather see the world in pieces.\"",
+    "image_file": "armored-walker-urherion.jpg"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 1,
+    "name": "Artisan Picora",
+    "power": "2000",
+    "subtypes": [
+      "Machine Eater"
+    ],
+    "text": "When you put this creature into the battle zone, put 1 card from your mana zone into your graveyard.",
+    "type": "Creature",
+    "id": "68/110",
+    "rarity": "Common",
+    "illustrator": "Akifumi Yamamoto",
+    "flavor": "\"Fix it? That's easy. Just hit it.\" \u00e2\u20ac\u201dLegendary Artisan Picora",
+    "image_file": "artisan-picora.jpg"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 6,
+    "name": "Bolshack Dragon",
+    "power": "6000+",
+    "subtypes": [
+      "Armored Dragon"
+    ],
+    "text": "While attacking, this creature gets +1000 power for each fire card in your graveyard.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature",
+    "id": "69/110",
+    "rarity": "Very Rare",
+    "illustrator": "Ryoya Yuki",
+    "flavor": "The last city that offended it is now a ruin.",
+    "image_file": "bolshack-dragon.jpg"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 2,
+    "name": "Brawler Zyler",
+    "power": "1000+",
+    "subtypes": [
+      "Human"
+    ],
+    "text": "Power attacker +2000 (While attacking, this creature gets +2000 power.)",
+    "type": "Creature",
+    "id": "70/110",
+    "rarity": "Common",
+    "illustrator": "Tsutomu Kawade",
+    "flavor": "\"I wouldn't, if I were you. You don't want to get hurt.\"",
+    "image_file": "brawler-zyler.jpg"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 1,
+    "name": "Burning Power",
+    "text": "One of your creatures gets \"power attacker +2000\" until the end of the turn. (While attacking, a creature that has \"power attacker +2000\" gets +2000 power.)",
+    "type": "Spell",
+    "id": "71/110",
+    "rarity": "Common",
+    "illustrator": "Miho Midorikawa",
+    "flavor": "Witness the power of whirling fire!",
+    "image_file": "burning-power.jpg"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 2,
+    "name": "Chaos Strike",
+    "text": "Choose 1 of your opponent's untapped creatures in the battle zone. Your creatures can attack it this turn as though it were tapped.",
+    "type": "Spell",
+    "id": "72/110",
+    "rarity": "Rare",
+    "illustrator": "Soushi Hirose",
+    "flavor": "\"You won't escape me!\"",
+    "image_file": "chaos-strike.jpg"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 2,
+    "name": "Crimson Hammer",
+    "text": "Destroy 1 of your opponent's creatures that has power 2000 or less.",
+    "type": "Spell",
+    "id": "73/110",
+    "rarity": "Common",
+    "illustrator": "Daisuke Izuka",
+    "flavor": "There's nothing a Machine Eater enjoys more than a good game of Whack-a-Hulcus.",
+    "image_file": "crimson-hammer.jpg"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 1,
+    "name": "Deadly Fighter Braid Claw",
+    "power": "1000",
+    "subtypes": [
+      "Dragonoid"
+    ],
+    "text": "This creature attacks each turn if able.",
+    "type": "Creature",
+    "id": "74/110",
+    "rarity": "Common",
+    "illustrator": "Yusaku Nakaaki",
+    "flavor": "A Dragonoid's true home is the battlefield.",
+    "image_file": "deadly-fighter-braid-claw.jpg"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 5,
+    "name": "Draglide",
+    "power": "5000",
+    "subtypes": [
+      "Armored Wyvern"
+    ],
+    "text": "This creature attacks each turn if able.",
+    "type": "Creature",
+    "id": "75/110",
+    "rarity": "Rare",
+    "illustrator": "Ittoku",
+    "flavor": "Draglides grow with their mounts. Their bond is their weapon.",
+    "image_file": "draglide.jpg"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 5,
+    "name": "Explosive Fighter Ucarn",
+    "power": "9000",
+    "subtypes": [
+      "Dragonoid"
+    ],
+    "text": "When you put this creature into the battle zone, put 2 cards from your mana zone into your graveyard.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature",
+    "id": "76/110",
+    "rarity": "Rare",
+    "illustrator": "Hisanobu Kometani",
+    "flavor": "Dragonoid fighters never retreat. They believe that a heroic fighter will become a Dragon in his next life.",
+    "image_file": "explosive-fighter-ucarn.jpg"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 3,
+    "name": "Fatal Attacker Horvath",
+    "power": "2000+",
+    "subtypes": [
+      "Human"
+    ],
+    "text": "While you have at least 1 Armorloid in the battle zone, this creature gets +2000 power during its attacks.",
+    "type": "Creature",
+    "id": "77/110",
+    "rarity": "Common",
+    "illustrator": "Dai",
+    "flavor": "\"Any final words?\"",
+    "image_file": "fatal-attacker-horvath.jpg"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 4,
+    "name": "Fire Sweeper Burning Hellion",
+    "power": "3000+",
+    "subtypes": [
+      "Dragonoid"
+    ],
+    "text": "Power attacker +2000 (While attacking, this creature gets +2000 power.)",
+    "type": "Creature",
+    "id": "78/110",
+    "rarity": "Common",
+    "illustrator": "Sansyu",
+    "flavor": "Those who leave battle last are the ones who savor victory the longest.",
+    "image_file": "fire-sweeper-burning-hellion.jpg"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 7,
+    "name": "Gatling Skyterror",
+    "power": "7000",
+    "subtypes": [
+      "Armored Wyvern"
+    ],
+    "text": "This creature can attack untapped creatures.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature",
+    "id": "79/110",
+    "rarity": "Very Rare",
+    "illustrator": "Hisashi Momose",
+    "flavor": "Part chopper, part chomper.",
+    "image_file": "gatling-skyterror.jpg"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 2,
+    "name": "Immortal Baron, Vorg",
+    "power": "2000",
+    "subtypes": [
+      "Human"
+    ],
+    "type": "Creature",
+    "id": "80/110",
+    "rarity": "Common",
+    "illustrator": "Dustmoss",
+    "flavor": "\"You see? The one who wins is the one who has the bigger weapon.\"",
+    "image_file": "immortal-baron-vorg.jpg"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 3,
+    "name": "Magma Gazer",
+    "text": "One of your creatures gets \"power attacker +4000\" and \"double breaker\" until the end of the turn. (A creature that has \"power attacker +4000\" and \"double breaker\" gets +4000 power while attacking and breaks 2 shields.)",
+    "type": "Spell",
+    "id": "81/110",
+    "rarity": "Rare",
+    "illustrator": "Masaki Hirooka",
+    "flavor": null,
+    "image_file": "magma-gazer.jpg"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 5,
+    "name": "Meteosaur",
+    "power": "2000",
+    "subtypes": [
+      "Rock Beast"
+    ],
+    "text": "When you put this creature into the battle zone, you may destroy 1 of your opponent's creatures that has power 2000 or less.",
+    "type": "Creature",
+    "id": "82/110",
+    "rarity": "Uncommon",
+    "illustrator": "Masateru Ikeda",
+    "flavor": null,
+    "image_file": "meteosaur.jpg"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 5,
+    "name": "Nomad Hero Gigio",
+    "power": "3000",
+    "subtypes": [
+      "Machine Eater"
+    ],
+    "text": "This creature can attack untapped creatures.",
+    "type": "Creature",
+    "id": "83/110",
+    "rarity": "Rare",
+    "illustrator": "Eiji Kaneda",
+    "flavor": "\"Time to move on. So many unexplored worlds; so much trash to find!\" \u00e2\u20ac\u201dNomad Hero Gigio",
+    "image_file": "nomad-hero-gigio.jpg"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 3,
+    "name": "Onslaughter Triceps",
+    "power": "5000",
+    "subtypes": [
+      "Dragonoid"
+    ],
+    "text": "When you put this creature into the battle zone, put 1 card from your mana zone into your graveyard.",
+    "type": "Creature",
+    "id": "84/110",
+    "rarity": "Uncommon",
+    "illustrator": "Katsuya",
+    "flavor": "The first to the front lines are the first to taste victory.",
+    "image_file": "onslaughter-triceps.jpg"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 4,
+    "name": "Rothus, the Traveler",
+    "power": "4000",
+    "subtypes": [
+      "Armorloid"
+    ],
+    "text": "When you put this creature into the battle zone, destroy 1 of your creatures. Then your opponent chooses 1 of his creatures and destroys it.",
+    "type": "Creature",
+    "id": "85/110",
+    "rarity": "Rare",
+    "illustrator": "Seki",
+    "flavor": "\"Though battered and scarred, I march on through wars, storms, and strife. I march on.\"",
+    "image_file": "rothus-the-traveler.jpg"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 5,
+    "name": "Stonesaur",
+    "power": "4000+",
+    "subtypes": [
+      "Rock Beast"
+    ],
+    "text": "Power attacker +2000 (While attacking, this creature gets +2000 power.)",
+    "type": "Creature",
+    "id": "86/110",
+    "rarity": "Uncommon",
+    "illustrator": "Miho Midorikawa",
+    "flavor": "There is no sanctuary in the Fire Territory. Especially on the featureless, rocky plains.",
+    "image_file": "stonesaur.jpg"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 4,
+    "name": "Super Explosive Volcanodon",
+    "power": "2000+",
+    "subtypes": [
+      "Dragonoid"
+    ],
+    "text": "Power attacker +4000 (While attacking, this creature gets +4000 power.)",
+    "type": "Creature",
+    "id": "87/110",
+    "rarity": "Uncommon",
+    "illustrator": "Naoki Saito",
+    "flavor": "After it attacks, the lucky are left with rubble.",
+    "image_file": "super-explosive-volcanodon.jpg"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 5,
+    "name": "Tornado Flame",
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nDestroy 1 of your opponent's creatures that has power 4000 or less.",
+    "type": "Spell",
+    "id": "88/110",
+    "rarity": "Uncommon",
+    "illustrator": "Soushi Hirose",
+    "flavor": null,
+    "image_file": "tornado-flame.jpg"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 4,
+    "name": "Aura Blast",
+    "text": "Each of your creatures in the battle zone gets \"power attacker +2000\" until the end of the turn. (While attacking, a creature that has \"power attacker +2000\" gets +2000 power.)",
+    "type": "Spell",
+    "id": "89/110",
+    "rarity": "Rare",
+    "illustrator": "Nottsuo",
+    "flavor": "Hear the roar of the mighty Earth!",
+    "image_file": "aura-blast.jpg"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 3,
+    "name": "Bronze-Arm Tribe",
+    "power": "1000",
+    "subtypes": [
+      "Beast Folk"
+    ],
+    "text": "When you put this creature into the battle zone, put the top card of your deck into your mana zone.",
+    "type": "Creature",
+    "id": "90/110",
+    "rarity": "Common",
+    "illustrator": "Yusaku Nakaaki",
+    "flavor": "They're bringing some friends to the party.",
+    "image_file": "bronze-arm-tribe.jpg"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 2,
+    "name": "Burning Mane",
+    "power": "2000",
+    "subtypes": [
+      "Beast Folk"
+    ],
+    "type": "Creature",
+    "id": "91/110",
+    "rarity": "Common",
+    "illustrator": "Sansyu",
+    "flavor": "It pulled a young tree up by the roots, swinging it over its head as though it were a twig.",
+    "image_file": "burning-mane.jpg"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 4,
+    "name": "Coiling Vines",
+    "power": "3000",
+    "subtypes": [
+      "Tree Folk"
+    ],
+    "text": "When this creature would be destroyed, put it into your mana zone instead.",
+    "type": "Creature",
+    "id": "92/110",
+    "rarity": "Uncommon",
+    "illustrator": "D-Suzuki",
+    "flavor": "They eat vegetarians.",
+    "image_file": "coiling-vines.jpg"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 3,
+    "name": "Dimension Gate",
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nSearch your deck. You may take a creature from your deck, show that creature to your opponent, and put it into your hand. Then shuffle your deck.",
+    "type": "Spell",
+    "id": "93/110",
+    "rarity": "Common",
+    "illustrator": "Jason",
+    "flavor": null,
+    "image_file": "dimension-gate.jpg"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 4,
+    "name": "Dome Shell",
+    "power": "3000+",
+    "subtypes": [
+      "Colony Beetle"
+    ],
+    "text": "Power attacker +2000 (While attacking, this creature gets +2000 power.)",
+    "type": "Creature",
+    "id": "94/110",
+    "rarity": "Uncommon",
+    "illustrator": "Hisashi Momose",
+    "flavor": "Colony Beetles feed on the World Tree to build gigantic nests on their backs.",
+    "image_file": "dome-shell.jpg"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 3,
+    "name": "Fear Fang",
+    "power": "3000",
+    "subtypes": [
+      "Beast Folk"
+    ],
+    "type": "Creature",
+    "id": "95/110",
+    "rarity": "Common",
+    "illustrator": "Norikatsu Miyoshi",
+    "flavor": "The Beast Folk are gifted with huge muscles to withstand the tremendous gravity of the World Tree.",
+    "image_file": "fear-fang.jpg"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 4,
+    "name": "Forest Hornet",
+    "power": "4000",
+    "subtypes": [
+      "Giant Insect"
+    ],
+    "type": "Creature",
+    "id": "96/110",
+    "rarity": "Uncommon",
+    "illustrator": "Youichi Kai",
+    "flavor": "With its deadly sting and crushing jaws, it makes the Horned Beasts cower.",
+    "image_file": "forest-hornet.jpg"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 3,
+    "name": "Golden Wing Striker",
+    "power": "2000+",
+    "subtypes": [
+      "Beast Folk"
+    ],
+    "text": "Power attacker +2000 (While attacking, this creature gets +2000 power.)",
+    "type": "Creature",
+    "id": "97/110",
+    "rarity": "Common",
+    "illustrator": "Miho Midorikawa",
+    "flavor": "Hawk warriors hunt faster than the wind.",
+    "image_file": "golden-wing-striker.jpg"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 3,
+    "name": "Mighty Shouter",
+    "power": "2000",
+    "subtypes": [
+      "Beast Folk"
+    ],
+    "text": "When this creature would be destroyed, put it into your mana zone instead.",
+    "type": "Creature",
+    "id": "98/110",
+    "rarity": "Common",
+    "illustrator": "Dustmoss",
+    "flavor": "\"I am not pink!\"",
+    "image_file": "mighty-shouter.jpg"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 6,
+    "name": "Natural Snare",
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nChoose 1 of your opponent's creatures in the battle zone and put it into his mana zone.",
+    "type": "Spell",
+    "id": "99/110",
+    "rarity": "Rare",
+    "illustrator": "Sansyu",
+    "flavor": null,
+    "image_file": "natural-snare.jpg"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 1,
+    "name": "Pangaea's Song",
+    "text": "Put 1 of your creatures from the battle zone into your mana zone.",
+    "type": "Spell",
+    "id": "100/110",
+    "rarity": "Uncommon",
+    "illustrator": "Seki",
+    "flavor": "\"Here's something better for you to do.\" \u00e2\u20ac\u201dFighter Dual Fang",
+    "image_file": "pangaeas-song.jpg"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 4,
+    "name": "Poisonous Dahlia",
+    "power": "5000",
+    "subtypes": [
+      "Tree Folk"
+    ],
+    "text": "This creature can't attack players.",
+    "type": "Creature",
+    "id": "101/110",
+    "rarity": "Uncommon",
+    "illustrator": "Hideaki Takamura",
+    "flavor": "\"I will never give you up.\" \u00e2\u20ac\u201dSymbolic meaning of the poisonous dahlia in flower language",
+    "image_file": "poisonous-dahlia.jpg"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 2,
+    "name": "Poisonous Mushroom",
+    "power": "1000",
+    "subtypes": [
+      "Balloon Mushroom"
+    ],
+    "text": "When you put this creature into the battle zone, you may put 1 card from your hand into your mana zone.",
+    "type": "Creature",
+    "id": "102/110",
+    "rarity": "Uncommon",
+    "illustrator": "Daisuke Izuka",
+    "flavor": "You won't find these mushrooms on salads.",
+    "image_file": "poisonous-mushroom.jpg"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 5,
+    "name": "Red-Eye Scorpion",
+    "power": "4000",
+    "subtypes": [
+      "Giant Insect"
+    ],
+    "text": "When this creature would be destroyed, put it into your mana zone instead.",
+    "type": "Creature",
+    "id": "103/110",
+    "rarity": "Rare",
+    "illustrator": "Kou1",
+    "flavor": "Never start a fire in the depths of a forest. Enraged red-eye scorpions will come after you.",
+    "image_file": "red-eye-scorpion.jpg"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 5,
+    "name": "Stampeding Longhorn",
+    "power": "4000",
+    "subtypes": [
+      "Horned Beast"
+    ],
+    "text": "This creature can't be blocked by any creature that has power 3000 or less.",
+    "type": "Creature",
+    "id": "104/110",
+    "rarity": "Rare",
+    "illustrator": "Norikatsu Miyoshi",
+    "flavor": "A stampeding longhorn leaves nothing but dust in its wake.",
+    "image_file": "stampeding-longhorn.jpg"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 2,
+    "name": "Steel Smasher",
+    "power": "3000",
+    "subtypes": [
+      "Beast Folk"
+    ],
+    "text": "This creature can't attack players.",
+    "type": "Creature",
+    "id": "105/110",
+    "rarity": "Common",
+    "illustrator": "Katsuya",
+    "flavor": "\"Me big. Me tough. Me smash.\" \u00e2\u20ac\u201dIron Hammer, Boar Warrior",
+    "image_file": "steel-smasher.jpg"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 7,
+    "name": "Storm Shell",
+    "power": "2000",
+    "subtypes": [
+      "Colony Beetle"
+    ],
+    "text": "When you put this creature into the battle zone, your opponent chooses 1 of his creatures in the battle zone and puts it into his mana zone.",
+    "type": "Creature",
+    "id": "106/110",
+    "rarity": "Rare",
+    "illustrator": "Sansyu",
+    "flavor": "A Colony Beetle's spawning is a virtual nightmare. It covers the earth with a hail of its bullet-like eggs.",
+    "image_file": "storm-shell.jpg"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 5,
+    "name": "Thorny Mandra",
+    "power": "4000",
+    "subtypes": [
+      "Tree Folk"
+    ],
+    "text": "When you put this creature into the battle zone, you may put 1 creature from your graveyard into your mana zone.",
+    "type": "Creature",
+    "id": "107/110",
+    "rarity": "Very Rare",
+    "illustrator": "Atsushi Kawasaki",
+    "flavor": "A beautiful flower, an alluring scent...and deadly thorns.",
+    "image_file": "thorny-mandra.jpg"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 6,
+    "name": "Tower Shell",
+    "power": "5000",
+    "subtypes": [
+      "Colony Beetle"
+    ],
+    "text": "This creature can't be blocked by any creature that has power 4000 or less.",
+    "type": "Creature",
+    "id": "108/110",
+    "rarity": "Very Rare",
+    "illustrator": "Atsushi Kawasaki",
+    "flavor": "Not many things want to get in its way.",
+    "image_file": "tower-shell.jpg"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 5,
+    "name": "Tri-horn Shepherd",
+    "power": "5000",
+    "subtypes": [
+      "Horned Beast"
+    ],
+    "type": "Creature",
+    "id": "109/110",
+    "rarity": "Rare",
+    "illustrator": "Daisuke Izuka",
+    "flavor": "Sometimes weeks pass before it realizes it has a gored enemy stuck to its horns.",
+    "image_file": "tri-horn-shepherd.jpg"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 5,
+    "name": "Ultimate Force",
+    "text": "Put the top 2 cards of your deck into your mana zone.",
+    "type": "Spell",
+    "id": "110/110",
+    "rarity": "Common",
+    "illustrator": "Sansyu",
+    "flavor": "\"Great Earth, give me your might!\" \u00e2\u20ac\u201dFighter Dual Fang",
+    "image_file": "ultimate-force.jpg"
+  }
+]
