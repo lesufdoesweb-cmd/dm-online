@@ -11,1219 +11,28 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+    <div id="root"></div>
 
-        :root {
-            --board-dark: #1c1008;
-            --board-mid: #2e1c0e;
-            --board-light: #3d2814;
-            --board-highlight: #5a3d1e;
-            --felt-green: #1a3a20;
-            --felt-dark: #0f2614;
-            --gold: #ffd644;
-            --gold-dark: #b8860b;
-            --gold-bright: #ffe88a;
-            --fire: #ff5722;
-            --fire-soft: #ff8a65;
-            --ice: #4fc3f7;
-            --nature: #66bb6a;
-            --shadow: #9c27b0;
-            --cream: #f5e6c8;
-            --font-display: 'Cinzel Decorative', serif;
-            --font-title: 'Cinzel', serif;
-            --font-ui: 'Inter', sans-serif;
-        }
+    <script type="module">
+    import { ETB_EFFECTS, SPELL_EFFECTS, ATTACK_TRIGGERS, DESTROY_EFFECTS } from './effects.js';
+    window.GAME_EFFECTS = { ETB_EFFECTS, SPELL_EFFECTS, ATTACK_TRIGGERS, DESTROY_EFFECTS };
+    </script>
 
-        body {
-            background: #0a0604;
-            color: #f5e6c8;
-            font-family: var(--font-ui);
-            overflow: hidden;
-            height: 100vh;
-            width: 100vw;
-            user-select: none;
-            cursor: default;
-        }
-
-        .board {
-            height: 100vh;
-            width: 100vw;
-            position: relative;
-            overflow: hidden;
-            background:
-                    radial-gradient(ellipse 70% 40% at 50% 50%, rgba(90,61,30,0.15) 0%, transparent 100%),
-                    radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(0,0,0,0.6) 100%),
-                    repeating-conic-gradient(rgba(62,40,20,0.03) 0% 25%, transparent 0% 50%) 0 0 / 4px 4px,
-                    linear-gradient(180deg, #1a2a18 0%, #162214 30%, #1a2a18 50%, #162214 70%, #1a2a18 100%);
-        }
-        .board::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border: 8px solid transparent;
-            border-image: linear-gradient(135deg, #5a3d1e 0%, #2e1c0e 30%, #5a3d1e 50%, #2e1c0e 70%, #5a3d1e 100%) 1;
-            pointer-events: none;
-            z-index: 200;
-        }
-
-        .centerline {
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            height: 6px;
-            z-index: 50;
-            pointer-events: none;
-        }
-        .centerline-inner {
-            position: absolute;
-            left: 60px;
-            right: 60px;
-            top: 0;
-            height: 100%;
-            background: linear-gradient(90deg, transparent 0%, rgba(180,130,70,0.15) 5%, rgba(255,214,68,0.2) 50%, rgba(180,130,70,0.15) 95%, transparent 100%);
-        }
-        .centerline-inner::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: 50px;
-            height: 50px;
-            background: radial-gradient(circle, rgba(255,214,68,0.12) 0%, transparent 70%);
-            border: 2px solid rgba(255,214,68,0.15);
-            border-radius: 50%;
-        }
-        .centerline-inner::after {
-            content: '⚔';
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 18px;
-            opacity: 0.35;
-            text-shadow: 0 0 10px rgba(255,214,68,0.3);
-        }
-
-        /* ===== OPPONENT SIDE ===== */
-        .side-opponent {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 50%;
-            display: flex;
-            flex-direction: column;
-            z-index: 10;
-        }
-
-        .opp-hand-row {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding-top: 4px;
-            gap: 1px;
-            height: 52px;
-            flex-shrink: 0;
-            position: relative;
-            z-index: 30;
-        }
-        /* Opponent card backs — slightly bigger */
-        .opp-card-back {
-            width: 36px;
-            height: 50px;
-            background-size: cover;
-            background-position: center;
-            border-radius: 4px;
-            border: 1px solid rgba(180,130,70,0.25);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.6);
-            transform-origin: center top;
-            transition: transform 0.2s;
-        }
-
-        .opp-field {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 0 20px 16px;
-            gap: 10px;
-        }
-
-        .resource-row {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 6px;
-            height: 75px;
-        }
-
-        .shield-stack {
-            display: flex;
-            gap: 4px;
-            align-items: center;
-        }
-
-        /* Shield gems — bigger */
-        .shield-gem {
-            width: 52px;
-            height: 73px;
-            border-radius: 5px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-            transition: all 0.3s;
-        }
-        .shield-gem--self {
-            border: 1.5px solid rgba(255,214,68,0.5);
-            box-shadow: 0 0 8px rgba(255,214,68,0.2), 0 3px 6px rgba(0,0,0,0.5);
-        }
-        .shield-gem--self::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            background: linear-gradient(180deg, rgba(255,214,68,0.1) 0%, transparent 60%);
-            animation: gem-pulse 3s ease-in-out infinite;
-        }
-        .shield-gem--opp {
-            border: 1.5px solid rgba(255,60,60,0.4);
-            box-shadow: 0 0 6px rgba(255,60,60,0.15), 0 3px 6px rgba(0,0,0,0.5);
-        }
-        .shield-gem--opp::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            background: linear-gradient(180deg, rgba(255,60,60,0.08) 0%, transparent 60%);
-        }
-        .shield-gem:hover { transform: translateY(-4px) scale(1.08); }
-        @keyframes gem-pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-
-        .res-separator {
-            width: 2px;
-            height: 30px;
-            background: linear-gradient(180deg, transparent, rgba(180,130,70,0.2), transparent);
-            margin: 0 6px;
-        }
-
-        .mana-row {
-            display: flex;
-            align-items: center;
-        }
-        .mana-pip {
-            width: 50px;
-            height: 70px;
-            border-radius: 5px;
-            overflow: hidden;
-            transition: all 0.25s;
-            cursor: pointer;
-            margin-left: -18px;
-            flex-shrink: 0;
-            transform-origin: center center;
-        }
-        .mana-pip:first-child { margin-left: 0; }
-        .mana-pip img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        .mana-pip--active {
-            border: 1.5px solid rgba(79,195,247,0.4);
-            box-shadow: 0 0 8px rgba(79,195,247,0.15), 0 3px 6px rgba(0,0,0,0.5);
-        }
-        .mana-pip--tapped {
-            opacity: 0.25;
-            filter: grayscale(0.8) brightness(0.5);
-            transform: rotate(90deg);
-            border: 1.5px solid transparent;
-        }
-        .mana-pip--opp {
-            width: 40px;
-            height: 56px;
-            margin-left: -14px;
-            border: 1px solid rgba(255,255,255,0.06);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.4);
-        }
-        .mana-pip--opp:first-child { margin-left: 0; }
-        .mana-pip:hover:not(.mana-pip--tapped) {
-            transform: translateY(-6px) scale(1.08);
-            z-index: 10;
-        }
-
-        /* ===== PLAYER MANA PANEL — right side of the screen ===== */
-        .player-mana-panel {
-            position: absolute;
-            right: 170px;
-            bottom: 215px;
-            z-index: 150;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 4px;
-            pointer-events: auto;
-        }
-        .player-mana-panel .mana-row-player {
-            display: flex;
-            align-items: center;
-            padding-left: 20px;
-        }
-        /* Horizontal mana pips for player */
-        .mana-pip--player {
-            width: 52px;
-            height: 73px;
-            border-radius: 5px;
-            overflow: hidden;
-            transition: all 0.25s;
-            cursor: pointer;
-            margin-left: -22px;
-            flex-shrink: 0;
-            transform-origin: center center;
-            position: relative;
-        }
-        .mana-pip--player:first-child { margin-left: 0; }
-        .mana-pip--player img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        .mana-pip--player.mana-pip--active {
-            border: 1.5px solid rgba(79,195,247,0.4);
-            box-shadow: 0 0 8px rgba(79,195,247,0.15), 0 3px 6px rgba(0,0,0,0.5);
-        }
-        .mana-pip--player.mana-pip--tapped {
-            opacity: 0.25;
-            filter: grayscale(0.8) brightness(0.5);
-            transform: rotate(90deg) scale(0.85);
-            border: 1.5px solid transparent;
-            margin-left: -10px;
-            margin-right: 10px;
-        }
-        .mana-pip--player:hover:not(.mana-pip--tapped) {
-            transform: translateY(-10px) scale(1.1);
-            z-index: 100;
-        }
-        .mana-label {
-            font-family: var(--font-title);
-            font-size: 8px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: rgba(180,130,70,0.4);
-            margin-bottom: 2px;
-            margin-left: 2px;
-        }
-
-        /* Battle grid */
-        .battle-row {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-            min-height: 180px;
-            padding: 8px 170px 8px 80px;
-        }
-
-        /* ===== PLAYER SIDE ===== */
-        .side-player {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 50%;
-            display: flex;
-            flex-direction: column;
-            z-index: 10;
-        }
-
-        .player-field {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            padding: 16px 20px 0;
-            gap: 10px;
-        }
-
-        /* ===== PLAYER HAND ===== */
-        .hand-tray {
-            position: relative;
-            height: 205px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            padding-bottom: 4px;
-            perspective: 1200px;
-            z-index: 100;
-            background: linear-gradient(0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 50%, transparent 100%);
-        }
-
-        .hand-cards {
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            position: relative;
-        }
-
-        .hand-slot {
-            transition: margin 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-        }
-        .hand-cards .hand-slot { margin-left: -32px; }
-        .hand-cards .hand-slot:first-child { margin-left: 0; }
-        .hand-cards:hover .hand-slot { margin-left: -16px; }
-        .hand-cards:hover .hand-slot:first-child { margin-left: 0; }
-
-        /* ===== CARDS ===== */
-        .card {
-            position: relative;
-            border-radius: 7px;
-            overflow: hidden;
-            flex-shrink: 0;
-            background: #111;
-            border: 2px solid rgba(180,130,70,0.35);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,200,60,0.05);
-            transform-origin: center center;
-        }
-        .card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            pointer-events: none;
-            display: block;
-        }
-        /* Bigger battle zone cards */
-        .card--md  { width: 124px; height: 174px; }
-        /* Bigger hand cards */
-        .card--lg  { width: 142px; height: 199px; }
-        .card--xl  { width: 260px; height: 364px; }
-
-        .creature {
-            cursor: pointer;
-            transition:
-                    transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
-                    box-shadow 0.25s ease,
-                    border-color 0.25s ease,
-                    filter 0.25s ease;
-        }
-        .creature:hover {
-            transform: translateY(-14px) scale(1.1);
-            z-index: 70;
-            border-color: var(--gold);
-            box-shadow:
-                    0 20px 40px rgba(0,0,0,0.7),
-                    0 0 30px rgba(255,214,68,0.2),
-                    0 -4px 20px rgba(255,214,68,0.1);
-        }
-        .creature--tapped {
-            transform: rotate(90deg);
-            filter: brightness(0.6) saturate(0.7);
-            border-color: rgba(180,130,70,0.15);
-        }
-        .creature--tapped:hover {
-            transform: rotate(90deg) scale(1.05);
-            filter: brightness(0.7) saturate(0.8);
-            z-index: 70;
-        }
-        .creature--opp { border-color: rgba(255,60,60,0.25); }
-        .creature--opp:hover {
-            border-color: rgba(255,60,60,0.6);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.7), 0 0 20px rgba(255,60,60,0.15);
-        }
-
-        .hand-card {
-            cursor: grab;
-            transition:
-                    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-                    box-shadow 0.3s ease,
-                    border-color 0.3s ease;
-        }
-        .hand-card:hover {
-            transform: translateY(-55px) scale(1.18) !important;
-            z-index: 90 !important;
-            border-color: var(--gold);
-            box-shadow:
-                    0 30px 50px rgba(0,0,0,0.8),
-                    0 0 40px rgba(255,214,68,0.2),
-                    0 0 80px rgba(255,214,68,0.06);
-        }
-        .hand-card:active { cursor: grabbing; }
-
-        .power-gem {
-            position: absolute;
-            bottom: 4px;
-            right: 4px;
-            min-width: 32px;
-            height: 22px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 4px;
-            background: linear-gradient(135deg, #c9a020 0%, #8b6914 100%);
-            border-radius: 4px;
-            border: 1px solid rgba(255,214,68,0.5);
-            font-family: var(--font-title);
-            font-weight: 900;
-            font-size: 10px;
-            color: #1a0f08;
-            text-shadow: 0 1px 0 rgba(255,255,255,0.2);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.6);
-            z-index: 5;
-            line-height: 1;
-        }
-
-        .cost-gem {
-            position: absolute;
-            top: 4px;
-            left: 4px;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(circle, #4fc3f7 0%, #0277bd 100%);
-            border-radius: 50%;
-            border: 1.5px solid rgba(255,255,255,0.4);
-            font-family: var(--font-title);
-            font-weight: 900;
-            font-size: 11px;
-            color: white;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.5), 0 0 8px rgba(79,195,247,0.3);
-            z-index: 5;
-            line-height: 1;
-        }
-
-        .zzz-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(120,60,200,0.12);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            pointer-events: none;
-            z-index: 4;
-        }
-        .zzz-icon {
-            font-size: 26px;
-            animation: zzz-bob 2.5s ease-in-out infinite;
-            filter: drop-shadow(0 0 8px rgba(160,80,255,0.5));
-        }
-        @keyframes zzz-bob {
-            0%, 100% { transform: translateY(0) rotate(-5deg); opacity: 0.5; }
-            50% { transform: translateY(-6px) rotate(5deg); opacity: 1; }
-        }
-
-        /* ===== RIGHT HUD ===== */
-        .game-hud {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 150;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .end-turn-wrap { position: relative; width: 130px; height: 58px; }
-        .end-turn {
-            width: 100%;
-            height: 100%;
-            border: none;
-            border-radius: 8px;
-            font-family: var(--font-display);
-            font-size: 13px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s;
-        }
-        .end-turn--active {
-            background: linear-gradient(180deg, #e6b422 0%, #b8860b 40%, #c9a020 100%);
-            color: #2a1500;
-            text-shadow: 0 1px 0 rgba(255,255,255,0.3);
-            border: 2px solid var(--gold-bright);
-            box-shadow:
-                    0 0 20px rgba(255,214,68,0.3),
-                    0 6px 20px rgba(0,0,0,0.5),
-                    inset 0 2px 0 rgba(255,255,255,0.25),
-                    inset 0 -2px 0 rgba(0,0,0,0.2);
-        }
-        .end-turn--active::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.08) 50%, transparent 70%);
-            animation: btn-shine 4s ease-in-out infinite;
-        }
-        @keyframes btn-shine {
-            0% { transform: translateX(-100%) rotate(0deg); }
-            100% { transform: translateX(100%) rotate(0deg); }
-        }
-        .end-turn--active:hover {
-            transform: scale(1.05);
-            box-shadow:
-                    0 0 35px rgba(255,214,68,0.4),
-                    0 8px 24px rgba(0,0,0,0.6),
-                    inset 0 2px 0 rgba(255,255,255,0.3);
-        }
-        .end-turn--waiting {
-            background: linear-gradient(180deg, #3d2814 0%, #2e1c0e 100%);
-            color: rgba(180,130,70,0.5);
-            border: 2px solid rgba(180,130,70,0.2);
-            cursor: default;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
-        }
-
-        .mana-counter {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 35% 35%, #5bb8f5, #1565c0 60%, #0d47a1);
-            border: 3px solid rgba(255,255,255,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow:
-                    0 0 20px rgba(79,195,247,0.25),
-                    0 4px 12px rgba(0,0,0,0.5),
-                    inset 0 -4px 8px rgba(0,0,0,0.3),
-                    inset 0 4px 8px rgba(255,255,255,0.15);
-            position: relative;
-        }
-        .mana-counter::after {
-            content: '';
-            position: absolute;
-            top: 8px; left: 12px;
-            width: 16px; height: 10px;
-            background: rgba(255,255,255,0.25);
-            border-radius: 50%;
-            transform: rotate(-30deg);
-        }
-        .mana-counter-text {
-            font-family: var(--font-display);
-            font-weight: 900;
-            font-size: 20px;
-            color: white;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            z-index: 2;
-            line-height: 1;
-        }
-        .mana-counter-text .mc-sep { font-size: 14px; opacity: 0.5; margin: 0 1px; }
-
-        .pile-counter { display: flex; flex-direction: column; align-items: center; gap: 2px; }
-        .pile-icon {
-            width: 40px;
-            height: 56px;
-            border-radius: 5px;
-            background-size: cover;
-            background-position: center;
-            border: 2px solid rgba(180,130,70,0.3);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-            position: relative;
-        }
-        .pile-icon::after {
-            content: '';
-            position: absolute;
-            bottom: -3px; left: 2px; right: 2px;
-            height: 3px;
-            background: rgba(180,130,70,0.2);
-            border-radius: 0 0 3px 3px;
-        }
-        .pile-num {
-            font-family: var(--font-title);
-            font-weight: 900;
-            font-size: 14px;
-            color: var(--gold-dark);
-            text-shadow: 0 1px 3px rgba(0,0,0,0.6);
-        }
-
-        /* ===== LEFT HUD ===== */
-        .opp-hud {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 150;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-        }
-        .opp-mana-counter {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 35% 35%, #e57373, #c62828 60%, #8e0000);
-            border: 2px solid rgba(255,100,100,0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow:
-                    0 0 12px rgba(255,60,60,0.15),
-                    0 4px 8px rgba(0,0,0,0.5),
-                    inset 0 -3px 6px rgba(0,0,0,0.3),
-                    inset 0 3px 6px rgba(255,255,255,0.1);
-            position: relative;
-        }
-        .opp-mana-counter::after {
-            content: '';
-            position: absolute;
-            top: 6px; left: 10px;
-            width: 12px; height: 8px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
-            transform: rotate(-30deg);
-        }
-        .opp-counter-text {
-            font-family: var(--font-display);
-            font-weight: 900;
-            font-size: 15px;
-            color: white;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            z-index: 2;
-        }
-        .opp-info-tag {
-            font-family: var(--font-title);
-            font-size: 8px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: rgba(180,130,70,0.3);
-            writing-mode: vertical-rl;
-        }
-
-        /* ===== CONTEXT MENU ===== */
-        .ctx-backdrop { position: fixed; inset: 0; z-index: 1999; }
-        .ctx-menu {
-            position: fixed;
-            z-index: 2000;
-            min-width: 220px;
-            padding: 6px;
-            background: linear-gradient(135deg, rgba(62,40,20,0.97) 0%, rgba(30,18,8,0.97) 100%);
-            border: 2px solid var(--gold-dark);
-            border-radius: 10px;
-            box-shadow:
-                    0 16px 48px rgba(0,0,0,0.8),
-                    0 0 0 1px rgba(0,0,0,0.3),
-                    inset 0 1px 0 rgba(255,200,60,0.1);
-            animation: ctx-pop 100ms ease-out;
-        }
-        @keyframes ctx-pop {
-            from { opacity: 0; transform: scale(0.96); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        .ctx-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            width: 100%;
-            padding: 11px 16px;
-            border: none;
-            background: none;
-            color: var(--cream);
-            font-size: 12px;
-            font-weight: 800;
-            font-family: var(--font-title);
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            border-radius: 7px;
-            cursor: pointer;
-            transition: all 0.15s;
-            text-align: left;
-        }
-        .ctx-item:hover { background: rgba(255,214,68,0.12); color: var(--gold-bright); text-shadow: 0 0 8px rgba(255,214,68,0.3); }
-        .ctx-item--atk:hover { background: rgba(255,60,60,0.12); color: var(--fire-soft); text-shadow: 0 0 8px rgba(255,87,34,0.3); }
-        .ctx-item--summon:hover { background: rgba(102,187,106,0.12); color: var(--nature); }
-        .ctx-item--mana:hover { background: rgba(79,195,247,0.12); color: var(--ice); }
-        .ctx-sep { height: 1px; background: rgba(180,130,70,0.15); margin: 3px 12px; }
-
-        /* ===== PREVIEW ===== */
-        .preview {
-            position: fixed;
-            top: 60px;
-            right: 160px;
-            z-index: 800;
-            pointer-events: none;
-            animation: preview-in 180ms ease-out;
-        }
-        @keyframes preview-in {
-            from { opacity: 0; transform: translateX(10px) scale(0.97); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        .preview-frame {
-            background: linear-gradient(135deg, var(--board-light) 0%, var(--board-mid) 100%);
-            border: 2px solid var(--gold-dark);
-            border-radius: 12px;
-            padding: 8px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 20px rgba(255,200,60,0.08);
-        }
-        .preview-frame img { width: 200px; border-radius: 8px; display: block; }
-        .preview-meta { padding: 8px 6px 2px; text-align: center; max-width: 200px; }
-        .preview-meta h3 { font-family: var(--font-title); font-weight: 900; font-size: 12px; color: var(--gold); text-transform: uppercase; }
-        .preview-meta .stats { display: flex; justify-content: center; gap: 14px; margin-top: 4px; font-size: 10px; font-weight: 700; color: rgba(245,230,200,0.5); }
-        .preview-meta .stats em { font-style: normal; color: var(--gold-bright); }
-        .preview-meta .desc { font-size: 9px; color: rgba(245,230,200,0.4); margin-top: 6px; line-height: 1.5; }
-
-        /* ===== TOASTS ===== */
-        .toast-layer {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1500;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-        .toast-msg {
-            padding: 14px 44px;
-            border-radius: 6px;
-            font-family: var(--font-display);
-            font-weight: 900;
-            font-size: 22px;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            animation: toast-in 250ms ease-out forwards;
-            white-space: nowrap;
-        }
-        .toast-msg--info {
-            background: linear-gradient(135deg, rgba(50,30,10,0.95) 0%, rgba(30,18,6,0.95) 100%);
-            color: var(--gold);
-            border: 2px solid var(--gold-dark);
-            box-shadow: 0 0 40px rgba(255,214,68,0.15), 0 8px 32px rgba(0,0,0,0.6);
-            text-shadow: 0 0 12px rgba(255,214,68,0.3);
-        }
-        .toast-msg--error {
-            background: linear-gradient(135deg, rgba(60,10,10,0.95) 0%, rgba(40,5,5,0.95) 100%);
-            color: var(--fire);
-            border: 2px solid rgba(255,87,34,0.4);
-            box-shadow: 0 0 40px rgba(255,87,34,0.15), 0 8px 32px rgba(0,0,0,0.6);
-            text-shadow: 0 0 12px rgba(255,87,34,0.3);
-        }
-        .toast-msg--exit { animation: toast-out 250ms ease-in forwards; }
-        @keyframes toast-in { from { opacity: 0; transform: scale(0.6); } to { opacity: 1; transform: scale(1); } }
-        @keyframes toast-out { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.6) translateY(-10px); } }
-
-        /* ===== GAME OVER ===== */
-        .gameover {
-            position: fixed;
-            inset: 0;
-            z-index: 3000;
-            background: rgba(0,0,0,0.92);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 600ms;
-        }
-        .gameover h1 {
-            font-family: var(--font-display);
-            font-size: clamp(50px, 12vw, 120px);
-            font-weight: 900;
-            font-style: italic;
-            text-transform: uppercase;
-            margin-bottom: 40px;
-        }
-        .gameover h1.win {
-            background: linear-gradient(135deg, var(--gold) 0%, var(--fire-soft) 50%, var(--gold-bright) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 50px rgba(255,214,68,0.3));
-        }
-        .gameover h1.lose { color: var(--fire); text-shadow: 0 0 50px rgba(255,87,34,0.3); }
-        .gameover button {
-            padding: 16px 56px;
-            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
-            color: #1a0f08;
-            border: 2px solid var(--gold-bright);
-            border-radius: 8px;
-            font-family: var(--font-display);
-            font-weight: 900;
-            font-size: 16px;
-            text-transform: uppercase;
-            cursor: pointer;
-            box-shadow: 0 8px 24px rgba(255,214,68,0.2);
-            transition: all 0.2s;
-        }
-        .gameover button:hover { transform: scale(1.05); box-shadow: 0 12px 32px rgba(255,214,68,0.3); }
-
-        /* ===== TRIGGER MODAL ===== */
-        .trigger-modal {
-            position: fixed;
-            inset: 0;
-            z-index: 1800;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            animation: fadeIn 300ms;
-        }
-        .trigger-modal h2 {
-            font-family: var(--font-display);
-            font-size: 36px;
-            font-weight: 900;
-            color: var(--gold);
-            text-shadow: 0 0 40px rgba(255,214,68,0.4);
-            animation: glow-text 1.5s ease-in-out infinite;
-        }
-        @keyframes glow-text {
-            0%, 100% { text-shadow: 0 0 40px rgba(255,214,68,0.4); }
-            50% { text-shadow: 0 0 60px rgba(255,214,68,0.7), 0 0 100px rgba(255,214,68,0.2); }
-        }
-        .trigger-btns { display: flex; gap: 14px; }
-        .trigger-btns button {
-            padding: 12px 40px;
-            border-radius: 8px;
-            border: 2px solid;
-            font-family: var(--font-display);
-            font-weight: 900;
-            font-size: 14px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .trigger-btns .go-btn {
-            background: linear-gradient(135deg, #388e3c, #1b5e20);
-            color: white;
-            border-color: #66bb6a;
-            box-shadow: 0 4px 16px rgba(56,142,60,0.3);
-        }
-        .trigger-btns .go-btn:hover { transform: translateY(-2px); }
-        .trigger-btns .hand-btn {
-            background: var(--board-mid);
-            color: var(--cream);
-            border-color: rgba(180,130,70,0.3);
-        }
-        .trigger-btns .hand-btn:hover { transform: translateY(-2px); background: var(--board-light); }
-
-        /* ===== LOBBY ===== */
-        .lobby {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 32px;
-            background:
-                    radial-gradient(ellipse 50% 50% at 50% 45%, rgba(255,214,68,0.03) 0%, transparent 70%),
-                    radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(0,0,0,0.5) 100%),
-                    repeating-conic-gradient(rgba(62,40,20,0.03) 0% 25%, transparent 0% 50%) 0 0 / 4px 4px,
-                    linear-gradient(180deg, #1c1008 0%, #0a0604 100%);
-            position: relative;
-        }
-        .lobby::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border: 8px solid transparent;
-            border-image: linear-gradient(135deg, #5a3d1e 0%, #2e1c0e 50%, #5a3d1e 100%) 1;
-            pointer-events: none;
-        }
-        .lobby h1 {
-            font-family: var(--font-display);
-            font-size: clamp(40px, 8vw, 80px);
-            font-weight: 900;
-            font-style: italic;
-            line-height: 0.9;
-            text-align: center;
-            margin-bottom: 60px;
-            color: var(--cream);
-        }
-        .lobby h1 span {
-            display: block;
-            background: linear-gradient(135deg, var(--gold) 0%, var(--fire-soft) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .lobby-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 700px; width: 100%; }
-        .lobby-panel {
-            padding: 36px;
-            background: linear-gradient(135deg, rgba(62,40,20,0.4) 0%, rgba(30,18,8,0.4) 100%);
-            border: 2px solid rgba(180,130,70,0.2);
-            border-radius: 12px;
-            transition: all 0.3s;
-        }
-        .lobby-panel:hover { border-color: rgba(255,214,68,0.3); }
-        .lobby-panel h2 { font-family: var(--font-display); font-size: 20px; font-weight: 900; color: var(--gold); margin-bottom: 6px; }
-        .lobby-panel .sub { font-size: 10px; color: rgba(180,130,70,0.4); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 20px; }
-        .lobby-code {
-            font-family: monospace;
-            font-size: 10px;
-            padding: 8px 14px;
-            background: rgba(255,214,68,0.06);
-            color: var(--gold);
-            border: 1px solid rgba(255,214,68,0.15);
-            border-radius: 6px;
-            display: inline-block;
-            cursor: pointer;
-            transition: all 0.2s;
-            word-break: break-all;
-        }
-        .lobby-code:hover { background: rgba(255,214,68,0.1); }
-        .join-row { display: flex; gap: 8px; margin-top: 10px; }
-        .join-input {
-            flex: 1;
-            background: rgba(0,0,0,0.4);
-            border: 1px solid rgba(180,130,70,0.2);
-            border-radius: 6px;
-            padding: 10px 14px;
-            color: var(--cream);
-            font-size: 12px;
-            font-weight: 700;
-            outline: none;
-        }
-        .join-input:focus { border-color: var(--gold-dark); }
-        .join-input::placeholder { color: rgba(180,130,70,0.3); }
-        .join-btn {
-            padding: 10px 24px;
-            border: 2px solid var(--gold-dark);
-            border-radius: 6px;
-            background: linear-gradient(135deg, var(--gold-dark) 0%, #8b6914 100%);
-            color: #1a0f08;
-            font-weight: 900;
-            font-size: 11px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .join-btn:hover { background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%); }
-
-        /* Loading */
-        .loading { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; background: #0a0604; }
-        .loading .ring { width: 44px; height: 44px; border: 3px solid rgba(180,130,70,0.2); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .loading p { font-family: var(--font-title); font-size: 11px; font-weight: 900; color: var(--gold-dark); text-transform: uppercase; letter-spacing: 0.3em; animation: pulse 2s ease-in-out infinite; }
-        @keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
-        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-
-        /* Drop highlights */
-        .drop-glow { position: absolute; inset: 4px; border-radius: 12px; pointer-events: none; z-index: 5; }
-        .drop-glow--battle { border: 2px dashed rgba(255,214,68,0.5); background: rgba(255,214,68,0.03); box-shadow: inset 0 0 30px rgba(255,214,68,0.04); }
-        .drop-glow--mana   { border: 2px dashed rgba(79,195,247,0.5);  background: rgba(79,195,247,0.03);  box-shadow: inset 0 0 30px rgba(79,195,247,0.04);  }
-
-        /* Empty slot */
-        .empty-text { font-family: var(--font-title); font-size: 11px; font-weight: 900; color: rgba(180,130,70,0.12); text-transform: uppercase; letter-spacing: 0.15em; }
-
-        /* Targeting */
-        .targeting-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.4);
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            padding-top: 120px;
-            pointer-events: none;
-        }
-        .targeting-msg {
-            background: rgba(20,10,5,0.9);
-            border: 2px solid var(--gold);
-            padding: 16px 32px;
-            border-radius: 12px;
-            color: var(--gold);
-            font-family: var(--font-display);
-            font-size: 18px;
-            text-transform: uppercase;
-            box-shadow: 0 0 30px rgba(255,214,68,0.2);
-            pointer-events: auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-        }
-        .targeting-cancel {
-            background: none;
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 4px;
-            font-size: 10px;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-        .target-highlight {
-            position: absolute;
-            inset: -4px;
-            border: 3px solid #00e5ff;
-            border-radius: 10px;
-            box-shadow: 0 0 15px #00e5ff, inset 0 0 15px #00e5ff;
-            animation: target-pulse 1s ease-in-out infinite;
-            z-index: 10;
-            pointer-events: none;
-        }
-        .target-selected {
-            border-color: #ffeb3b;
-            box-shadow: 0 0 20px #ffeb3b, inset 0 0 20px #ffeb3b;
-        }
-        .search-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.85);
-            z-index: 2500;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px;
-            backdrop-filter: blur(10px);
-            animation: fadeIn 300ms;
-        }
-        .search-container {
-            width: 100%;
-            max-width: 1000px;
-            background: rgba(46,28,14,0.4);
-            border: 2px solid var(--gold-dark);
-            border-radius: 16px;
-            display: flex;
-            flex-direction: column;
-            max-height: 80vh;
-        }
-        .search-header {
-            padding: 24px;
-            border-bottom: 1px solid rgba(180,130,70,0.2);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .search-header h2 {
-            font-family: var(--font-display);
-            font-size: 24px;
-            color: var(--gold);
-            margin: 0;
-        }
-        .search-grid {
-            flex: 1;
-            overflow-y: auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            gap: 20px;
-            padding: 30px;
-        }
-        .search-card-wrap {
-            transition: transform 0.2s;
-            cursor: pointer;
-        }
-        .search-card-wrap:hover {
-            transform: scale(1.1) translateY(-5px);
-            z-index: 10;
-        }
-        .search-grid::-webkit-scrollbar { width: 8px; }
-        .search-grid::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
-        .search-grid::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
-
-        .decision-box {
-            position: fixed;
-            top: 40px;
-            left: 40px;
-            z-index: 1500;
-            width: 320px;
-            background: linear-gradient(135deg, var(--board-light) 0%, var(--board-mid) 100%);
-            border: 2px solid var(--gold-dark);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.9), 0 0 30px rgba(255,200,60,0.1);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            color: var(--cream);
-            animation: preview-in 250ms ease-out;
-            pointer-events: auto;
-        }
-        .decision-box h2 {
-            font-family: var(--font-display);
-            font-size: 14px;
-            font-weight: 900;
-            color: var(--gold);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .decision-box .desc {
-            font-size: 11px;
-            color: rgba(245,230,200,0.7);
-            line-height: 1.5;
-        }
-        .decision-box .actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 5px;
-        }
-        .decision-box button {
-            flex: 1;
-            padding: 10px;
-            border-radius: 6px;
-            font-family: var(--font-title);
-            font-weight: 900;
-            font-size: 11px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .decision-box .btn-primary {
-            background: linear-gradient(180deg, #e6b422 0%, #b8860b 100%);
-            color: #2a1500;
-            border: 1px solid var(--gold-bright);
-        }
-        .decision-box .btn-secondary {
-            background: rgba(0,0,0,0.3);
-            color: var(--cream);
-            border: 1px solid rgba(180,130,70,0.3);
-        }
-        .decision-box .btn-danger {
-            background: linear-gradient(180deg, #d32f2f, #b71c1c);
-            color: white;
-            border: 1px solid #ff5252;
-        }
-        .trigger-modal--transparent {
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: none;
-            pointer-events: none;
-        }
-        .trigger-modal--transparent > * {
-            pointer-events: auto;
-        }
-        @keyframes target-pulse {
-            0%, 100% { opacity: 0.6; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.02); }
-        }
-    </style>
-</head>
-<body>
-<div id="root"></div>
-
-<script type="text/babel">
-    const { useState, useEffect, useRef, useCallback } = React;
+    <script type="text/babel">    const { useState, useEffect, useRef, useCallback, useMemo } = React;
     const CARD_BACK = "./cards/bg.png";
 
     // ================================================================
     // CARD ABILITIES ENGINE
     // ================================================================
     const CardEngine = {
-        parseAbilities(card) {
+        isMono(manaZone, civ) {
+            if (!manaZone || manaZone.length === 0) return false;
+            return manaZone.every(m => m.civilizations?.includes(civ));
+        },
+        parseAbilities(card, battleZone, manaZone) {
             const text = (card.text || '').toLowerCase();
             const abilities = {};
             if (text.includes("can't attack players") || text.includes("can\u2019t attack players")) abilities.cantAttackPlayers = true;
@@ -1244,6 +53,17 @@
             const paMatch = text.match(/power attacker \+(\d+)/);
             if (paMatch) abilities.powerAttacker = parseInt(paMatch[1]);
             if (text.includes("shield trigger")) abilities.shieldTrigger = true;
+
+            // --- DM-03 Dynamic Keywords ---
+            if (card.name === "Angler Cluster") abilities.cantAttack = true;
+            if (card.name === "Sparkle Flower" && this.isMono(manaZone, 'Light')) abilities.blocker = true;
+            if (card.name === "Raging Dash-Horn" && this.isMono(manaZone, 'Nature')) abilities.doubleBreaker = true;
+            
+            // Sieg Balicula: Each of your other light creatures has "blocker"
+            if (battleZone?.some(c => c.name === "Sieg Balicula, the Intense" && c.instanceId !== card.instanceId)) {
+                if (card.civilizations?.includes('Light')) abilities.blocker = true;
+            }
+
             return abilities;
         },
         isSpell(card) { return card.type === 'Spell'; },
@@ -1254,58 +74,208 @@
         evolutionBaitRace(card) {
             const text = (card.text || '').toLowerCase();
             const match = text.match(/put on one of your ([\w\s]+)\./);
-            return match ? match[1].trim() : null;
+            if (!match) return null;
+            let race = match[1].trim();
+            // Basic singularization for common DM races
+            if (race.endsWith('s')) {
+                // Exceptional cases like 'Liquid People' don't end in S, but 'Humans' does.
+                // If it ends in 's', try removing it.
+                return race.slice(0, -1);
+            }
+            return race;
         },
         basePower(card) { if (!card.power) return 0; return parseInt(card.power.toString().replace(/[^0-9]/g, '')) || 0; },
-        attackPower(card, battleZone, graveyard) {
+        attackPower(card, battleZone, graveyard, manaZone) {
             let power = this.basePower(card);
-            const abilities = this.parseAbilities(card);
+            const abilities = this.parseAbilities(card, battleZone, manaZone);
             const text = (card.text || '').toLowerCase();
             if (abilities.powerAttacker) power += abilities.powerAttacker;
+            
+            // --- PASSIVE BUFFS (DM-01/02/03) ---
+            battleZone.forEach(other => {
+                if (other.instanceId === card.instanceId) return;
+                
+                // Valdios: Each of your other Humans gets +1000
+                if (other.name === "Armored Blaster Valdios" && card.subtypes?.some(s => s.toLowerCase().includes('human'))) {
+                    power += 1000;
+                }
+                // Barkwhip: While this creature is tapped, each of your other Beast Folk gets +2000
+                if (other.name === "Barkwhip, the Smasher" && other.isTapped && card.subtypes?.some(s => s.toLowerCase().includes('beast folk'))) {
+                    power += 2000;
+                }
+                
+                // Stallob: Each of your other Light creatures gets +1000
+                if (other.name === "Stallob, the Oracle" && card.civilizations?.includes('Light')) {
+                    power += 1000;
+                }
+                // Smaragd: While tapped, each of your other creatures gets +2000
+                if (other.name === "Smaragd, Vizier of Faith" && other.isTapped) {
+                    power += 2000;
+                }
+                // Überdragon Jabaha: Each of your other fire creatures has "power attacker +2000"
+                if (other.name === "Überdragon Jabaha" && card.civilizations?.includes('Fire')) {
+                    // Logic here: Official card says "power attacker +2000", but we can add it directly to attackPower calculation
+                    power += 2000;
+                }
+            });
+
+            // Self-buffs based on others (DM-02)
+            if (card.name === "Armored Cannon Balbaro") {
+                const humans = battleZone.filter(c => c.instanceId !== card.instanceId && c.subtypes?.some(s => s.toLowerCase().includes('human'))).length;
+                power += (humans * 2000);
+            }
+            if (card.name === "Dogarn, the Marauder") {
+                const tapped = battleZone.filter(c => c.instanceId !== card.instanceId && c.isTapped).length;
+                power += (tapped * 2000);
+            }
+            if (card.name === "Leaping Tornado Horn") {
+                const others = battleZone.filter(c => c.instanceId !== card.instanceId).length;
+                power += (others * 1000);
+            }
+            if (card.name === "Galsaur") {
+                const others = battleZone.filter(c => c.instanceId !== card.instanceId).length;
+                if (others === 0) power += 4000;
+            }
+
+            // DM-03 Specific Passive Power
+            if (card.name === "Alek, Solidity Enforcer") {
+                const lightCount = battleZone.filter(c => c.instanceId !== card.instanceId && c.civilizations?.includes('Light')).length;
+                power += (lightCount * 1000);
+            }
+            if (card.name === "Garkago Dragon") {
+                const fireCount = battleZone.filter(c => c.instanceId !== card.instanceId && c.civilizations?.includes('Fire')).length;
+                power += (fireCount * 1000);
+            }
+            if (card.name === "Masked Pomegranate") {
+                const natureCount = battleZone.filter(c => c.instanceId !== card.instanceId && c.civilizations?.includes('Nature')).length;
+                power += (natureCount * 1000);
+            }
+            if (card.name === "Scratchclaw") {
+                const darknessCount = battleZone.filter(c => c.instanceId !== card.instanceId && c.civilizations?.includes('Darkness')).length;
+                power += (darknessCount * 1000);
+            }
+
+            // Mono-Mana Checks (DM-03)
+            if (card.name === "Angler Cluster" && this.isMono(manaZone, 'Water')) power += 3000;
+            if (card.name === "Baby Zoppe" && this.isMono(manaZone, 'Fire')) power += 2000;
+            if (card.name === "Mudman" && this.isMono(manaZone, 'Darkness')) power += 2000;
+            if (card.name === "Raging Dash-Horn" && this.isMono(manaZone, 'Nature')) power += 3000;
+            if (card.name === "Ur Pale, Seeker of Sunlight" && this.isMono(manaZone, 'Light')) power += 2000;
+
+            // Self-buffs based on others (LEGACY)
+            if (text.includes("gets +1000 power for each other light creature")) {
+                const count = battleZone.filter(c => c.instanceId !== card.instanceId && c.civilizations?.includes('Light')).length;
+                power += (count * 1000);
+            }
+            
+            // Set 1 Legacy checks
             if (text.includes("while you have at least 1 human"))
                 if (battleZone.some(c => c.subtypes?.some(s => s.toLowerCase().includes('human')))) power += 2000;
             if (text.includes("while you have at least 1 armorloid"))
                 if (battleZone.some(c => c.subtypes?.some(s => s.toLowerCase().includes('armorloid')))) power += 2000;
             if (text.includes("while you have at least 1 angel command"))
                 if (battleZone.some(c => c.subtypes?.some(s => s.toLowerCase().includes('angel command')))) power += 2000;
+            
             if (card.name === "Bolshack Dragon" && graveyard) {
                 const fireCount = graveyard.filter(c => c.civilizations?.includes('Fire')).length;
                 power += (fireCount * 1000);
             }
             return power;
         },
-        shieldsToBreak(card) {
-            const abilities = this.parseAbilities(card);
+        hasAttackTrigger(card) {
+            const text = (card.text || '').toLowerCase();
+            return text.includes("whenever this creature attacks");
+        },
+        shieldsToBreak(card, battleZone, manaZone) {
+            const abilities = this.parseAbilities(card, battleZone, manaZone);
             if (abilities.tripleBreaker) return 3;
             if (abilities.doubleBreaker) return 2;
             if (card.tempDoubleBreaker) return 2;
+
+            if (card.name === "Galsaur" && battleZone) {
+                const others = battleZone.filter(c => c.instanceId !== card.instanceId).length;
+                if (others === 0) return 2;
+            }
+
             return 1;
         },
-        canAttackPlayer(card) {
-            const abilities = this.parseAbilities(card);
+        canAttackPlayer(card, battleZone, manaZone) {
+            const abilities = this.parseAbilities(card, battleZone, manaZone);
+            if (card.canAttackPlayersOverride) return true;
             if (abilities.cantAttack) return false;
             if (abilities.cantAttackPlayers) return false;
             return true;
         },
-        canAttack(card) { const abilities = this.parseAbilities(card); if (abilities.cantAttack) return false; return true; },
-        canAttackUntapped(card) { return !!this.parseAbilities(card).canAttackUntapped; },
-        canBeBlocked(atk, def, battleZone) {
-            const abs = this.parseAbilities(atk);
+        canAttack(card, battleZone, opponentBattleZone, manaZone) { 
+            const abilities = this.parseAbilities(card, battleZone, manaZone); 
+            if (abilities.cantAttack) return false; 
+            
+            // Snip Striker Bullraizer: can't attack while opponent has more creatures
+            if (card.name === "Snip Striker Bullraizer") {
+                if (opponentBattleZone && opponentBattleZone.length > battleZone.length) return false;
+            }
+
+            return true; 
+        },
+        canAttackUntapped(card, battleZone, manaZone) { return !!this.parseAbilities(card, battleZone, manaZone).canAttackUntapped || !!card.canAttackUntappedThisTurn; },
+        canBeBlocked(atk, def, battleZone, manaZone) {
+            const abs = this.parseAbilities(atk, battleZone, manaZone);
             if (abs.cantBeBlocked || atk.cantBeBlockedThisTurn) return false;
-            if (abs.unblockableByWeak && this.basePower(def) <= 3000) return false;
+            
+            // Legendary Bynor: Your other water creatures can't be blocked
+            if (battleZone?.some(c => c.name === "Legendary Bynor" && c.instanceId !== atk.instanceId)) {
+                if (atk.civilizations?.includes('Water')) return false;
+            }
+
+            // Threshold-based unblockable
+            if (atk.name === "Xeno Mantis" && this.basePower(def) <= 5000) return false;
+            if (atk.name === "Stampeding Longhorn" && this.basePower(def) <= 3000) return false;
+            if (atk.name === "Masked Pomegranate" && this.basePower(def) <= 4000) return false;
+            
+            // Tropico: Can't be blocked while you have 2+ other creatures
             if (atk.name === "Tropico") {
                 const others = battleZone.filter(c => c.instanceId !== atk.instanceId).length;
                 if (others >= 2) return false;
             }
+
+            // King Nautilus: Your other Liquid People can't be blocked
+            const hasNautilus = battleZone.some(c => c.name === "King Nautilus" && c.instanceId !== atk.instanceId);
+            if (hasNautilus && atk.subtypes?.some(s => s.toLowerCase().includes('liquid people'))) return false;
+
             return true;
         },
-        hasSlayer(card) { return this.parseAbilities(card).slayer; },
-        onDestroyed(card) {
+        hasSlayer(card) { return this.parseAbilities(card, [], []).slayer; },
+        onDestroyed(card, battleZone) {
             const text = (card.text || '').toLowerCase();
+            
+            // Mandatory replacements (DM-03)
+            if (text.includes("add it to your shields face down instead") || text.includes("add it to your shields instead")) return 'shield';
+            if (text.includes("put it into your mana zone instead") && !text.includes("you may")) return 'mana';
+            if (text.includes("return it to your hand instead") && !text.includes("you may")) return 'hand';
+
+            // Passive replacements from others (DM-03) - Gigamantis is mandatory for OTHER units
+            if (battleZone) {
+                if (battleZone.some(c => c.name === "Gigamantis") && card.civilizations?.includes('Nature') && card.name !== "Gigamantis") {
+                    return 'mana';
+                }
+            }
+
+            // Legacy Set 1/2 logic (assuming mandatory if no "may")
             if (text.includes("when this creature would be destroyed, put it into your mana zone")) return 'mana';
             if (text.includes("when this creature would be destroyed, put it into your hand") || text.includes("when this creature would be destroyed, return it to your hand")) return 'hand';
+            
             return 'graveyard';
         },
+        getOptionalReplacement(card, battleZone) {
+            const text = (card.text || '').toLowerCase();
+            if (card.name === "Gigastand") {
+                return { type: 'hand', message: "Return Gigastand to hand? (Must discard 1 card)", requiresDiscard: true };
+            }
+            if (battleZone?.some(c => c.name === "Jack Viper, Shadow of Doom") && card.civilizations?.includes('Darkness') && card.name !== "Jack Viper, Shadow of Doom") {
+                return { type: 'hand', message: "Jack Viper: Return Darkness creature to hand instead?", requiresDiscard: false };
+            }
+            return null;
+        }
     };
 
     /* ============ TOAST ============ */
@@ -1318,7 +288,7 @@
     /* ============ PREVIEW ============ */
     const Preview = ({ card }) => {
         if (!card) return null;
-        const src = card.isFaceDown ? CARD_BACK : `./cards/dm-01/${card.image_file}`;
+        const src = card.isFaceDown ? CARD_BACK : `./cards/${card.set_id || 'dm-01'}/${card.image_file}`;
         const abs = CardEngine.parseAbilities(card);
         const abilityTags = [];
         if (abs.blocker) abilityTags.push("Blocker");
@@ -1333,27 +303,58 @@
         if (abs.untapAtEnd) abilityTags.push("End-Turn Untap");
         if (abs.untapAllAtEnd) abilityTags.push("End-Turn Untap All");
         if (abs.destroyOnWin) abilityTags.push("Destroy on Win");
+
+        const civColors = {
+            'Fire': 'var(--fire)',
+            'Water': 'var(--ice)',
+            'Nature': 'var(--nature)',
+            'Darkness': 'var(--shadow)',
+            'Light': 'var(--gold-bright)'
+        };
+
         return (
             <div className="preview">
                 <div className="preview-frame">
                     <img src={src} alt={card.name || ""} />
                     {!card.isFaceDown && (
                         <div className="preview-meta">
+                            <div style={{display:'flex', justifyContent:'space-between', opacity:0.5, fontSize:11, fontWeight:900, marginBottom:4}}>
+                                <span>{card.id}</span>
+                                <span>{card.rarity}</span>
+                            </div>
                             <h3>{card.name}</h3>
                             <div className="stats">
                                 {card.type && <em style={{color:'var(--fire-soft)'}}>{card.type}</em>}
                                 {card.cost != null && <>&nbsp;| Cost: <em>{card.cost}</em></>}
                                 {card.power && <>&nbsp;| Power: <em>{card.power}</em></>}
                             </div>
-                            {card.civilizations && <div className="stats">{card.civilizations.join(" / ")}</div>}
+
+                            {card.subtypes && card.subtypes.length > 0 && (
+                                <div style={{display:'flex', flexWrap:'wrap', gap:4, justifyContent:'center', marginTop:10}}>
+                                    {card.subtypes.map((s, i) => (
+                                        <span key={i} style={{fontSize:10,fontWeight:900,padding:'2px 8px',background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.2)',borderRadius:100,color:'var(--cream)',textTransform:'uppercase'}}>{s}</span>
+                                    ))}
+                                </div>
+                            )}
+
+                            {card.civilizations && (
+                                <div style={{display:'flex', flexWrap:'wrap', gap:4, justifyContent:'center', marginTop:6}}>
+                                    {card.civilizations.map((c, i) => (
+                                        <span key={i} style={{fontSize:9,fontWeight:900,padding:'1px 8px',background:'rgba(0,0,0,0.3)',border:`1px solid ${civColors[c] || '#fff'}`,borderRadius:4,color:civColors[c] || '#fff',textTransform:'uppercase'}}>{c}</span>
+                                    ))}
+                                </div>
+                            )}
+
                             {abilityTags.length > 0 && (
-                                <div style={{display:'flex', flexWrap:'wrap', gap:3, justifyContent:'center', marginTop:6}}>
+                                <div style={{display:'flex', flexWrap:'wrap', gap:3, justifyContent:'center', marginTop:10}}>
                                     {abilityTags.map((tag, i) => (
                                         <span key={i} style={{fontSize:8,fontWeight:800,padding:'2px 6px',background:'rgba(255,214,68,0.1)',border:'1px solid rgba(255,214,68,0.2)',borderRadius:4,color:'var(--gold)',textTransform:'uppercase',letterSpacing:'0.05em'}}>{tag}</span>
                                     ))}
                                 </div>
                             )}
-                            {card.text && <div className="desc">{card.text}</div>}
+
+                            {card.text && <div className="desc" style={{marginTop:15, borderTop:'1px solid rgba(255,255,255,0.05)', paddingTop:10}}>{card.text}</div>}
+                            {card.flavor && <div style={{fontSize:11, fontStyle:'italic', opacity:0.4, marginTop:10, lineHeight:1.3}}>"{card.flavor}"</div>}
                         </div>
                     )}
                 </div>
@@ -1391,16 +392,23 @@
         const on = useCallback((t, h) => { handlers.current[t] = h; }, []);
         const send = useCallback((t, p) => { if (conn?.open) conn.send({ type: t, payload: p, ts: Date.now() }); }, [conn]);
         const sync = useCallback((g) => {
-            if (pending.current) cancelAnimationFrame(pending.current);
-            pending.current = requestAnimationFrame(() => { const s = typeof g === 'function' ? g() : g; send("SYNC", s); pending.current = null; });
+            if (pending.current) clearTimeout(pending.current);
+            pending.current = setTimeout(() => { 
+                const s = typeof g === 'function' ? g() : g; 
+                send("SYNC", s); 
+                pending.current = null; 
+            }, 50); // Small 50ms debounce
         }, [send]);
         useEffect(() => {
             if (!conn) return;
             const h = d => { const fn = handlers.current[d.type]; if (fn) fn(d.payload); };
             conn.on('data', h);
-            return () => conn.off('data', h);
+            return () => {
+                conn.off('data', h);
+                if (pending.current) clearTimeout(pending.current);
+            };
         }, [conn]);
-        return { on, send, sync };
+        return useMemo(() => ({ on, send, sync }), [on, send, sync]);
     }
 
     /* ============ DRAG ============ */
@@ -1437,6 +445,10 @@
         const [waitingForBlock, setWaitingForBlock] = useState(null);
         const [waitingForOpponent, setWaitingForOpponent] = useState(false);
         const [searchingDeck, setSearchingDeck] = useState(null);
+        const [pendingDestruction, setPendingDestruction] = useState(null);
+        const [pendingDecision, setPendingDecision] = useState(null);
+        const [logs, setLogs] = useState([]);
+        const [showHistory, setShowHistory] = useState(false);
 
         const prevT = useRef(null);
         const bzRef = useRef(null);
@@ -1471,505 +483,76 @@
         const hover = useCallback(c => { if (prevT.current) clearTimeout(prevT.current); prevT.current = setTimeout(() => setPreview(c), 300); }, []);
         const unhover = useCallback(() => { if (prevT.current) clearTimeout(prevT.current); prevT.current = null; setPreview(null); }, []);
 
-        const isLocked = !gs.turn || gs.gameOver || waitingForOpponent || !!waitingForBlock || !!searchingDeck;
+        const isLocked = !gs.turn || gs.gameOver || waitingForOpponent || !!waitingForBlock || !!searchingDeck || !!targeting || !!pendingDestruction || !!pendingDecision || !!trigger;
 
-        const ETB_EFFECTS = {
-            "Aqua Hulcus": (draw) => { draw(); toast("Aqua Hulcus: Draw 1 card!"); },
-            "Aqua Sniper": (draw) => {
-                const s = gsR.current;
-                const allCreatures = [...s.battleZone, ...s.opponent.battleZone];
-                if (!allCreatures.length) return;
-                setTargeting({
-                    message: "Select up to 2 creatures to bounce",
-                    count: 2,
-                    validTargets: allCreatures.map(c => c.instanceId),
-                    onComplete: (selectedIds) => {
-                        selectedIds.forEach(id => net.send("ACTION", { action: "BOUNCE_TARGET", details: { targetId: id } }));
-                        setGs(s => {
-                            const toBounce = s.battleZone.filter(c => selectedIds.includes(c.instanceId));
-                            return { ...s, battleZone: s.battleZone.filter(c => !selectedIds.includes(c.instanceId)), hand: [...s.hand, ...toBounce] };
-                        });
-                        toast(`Bounced ${selectedIds.length} creatures!`);
+        const addLog = useCallback((text, type = 'info', isOpponent = false, card = null) => {
+            const entry = {
+                id: Date.now() + Math.random(),
+                text,
+                type,
+                isOpponent,
+                card: card ? { name: card.name, image_file: card.image_file, set_id: card.set_id, text: card.text, type: card.type, power: card.power, cost: card.cost, civilizations: card.civilizations, subtypes: card.subtypes } : null,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+            };
+            setLogs(p => [entry, ...p]);
+            if (!isOpponent) {
+                net.send("ACTION", { action: "LOG_ENTRY", details: entry });
+            }
+        }, [net]);
+
+        const triggerEffect = useCallback((mapName, card) => {
+            const map = window.GAME_EFFECTS?.[mapName];
+            if (!map) return;
+            const fx = map[card.name];
+            if (fx) {
+                addLog(`Triggered: ${card.name}`, 'effect', false, card);
+                const params = { 
+                    card, draw, setGs, toast, net, setSearchingDeck, setTargeting, gsR, play, attack, CardEngine,
+                    addLog,
+                    askMay: ({ message, onYes, onNo }) => {
+                        setPendingDecision({ card, message, onYes, onNo: onNo || (() => {}) });
                     }
-                });
-            },
-            "King Ripped-Hide": (draw) => { draw(); setTimeout(() => draw(), 200); toast("King Ripped-Hide: Draw 2 cards!"); },
-            "Saucer-Head Shark": () => {
-                setGs(p => {
-                    const toReturn = p.battleZone.filter(c => CardEngine.basePower(c) <= 2000);
-                    return { ...p, battleZone: p.battleZone.filter(c => CardEngine.basePower(c) > 2000), hand: [...p.hand, ...toReturn] };
-                });
-                net.send("ACTION", { action: "BOUNCE_WEAK", details: { maxPower: 2000 } });
-                toast("Saucer-Head Shark: Bounce weak creatures!");
-            },
-            "Unicorn Fish": () => {
-                const s = gsR.current;
-                const allCreatures = [...s.battleZone, ...s.opponent.battleZone];
-                if (!allCreatures.length) return;
-                setTargeting({
-                    message: "Select a creature to bounce",
-                    count: 1,
-                    validTargets: allCreatures.map(c => c.instanceId),
-                    onComplete: (selectedIds) => {
-                        const id = selectedIds[0];
-                        net.send("ACTION", { action: "BOUNCE_TARGET", details: { targetId: id } });
-                        setGs(s => {
-                            const c = s.battleZone.find(x => x.instanceId === id);
-                            if (!c) return s;
-                            return { ...s, battleZone: s.battleZone.filter(x => x.instanceId !== id), hand: [...s.hand, c] };
-                        });
-                        toast("Creature bounced!");
-                    }
-                });
-            },
-            "Illusionary Merfolk": (draw) => {
-                const hasCyberLord = gsR.current.battleZone.some(c => c.subtypes?.some(s => s.toLowerCase().includes('cyber lord')));
-                if (hasCyberLord) { toast("Illusionary Merfolk: Draw 3!"); setTimeout(() => { draw(); setTimeout(() => { draw(); setTimeout(() => draw(), 150); }, 150); }, 100); }
-                else { toast("No Cyber Lord — no draw"); }
-            },
-            "Artisan Picora": () => {
-                setGs(p => { if (p.mana.length === 0) return p; const removed = p.mana[p.mana.length - 1]; return { ...p, mana: p.mana.slice(0, -1), graveyard: [...p.graveyard, removed] }; });
-                toast("Artisan Picora: Mana to graveyard!");
-            },
-            "Onslaughter Triceps": () => {
-                setGs(p => { if (p.mana.length === 0) return p; const removed = p.mana[p.mana.length - 1]; return { ...p, mana: p.mana.slice(0, -1), graveyard: [...p.graveyard, removed] }; });
-                toast("Onslaughter Triceps: Mana to graveyard!");
-            },
-            "Explosive Fighter Ucarn": () => {
-                setGs(p => { const toRemove = p.mana.slice(-2); return { ...p, mana: p.mana.slice(0, -2), graveyard: [...p.graveyard, ...toRemove] }; });
-                toast("Ucarn: 2 mana to graveyard!");
-            },
-            "Meteosaur": () => {
-                const targets = gsR.current.opponent.battleZone.filter(c => CardEngine.basePower(c) <= 2000);
-                if (!targets.length) { toast("No valid targets for Meteosaur"); return; }
-                setTargeting({
-                    message: "Destroy an enemy creature (Max 2000 power)",
-                    count: 1,
-                    validTargets: targets.map(c => c.instanceId),
-                    onComplete: (selectedIds) => {
-                        net.send("ACTION", { action: "DESTROY_TARGET", details: { targetId: selectedIds[0] } });
-                        toast("Target destroyed!");
-                    }
-                });
-            },
-            "Rothus, the Traveler": () => {
-                if (!gsR.current.battleZone.length) return;
-                setTargeting({
-                    message: "Select one of your creatures to destroy",
-                    count: 1,
-                    validTargets: gsR.current.battleZone.map(c => c.instanceId),
-                    onComplete: (selectedIds) => {
-                        const id = selectedIds[0];
-                        setGs(s => {
-                            const c = s.battleZone.find(x => x.instanceId === id);
-                            return { ...s, battleZone: s.battleZone.filter(x => x.instanceId !== id), graveyard: [...s.graveyard, c] };
-                        });
-                        net.send("ACTION", { action: "FORCE_DESTROY_OWN_CHOICE" });
-                        toast("Mutual destruction!");
-                    }
-                });
-            },
-            "Bronze-Arm Tribe": () => {
-                setGs(p => { const d = [...p.deck]; if (!d.length) return p; const c = d.pop(); return { ...p, mana: [...p.mana, { ...c, isTapped: false }], deck: d }; });
-                toast("Bronze-Arm Tribe: Mana boost!");
-            },
-            "Storm Shell": () => { net.send("ACTION", { action: "CREATURE_TO_MANA_CHOICE" }); toast("Storm Shell: Opponent loses a creature!"); },
-            "Poisonous Mushroom": () => {
-                setGs(p => { if (p.hand.length === 0) return p; const card = p.hand[p.hand.length - 1]; return { ...p, hand: p.hand.slice(0, -1), mana: [...p.mana, { ...card, isTapped: false }] }; });
-                toast("Poisonous Mushroom: Hand to mana!");
-            },
-            "Thorny Mandra": () => {
-                setGs(p => { const creature = p.graveyard.find(c => c.type === 'Creature'); if (!creature) return p; return { ...p, graveyard: p.graveyard.filter(c => c.instanceId !== creature.instanceId), mana: [...p.mana, { ...creature, isTapped: false }] }; });
-                toast("Thorny Mandra: Graveyard to mana!");
-            },
-            "Miele, Vizier of Lightning": () => {
-                if (!gsR.current.opponent.battleZone.length) return;
-                setTargeting({
-                    message: "Choose an enemy creature to tap",
-                    count: 1,
-                    validTargets: gsR.current.opponent.battleZone.map(c => c.instanceId),
-                    onComplete: (selectedIds) => {
-                        net.send("ACTION", { action: "TAP_TARGET", details: { targetId: selectedIds[0] } });
-                        toast("Enemy tapped!");
-                    }
-                });
-            },
-            "Rayla, Truth Enforcer": (draw) => {
-                setSearchingDeck({
-                    message: "Rayla: Search for a Spell",
-                    count: 1,
-                    filter: (c) => c.type === 'Spell',
-                    onComplete: (card) => {
-                        net.send("ACTION", { action: "REVEAL_CARD", details: { card } });
-                        setGs(s => {
-                            const newDeck = s.deck.filter(x => x.instanceId !== card.instanceId).sort(() => Math.random() - 0.5);
-                            return { ...s, deck: newDeck, hand: [...s.hand, card] };
-                        });
-                        toast(`${card.name} added to hand!`);
-                    }
-                });
-            },
-            "Masked Horror, Shadow of Scorn": () => { net.send("ACTION", { action: "DISCARD_RANDOM" }); toast("Masked Horror: Opponent discards!"); },
-            "Swamp Worm": () => { net.send("ACTION", { action: "FORCE_DESTROY_OWN_CHOICE" }); toast("Swamp Worm: Opponent destroys a creature!"); },
-            "Stinger Worm": () => {
-                if (!gsR.current.battleZone.length) return;
-                setTargeting({
-                    message: "Select one of your creatures to sacrifice",
-                    count: 1,
-                    validTargets: gsR.current.battleZone.map(c => c.instanceId),
-                    onComplete: (selectedIds) => {
-                        const id = selectedIds[0];
-                        setGs(s => {
-                            const c = s.battleZone.find(x => x.instanceId === id);
-                            return { ...s, battleZone: s.battleZone.filter(x => x.instanceId !== id), graveyard: [...s.graveyard, c] };
-                        });
-                        toast("Sacrificed!");
-                    }
-                });
-            },
-            "Vampire Silphy": () => {
-                setGs(p => {
-                    const toDestroy = p.battleZone.filter(c => CardEngine.basePower(c) <= 3000 && c.name !== "Vampire Silphy");
-                    return { ...p, battleZone: p.battleZone.filter(c => CardEngine.basePower(c) > 3000 || c.name === "Vampire Silphy"), graveyard: [...p.graveyard, ...toDestroy] };
-                });
-                net.send("ACTION", { action: "DESTROY_ALL_WEAK", details: { maxPower: 3000 } });
-                toast("Vampire Silphy: Mass destruction!");
-            },
-            "Gigargon": () => {
-                setGs(p => { const creatures = p.graveyard.filter(c => c.type === 'Creature').slice(-2); return { ...p, graveyard: p.graveyard.filter(c => !creatures.includes(c)), hand: [...p.hand, ...creatures] }; });
-                toast("Gigargon: Recover 2 creatures!");
-            },
-            "Scarlet Skyterror": () => {
-                setGs(p => {
-                    const toDestroy = p.battleZone.filter(c => CardEngine.parseAbilities(c).blocker);
-                    return { ...p, battleZone: p.battleZone.filter(c => !CardEngine.parseAbilities(c).blocker), graveyard: [...p.graveyard, ...toDestroy] };
-                });
-                net.send("ACTION", { action: "DESTROY_ALL_BLOCKERS" });
-                toast("Scarlet Skyterror: Destroy all blockers!");
-            },
-            "Black Feather, Shadow of Rage": () => {
-                if (!gsR.current.battleZone.length) return;
-                setTargeting({
-                    message: "Select one of your creatures to destroy",
-                    count: 1,
-                    validTargets: gsR.current.battleZone.map(c => c.instanceId),
-                    onComplete: (selectedIds) => {
-                        const id = selectedIds[0];
-                        setGs(s => {
-                            const c = s.battleZone.find(x => x.instanceId === id);
-                            return { ...s, battleZone: s.battleZone.filter(x => x.instanceId !== id), graveyard: [...s.graveyard, c] };
-                        });
-                        toast("Destroyed own creature!");
-                    }
-                });
-            },
-            "Gigaberos": () => {
-                const others = gsR.current.battleZone.filter(c => c.name !== "Gigaberos");
-                if (others.length < 2) {
-                    setGs(p => {
-                       const self = p.battleZone.find(c => c.name === "Gigaberos");
-                       if (!self) return p;
-                       return { ...p, battleZone: p.battleZone.filter(c => c.instanceId !== self.instanceId), graveyard: [...p.graveyard, self] };
-                    });
-                    return;
+                };
+                setTimeout(() => fx(params), 400);
+            }
+        }, [draw, net, play, attack, toast, addLog]);
+
+        const finishDestruction = useCallback((card, destinationOverride = null) => {
+            setGs(p => {
+                const target = p.battleZone.find(c => c.instanceId === card.instanceId);
+                if (!target) return p;
+
+                const dest = destinationOverride || CardEngine.onDestroyed(target, p.battleZone);
+                const filtered = p.battleZone.filter(c => c.instanceId !== card.instanceId);
+
+                if (dest === 'mana') {
+                    return { ...p, battleZone: filtered, mana: [...p.mana, { ...target, isTapped: false }] };
                 }
-                setTargeting({
-                    message: "Select 2 other creatures to sacrifice",
-                    count: 2,
-                    validTargets: others.map(c => c.instanceId),
-                    onComplete: (selectedIds) => {
-                        setGs(s => {
-                            const targets = s.battleZone.filter(c => selectedIds.includes(c.instanceId));
-                            return { ...s, battleZone: s.battleZone.filter(c => !selectedIds.includes(c.instanceId)), graveyard: [...s.graveyard, ...targets] };
-                        });
-                        toast("Gigaberos sacrifice complete!");
-                    }
-                });
-            },
-        };
+                if (dest === 'shield') {
+                    return { ...p, battleZone: filtered, shields: [...p.shields, target] };
+                }
+                if (dest === 'hand') {
+                    return { ...p, battleZone: filtered, hand: [...p.hand, target] };
+                }
+                return { ...p, battleZone: filtered, graveyard: [...p.graveyard, target] };
+            });
+            net.send("ACTION", { action: "FINISH_DESTRUCTION_SYNC", details: { instanceId: card.instanceId, dest: destinationOverride || CardEngine.onDestroyed(card, gsR.current.battleZone) } });
+        }, [net]);
 
-        const SPELL_EFFECTS = {
-            "Holy Awe": () => { net.send("ACTION", { action: "TAP_ALL" }); toast("Holy Awe: Tap all enemy creatures!"); },
-            "Solar Ray": () => {
-                if (!gsR.current.opponent.battleZone.length) return;
-                setTargeting({
-                    message: "Choose an enemy creature to tap",
-                    count: 1,
-                    validTargets: gsR.current.opponent.battleZone.map(c => c.instanceId),
-                    onComplete: (selectedIds) => {
-                        net.send("ACTION", { action: "TAP_TARGET", details: { targetId: selectedIds[0] } });
-                        toast("Enemy tapped!");
-                    }
-                });
-            },
-            "Moonlight Flash": () => {
-                if (!gsR.current.opponent.battleZone.length) return;
-                setTargeting({
-                    message: "Choose up to 2 enemy creatures to tap",
-                    count: 2,
-                    validTargets: gsR.current.opponent.battleZone.map(c => c.instanceId),
-                    onComplete: (selectedIds) => {
-                        selectedIds.forEach(id => net.send("ACTION", { action: "TAP_TARGET", details: { targetId: id } }));
-                        toast("Enemies tapped!");
-                    }
-                });
-            },
-            "Laser Wing": () => {
-                if (!gsR.current.battleZone.length) return;
-                setTargeting({
-                    message: "Select 2 creatures to make unblockable",
-                    count: 2,
-                    validTargets: gsR.current.battleZone.map(c => c.instanceId),
-                    onComplete: (selectedIds) => {
-                        setGs(s => ({ ...s, battleZone: s.battleZone.map(c => selectedIds.includes(c.instanceId) ? { ...c, cantBeBlockedThisTurn: true } : c) }));
-                        toast("Creatures unblockable!");
-                    }
-                });
-            },
-            "Sonic Wing": () => {
-                if (!gsR.current.battleZone.length) return;
-                setTargeting({
-                    message: "Select a creature to make unblockable",
-                    count: 1,
-                    validTargets: gsR.current.battleZone.map(c => c.instanceId),
-                    onComplete: (selectedIds) => {
-                        const id = selectedIds[0];
-                        setGs(s => ({ ...s, battleZone: s.battleZone.map(c => c.instanceId === id ? { ...c, cantBeBlockedThisTurn: true } : c) }));
-                        toast("Creature unblockable!");
-                    }
-                });
-            },
-            "Brain Serum": (draw) => { draw(); setTimeout(() => draw(), 200); toast("Brain Serum: Draw 2!"); },
-            "Spiral Gate": () => {
-                const all = [...gsR.current.battleZone, ...gsR.current.opponent.battleZone];
-                if (!all.length) return;
-                setTargeting({
-                    message: "Select a creature to bounce",
-                    count: 1,
-                    validTargets: all.map(c => c.instanceId),
-                    onComplete: (selectedIds) => {
-                        const id = selectedIds[0];
-                        net.send("ACTION", { action: "BOUNCE_TARGET", details: { targetId: id } });
-                        setGs(s => {
-                            const c = s.battleZone.find(x => x.instanceId === id);
-                            if (!c) return s;
-                            return { ...s, battleZone: s.battleZone.filter(x => x.instanceId !== id), hand: [...s.hand, c] };
-                        });
-                        toast("Creature bounced!");
-                    }
-                });
-            },
-            "Teleportation": () => {
-                const all = [...gsR.current.battleZone, ...gsR.current.opponent.battleZone];
-                if (!all.length) return;
-                setTargeting({
-                    message: "Select up to 2 creatures to bounce",
-                    count: 2,
-                    validTargets: all.map(c => c.instanceId),
-                    onComplete: (selectedIds) => {
-                        selectedIds.forEach(id => net.send("ACTION", { action: "BOUNCE_TARGET", details: { targetId: id } }));
-                        setGs(s => {
-                            const toBounce = s.battleZone.filter(c => selectedIds.includes(c.instanceId));
-                            return { ...s, battleZone: s.battleZone.filter(c => !selectedIds.includes(c.instanceId)), hand: [...s.hand, ...toBounce] };
-                        });
-                        toast("Creatures bounced!");
-                    }
-                });
-            },
-            "Crystal Memory": (draw) => { 
-                setSearchingDeck({
-                    message: "Crystal Memory: Search Deck",
-                    count: 1,
-                    filter: () => true,
-                    onComplete: (card) => {
-                        setGs(s => {
-                            const newDeck = s.deck.filter(x => x.instanceId !== card.instanceId).sort(() => Math.random() - 0.5);
-                            return { ...s, deck: newDeck, hand: [...s.hand, card] };
-                        });
-                        toast("Card added to hand!");
-                    }
-                });
-            },
-            "Virtual Tripwire": () => {
-                if (!gsR.current.opponent.battleZone.length) return;
-                setTargeting({
-                    message: "Select an enemy creature to tap",
-                    count: 1,
-                    validTargets: gsR.current.opponent.battleZone.map(c => c.instanceId),
-                    onComplete: (selectedIds) => {
-                        net.send("ACTION", { action: "TAP_TARGET", details: { targetId: selectedIds[0] } });
-                        toast("Enemy tapped!");
-                    }
-                });
-            },
-            "Terror Pit": () => {
-                if (!gsR.current.opponent.battleZone.length) return;
-                setTargeting({
-                    message: "Select an enemy creature to destroy",
-                    count: 1,
-                    validTargets: gsR.current.opponent.battleZone.map(c => c.instanceId),
-                    onComplete: (selectedIds) => {
-                        net.send("ACTION", { action: "DESTROY_TARGET", details: { targetId: selectedIds[0] } });
-                        toast("Enemy destroyed!");
-                    }
-                });
-            },
-            "Death Smoke": () => {
-                const targets = gsR.current.opponent.battleZone.filter(c => !c.isTapped);
-                if (!targets.length) { toast("No untapped creatures to destroy"); return; }
-                setTargeting({
-                    message: "Select an untapped enemy creature to destroy",
-                    count: 1,
-                    validTargets: targets.map(c => c.instanceId),
-                    onComplete: (selectedIds) => {
-                        net.send("ACTION", { action: "DESTROY_TARGET", details: { targetId: selectedIds[0] } });
-                        toast("Enemy destroyed!");
-                    }
-                });
-            },
-            "Ghost Touch": () => { net.send("ACTION", { action: "DISCARD_RANDOM" }); toast("Ghost Touch: Opponent discards!"); },
-            "Dark Reversal": () => {
-                setGs(p => { const creature = p.graveyard.find(c => c.type === 'Creature'); if (!creature) return p; return { ...p, graveyard: p.graveyard.filter(c => c.instanceId !== creature.instanceId), hand: [...p.hand, creature] }; });
-                toast("Dark Reversal: Recover creature!");
-            },
-            "Creeping Plague": () => { net.send("ACTION", { action: "POWER_REDUCE_ALL", details: { amount: 2000 } }); toast("Creeping Plague: -2000 to all enemies!"); },
-            "Crimson Hammer": () => {
-                const targets = gsR.current.opponent.battleZone.filter(c => CardEngine.basePower(c) <= 2000);
-                if (!targets.length) { toast("No creatures with power <= 2000"); return; }
-                setTargeting({
-                    message: "Destroy an enemy creature (Max 2000 power)",
-                    count: 1,
-                    validTargets: targets.map(c => c.instanceId),
-                    onComplete: (selectedIds) => {
-                        net.send("ACTION", { action: "DESTROY_TARGET", details: { targetId: selectedIds[0] } });
-                        toast("Enemy destroyed!");
-                    }
-                });
-            },
-            "Tornado Flame": () => {
-                const targets = gsR.current.opponent.battleZone.filter(c => CardEngine.basePower(c) <= 4000);
-                if (!targets.length) { toast("No creatures with power <= 4000"); return; }
-                setTargeting({
-                    message: "Destroy an enemy creature (Max 4000 power)",
-                    count: 1,
-                    validTargets: targets.map(c => c.instanceId),
-                    onComplete: (selectedIds) => {
-                        net.send("ACTION", { action: "DESTROY_TARGET", details: { targetId: selectedIds[0] } });
-                        toast("Enemy destroyed!");
-                    }
-                });
-            },
-            "Burning Power": () => {
-                if (!gsR.current.battleZone.length) return;
-                setTargeting({
-                    message: "Select a creature to give +2000 power",
-                    count: 1,
-                    validTargets: gsR.current.battleZone.map(c => c.instanceId),
-                    onComplete: (selectedIds) => {
-                        const id = selectedIds[0];
-                        setGs(s => ({ ...s, battleZone: s.battleZone.map(c => c.instanceId === id ? { ...c, powerBonus: (c.powerBonus || 0) + 2000 } : c) }));
-                        toast("Power boosted!");
-                    }
-                });
-            },
-            "Magma Gazer": () => {
-                if (!gsR.current.battleZone.length) return;
-                setTargeting({
-                    message: "Select a creature to give +4000 power & double breaker",
-                    count: 1,
-                    validTargets: gsR.current.battleZone.map(c => c.instanceId),
-                    onComplete: (selectedIds) => {
-                        const id = selectedIds[0];
-                        setGs(s => ({ ...s, battleZone: s.battleZone.map(c => c.instanceId === id ? { ...c, powerBonus: (c.powerBonus || 0) + 4000, tempDoubleBreaker: true } : c) }));
-                        toast("Power boosted!");
-                    }
-                });
-            },
-            "Chaos Strike": () => {
-                 if (!gsR.current.opponent.battleZone.length) return;
-                 setTargeting({
-                     message: "Select an enemy creature. Your units can attack it as if tapped.",
-                     count: 1,
-                     validTargets: gsR.current.opponent.battleZone.map(c => c.instanceId),
-                     onComplete: (selectedIds) => {
-                         const id = selectedIds[0];
-                         setGs(s => ({
-                             ...s,
-                             opponent: {
-                                 ...s.opponent,
-                                 battleZone: s.opponent.battleZone.map(c => c.instanceId === id ? { ...c, chaosStrikeTarget: true } : c)
-                             }
-                         }));
-                         toast("Chaos Strike targeted creature!");
-                     }
-                 });
-            },
-            "Aura Blast": () => {
-                setGs(p => ({ ...p, battleZone: p.battleZone.map(c => ({ ...c, powerBonus: (c.powerBonus || 0) + 2000 })) }));
-                toast("Aura Blast: All creatures +2000!");
-            },
-            "Natural Snare": () => {
-                if (!gsR.current.opponent.battleZone.length) return;
-                setTargeting({
-                    message: "Select an enemy creature to send to mana",
-                    count: 1,
-                    validTargets: gsR.current.opponent.battleZone.map(c => c.instanceId),
-                    onComplete: (selectedIds) => {
-                        net.send("ACTION", { action: "CREATURE_TO_MANA_TARGET", details: { targetId: selectedIds[0] } });
-                        toast("Enemy sent to mana!");
-                    }
-                });
-            },
-            "Dimension Gate": (draw) => { 
-                setSearchingDeck({
-                    message: "Dimension Gate: Search for a Creature",
-                    count: 1,
-                    filter: (c) => c.type === 'Creature',
-                    onComplete: (card) => {
-                        net.send("ACTION", { action: "REVEAL_CARD", details: { card } });
-                        setGs(s => {
-                            const newDeck = s.deck.filter(x => x.instanceId !== card.instanceId).sort(() => Math.random() - 0.5);
-                            return { ...s, deck: newDeck, hand: [...s.hand, card] };
-                        });
-                        toast(`${card.name} added to hand!`);
-                    }
-                });
-            },
-            "Ultimate Force": () => {
-                setGs(p => { const d = [...p.deck]; const added = []; for (let i = 0; i < 2 && d.length; i++) added.push(d.pop()); return { ...p, mana: [...p.mana, ...added.map(c => ({ ...c, isTapped: false }))], deck: d }; });
-                toast("Ultimate Force: 2 cards to mana!");
-            },
-            "Pangaea's Song": () => {
-                if (!gsR.current.battleZone.length) return;
-                setTargeting({
-                    message: "Select your creature to send to mana zone",
-                    count: 1,
-                    validTargets: gsR.current.battleZone.map(c => c.instanceId),
-                    onComplete: (selectedIds) => {
-                        const id = selectedIds[0];
-                        setGs(s => {
-                            const c = s.battleZone.find(x => x.instanceId === id);
-                            return { ...s, battleZone: s.battleZone.filter(x => x.instanceId !== id), mana: [...s.mana, { ...c, isTapped: false }] };
-                        });
-                        toast("Creature sent to mana zone!");
-                    }
-                });
-            },
-            "Coiling Vines": () => { net.send("ACTION", { action: "CREATURE_TO_MANA_CHOICE" }); toast("Coiling Vines: Creature to mana!"); },
-        };
+
 
         useEffect(() => {
-            const isMakingDecision = !!targeting || !!blockingRequest || !!trigger || !!searchingDeck;
+            const isMakingDecision = !!targeting || !!blockingRequest || !!trigger || !!searchingDeck || !!pendingDestruction || !!pendingDecision;
             net.send("ACTION", { action: "WAIT_OPPONENT", details: { waiting: isMakingDecision } });
-        }, [!!targeting, !!blockingRequest, !!trigger, !!searchingDeck]);
+        }, [!!targeting, !!blockingRequest, !!trigger, !!searchingDeck, !!pendingDestruction, !!pendingDecision]);
 
         const broadcast = useCallback(s => {
             net.sync({
                 handCount: s.hand.length,
-                mana: s.mana.map(c => ({ instanceId: c.instanceId, isTapped: !!c.isTapped, civilizations: c.civilizations, name: c.name, image_file: c.image_file })),
-                battleZone: s.battleZone.map(c => ({ instanceId: c.instanceId, name: c.name, power: c.power, cost: c.cost, civilizations: c.civilizations, image_file: c.image_file, isTapped: !!c.isTapped, text: c.text, type: c.type, subtypes: c.subtypes, powerBonus: c.powerBonus || 0, tempDoubleBreaker: c.tempDoubleBreaker })),
-                shields: s.shields.length,
-                graveyard: s.graveyard.map(c => ({ instanceId: c.instanceId, name: c.name, civilizations: c.civilizations, image_file: c.image_file })),
+                mana: s.mana.map(c => ({ instanceId: c.instanceId, isTapped: !!c.isTapped, skipNextUntap: !!c.skipNextUntap, civilizations: c.civilizations, name: c.name, image_file: c.image_file, set_id: c.set_id })),
+                battleZone: s.battleZone.map(c => ({ instanceId: c.instanceId, name: c.name, power: c.power, cost: c.cost, civilizations: c.civilizations, image_file: c.image_file, set_id: c.set_id, isTapped: !!c.isTapped, skipNextUntap: !!c.skipNextUntap, chaosStrikeTarget: !!c.chaosStrikeTarget, text: c.text, type: c.type, subtypes: c.subtypes, powerBonus: c.powerBonus || 0, tempDoubleBreaker: c.tempDoubleBreaker })),
+                shields: s.shields.map(c => ({ instanceId: c.instanceId, name: c.name, image_file: c.image_file, set_id: c.set_id, text: c.text, type: c.type, subtypes: c.subtypes })),
+                graveyard: s.graveyard.map(c => ({ instanceId: c.instanceId, name: c.name, civilizations: c.civilizations, image_file: c.image_file, set_id: c.set_id })),
             });
         }, [net]);
 
@@ -1986,7 +569,7 @@
         useEffect(() => {
             const full = [];
             deck.cards.forEach(dc => {
-                const info = cards.find(c => c.id === dc.id);
+                const info = cards.find(c => c.id === dc.id && (!dc.set_id || c.set_id === dc.set_id));
                 if (!info) return;
                 for (let i = 0; i < dc.count; i++) full.push({ ...info, instanceId: Math.random().toString(36).substr(2, 9) });
             });
@@ -1998,20 +581,34 @@
 
         const play = useCallback((card, target, targetId) => {
             if (isLocked) return;
+
+            // Calculate dynamic cost reduction
+            let actualCost = card.cost;
+            const isSpell = CardEngine.isSpell(card);
+            const isNature = card.civilizations?.includes('Nature');
+
+            gs.battleZone.forEach(c => {
+                if (isSpell && c.name === "Essence Elf") actualCost = Math.max(1, actualCost - 1);
+                if (!isSpell && isNature && c.name === "Elf-X") actualCost = Math.max(1, actualCost - 1);
+            });
+
             if (target === "battle" || target === "evolution") {
                 const s = gsR.current;
-                const isSpell = CardEngine.isSpell(card);
                 const ut = s.mana.filter(m => !m.isTapped);
-                if (ut.length < card.cost) { toast("Not enough mana", "error"); return; }
+                if (ut.length < actualCost) { toast("Not enough mana", "error"); return; }
                 if (!ut.some(m => m.civilizations.some(c => card.civilizations.includes(c)))) { toast(`Need ${card.civilizations[0]} mana`, "error"); return; }
                 
                 setGs(p => {
-                    let cost = card.cost;
-                    const nm = p.mana.map(m => { if (!m.isTapped && cost > 0) { cost--; return { ...m, isTapped: true }; } return m; });
+                    let remainingToPay = actualCost;
+                    const nm = p.mana.map(m => { if (!m.isTapped && remainingToPay > 0) { remainingToPay--; return { ...m, isTapped: true }; } return m; });
                     
-                    if (isSpell) return { ...p, hand: p.hand.filter(c => c.instanceId !== card.instanceId), mana: nm, graveyard: [...p.graveyard, card] };
+                    if (isSpell) {
+                        addLog(`Cast Spell: ${card.name}`, 'spell', false, card);
+                        return { ...p, hand: p.hand.filter(c => c.instanceId !== card.instanceId), mana: nm, graveyard: [...p.graveyard, card] };
+                    }
                     
                     if (target === "evolution") {
+                        addLog(`Evolved: ${card.name}`, 'summon', false, card);
                         const bait = p.battleZone.find(c => c.instanceId === targetId);
                         const filteredBz = p.battleZone.filter(c => c.instanceId !== targetId);
                         // Inherit tapped state and summoning sickness
@@ -2025,28 +622,29 @@
                         };
                     }
                     
+                    addLog(`Summoned: ${card.name}`, 'summon', false, card);
                     return { ...p, hand: p.hand.filter(c => c.instanceId !== card.instanceId), mana: nm, battleZone: [...p.battleZone, { ...card, summonedThisTurn: true, isTapped: false, powerBonus: 0 }] };
                 });
                 if (isSpell) {
-                    const spellFx = SPELL_EFFECTS[card.name];
-                    if (spellFx) setTimeout(() => spellFx(draw), 300);
+                    triggerEffect("SPELL_EFFECTS", card);
                     toast(`${card.name} cast!`);
                 } else {
-                    const etbFx = ETB_EFFECTS[card.name];
-                    if (etbFx) setTimeout(() => etbFx(draw), 400);
+                    triggerEffect("ETB_EFFECTS", card);
                     toast(`${card.name} ${target === 'evolution' ? 'evolved' : 'summoned'}!`);
                 }
             } else {
                 setGs(p => ({ ...p, hasPlacedMana: true, hand: p.hand.filter(c => c.instanceId !== card.instanceId), mana: [...p.mana, { ...card, isTapped: false }] }));
+                addLog(`Charged Mana: ${card.name}`, 'mana', false, card);
                 toast("Mana charged");
             }
             setCtx(null);
-        }, [toast, net, draw, ETB_EFFECTS, SPELL_EFFECTS, isLocked]);
+        }, [toast, net, draw, isLocked, triggerEffect]);
 
         const resolveAttack = useCallback((atk, tgt, tid, isBlocked) => {
             if (tgt === "SHIELD") {
-                if (!CardEngine.canAttackPlayer(atk)) { toast("Can't attack players!", "error"); return; }
-                const shieldsToBreak = CardEngine.shieldsToBreak(atk);
+                addLog(`${atk.name} attacked shields`, 'attack', false, atk);
+                if (!CardEngine.canAttackPlayer(atk, gsR.current.battleZone, gsR.current.mana)) { toast("Can't attack players!", "error"); return; }
+                const shieldsToBreak = CardEngine.shieldsToBreak(atk, gsR.current.battleZone);
                 const oppShields = gsR.current.opponent.shields;
                 if (oppShields === 0) {
                     toast("Direct attack!");
@@ -2057,10 +655,22 @@
                     for (let i = 0; i < actualBreaks; i++) setTimeout(() => { net.send("ACTION", { action: "SHIELD_BROKEN" }); }, i * 400);
                     toast(`Breaking ${actualBreaks} shield${actualBreaks > 1 ? 's' : ''}!`);
                 }
+
+                if (atk.name === "Marrow Ooze, the Twister") {
+                    setTimeout(() => {
+                        setGs(p => {
+                            const target = p.battleZone.find(x => x.instanceId === atk.instanceId);
+                            if (!target) return p;
+                            return { ...p, battleZone: p.battleZone.filter(x => x.instanceId !== atk.instanceId), graveyard: [...p.graveyard, target] };
+                        });
+                        toast("Marrow Ooze destroyed after attack!");
+                    }, 500);
+                }
             } else {
                 const opp = gsR.current.opponent.battleZone.find(c => c.instanceId === tid);
                 if (!opp) return;
-                const atkPower = CardEngine.attackPower(atk, gsR.current.battleZone, gsR.current.graveyard) + (atk.powerBonus || 0);
+                addLog(`${atk.name} attacked ${opp.name}`, 'attack', false, atk);
+                const atkPower = CardEngine.attackPower(atk, gsR.current.battleZone, gsR.current.graveyard, gsR.current.mana) + (atk.powerBonus || 0);
                 const defPower = CardEngine.basePower(opp) + (opp.powerBonus || 0);
                 
                 const win = atkPower > defPower;
@@ -2070,54 +680,68 @@
 
                 // Handle Defender Destruction
                 if (win || tie || attackerHasSlayer) {
+                    addLog(`${opp.name} was destroyed`, 'battle', false, opp);
                     net.send("ACTION", { action: "CREATURE_DESTROYED", details: { targetId: tid } });
                     if (attackerHasSlayer && !win && !tie) toast("Slayer: Enemy destroyed!", "error");
                 }
 
                 // Handle Attacker Destruction
                 if (lose || tie || CardEngine.hasSlayer(opp)) {
+                    addLog(`${atk.name} was destroyed`, 'battle', false, atk);
                     setTimeout(() => {
-                        setGs(p => {
-                            const target = p.battleZone.find(x => x.instanceId === atk.instanceId);
-                            if (!target) return p;
-                            const dest = CardEngine.onDestroyed(target);
-                            const filtered = p.battleZone.filter(x => x.instanceId !== atk.instanceId);
-                            if (dest === 'mana') return { ...p, battleZone: filtered, mana: [...p.mana, { ...target, isTapped: false }] };
-                            if (dest === 'hand') return { ...p, battleZone: filtered, hand: [...p.hand, target] };
-                            return { ...p, battleZone: filtered, graveyard: [...p.graveyard, target] };
-                        });
+                        const target = gsR.current.battleZone.find(x => x.instanceId === atk.instanceId);
+                        if (!target) return;
+
+                        triggerEffect("DESTROY_EFFECTS", target);
+                        
+                        const opt = CardEngine.getOptionalReplacement(target, gsR.current.battleZone);
+                        if (opt) {
+                            setPendingDestruction({ card: target, replacement: opt });
+                        } else {
+                            finishDestruction(target);
+                        }
+
                         if (CardEngine.hasSlayer(opp) && !lose && !tie) toast("Slayer: Attacker destroyed!", "error");
                     }, 100);
+                }
+
+                if (isBlocked && opp.name === "Spiral Grass") {
+                    setTimeout(() => net.send("ACTION", { action: "UNTAP_TARGET", details: { targetId: tid } }), 600);
                 }
 
                 if (tie) toast("Tie! Both destroyed!", "error");
                 else if (win) toast(`${atk.name} wins battle!`);
                 else if (lose) toast(`${atk.name} loses battle!`, "error");
             }
-        }, [net, toast]);
+        }, [net, toast, triggerEffect]);
 
         const attack = useCallback((atk, tgt, tid) => {
             if (isLocked) return;
             if (atk.summonedThisTurn) { toast("Summoning sickness!", "error"); return; }
             if (atk.isTapped) { toast("Already tapped", "error"); return; }
-            if (!CardEngine.canAttack(atk)) { toast("This creature can't attack!", "error"); return; }
+            if (!CardEngine.canAttack(atk, gsR.current.battleZone, gsR.current.opponent.battleZone, gsR.current.mana)) { toast("This creature can't attack!", "error"); return; }
+            
+            addLog(`${atk.name} is attacking!`, 'attack', false, atk);
             setGs(p => ({ ...p, attackStarted: true, battleZone: p.battleZone.map(c => c.instanceId === atk.instanceId ? { ...c, isTapped: true } : c) }));
+
+            // Trigger "Whenever this creature attacks" effects
+            triggerEffect("ATTACK_TRIGGERS", atk);
 
             // Notify opponent to allow blocking
             net.send("ACTION", { action: "ATTACK_DECLARED", details: { attacker: atk, targetType: tgt, targetId: tid } });
             setWaitingForBlock({ atk, tgt, tid });
-        }, [toast, net, isLocked]);
+        }, [toast, net, isLocked, triggerEffect]);
 
         const endTurn = useCallback(() => {
             if (isLocked) return;
 
             const currentGs = gsR.current;
             const mandatoryAtk = currentGs.battleZone.find(c => {
-                const abs = CardEngine.parseAbilities(c);
-                const canAtk = CardEngine.canAttack(c);
-                const canAtkShields = CardEngine.canAttackPlayer(c);
+                const abs = CardEngine.parseAbilities(c, currentGs.battleZone, currentGs.mana);
+                const canAtk = CardEngine.canAttack(c, currentGs.battleZone, currentGs.opponent.battleZone, currentGs.mana);
+                const canAtkShields = CardEngine.canAttackPlayer(c, currentGs.battleZone, currentGs.mana);
                 const hasTappedOpps = currentGs.opponent.battleZone.some(x => x.isTapped);
-                const canAtkUntapped = CardEngine.canAttackUntapped(c);
+                const canAtkUntapped = CardEngine.canAttackUntapped(c, currentGs.battleZone, currentGs.mana);
                 const hasUntappedOpps = currentGs.opponent.battleZone.some(x => !x.isTapped);
                 
                 return abs.mustAttack && !c.isTapped && !c.summonedThisTurn && canAtk && 
@@ -2127,13 +751,13 @@
             if (mandatoryAtk) {
                 toast(`${mandatoryAtk.name} must attack!`, "error");
                 // Default to shield attack if possible, otherwise pick first valid creature
-                if (CardEngine.canAttackPlayer(mandatoryAtk)) {
+                if (CardEngine.canAttackPlayer(mandatoryAtk, currentGs.battleZone, currentGs.mana)) {
                     attack(mandatoryAtk, "SHIELD");
                 } else {
                     const tappedOpps = currentGs.opponent.battleZone.filter(x => x.isTapped);
                     if (tappedOpps.length > 0) {
                         attack(mandatoryAtk, "CREATURE", tappedOpps[0].instanceId);
-                    } else if (CardEngine.canAttackUntapped(mandatoryAtk)) {
+                    } else if (CardEngine.canAttackUntapped(mandatoryAtk, currentGs.battleZone, currentGs.mana)) {
                         const untapped = currentGs.opponent.battleZone.find(x => !x.isTapped);
                         if (untapped) attack(mandatoryAtk, "CREATURE", untapped.instanceId);
                     }
@@ -2142,11 +766,12 @@
             }
 
             setGs(p => {
-                const untapAll = p.battleZone.some(c => CardEngine.parseAbilities(c).untapAllAtEnd);
+                const untapAll = p.battleZone.some(c => CardEngine.parseAbilities(c, p.battleZone, p.mana).untapAllAtEnd);
                 const newBz = p.battleZone.map(c => {
-                    const abs = CardEngine.parseAbilities(c);
-                    if (untapAll || abs.untapAtEnd) return { ...c, isTapped: false, powerBonus: 0, cantBeBlockedThisTurn: false, tempDoubleBreaker: false, chaosStrikeTarget: false };
-                    return { ...c, powerBonus: 0, cantBeBlockedThisTurn: false, tempDoubleBreaker: false, chaosStrikeTarget: false };
+                    const abs = CardEngine.parseAbilities(c, p.battleZone, p.mana);
+                    const reset = { ...c, powerBonus: 0, cantBeBlockedThisTurn: false, tempDoubleBreaker: false, chaosStrikeTarget: false, canAttackUntappedThisTurn: false, canAttackPlayersOverride: false };
+                    if (untapAll || abs.untapAtEnd) return { ...reset, isTapped: false };
+                    return reset;
                 });
                 return { 
                     ...p, 
@@ -2156,6 +781,7 @@
                     turnEffects: { creepingPlague: false }
                 };
             });
+            addLog("End of Turn", 'info');
             net.send("END_TURN");
             toast("Turn ended");
         }, [net, toast, isLocked, attack]);
@@ -2170,6 +796,8 @@
                     attackStarted: false, 
                     mana: p.mana.map(c => c.skipNextUntap ? { ...c, skipNextUntap: false } : { ...c, isTapped: false }), 
                     battleZone: p.battleZone.map(c => {
+                        // Check for 'frozen' state (Fonch) or standard skipNextUntap
+                        if (c.frozen) return { ...c, isTapped: true, frozen: false };
                         const nextIsTapped = c.skipNextUntap ? true : false;
                         return { 
                             ...c, 
@@ -2178,21 +806,47 @@
                             summonedThisTurn: false, 
                             powerBonus: 0, 
                             cantBeBlockedThisTurn: false, 
-                            tempDoubleBreaker: false 
+                            tempDoubleBreaker: false,
+                            chaosStrikeTarget: false,
+                            canAttackUntappedThisTurn: false,
+                            canAttackPlayersOverride: false
                         };
                     }) 
                 }));
                 setTimeout(() => draw(), 300);
                 toast("Your turn!");
             });
+
             net.on("ACTION", p => {
                 const { action, details } = p;
+                if (action === "LOG_ENTRY") {
+                    setLogs(p => [{ ...details, isOpponent: true }, ...p]);
+                }
+                if (action === "MOVE_TO_DECK_TOP") {
+                    setGs(p => {
+                        const target = p.battleZone.find(c => c.instanceId === details.targetId);
+                        if (!target) return p;
+                        return {
+                            ...p,
+                            battleZone: p.battleZone.filter(c => c.instanceId !== details.targetId),
+                            deck: [...p.deck, target] // target goes to top (end of array)
+                        };
+                    });
+                    toast("Creature returned to top of deck!", "error");
+                }
+                if (action === "FREEZE_TARGET") {
+                    setGs(p => ({
+                        ...p,
+                        battleZone: p.battleZone.map(c => c.instanceId === details.targetId ? { ...c, isTapped: true, frozen: true } : c)
+                    }));
+                    toast("Creature frozen!", "error");
+                }
                 if (action === "ATTACK_DECLARED") {
                     const { attacker, targetType, targetId } = details;
                     const blockers = gsR.current.battleZone.filter(c => {
-                        const abs = CardEngine.parseAbilities(c);
+                        const abs = CardEngine.parseAbilities(c, gsR.current.battleZone, gsR.current.mana);
                         // pass attacker's side battle zone (opponent's from player's view) for ability checks
-                        return abs.blocker && !c.isTapped && CardEngine.canBeBlocked(attacker, c, gsR.current.opponent.battleZone);
+                        return abs.blocker && !c.isTapped && CardEngine.canBeBlocked(attacker, c, gsR.current.opponent.battleZone, gsR.current.mana);
                     });
 
                     if (blockers.length === 0) {
@@ -2218,6 +872,8 @@
                     if (!wfb) return;
                     setWaitingForBlock(null);
                     if (blockerId) {
+                        const blocker = gsR.current.opponent.battleZone.find(x => x.instanceId === blockerId);
+                        addLog(`${blocker ? blocker.name : 'A creature'} blocked the attack!`, 'battle', true, blocker);
                         resolveAttack(wfb.atk, "CREATURE", blockerId, true);
                     } else {
                         resolveAttack(wfb.atk, wfb.tgt, wfb.tid, false);
@@ -2239,6 +895,7 @@
                     setTimeout(() => setSearchingDeck(null), 3500);
                 }
                 if (action === "SHIELD_BROKEN") {
+                    addLog("One of your shields was broken", 'shield');
                     setGs(prev => {
                         const ns = [...prev.shields];
                         if (!ns.length) return { ...prev, gameOver: 'lose' };
@@ -2253,14 +910,17 @@
                 }
                 if (action === "DECK_OUT" || action === "DIRECT_KILL") { setGs(p => ({ ...p, gameOver: 'win' })); toast("Victory!"); }
                 if (action === "CREATURE_DESTROYED") {
-                    setGs(p => {
-                        const t = p.battleZone.find(c => c.instanceId === details.targetId); if (!t) return p;
-                        const dest = CardEngine.onDestroyed(t);
-                        const filtered = p.battleZone.filter(c => c.instanceId !== details.targetId);
-                        if (dest === 'mana') { toast(`${t.name} goes to mana!`); return { ...p, battleZone: filtered, mana: [...p.mana, { ...t, isTapped: false }] }; }
-                        if (dest === 'hand') { toast(`${t.name} returns to hand!`); return { ...p, battleZone: filtered, hand: [...p.hand, t] }; }
-                        return { ...p, battleZone: filtered, graveyard: [...p.graveyard, t] };
-                    });
+                    const t = gsR.current.battleZone.find(c => c.instanceId === details.targetId);
+                    if (t) addLog(`Opponent destroyed your ${t.name}`, 'battle');
+                    if (t) {
+                        triggerEffect("DESTROY_EFFECTS", t);
+                        const opt = CardEngine.getOptionalReplacement(t, gsR.current.battleZone);
+                        if (opt) {
+                            setPendingDestruction({ card: t, replacement: opt });
+                        } else {
+                            finishDestruction(t);
+                        }
+                    }
                     toast("Creature destroyed!", "error");
                 }
                 if (action === "BOUNCE") { setGs(p => { const count = details?.count || 1; const toReturn = p.battleZone.slice(-count); return { ...p, battleZone: p.battleZone.slice(0, -count), hand: [...p.hand, ...toReturn] }; }); toast("Creatures bounced!", "error"); }
@@ -2272,7 +932,7 @@
                     });
                     toast("Creature bounced!", "error");
                 }
-                if (action === "BOUNCE_WEAK") { setGs(p => { const max = details?.maxPower || 2000; const toReturn = p.battleZone.filter(c => CardEngine.basePower(c) <= max); return { ...p, battleZone: p.battleZone.filter(c => CardEngine.basePower(c) > max), hand: [...p.hand, ...toReturn] }; }); toast("Weak creatures bounced!", "error"); }
+                if (action === "BOUNCE_WEAK") { setGs(p => { const max = details?.maxPower || 2000; const toReturn = p.battleZone.filter(c => CardEngine.basePower(c, p.battleZone, p.mana) <= max); return { ...p, battleZone: p.battleZone.filter(c => CardEngine.basePower(c, p.battleZone, p.mana) > max), hand: [...p.hand, ...toReturn] }; }); toast("Weak creatures bounced!", "error"); }
                 if (action === "TAP_ALL") { setGs(p => ({ ...p, battleZone: p.battleZone.map(c => ({ ...c, isTapped: true, skipNextUntap: true })) })); toast("All creatures tapped!", "error"); }
                 if (action === "TAP_CREATURE") {
                     setGs(p => { const count = details?.count || 1; let tapped = 0; return { ...p, battleZone: p.battleZone.map(c => { if (!c.isTapped && tapped < count) { tapped++; return { ...c, isTapped: true, skipNextUntap: true }; } return c; }) }; });
@@ -2282,24 +942,50 @@
                     setGs(p => ({ ...p, battleZone: p.battleZone.map(c => c.instanceId === details.targetId ? { ...c, isTapped: true, skipNextUntap: true } : c) }));
                     toast("Creature tapped!", "error");
                 }
+                if (action === "UNTAP_TARGET") {
+                    setGs(p => ({ ...p, battleZone: p.battleZone.map(c => c.instanceId === details.targetId ? { ...c, isTapped: false, skipNextUntap: false } : c) }));
+                    toast("Creature untapped!", "info");
+                }
                 if (action === "DESTROY_TARGET") {
+                    const target = gsR.current.battleZone.find(c => c.instanceId === details.targetId);
+                    if (target) addLog(`Opponent destroyed your ${target.name}`, 'battle');
+                    if (target) {
+                        triggerEffect("DESTROY_EFFECTS", target);
+                        const opt = CardEngine.getOptionalReplacement(target, gsR.current.battleZone);
+                        if (opt) {
+                            setPendingDestruction({ card: target, replacement: opt });
+                        } else {
+                            finishDestruction(target);
+                        }
+                    }
+                    toast("Creature destroyed!", "error");
+                }
+                if (action === "FINISH_DESTRUCTION_SYNC") {
                     setGs(p => {
-                        const target = p.battleZone.find(c => c.instanceId === details.targetId);
+                        const target = p.battleZone.find(c => c.instanceId === details.instanceId);
                         if (!target) return p;
-                        const dest = CardEngine.onDestroyed(target);
-                        const filtered = p.battleZone.filter(c => c.instanceId !== details.targetId);
+                        const dest = details.dest;
+                        const filtered = p.battleZone.filter(c => c.instanceId !== details.instanceId);
                         if (dest === 'mana') return { ...p, battleZone: filtered, mana: [...p.mana, { ...target, isTapped: false }] };
+                        if (dest === 'shield') return { ...p, battleZone: filtered, shields: [...p.shields, target] };
                         if (dest === 'hand') return { ...p, battleZone: filtered, hand: [...p.hand, target] };
                         return { ...p, battleZone: filtered, graveyard: [...p.graveyard, target] };
                     });
-                    toast("Creature destroyed!", "error");
                 }
                 if (action === "DESTROY_WEAK") {
-                    setGs(p => { const max = details?.maxPower || 2000; const target = p.battleZone.find(c => CardEngine.basePower(c) <= max); if (!target) return p; const dest = CardEngine.onDestroyed(target); const filtered = p.battleZone.filter(c => c.instanceId !== target.instanceId); if (dest === 'mana') return { ...p, battleZone: filtered, mana: [...p.mana, { ...target, isTapped: false }] }; if (dest === 'hand') return { ...p, battleZone: filtered, hand: [...p.hand, target] }; return { ...p, battleZone: filtered, graveyard: [...p.graveyard, target] }; });
+                    setGs(p => { 
+                        const max = details?.maxPower || 2000; 
+                        const victims = p.battleZone.filter(c => CardEngine.basePower(c, p.battleZone, p.mana) <= max);
+                        victims.forEach(v => triggerEffect("DESTROY_EFFECTS", v.name));
+                        const survivors = p.battleZone.filter(c => CardEngine.basePower(c, p.battleZone, p.mana) > max); 
+                        const toGrave=[]; const toMana=[]; const toHand=[]; 
+                        victims.forEach(v => { const dest = CardEngine.onDestroyed(v); if (dest==='mana') toMana.push({...v,isTapped:false}); else if (dest==='hand') toHand.push(v); else toGrave.push(v); }); 
+                        return { ...p, battleZone: survivors, graveyard: [...p.graveyard,...toGrave], mana: [...p.mana,...toMana], hand: [...p.hand,...toHand] }; 
+                    });
                     toast("Weak creature destroyed!", "error");
                 }
                 if (action === "DESTROY_CHOICE") {
-                    setGs(p => { if (!p.battleZone.length) return p; const sorted = [...p.battleZone].sort((a, b) => CardEngine.basePower(b) - CardEngine.basePower(a)); const target = sorted[0]; const dest = CardEngine.onDestroyed(target); const filtered = p.battleZone.filter(c => c.instanceId !== target.instanceId); if (dest === 'mana') return { ...p, battleZone: filtered, mana: [...p.mana, { ...target, isTapped: false }] }; if (dest === 'hand') return { ...p, battleZone: filtered, hand: [...p.hand, target] }; return { ...p, battleZone: filtered, graveyard: [...p.graveyard, target] }; });
+                    setGs(p => { if (!p.battleZone.length) return p; const sorted = [...p.battleZone].sort((a, b) => CardEngine.basePower(b, p.battleZone, p.mana) - CardEngine.basePower(a, p.battleZone, p.mana)); const target = sorted[0]; const dest = CardEngine.onDestroyed(target); const filtered = p.battleZone.filter(c => c.instanceId !== target.instanceId); if (dest === 'mana') return { ...p, battleZone: filtered, mana: [...p.mana, { ...target, isTapped: false }] }; if (dest === 'hand') return { ...p, battleZone: filtered, hand: [...p.hand, target] }; return { ...p, battleZone: filtered, graveyard: [...p.graveyard, target] }; });
                     toast("Creature destroyed!", "error");
                 }
                 if (action === "DESTROY_UNTAPPED") {
@@ -2307,11 +993,19 @@
                     toast("Untapped creature destroyed!", "error");
                 }
                 if (action === "DESTROY_ALL_WEAK") {
-                    setGs(p => { const max = details?.maxPower || 3000; const victims = p.battleZone.filter(c => CardEngine.basePower(c) <= max); const survivors = p.battleZone.filter(c => CardEngine.basePower(c) > max); const toGrave=[]; const toMana=[]; const toHand=[]; victims.forEach(v => { const dest = CardEngine.onDestroyed(v); if (dest==='mana') toMana.push({...v,isTapped:false}); else if (dest==='hand') toHand.push(v); else toGrave.push(v); }); return { ...p, battleZone: survivors, graveyard: [...p.graveyard,...toGrave], mana: [...p.mana,...toMana], hand: [...p.hand,...toHand] }; });
+                    setGs(p => { 
+                        const max = details?.maxPower || 3000; 
+                        const victims = p.battleZone.filter(c => CardEngine.basePower(c, p.battleZone, p.mana) <= max); 
+                        victims.forEach(v => triggerEffect("DESTROY_EFFECTS", v.name));
+                        const survivors = p.battleZone.filter(c => CardEngine.basePower(c, p.battleZone, p.mana) > max); 
+                        const toGrave=[]; const toMana=[]; const toHand=[]; 
+                        victims.forEach(v => { const dest = CardEngine.onDestroyed(v); if (dest==='mana') toMana.push({...v,isTapped:false}); else if (dest==='hand') toHand.push(v); else toGrave.push(v); }); 
+                        return { ...p, battleZone: survivors, graveyard: [...p.graveyard,...toGrave], mana: [...p.mana,...toMana], hand: [...p.hand,...toHand] }; 
+                    });
                     toast("Mass destruction!", "error");
                 }
                 if (action === "CREATURE_TO_MANA") {
-                    setGs(p => { if (!p.battleZone.length) return p; const sorted = [...p.battleZone].sort((a, b) => CardEngine.basePower(a) - CardEngine.basePower(b)); const target = sorted[0]; return { ...p, battleZone: p.battleZone.filter(c => c.instanceId !== target.instanceId), mana: [...p.mana, { ...target, isTapped: false }] }; });
+                    setGs(p => { if (!p.battleZone.length) return p; const sorted = [...p.battleZone].sort((a, b) => CardEngine.basePower(a, p.battleZone, p.mana) - CardEngine.basePower(b, p.battleZone, p.mana)); const target = sorted[0]; return { ...p, battleZone: p.battleZone.filter(c => c.instanceId !== target.instanceId), mana: [...p.mana, { ...target, isTapped: false }] }; });
                     toast("Creature sent to mana!", "error");
                 }
                 if (action === "CREATURE_TO_MANA_TARGET") {
@@ -2337,8 +1031,77 @@
                         }
                     });
                 }
+                if (action === "MANA_TO_HAND_CHOICE") {
+                    setTargeting({
+                        message: `Select ${details.count} of your mana to return to hand`,
+                        count: details.count,
+                        validTargets: gsR.current.mana.map(m => m.instanceId),
+                        isManaTarget: true,
+                        onComplete: (ids) => {
+                            setGs(s => {
+                                const targets = s.mana.filter(m => ids.includes(m.instanceId));
+                                return { ...s, mana: s.mana.filter(m => !ids.includes(m.instanceId)), hand: [...s.hand, ...targets] };
+                            });
+                            toast("Mana returned to hand!");
+                        }
+                    });
+                }
+                if (action === "DE_EVOLVE") {
+                    setGs(p => {
+                        const target = p.battleZone.find(c => c.instanceId === details.targetId);
+                        if (!target) return p;
+                        return { ...p, battleZone: p.battleZone.filter(c => c.instanceId !== details.targetId), graveyard: [...p.graveyard, target] };
+                    });
+                    toast("Creature de-evolved!", "error");
+                }
+                if (action === "SHIELD_TO_MANA") {
+                    setGs(p => {
+                        const ids = details.targetIds;
+                        addLog(`Shields moved to mana`, 'shield');
+                        // Map shield IDs like 'shield-0' to indices
+                        const indices = ids.map(id => parseInt(id.split('-')[1]));
+                        const targets = p.shields.filter((_, i) => indices.includes(i));
+                        return { ...p, shields: p.shields.filter((_, i) => !indices.includes(i)), mana: [...p.mana, ...targets.map(c => ({...c, isTapped: false}))] };
+                    });
+                    toast("Shields moved to mana!", "error");
+                }
+                if (action === "PEEK_HAND_SHIELDS") {
+                    toast("Opponent is peeking at your hand and shields!");
+                }
+                if (action === "FORCE_DISCARD_NON_FIRE_MANA") {
+                    const nonFire = gsR.current.mana.filter(m => !m.civilizations?.includes('Fire'));
+                    if (nonFire.length > 0) {
+                        setTargeting({
+                            message: "Opponent's Quelos: Select a non-Fire mana to sacrifice",
+                            count: 1,
+                            validTargets: nonFire.map(m => m.instanceId),
+                            isManaTarget: true,
+                            onComplete: (ids) => {
+                                setGs(prev => {
+                                    const target = prev.mana.find(m => m.instanceId === ids[0]);
+                                    return { ...prev, mana: prev.mana.filter(m => m.instanceId !== ids[0]), graveyard: [...prev.graveyard, target] };
+                                });
+                            }
+                        });
+                    }
+                }
+                if (action === "DESTROY_MANA_CHOICE") {
+                    setTargeting({
+                        message: `Select ${details.count} of your mana to destroy`,
+                        count: details.count,
+                        validTargets: gsR.current.mana.map(m => m.instanceId),
+                        isManaTarget: true,
+                        onComplete: (ids) => {
+                            setGs(s => {
+                                const targets = s.mana.filter(m => ids.includes(m.instanceId));
+                                return { ...s, mana: s.mana.filter(m => !ids.includes(m.instanceId)), graveyard: [...s.graveyard, ...targets] };
+                            });
+                            toast("Mana destroyed!");
+                        }
+                    });
+                }
                 if (action === "FORCE_DESTROY_OWN") {
-                    setGs(p => { if (!p.battleZone.length) return p; const sorted = [...p.battleZone].sort((a, b) => CardEngine.basePower(a) - CardEngine.basePower(b)); const target = sorted[0]; const dest = CardEngine.onDestroyed(target); const filtered = p.battleZone.filter(c => c.instanceId !== target.instanceId); if (dest === 'mana') return { ...p, battleZone: filtered, mana: [...p.mana, { ...target, isTapped: false }] }; if (dest === 'hand') return { ...p, battleZone: filtered, hand: [...p.hand, target] }; return { ...p, battleZone: filtered, graveyard: [...p.graveyard, target] }; });
+                    setGs(p => { if (!p.battleZone.length) return p; const sorted = [...p.battleZone].sort((a, b) => CardEngine.basePower(a, p.battleZone, p.mana) - CardEngine.basePower(b, p.battleZone, p.mana)); const target = sorted[0]; const dest = CardEngine.onDestroyed(target); const filtered = p.battleZone.filter(c => c.instanceId !== target.instanceId); if (dest === 'mana') return { ...p, battleZone: filtered, mana: [...p.mana, { ...target, isTapped: false }] }; if (dest === 'hand') return { ...p, battleZone: filtered, hand: [...p.hand, target] }; return { ...p, battleZone: filtered, graveyard: [...p.graveyard, target] }; });
                     toast("Forced to sacrifice!", "error");
                 }
                 if (action === "FORCE_DESTROY_OWN_CHOICE") {
@@ -2365,29 +1128,85 @@
                     toast("Discarded a card!", "error");
                 }
                 if (action === "POWER_REDUCE_ALL") {
-                    setGs(p => { const amount = details?.amount || 2000; const survivors = []; const dead = []; p.battleZone.forEach(c => { if (CardEngine.basePower(c) - amount <= 0) dead.push(c); else survivors.push(c); }); return { ...p, battleZone: survivors, graveyard: [...p.graveyard, ...dead] }; });
+                    setGs(p => { const amount = details?.amount || 2000; const survivors = []; const dead = []; p.battleZone.forEach(c => { if (CardEngine.basePower(c, p.battleZone, p.mana) - amount <= 0) dead.push(c); else survivors.push(c); }); return { ...p, battleZone: survivors, graveyard: [...p.graveyard, ...dead] }; });
                     toast("Power reduced!", "error");
                 }
                 if (action === "DESTROY_ALL_BLOCKERS") {
                     setGs(p => {
-                        const targets = p.battleZone.filter(c => CardEngine.parseAbilities(c).blocker);
-                        return { ...p, battleZone: p.battleZone.filter(c => !CardEngine.parseAbilities(c).blocker), graveyard: [...p.graveyard, ...targets] };
+                        const targets = p.battleZone.filter(c => CardEngine.parseAbilities(c, p.battleZone, p.mana).blocker);
+                        return { ...p, battleZone: p.battleZone.filter(c => !CardEngine.parseAbilities(c, p.battleZone, p.mana).blocker), graveyard: [...p.graveyard, ...targets] };
                     });
                     toast("Blockers annihilated!", "error");
                 }
+                if (action === "BOUNCE_ALL_BLOCKERS") {
+                    setGs(p => {
+                        const targets = p.battleZone.filter(c => CardEngine.parseAbilities(c, p.battleZone, p.mana).blocker);
+                        return { ...p, battleZone: p.battleZone.filter(c => !CardEngine.parseAbilities(c, p.battleZone, p.mana).blocker), hand: [...p.hand, ...targets] };
+                    });
+                    toast("All blockers bounced!", "error");
+                }
+                if (action === "DISCARD_ALL") {
+                    setGs(p => ({ ...p, hand: [], graveyard: [...p.graveyard, ...p.hand] }));
+                    toast("Lost Soul: Your whole hand was discarded!", "error");
+                }
+                if (action === "DESTROY_MANA") {
+                    setGs(p => {
+                        const t = p.mana.find(m => m.instanceId === details.targetId);
+                        if (!t) return p;
+                        return { ...p, mana: p.mana.filter(m => m.instanceId !== details.targetId), graveyard: [...p.graveyard, t] };
+                    });
+                    toast("Mana destroyed!", "error");
+                }
+                if (action === "MANA_TO_HAND") {
+                    setGs(p => {
+                        const count = details?.count || 1;
+                        const toReturn = p.mana.slice(-count);
+                        return { ...p, mana: p.mana.slice(0, -count), hand: [...p.hand, ...toReturn] };
+                    });
+                    toast("Mana returned to hand!", "error");
+                }
+                if (action === "GRAVE_TO_SHIELD") {
+                    setGs(p => ({ ...p, shields: [...p.shields, { name: "Mystery Shield", isFaceDown: true, image_file: "bg.png" }] }));
+                    toast("Opponent put a card into shields!", "error");
+                }
             });
         }, [net, draw, toast]);
+
+        const ctxAction = useCallback((a, d) => {
+            if (a === "AS") attack(d.a, "SHIELD");
+            if (a === "AC") attack(d.a, "CREATURE", d.tid);
+            if (a === "PB") play(d.card, "battle");
+            if (a === "PM") play(d.card, "mana");
+            if (a === "EV") {
+                const race = CardEngine.evolutionBaitRace(d.card);
+                const validBait = gs.battleZone.filter(c => c.subtypes?.some(s => {
+                    const st = s.toLowerCase();
+                    const rt = race.toLowerCase();
+                    return st.includes(rt) || rt.includes(st);
+                }));
+                if (!validBait.length) { toast(`Need a ${race} to evolve!`, "error"); return; }
+                setTargeting({
+                    message: `Select a ${race} to evolve on top of`,
+                    count: 1,
+                    validTargets: validBait.map(c => c.instanceId),
+                    onComplete: (ids) => play(d.card, "evolution", ids[0])
+                });
+            }
+        }, [attack, play, gs.battleZone]);
 
         const onDrop = useCallback((card, pt) => {
             if (isLocked || gsR.current.attackStarted) return;
             const bz = bzRef.current?.getBoundingClientRect();
             const mz = mzRef.current?.getBoundingClientRect();
-            if (bz && pt.y >= bz.top && pt.y <= bz.bottom && pt.x >= bz.left && pt.x <= bz.right) play(card, "battle");
+            if (bz && pt.y >= bz.top && pt.y <= bz.bottom && pt.x >= bz.left && pt.x <= bz.right) {
+                if (CardEngine.isEvolution(card)) ctxAction("EV", { card });
+                else play(card, "battle");
+            }
             else if (mz && pt.x >= mz.left - 20 && pt.x <= mz.right + 20 && pt.y >= mz.top - 20 && pt.y <= mz.bottom + 20) {
                 if (gsR.current.hasPlacedMana) { toast("1 mana per turn", "error"); return; }
                 play(card, "mana");
             }
-        }, [play, toast, isLocked]);
+        }, [play, toast, isLocked, ctxAction]);
         const { dragging, start: startDrag } = useDrag(onDrop);
         const isDrag = !!dragging;
 
@@ -2395,12 +1214,12 @@
             e.preventDefault(); e.stopPropagation(); unhover();
             if (isLocked) return;
             const items = [];
-            const canAtk = CardEngine.canAttack(c);
-            const canAtkPlayer = CardEngine.canAttackPlayer(c);
-            const canAtkUntapped = CardEngine.canAttackUntapped(c);
+            const canAtk = CardEngine.canAttack(c, gsR.current.battleZone, gsR.current.opponent.battleZone, gsR.current.mana);
+            const canAtkPlayer = CardEngine.canAttackPlayer(c, gsR.current.battleZone, gsR.current.mana);
+            const canAtkUntapped = CardEngine.canAttackUntapped(c, gsR.current.battleZone, gsR.current.mana);
             if (!c.isTapped && !c.summonedThisTurn && canAtk) {
                 if (canAtkPlayer) {
-                    const breaksCount = CardEngine.shieldsToBreak(c);
+                    const breaksCount = CardEngine.shieldsToBreak(c, gsR.current.battleZone, gsR.current.mana);
                     items.push({ label: `Attack Shields${breaksCount > 1 ? ` (×${breaksCount})` : ''}`, icon: "🛡", cls: "ctx-item--atk", action: "AS", data: { a: c } });
                 }
                 const tappedOpps = gsR.current.opponent.battleZone.filter(x => x.isTapped || x.chaosStrikeTarget);
@@ -2409,8 +1228,8 @@
                 if (targets.length) {
                     items.push({ type: 'sep' });
                     targets.forEach(t => {
-                        const atkPow = CardEngine.attackPower(c, gsR.current.battleZone, gsR.current.graveyard) + (c.powerBonus || 0);
-                        const defPower = CardEngine.basePower(t) + (t.powerBonus || 0);
+                        const atkPow = CardEngine.attackPower(c, gsR.current.battleZone, gsR.current.graveyard, gsR.current.mana) + (c.powerBonus || 0);
+                        const defPower = CardEngine.basePower(t, gsR.current.opponent.battleZone, gsR.current.opponent.mana) + (t.powerBonus || 0);
                         items.push({ label: `${t.name} (${defPower})`, icon: atkPow >= defPower ? "⚔" : "💀", cls: "ctx-item--atk", action: "AC", data: { a: c, tid: t.instanceId } });
                     });
                 }
@@ -2452,41 +1271,13 @@
             setCtx({ x: e.clientX, y: e.clientY, items });
         }, [unhover, isLocked]);
 
-        const ctxAction = useCallback((a, d) => {
-            if (a === "AS") attack(d.a, "SHIELD");
-            if (a === "AC") attack(d.a, "CREATURE", d.tid);
-            if (a === "PB") play(d.card, "battle");
-            if (a === "PM") play(d.card, "mana");
-            if (a === "EV") {
-                const race = CardEngine.evolutionBaitRace(d.card);
-                const validBait = gs.battleZone.filter(c => c.subtypes?.some(s => s.toLowerCase().includes(race.toLowerCase())));
-                
-                if (!validBait.length) {
-                    toast(`Need a ${race} to evolve!`, "error");
-                    return;
-                }
-
-                setTargeting({
-                    message: `Select a ${race} to evolve on top of`,
-                    count: 1,
-                    validTargets: validBait.map(c => c.instanceId),
-                    onComplete: (ids) => {
-                        play(d.card, "evolution", ids[0]);
-                    }
-                });
-            }
-        }, [attack, play, gs.battleZone]);
-
         const avail = gs.mana.filter(m => !m.isTapped).length;
         const oppAvail = gs.opponent.mana.filter(m => !m.isTapped).length;
 
         const displayPower = (c) => {
-            let power = CardEngine.basePower(c);
+            const s = gsR.current;
+            let power = CardEngine.attackPower(c, s.battleZone, s.graveyard, s.mana);
             if (c.powerBonus) power += c.powerBonus;
-            if (c.name === "Bolshack Dragon") {
-                const fireCount = gsR.current.graveyard.filter(gc => gc.civilizations?.includes('Fire')).length;
-                power += (fireCount * 1000);
-            }
             return power;
         };
 
@@ -2504,7 +1295,7 @@
                      onClick={() => isTargetable ? onTargetClick(c) : null}
                      onMouseEnter={() => hover(c)} onMouseLeave={unhover}
                      style={{ cursor: isTargetable ? 'crosshair' : (isOpponent ? 'default' : 'pointer'), position: 'relative' }}>
-                    <img src={`./cards/dm-01/${c.image_file}`} alt={c.name} />
+                    <img src={`./cards/${c.set_id || 'dm-01'}/${c.image_file}`} alt={c.name} />
                     {isTargetable && <div className={`target-highlight ${isSelected ? 'target-selected' : ''}`} />}
                     {c.power && <div className="power-gem" style={boosted ? {background:'linear-gradient(135deg,#4caf50,#2e7d32)',borderColor:'#66bb6a'} : {}}>{dp}</div>}
                     {!isOpponent && c.cost != null && <div className="cost-gem">{c.cost}</div>}
@@ -2526,29 +1317,53 @@
                         <div className="search-container">
                             <div className="search-header">
                                 <h2>{searchingDeck.message}</h2>
-                                {!searchingDeck.isReveal && <div style={{color:'rgba(255,255,255,0.5)', fontSize:12}}>Pick {searchingDeck.count} card(s)</div>}
+                                {searchingDeck.isViewOnly && <button className="btn-secondary" onClick={() => setSearchingDeck(null)}>Close</button>}
+                                {!searchingDeck.isReveal && !searchingDeck.isViewOnly && <div style={{color:'rgba(255,255,255,0.5)', fontSize:12}}>Pick {searchingDeck.count} card(s)</div>}
                             </div>
                             <div className="search-grid" style={searchingDeck.isReveal ? {display:'flex', justifyContent:'center', alignItems:'center'} : {}}>
                                 {searchingDeck.isReveal ? (
                                     <div className="card card--xl" style={{animation: 'preview-in 400ms'}}>
-                                        <img src={`./cards/dm-01/${searchingDeck.card.image_file}`} alt={searchingDeck.card.name} />
+                                        <img src={`./cards/${searchingDeck.card.set_id || 'dm-01'}/${searchingDeck.card.image_file}`} alt={searchingDeck.card.name} />
                                     </div>
                                 ) : (
-                                    gs.deck.filter(searchingDeck.filter).map(c => (
-                                        <div key={c.instanceId} className="search-card-wrap" onClick={() => {
-                                            searchingDeck.onComplete(c);
-                                            setSearchingDeck(null);
-                                        }}>
-                                            <div className="card card--md">
-                                                <img src={`./cards/dm-01/${c.image_file}`} alt={c.name} />
+                                    (searchingDeck.customList || gs.deck.filter(searchingDeck.filter)).map(c => {
+                                        const isSel = (searchingDeck.selectedIds || []).includes(c.instanceId);
+                                        return (
+                                            <div key={c.instanceId} className={`search-card-wrap ${isSel ? 'search-card--selected' : ''}`} onClick={() => {
+                                                if (searchingDeck.count === 1) {
+                                                    searchingDeck.onComplete(c);
+                                                    setSearchingDeck(null);
+                                                } else {
+                                                    const current = searchingDeck.selectedIds || [];
+                                                    if (isSel) {
+                                                        setSearchingDeck({ ...searchingDeck, selectedIds: current.filter(id => id !== c.instanceId) });
+                                                    } else if (current.length < searchingDeck.count) {
+                                                        setSearchingDeck({ ...searchingDeck, selectedIds: [...current, c.instanceId] });
+                                                    }
+                                                }
+                                            }}>
+                                                <div className="card card--md">
+                                                    <img src={`./cards/${c.set_id || 'dm-01'}/${c.image_file}`} alt={c.name} />
+                                                    {isSel && <div className="power-gem" style={{background:'var(--gold)', color:'black', top:0, left:0, bottom:'auto', right:'auto'}}>✓</div>}
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))
+                                        );
+                                    })
                                 )}
                             </div>
-                            {!searchingDeck.isReveal && (
-                                <div style={{padding:20, borderTop:'1px solid rgba(180,130,70,0.2)', textAlign:'center'}}>
-                                    <button className="btn-secondary" onClick={() => setSearchingDeck(null)}>Cancel Search</button>
+                            {searchingDeck.count > 1 && !searchingDeck.isReveal && (
+                                <div style={{padding:15, textAlign:'center', borderTop:'1px solid rgba(255,255,255,0.1)'}}>
+                                    <button className="btn-primary" onClick={() => {
+                                        const list = searchingDeck.customList || gs.deck.filter(searchingDeck.filter);
+                                        const selected = list.filter(c => (searchingDeck.selectedIds || []).includes(c.instanceId));
+                                        searchingDeck.onComplete(selected);
+                                        setSearchingDeck(null);
+                                    }} disabled={(searchingDeck.selectedIds || []).length === 0}>Done Selection ({(searchingDeck.selectedIds || []).length})</button>
+                                </div>
+                            )}
+                            {!searchingDeck.isReveal && !searchingDeck.isViewOnly && (
+                                <div style={{padding:10, borderTop:'1px solid rgba(180,130,70,0.2)', textAlign:'center'}}>
+                                    <button className="btn-secondary" style={{fontSize:10, padding:'4px 12px'}} onClick={() => setSearchingDeck(null)}>Cancel Action</button>
                                 </div>
                             )}
                         </div>
@@ -2587,12 +1402,12 @@
                     <div className="decision-box">
                         <h2>🛡️ BLOCK DECISION</h2>
                         <div style={{display:'flex', gap:10, alignItems:'center', background:'rgba(0,0,0,0.2)', padding:10, borderRadius:8}}>
-                             <img src={`./cards/dm-01/${blockingRequest.attacker.image_file}`} style={{width:50, borderRadius:4}} alt="Attacker" />
+                             <img src={`./cards/${blockingRequest.attacker.set_id || 'dm-01'}/${blockingRequest.attacker.image_file}`} style={{width:50, borderRadius:4}} alt="Attacker" />
                              <div style={{fontSize:16, color:'var(--gold)'}}>➡️</div>
                              {blockingRequest.targetType === 'SHIELD' ? (
                                  <div style={{width:35, height:50, border:'1px solid var(--gold)', borderRadius:4, background:`url(${CARD_BACK})`, backgroundSize:'cover'}}></div>
                              ) : (
-                                 <img src={`./cards/dm-01/${gs.battleZone.find(c => c.instanceId === blockingRequest.targetId)?.image_file}`} style={{width:50, borderRadius:4}} alt="Target" />
+                                 <img src={`./cards/${(gs.battleZone.find(c => c.instanceId === blockingRequest.targetId) || {}).set_id || 'dm-01'}/${(gs.battleZone.find(c => c.instanceId === blockingRequest.targetId) || {}).image_file}`} style={{width:50, borderRadius:4}} alt="Target" />
                              )}
                         </div>
                         <div className="desc">An attack is incoming! Click a highlighted blocker to intercept, or let the attack through.</div>
@@ -2610,21 +1425,20 @@
                     <div className="decision-box">
                         <h2>⚡ SHIELD TRIGGER</h2>
                         <div style={{display:'flex', gap:12}}>
-                             <img src={`./cards/dm-01/${trigger.image_file}`} style={{width:100, borderRadius:6, border:'1px solid var(--gold)'}} alt="Trigger" />
+                             <img src={`./cards/${trigger.set_id || 'dm-01'}/${trigger.image_file}`} style={{width:100, borderRadius:6, border:'1px solid var(--gold)'}} alt="Trigger" />
                              <div className="desc" style={{flex:1}}>{trigger.text}</div>
                         </div>
                         <div className="actions">
                             <button className="btn-primary" onClick={() => {
                                 const isSpell = CardEngine.isSpell(trigger);
+                                addLog(`Activated Shield Trigger: ${trigger.name}`, 'effect', false, trigger);
                                 if (isSpell) {
                                     setGs(s => ({ ...s, graveyard: [...s.graveyard, trigger] }));
-                                    const spellFx = SPELL_EFFECTS[trigger.name];
-                                    if (spellFx) setTimeout(() => spellFx(draw), 300);
+                                    triggerEffect("SPELL_EFFECTS", trigger.name);
                                     toast(`${trigger.name} triggered!`);
                                 } else {
                                     setGs(s => ({ ...s, battleZone: [...s.battleZone, { ...trigger, summonedThisTurn: true, isTapped: false, powerBonus: 0 }] }));
-                                    const etbFx = ETB_EFFECTS[trigger.name];
-                                    if (etbFx) setTimeout(() => etbFx(draw), 400);
+                                    triggerEffect("ETB_EFFECTS", trigger.name);
                                     toast(`${trigger.name} summoned from shield!`);
                                 }
                                 setTrigger(null);
@@ -2637,7 +1451,90 @@
                     </div>
                 )}
 
+                {pendingDecision && (
+                    <div className="decision-box">
+                        <h2>🤔 OPTIONAL EFFECT</h2>
+                        <div style={{display:'flex', gap:12}}>
+                             <img src={`./cards/${pendingDecision.card.set_id || 'dm-01'}/${pendingDecision.card.image_file}`} style={{width:100, borderRadius:6, border:'1px solid var(--gold)'}} alt="Candidate" />
+                             <div className="desc" style={{flex:1}}>{pendingDecision.message}</div>
+                        </div>
+                        <div className="actions">
+                            <button className="btn-primary" onClick={() => {
+                                pendingDecision.onYes();
+                                setPendingDecision(null);
+                            }}>Yes / Use Effect</button>
+                            <button className="btn-secondary" onClick={() => {
+                                pendingDecision.onNo();
+                                setPendingDecision(null);
+                            }}>No / Skip</button>
+                        </div>
+                    </div>
+                )}
+
                 <div className="toast-layer">{toasts.map(t => <Toast key={t.id} t={t} />)}</div>
+                
+                {/* ===== GAME TIMELINE ===== */}
+                <div className="timeline-sidebar">
+                    {logs.slice(0, 7).map(log => (
+                        <div key={log.id} 
+                             className={`log-entry ${log.isOpponent ? 'log-entry--opp' : ''} log-entry--${log.type}`} 
+                             title={log.time}
+                             onMouseEnter={() => log.card && hover(log.card)}
+                             onMouseLeave={() => log.card && unhover()}>
+                            {log.card && (
+                                <div className="log-thumb">
+                                    <img src={`./cards/${log.card.set_id || 'dm-01'}/${log.card.image_file}`} alt="" />
+                                </div>
+                            )}
+                            <span className="log-icon">
+                                {log.type === 'attack' ? '⚔️' : 
+                                 log.type === 'spell' ? '✨' : 
+                                 log.type === 'summon' ? '👤' : 
+                                 log.type === 'shield' ? '🛡️' : 
+                                 log.type === 'mana' ? '💧' : 
+                                 log.type === 'battle' ? '💀' : '🔥'}
+                            </span>
+                            <div className="log-text">
+                                {log.isOpponent ? <strong style={{color:'var(--fire-soft)', fontSize:7}}>OPP: </strong> : ''}
+                                {log.text}
+                            </div>
+                        </div>
+                    ))}
+                    {logs.length > 0 && <button className="history-btn" onClick={() => setShowHistory(true)}>Full History ({logs.length})</button>}
+                </div>
+
+                {/* ===== HISTORY MODAL ===== */}
+                {showHistory && (
+                    <div className="history-overlay" onClick={() => setShowHistory(false)}>
+                        <div className="history-container" onClick={e => e.stopPropagation()}>
+                            <div className="history-header">
+                                <h2>Game Chronicles</h2>
+                                <button className="btn-secondary btn-xs" onClick={() => setShowHistory(false)}>Close</button>
+                            </div>
+                            <div className="history-list">
+                                {logs.length === 0 && <div className="empty-text" style={{textAlign:'center', padding:40}}>No records yet. The battle has just begun...</div>}
+                                {logs.map(log => (
+                                    <div key={log.id} 
+                                         className="history-item" 
+                                         style={{ borderLeftColor: log.isOpponent ? 'var(--fire)' : 'var(--gold-dark)' }}
+                                         onMouseEnter={() => log.card && hover(log.card)}
+                                         onMouseLeave={() => log.card && unhover()}>
+                                        <div className="time">{log.time}</div>
+                                        {log.card && (
+                                            <div className="history-thumb">
+                                                <img src={`./cards/${log.card.set_id || 'dm-01'}/${log.card.image_file}`} alt="" />
+                                            </div>
+                                        )}
+                                        <div className="content">
+                                            {log.isOpponent ? <strong style={{color:'var(--fire-soft)'}}>Opponent </strong> : <strong style={{color:'var(--gold)'}}>You </strong>}
+                                            {log.text}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                )}
                 {preview && !isDrag && <Preview card={preview} />}
                 <CtxMenu menu={ctx} onClose={() => setCtx(null)} onAction={ctxAction} />
 
@@ -2666,7 +1563,7 @@
                                     <div key={c.instanceId || i}
                                          className={`mana-pip mana-pip--opp ${c.isTapped ? 'mana-pip--tapped' : ''}`}
                                          onMouseEnter={() => hover(c)} onMouseLeave={unhover}>
-                                        <img src={`./cards/dm-01/${c.image_file}`} alt={c.name} />
+                                        <img src={`./cards/${c.set_id || 'dm-01'}/${c.image_file}`} alt={c.name} />
                                     </div>
                                 ))}
                             </div>
@@ -2690,11 +1587,15 @@
                     )}
                     <div className="mana-label">Mana Zone</div>
                     <div className="mana-row-player">
+                        <div style={{position:'absolute', left:-40, top:0, display:'flex', flexDirection:'column', gap:5}}>
+                            <button className="btn-secondary btn-xs" onClick={() => setSearchingDeck({ message: "Graveyard", customList: gs.graveyard, isViewOnly: true, filter: () => true })}>Grave</button>
+                            <button className="btn-secondary btn-xs" onClick={() => setSearchingDeck({ message: "Mana Zone", customList: gs.mana, isViewOnly: true, filter: () => true })}>Mana</button>
+                        </div>
                         {gs.mana.map(c => (
                             <div key={c.instanceId}
                                  className={`mana-pip--player ${c.isTapped ? 'mana-pip--tapped' : 'mana-pip--active'}`}
                                  onMouseEnter={() => hover(c)} onMouseLeave={unhover}>
-                                <img src={`./cards/dm-01/${c.image_file}`} alt={c.name} />
+                                <img src={`./cards/${c.set_id || 'dm-01'}/${c.image_file}`} alt={c.name} />
                             </div>
                         ))}
                         {gs.mana.length === 0 && (
@@ -2713,9 +1614,15 @@
                         </div>
                         <div className="resource-row">
                             <div className="shield-stack">
-                                {gs.shields.map((_, i) => (
-                                    <div key={i} className="shield-gem shield-gem--self" style={{ backgroundImage: `url(${CARD_BACK})` }} />
-                                ))}
+                                {gs.shields.map((_, i) => {
+                                    const isTargetable = targeting && targeting.isShieldTarget && targeting.validTargets.includes(`shield-${i}`);
+                                    return (
+                                        <div key={i} 
+                                             className={`shield-gem shield-gem--self ${isTargetable ? 'target-highlight' : ''}`} 
+                                             style={{ backgroundImage: `url(${CARD_BACK})`, cursor: isTargetable ? 'crosshair' : 'default' }}
+                                             onClick={() => isTargetable && onTargetClick({ instanceId: `shield-${i}` })} />
+                                    );
+                                })}
                                 {gs.shields.length === 0 && <span style={{ fontSize: 9, color: 'var(--fire)', fontWeight: 900 }}>!</span>}
                             </div>
                         </div>
@@ -2744,7 +1651,7 @@
                                             onMouseEnter={() => { if (!isDrag) hover(c); }}
                                             onMouseLeave={unhover}
                                         >
-                                            <img src={`./cards/dm-01/${c.image_file}`} alt={c.name} />
+                                            <img src={`./cards/${c.set_id || 'dm-01'}/${c.image_file}`} alt={c.name} />
                                             {c.cost != null && <div className="cost-gem">{c.cost}</div>}
                                             {c.power && <div className="power-gem">{c.power}</div>}
                                             {CardEngine.isSpell(c) && <div style={{position:'absolute',top:4,right:4,fontSize:12,filter:'drop-shadow(0 1px 3px rgba(0,0,0,0.8))',zIndex:5}}>✨</div>}
@@ -2775,7 +1682,7 @@
                     </div>
                     <div className="pile-counter">
                         <div className="pile-icon" style={{
-                            backgroundImage: gs.graveyard.length ? `url(./cards/dm-01/${gs.graveyard[gs.graveyard.length-1].image_file})` : `url(${CARD_BACK})`,
+                            backgroundImage: gs.graveyard.length ? `url(./cards/${gs.graveyard[gs.graveyard.length-1].set_id || 'dm-01'}/${gs.graveyard[gs.graveyard.length-1].image_file})` : `url(${CARD_BACK})`,
                             filter: 'brightness(0.5) saturate(0.5)',
                         }} />
                         <div className="pile-num" style={{ color: 'var(--fire)' }}>{gs.graveyard.length}</div>
@@ -2791,6 +1698,91 @@
                     <div className="pile-counter">
                         <div style={{ width:32, height:45, borderRadius:4, background:`url(${CARD_BACK})`, backgroundSize:'cover', border:'1px solid rgba(255,60,60,0.2)', filter:'brightness(0.5) saturate(0.5)', boxShadow:'0 2px 6px rgba(0,0,0,0.5)' }} />
                         <div className="pile-num" style={{ color: 'var(--fire)', fontSize: 11 }}>{gs.opponent.graveyard?.length || 0}</div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    /* ============ DECK BUILDER ============ */
+    const DeckBuilder = ({ cards, initialDeck, onSave, onExit }) => {
+        const [deck, setDeck] = useState(() => {
+            if (!initialDeck) return [];
+            const full = [];
+            initialDeck.cards.forEach(dc => {
+                const info = cards.find(c => c.id === dc.id && c.set_id === dc.set_id);
+                if (info) {
+                    for (let i = 0; i < dc.count; i++) full.push({ ...info, instanceId: Math.random().toString(36).substr(2, 9) });
+                }
+            });
+            return full;
+        });
+        const [filter, setFilter] = useState("All");
+        const [preview, setPreview] = useState(null);
+        const [deckName, setDeckName] = useState(initialDeck?.name || "Custom Deck");
+
+        const addCard = (card) => {
+            if (deck.length >= 40) return;
+            const count = deck.filter(c => c.name === card.name).length;
+            if (count >= 4) return;
+            setDeck([...deck, { ...card, instanceId: Math.random().toString(36).substr(2, 9) }]);
+        };
+
+        const removeCard = (idx) => {
+            setDeck(deck.filter((_, i) => i !== idx));
+        };
+
+        const filteredCards = filter === "All" ? cards : cards.filter(c => c.civilizations?.includes(filter));
+
+        return (
+            <div className="db-layout">
+                {preview && <Preview card={preview} />}
+                
+                <div className="db-catalog">
+                    <div className="db-catalog-header">
+                        <h2>Card Catalog</h2>
+                        <div style={{display:'flex', gap:6}}>
+                            {["All", "Light", "Water", "Darkness", "Fire", "Nature"].map(c => (
+                                <button key={c} className={`civ-filter-btn ${filter === c ? 'active' : ''}`} onClick={() => setFilter(c)}>{c}</button>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="db-catalog-grid">
+                        {filteredCards.map(c => {
+                            const count = deck.filter(x => x.name === c.name).length;
+                            return (
+                                <div key={`${c.set_id}-${c.id}`} className={`card card--md ${count >= 4 ? 'limit-reached' : ''}`} 
+                                     onClick={() => addCard(c)}
+                                     onMouseEnter={() => setPreview(c)}
+                                     onMouseLeave={() => setPreview(null)}
+                                     style={{cursor: 'pointer'}}>
+                                    <img src={`./cards/${c.set_id || 'dm-01'}/${c.image_file}`} alt={c.name} />
+                                    {count > 0 && <div className="power-gem" style={{background:'var(--gold)', color:'black', top: -5, right: -5, bottom: 'auto', borderRadius: '50%', width: 22}}>{count}</div>}
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                <div className="db-deck-pane">
+                    <div className="db-deck-header">
+                        <input value={deckName} onChange={e => setDeckName(e.target.value)} 
+                               style={{background:'none', border:'none', borderBottom:'1px solid var(--gold)', color:'var(--gold)', font:'inherit', fontWeight:900, width:'100%', outline:'none'}} />
+                        <div style={{fontSize:12, marginTop:8, opacity:0.6}}>Cards: {deck.length} / 40</div>
+                    </div>
+                    <div className="db-deck-list">
+                        {deck.map((c, i) => (
+                            <div key={c.instanceId} className="db-deck-card card" 
+                                 onClick={() => removeCard(i)}
+                                 onMouseEnter={() => setPreview(c)}
+                                 onMouseLeave={() => setPreview(null)}>
+                                <img src={`./cards/${c.set_id}/${c.image_file}`} alt={c.name} />
+                            </div>
+                        ))}
+                    </div>
+                    <div className="db-footer">
+                        <button className="btn-primary" onClick={() => onSave({ name: deckName, cards: deck })} disabled={deck.length !== 40}>Save Deck</button>
+                        <button className="btn-secondary" onClick={onExit}>Exit</button>
                     </div>
                 </div>
             </div>
@@ -2816,40 +1808,123 @@
         const [jc, setJc] = useState("");
         const [loading, setLoading] = useState(true);
         const [selIdx, setSelIdx] = useState(0);
+        const [customDecks, setCustomDecks] = useState([]);
+        const [editingDeckIdx, setEditingDeckIdx] = useState(null);
+        const [toasts, setToasts] = useState([]);
+
+        const toast = (msg, type = "success") => {
+            const id = Date.now();
+            setToasts(p => [...p, { id, message: msg, type }]);
+            setTimeout(() => setToasts(p => p.filter(t => t.id !== id)), 3000);
+        };
 
         useEffect(() => {
-            fetch("./cards/dm-01/metadata.json").then(r => r.json()).then(d => { setCards(d); setLoading(false); }).catch(() => setLoading(false));
+            // Fetch all metadata
+            const sets = ["dm-01", "dm-02", "dm-03"];
+            Promise.all(sets.map(s => fetch(`./cards/${s}/metadata.json`).then(r => r.json())))
+                .then(allSets => {
+                    setCards(allSets.flat());
+                    setLoading(false);
+                }).catch(() => setLoading(false));
+
             const p = new Peer();
             p.on('open', id => setCode(id));
             p.on('connection', c => { c.on('open', () => { setConn(c); setIsHost(true); setView("game"); }); });
             setPeer(p);
+
+            // Load custom decks
+            const saved = localStorage.getItem("dm_custom_decks");
+            if (saved) setCustomDecks(JSON.parse(saved));
         }, []);
+
+        const saveCustomDeck = (deck) => {
+            const deckData = {
+                name: deck.name,
+                color: deck.cards[0]?.civilizations[0] || "Neutral",
+                isCustom: true,
+                cards: deck.cards.reduce((acc, c) => {
+                    const existing = acc.find(x => x.id === c.id && x.set_id === c.set_id);
+                    if (existing) existing.count++;
+                    else acc.push({ id: c.id, set_id: c.set_id, count: 1 });
+                    return acc;
+                }, [])
+            };
+            let newDecks;
+            if (editingDeckIdx !== null) {
+                newDecks = [...customDecks];
+                newDecks[editingDeckIdx] = deckData;
+            } else {
+                newDecks = [...customDecks, deckData];
+            }
+            setCustomDecks(newDecks);
+            localStorage.setItem("dm_custom_decks", JSON.stringify(newDecks));
+            setEditingDeckIdx(null);
+            setView("home");
+        };
+
+        const editDeck = (idx, e) => {
+            e.stopPropagation();
+            setEditingDeckIdx(idx);
+            setView("deckbuilder");
+        };
+
+        const deleteDeck = (idx, e) => {
+            e.stopPropagation();
+            const newDecks = customDecks.filter((_, i) => i !== idx);
+            setCustomDecks(newDecks);
+            localStorage.setItem("dm_custom_decks", JSON.stringify(newDecks));
+            if (selIdx >= DECKS.length + newDecks.length) setSelIdx(0);
+        };
 
         const join = () => { if (!jc.trim() || !peer) return; const c = peer.connect(jc.trim()); c.on('open', () => { setConn(c); setIsHost(false); setView("game"); }); };
 
         if (loading || !cards.length) return <div className="loading"><div className="ring" /><p>Loading...</p></div>;
 
+        const allDecks = [...DECKS, ...customDecks];
+
         if (view === "game") {
-            return <GameBoard cards={cards} deck={DECKS[selIdx]} conn={conn} isHost={isHost} />;
+            return <GameBoard cards={cards} deck={allDecks[selIdx]} conn={conn} isHost={isHost} />;
+        }
+
+        if (view === "deckbuilder") {
+            return <DeckBuilder cards={cards} initialDeck={editingDeckIdx !== null ? customDecks[editingDeckIdx] : null} onSave={saveCustomDeck} onExit={() => { setView("home"); setEditingDeckIdx(null); }} />;
         }
 
         return (
             <div className="lobby">
+                <div className="toast-layer">
+                    {toasts.map(t => (
+                        <div key={t.id} className={`toast toast--${t.type}`} style={{animation:'toast-in 0.3s ease-out forwards'}}>
+                            {t.type === 'error' ? '⚠️' : '✨'} {t.message}
+                        </div>
+                    ))}
+                </div>
                 <h1 style={{marginBottom: 20}}>Duel<span>Masters</span></h1>
                 <div className="lobby-grid">
-                    <div className="lobby-panel" style={{gridColumn: 'span 1'}}>
-                        <h2>Select Deck</h2>
-                        <p className="sub">Mono-civilization</p>
-                        <div style={{display:'flex', flexDirection:'column', gap:8, marginTop:10}}>
-                            {DECKS.map((d, i) => (
+                    <div className="lobby-panel" style={{gridColumn: 'span 1', display:'flex', flexDirection:'column'}}>
+                        <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+                            <h2>Select Deck</h2>
+                            <button className="btn-secondary" style={{padding:'4px 8px', fontSize:9}} onClick={() => setView("deckbuilder")}>+ New Deck</button>
+                        </div>
+                        <p className="sub">Standard & Custom</p>
+                        <div style={{flex:1, overflowY:'auto', display:'flex', flexDirection:'column', gap:8, marginTop:10, paddingRight:5}}>
+                            {allDecks.map((d, i) => (
                                 <div key={i} onClick={() => setSelIdx(i)} style={{
-                                    padding: '12px 16px', borderRadius: 8, cursor: 'pointer',
+                                    padding: '12px 16px', borderRadius: 8, cursor: 'pointer', position:'relative',
                                     border: `2px solid ${selIdx === i ? 'var(--gold)' : 'rgba(180,130,70,0.1)'}`,
                                     background: selIdx === i ? 'rgba(255,214,68,0.1)' : 'rgba(0,0,0,0.2)',
                                     transition: 'all 0.2s'
                                 }}>
                                     <div style={{fontSize:13, fontWeight:900, color: selIdx === i ? 'var(--gold)' : 'var(--cream)'}}>{d.name}</div>
                                     <div style={{fontSize:9, opacity:0.5, textTransform:'uppercase'}}>{d.color}</div>
+                                    {d.isCustom && (
+                                        <div style={{position:'absolute', right:10, top:10, display:'flex', gap:10}}>
+                                            <button onClick={(e) => editDeck(i - DECKS.length, e)} 
+                                                    style={{background:'none', border:'none', color:'var(--gold)', cursor:'pointer', fontSize:12}}>Edit</button>
+                                            <button onClick={(e) => deleteDeck(i - DECKS.length, e)} 
+                                                    style={{background:'none', border:'none', color:'var(--fire)', cursor:'pointer', fontSize:14}}>×</button>
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </div>
@@ -2858,13 +1933,32 @@
                         <h2>Online Duel</h2>
                         <p className="sub">Share code or join</p>
                         <div style={{ marginBottom: 12 }}>
-                                <span className="lobby-code" onClick={() => code && navigator.clipboard.writeText(code)} title="Click to copy">
+                                <span className="lobby-code" onClick={() => {
+                                    if (code) {
+                                        if (navigator.clipboard && navigator.clipboard.writeText) {
+                                            navigator.clipboard.writeText(code);
+                                            toast("Code copied to clipboard!");
+                                        } else {
+                                            const textArea = document.createElement("textarea");
+                                            textArea.value = code;
+                                            document.body.appendChild(textArea);
+                                            textArea.select();
+                                            try {
+                                                document.execCommand('copy');
+                                                toast("Code copied (fallback)!");
+                                            } catch (err) {
+                                                alert("Copy failed. Your ID: " + code);
+                                            }
+                                            document.body.removeChild(textArea);
+                                        }
+                                    }
+                                }} title="Click to copy">
                                     {code || "Generating..."}
                                 </span>
                         </div>
                         <div className="join-row">
                             <input className="join-input" placeholder="Opponent's code" value={jc} onChange={e => setJc(e.target.value)} onKeyDown={e => e.key === 'Enter' && join()} />
-                            <button className="join-btn" onClick={join}>Connect</button>
+                            <button className="btn-primary" style={{borderRadius:'0 8px 8px 0', height:'36px', padding:'0 25px'}} onClick={join}>Connect</button>
                         </div>
                     </div>
                 </div>
