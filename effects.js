@@ -7,7 +7,12 @@
  */
 
 export const ETB_EFFECTS = {
-    "Aqua Hulcus": ({ draw, toast }) => { draw(); toast("Aqua Hulcus: Draw 1 card!"); },
+    "Aqua Hulcus": ({ draw, toast, askMay }) => {
+        askMay({
+            message: "Use Aqua Hulcus's effect to draw a card?",
+            onYes: () => { draw(); toast("Aqua Hulcus: Draw 1 card!"); }
+        });
+    },
     "Aqua Sniper": ({ gsR, setTargeting, net, setGs, toast }) => {
         const s = gsR.current;
         const allCreatures = [...s.battleZone, ...s.opponent.battleZone];
@@ -26,7 +31,12 @@ export const ETB_EFFECTS = {
             }
         });
     },
-    "King Ripped-Hide": ({ draw, toast }) => { draw(); setTimeout(() => draw(), 200); toast("King Ripped-Hide: Draw 2 cards!"); },
+    "King Ripped-Hide": ({ draw, toast, askMay }) => {
+        askMay({
+            message: "Use King Ripped-Hide's effect to draw 2 cards?",
+            onYes: () => { draw(); setTimeout(() => draw(), 200); toast("King Ripped-Hide: Draw 2 cards!"); }
+        });
+    },
     "Emeral": ({ gsR, setSearchingDeck, setTargeting, setGs, toast, askMay }) => {
         const s = gsR.current;
         if (!s.hand.length) return;
@@ -63,10 +73,10 @@ export const ETB_EFFECTS = {
             }
         });
     },
-    "Saucer-Head Shark": ({ setGs, net, toast, CardEngine }) => {
+    "Saucer-Head Shark": ({ setGs, net, toast, CardEngine, gsR }) => {
         setGs(p => {
-            const toReturn = p.battleZone.filter(c => CardEngine.basePower(c, p.battleZone, p.mana) <= 2000);
-            return { ...p, battleZone: p.battleZone.filter(c => CardEngine.basePower(c, p.battleZone, p.mana) > 2000), hand: [...p.hand, ...toReturn] };
+            const toReturn = p.battleZone.filter(c => CardEngine.getCurrentPower(c, p.battleZone, p.mana) <= 2000);
+            return { ...p, battleZone: p.battleZone.filter(c => CardEngine.getCurrentPower(c, p.battleZone, p.mana) > 2000), hand: [...p.hand, ...toReturn] };
         });
         net.send("ACTION", { action: "BOUNCE_WEAK", details: { maxPower: 2000 } });
         toast("Saucer-Head Shark: Bounce weak creatures!");
@@ -94,23 +104,62 @@ export const ETB_EFFECTS = {
     "Illusionary Merfolk": ({ gsR, toast, draw }) => {
         const hasCyberLord = gsR.current.battleZone.some(c => c.subtypes?.some(s => s.toLowerCase().includes('cyber lord')));
         if (hasCyberLord) { toast("Illusionary Merfolk: Draw 3!"); setTimeout(() => { draw(); setTimeout(() => { draw(); setTimeout(() => draw(), 150); }, 150); }, 100); }
-        else { toast("No Cyber Lord — no draw"); }
+        else { toast("No Cyber Lord \u2014 no draw"); }
     },
-    "Artisan Picora": ({ setGs, toast }) => {
-        setGs(p => { if (p.mana.length === 0) return p; const removed = p.mana[p.mana.length - 1]; return { ...p, mana: p.mana.slice(0, -1), graveyard: [...p.graveyard, removed] }; });
-        toast("Artisan Picora: Mana to graveyard!");
+    "Artisan Picora": ({ gsR, setGs, setTargeting, toast }) => {
+        const s = gsR.current;
+        if (!s.mana.length) return;
+        setTargeting({
+            message: "Artisan Picora: Select mana to put into graveyard",
+            count: 1,
+            validTargets: s.mana.map(m => m.instanceId),
+            isManaTarget: true,
+            onComplete: (ids) => {
+                setGs(p => {
+                    const card = p.mana.find(m => m.instanceId === ids[0]);
+                    return { ...p, mana: p.mana.filter(m => m.instanceId !== ids[0]), graveyard: [...p.graveyard, card] };
+                });
+                toast("Artisan Picora: Mana to graveyard!");
+            }
+        });
     },
-    "Onslaughter Triceps": ({ setGs, toast }) => {
-        setGs(p => { if (p.mana.length === 0) return p; const removed = p.mana[p.mana.length - 1]; return { ...p, mana: p.mana.slice(0, -1), graveyard: [...p.graveyard, removed] }; });
-        toast("Onslaughter Triceps: Mana to graveyard!");
+    "Onslaughter Triceps": ({ gsR, setGs, setTargeting, toast }) => {
+        const s = gsR.current;
+        if (!s.mana.length) return;
+        setTargeting({
+            message: "Onslaughter Triceps: Select mana to put into graveyard",
+            count: 1,
+            validTargets: s.mana.map(m => m.instanceId),
+            isManaTarget: true,
+            onComplete: (ids) => {
+                setGs(p => {
+                    const card = p.mana.find(m => m.instanceId === ids[0]);
+                    return { ...p, mana: p.mana.filter(m => m.instanceId !== ids[0]), graveyard: [...p.graveyard, card] };
+                });
+                toast("Onslaughter Triceps: Mana to graveyard!");
+            }
+        });
     },
-    "Explosive Fighter Ucarn": ({ setGs, toast }) => {
-        setGs(p => { const toRemove = p.mana.slice(-2); return { ...p, mana: p.mana.slice(0, -2), graveyard: [...p.graveyard, ...toRemove] }; });
-        toast("Ucarn: 2 mana to graveyard!");
+    "Explosive Fighter Ucarn": ({ gsR, setGs, setTargeting, toast }) => {
+        const s = gsR.current;
+        if (s.mana.length < 2) return;
+        setTargeting({
+            message: "Ucarn: Select 2 mana to put into graveyard",
+            count: 2,
+            validTargets: s.mana.map(m => m.instanceId),
+            isManaTarget: true,
+            onComplete: (ids) => {
+                setGs(p => {
+                    const toRemove = p.mana.filter(m => ids.includes(m.instanceId));
+                    return { ...p, mana: p.mana.filter(m => !ids.includes(m.instanceId)), graveyard: [...p.graveyard, ...toRemove] };
+                });
+                toast("Ucarn: 2 mana to graveyard!");
+            }
+        });
     },
     "Meteosaur": ({ gsR, toast, setTargeting, net, CardEngine, askMay }) => {
         const s = gsR.current;
-        const targets = s.opponent.battleZone.filter(c => CardEngine.basePower(c, s.opponent.battleZone, s.opponent.mana) <= 2000);
+        const targets = s.opponent.battleZone.filter(c => CardEngine.getCurrentPower(c, s.opponent.battleZone, s.opponent.mana) <= 2000);
         if (!targets.length) return;
         askMay({
             message: "Use Meteosaur's effect to destroy an enemy creature?",
@@ -149,23 +198,48 @@ export const ETB_EFFECTS = {
         toast("Bronze-Arm Tribe: Mana boost!");
     },
     "Storm Shell": ({ net, toast }) => { net.send("ACTION", { action: "CREATURE_TO_MANA_CHOICE" }); toast("Storm Shell: Opponent loses a creature!"); },
-    "Poisonous Mushroom": ({ setGs, toast, askMay }) => {
+    "Poisonous Mushroom": ({ gsR, setGs, setSearchingDeck, toast, askMay }) => {
+        const s = gsR.current;
+        if (!s.hand.length) return;
         askMay({
             message: "Use Poisonous Mushroom's effect to put a card from hand into mana?",
             onYes: () => {
-                setGs(p => { if (p.hand.length === 0) return p; const card = p.hand[p.hand.length - 1]; return { ...p, hand: p.hand.slice(0, -1), mana: [...p.mana, { ...card, isTapped: false }] }; });
-                toast("Poisonous Mushroom: Hand to mana!");
+                setSearchingDeck({
+                    message: "Poisonous Mushroom: Select a card from hand to put into mana",
+                    count: 1,
+                    customList: s.hand,
+                    onComplete: (card) => {
+                        setGs(p => ({
+                            ...p,
+                            hand: p.hand.filter(x => x.instanceId !== card.instanceId),
+                            mana: [...p.mana, { ...card, isTapped: false }]
+                        }));
+                        toast("Poisonous Mushroom: Hand to mana!");
+                    }
+                });
             }
         });
     },
-    "Thorny Mandra": ({ setGs, toast, askMay, gsR }) => {
-        const creature = gsR.current.graveyard.find(c => c.type === 'Creature');
-        if (!creature) return;
+    "Thorny Mandra": ({ gsR, setGs, setSearchingDeck, toast, askMay }) => {
+        const creatures = gsR.current.graveyard.filter(c => c.type === 'Creature');
+        if (!creatures.length) return;
         askMay({
             message: "Use Thorny Mandra's effect to put a creature from grave into mana?",
             onYes: () => {
-                setGs(p => { const c = p.graveyard.find(x => x.type === 'Creature'); if (!c) return p; return { ...p, graveyard: p.graveyard.filter(x => x.instanceId !== c.instanceId), mana: [...p.mana, { ...c, isTapped: false }] }; });
-                toast("Thorny Mandra: Graveyard to mana!");
+                setSearchingDeck({
+                    message: "Thorny Mandra: Select creature from graveyard to put into mana",
+                    count: 1,
+                    isGraveSearch: true,
+                    customList: creatures,
+                    onComplete: (card) => {
+                        setGs(p => ({
+                            ...p,
+                            graveyard: p.graveyard.filter(x => x.instanceId !== card.instanceId),
+                            mana: [...p.mana, { ...card, isTapped: false }]
+                        }));
+                        toast("Thorny Mandra: Graveyard to mana!");
+                    }
+                });
             }
         });
     },
@@ -342,36 +416,46 @@ export const ETB_EFFECTS = {
             }
         });
     },
-    "Aqua Bouncer": ({ gsR, setTargeting, net, setGs, toast }) => {
+    "Aqua Bouncer": ({ gsR, setTargeting, net, setGs, toast, askMay }) => {
         const s = gsR.current;
         const allCreatures = [...s.battleZone, ...s.opponent.battleZone];
         if (!allCreatures.length) return;
-        setTargeting({
-            message: "Aqua Bouncer: Select a creature to bounce",
-            count: 1,
-            validTargets: allCreatures.map(c => c.instanceId),
-            onComplete: (selectedIds) => {
-                const id = selectedIds[0];
-                net.send("ACTION", { action: "BOUNCE_TARGET", details: { targetId: id } });
-                setGs(s => {
-                    const c = s.battleZone.find(x => x.instanceId === id);
-                    if (!c) return s;
-                    return { ...s, battleZone: s.battleZone.filter(x => x.instanceId !== id), hand: [...s.hand, c] };
+        askMay({
+            message: "Use Aqua Bouncer's effect to bounce a creature?",
+            onYes: () => {
+                setTargeting({
+                    message: "Aqua Bouncer: Select a creature to bounce",
+                    count: 1,
+                    validTargets: allCreatures.map(c => c.instanceId),
+                    onComplete: (selectedIds) => {
+                        const id = selectedIds[0];
+                        net.send("ACTION", { action: "BOUNCE_TARGET", details: { targetId: id } });
+                        setGs(s => {
+                            const c = s.battleZone.find(x => x.instanceId === id);
+                            if (!c) return s;
+                            return { ...s, battleZone: s.battleZone.filter(x => x.instanceId !== id), hand: [...s.hand, c] };
+                        });
+                        toast("Creature bounced!");
+                    }
                 });
-                toast("Creature bounced!");
             }
         });
     },
-    "Chaos Worm": ({ gsR, setTargeting, net, toast }) => {
+    "Chaos Worm": ({ gsR, setTargeting, net, toast, askMay }) => {
         const s = gsR.current;
         if (!s.opponent.battleZone.length) return;
-        setTargeting({
-            message: "Chaos Worm: Select an opponent's creature to destroy",
-            count: 1,
-            validTargets: s.opponent.battleZone.map(c => c.instanceId),
-            onComplete: (selectedIds) => {
-                net.send("ACTION", { action: "DESTROY_TARGET", details: { targetId: selectedIds[0] } });
-                toast("Creature destroyed!");
+        askMay({
+            message: "Use Chaos Worm's effect to destroy an enemy creature?",
+            onYes: () => {
+                setTargeting({
+                    message: "Chaos Worm: Select an opponent's creature to destroy",
+                    count: 1,
+                    validTargets: s.opponent.battleZone.map(c => c.instanceId),
+                    onComplete: (selectedIds) => {
+                        net.send("ACTION", { action: "DESTROY_TARGET", details: { targetId: selectedIds[0] } });
+                        toast("Creature destroyed!");
+                    }
+                });
             }
         });
     },
@@ -404,29 +488,39 @@ export const ETB_EFFECTS = {
         blockers.forEach(c => net.send("ACTION", { action: "TAP_TARGET", details: { targetId: c.instanceId } }));
         toast("Larba Geer: Tapped all blockers!");
     },
-    "Magris, Vizier of Magnetism": ({ draw, toast }) => { draw(); toast("Magris: Draw 1 card!"); },
-    "Phal Eega, Dawn Guardian": ({ gsR, setSearchingDeck, setGs, toast }) => {
+    "Magris, Vizier of Magnetism": ({ draw, toast, askMay }) => {
+        askMay({
+            message: "Use Magris's effect to draw a card?",
+            onYes: () => { draw(); toast("Magris: Draw 1 card!"); }
+        });
+    },
+    "Phal Eega, Dawn Guardian": ({ gsR, setSearchingDeck, setGs, toast, askMay }) => {
         const s = gsR.current;
         const spells = s.graveyard.filter(c => c.type === 'Spell');
         if (!spells.length) return;
-        setSearchingDeck({
-            message: "Phal Eega: Return a spell from graveyard",
-            count: 1,
-            filter: () => true,
-            isGraveSearch: true,
-            customList: spells,
-            onComplete: (card) => {
-                setGs(prev => ({
-                    ...prev,
-                    graveyard: prev.graveyard.filter(x => x.instanceId !== card.instanceId),
-                    hand: [...prev.hand, card]
-                }));
-                toast(`${card.name} returned from graveyard!`);
+        askMay({
+            message: "Use Phal Eega's effect to return a spell from graveyard?",
+            onYes: () => {
+                setSearchingDeck({
+                    message: "Phal Eega: Return a spell from graveyard",
+                    count: 1,
+                    filter: () => true,
+                    isGraveSearch: true,
+                    customList: spells,
+                    onComplete: (card) => {
+                        setGs(prev => ({
+                            ...prev,
+                            graveyard: prev.graveyard.filter(x => x.instanceId !== card.instanceId),
+                            hand: [...prev.hand, card]
+                        }));
+                        toast(`${card.name} returned from graveyard!`);
+                    }
+                });
             }
         });
     },
     "Poison Worm": ({ gsR, setTargeting, setGs, toast, CardEngine }) => {
-        const targets = gsR.current.battleZone.filter(c => CardEngine.basePower(c, gsR.current.battleZone, gsR.current.mana) <= 3000);
+        const targets = gsR.current.battleZone.filter(c => CardEngine.getCurrentPower(c, gsR.current.battleZone, gsR.current.mana) <= 3000);
         if (!targets.length) return;
         setTargeting({
             message: "Poison Worm: Select one of your creatures to destroy (3000 or less)",
@@ -462,31 +556,41 @@ export const ETB_EFFECTS = {
             }
         });
     },
-    "Lena, Vizier of Brilliance": ({ gsR, setSearchingDeck, setGs, toast }) => {
+    "Lena, Vizier of Brilliance": ({ gsR, setSearchingDeck, setGs, toast, askMay }) => {
         const s = gsR.current;
         const spells = s.mana.filter(c => c.type === 'Spell');
         if (!spells.length) return;
-        setSearchingDeck({
-            message: "Lena: Select a spell from your mana to return to hand",
-            count: 1,
-            customList: spells,
-            onComplete: (card) => {
-                setGs(p => ({ ...p, mana: p.mana.filter(m => m.instanceId !== card.instanceId), hand: [...p.hand, card] }));
-                toast("Lena: Spell returned from mana!");
+        askMay({
+            message: "Use Lena's effect to return a spell from mana?",
+            onYes: () => {
+                setSearchingDeck({
+                    message: "Lena: Select a spell from your mana to return to hand",
+                    count: 1,
+                    customList: spells,
+                    onComplete: (card) => {
+                        setGs(p => ({ ...p, mana: p.mana.filter(m => m.instanceId !== card.instanceId), hand: [...p.hand, card] }));
+                        toast("Lena: Spell returned from mana!");
+                    }
+                });
             }
         });
     },
-    "Pouch Shell": ({ gsR, setTargeting, net, toast, CardEngine }) => {
+    "Pouch Shell": ({ gsR, setTargeting, net, toast, CardEngine, askMay }) => {
         const s = gsR.current;
         const evos = s.opponent.battleZone.filter(c => CardEngine.isEvolution(c));
         if (!evos.length) return;
-        setTargeting({
-            message: "Pouch Shell: Select enemy evolution creature to de-evolve",
-            count: 1,
-            validTargets: evos.map(c => c.instanceId),
-            onComplete: (ids) => {
-                net.send("ACTION", { action: "DE_EVOLVE", details: { targetId: ids[0] } });
-                toast("Pouch Shell triggered!");
+        askMay({
+            message: "Use Pouch Shell's effect to de-evolve an enemy creature?",
+            onYes: () => {
+                setTargeting({
+                    message: "Pouch Shell: Select enemy evolution creature to de-evolve",
+                    count: 1,
+                    validTargets: evos.map(c => c.instanceId),
+                    onComplete: (ids) => {
+                        net.send("ACTION", { action: "DE_EVOLVE", details: { targetId: ids[0] } });
+                        toast("Pouch Shell triggered!");
+                    }
+                });
             }
         });
     },
@@ -528,28 +632,44 @@ export const ETB_EFFECTS = {
     },
     "Vampire Silphy": ({ setGs, net, toast, CardEngine }) => {
         setGs(p => {
-            const toDestroy = p.battleZone.filter(c => CardEngine.basePower(c) <= 3000 && c.name !== "Vampire Silphy");
-            return { ...p, battleZone: p.battleZone.filter(c => CardEngine.basePower(c) > 3000 || c.name === "Vampire Silphy"), graveyard: [...p.graveyard, ...toDestroy] };
+            const toDestroy = p.battleZone.filter(c => CardEngine.getCurrentPower(c, p.battleZone, p.mana) <= 3000 && c.name !== "Vampire Silphy");
+            return { ...p, battleZone: p.battleZone.filter(c => CardEngine.getCurrentPower(c, p.battleZone, p.mana) > 3000 || c.name === "Vampire Silphy"), graveyard: [...p.graveyard, ...toDestroy] };
         });
         net.send("ACTION", { action: "DESTROY_ALL_WEAK", details: { maxPower: 3000 } });
         toast("Vampire Silphy: Mass destruction!");
     },
     "Crystal Paladin": ({ setGs, net, toast, CardEngine }) => {
         setGs(p => {
-            const blockers = p.battleZone.filter(c => CardEngine.parseAbilities(c).blocker);
-            return { ...p, battleZone: p.battleZone.filter(c => !CardEngine.parseAbilities(c).blocker), hand: [...p.hand, ...blockers] };
+            const blockers = p.battleZone.filter(c => CardEngine.parseAbilities(c, p.battleZone, p.mana).blocker);
+            return { ...p, battleZone: p.battleZone.filter(c => !CardEngine.parseAbilities(c, p.battleZone, p.mana).blocker), hand: [...p.hand, ...blockers] };
         });
         net.send("ACTION", { action: "BOUNCE_ALL_BLOCKERS" });
         toast("Crystal Paladin: Bounce all blockers!");
     },
-    "Gigargon": ({ setGs, toast }) => {
-        setGs(p => { const creatures = p.graveyard.filter(c => c.type === 'Creature').slice(-2); return { ...p, graveyard: p.graveyard.filter(c => !creatures.includes(c)), hand: [...p.hand, ...creatures] }; });
-        toast("Gigargon: Recover 2 creatures!");
+    "Gigargon": ({ gsR, setGs, setSearchingDeck, toast }) => {
+        const creatures = gsR.current.graveyard.filter(c => c.type === 'Creature');
+        if (!creatures.length) return;
+        setSearchingDeck({
+            message: "Gigargon: Select up to 2 creatures from graveyard to return to hand",
+            count: 2,
+            isGraveSearch: true,
+            customList: creatures,
+            onComplete: (cards) => {
+                const selected = Array.isArray(cards) ? cards : [cards];
+                const ids = selected.map(c => c.instanceId);
+                setGs(p => ({
+                    ...p,
+                    graveyard: p.graveyard.filter(x => !ids.includes(x.instanceId)),
+                    hand: [...p.hand, ...selected]
+                }));
+                toast("Gigargon: Recovered creatures!");
+            }
+        });
     },
     "Scarlet Skyterror": ({ setGs, net, toast, CardEngine }) => {
         setGs(p => {
-            const toDestroy = p.battleZone.filter(c => CardEngine.parseAbilities(c).blocker);
-            return { ...p, battleZone: p.battleZone.filter(c => !CardEngine.parseAbilities(c).blocker), graveyard: [...p.graveyard, ...toDestroy] };
+            const toDestroy = p.battleZone.filter(c => CardEngine.parseAbilities(c, p.battleZone, p.mana).blocker);
+            return { ...p, battleZone: p.battleZone.filter(c => !CardEngine.parseAbilities(c, p.battleZone, p.mana).blocker), graveyard: [...p.graveyard, ...toDestroy] };
         });
         net.send("ACTION", { action: "DESTROY_ALL_BLOCKERS" });
         toast("Scarlet Skyterror: Destroy all blockers!");
@@ -570,27 +690,40 @@ export const ETB_EFFECTS = {
             }
         });
     },
-    "Gigaberos": ({ gsR, setGs, setTargeting, toast }) => {
+    "Gigaberos": ({ gsR, setGs, setTargeting, toast, askMay }) => {
         const s = gsR.current;
         const others = s.battleZone.filter(c => c.name !== "Gigaberos");
+        const destroySelf = (p) => {
+            const self = p.battleZone.find(c => c.name === "Gigaberos");
+            if (!self) return p;
+            return { ...p, battleZone: p.battleZone.filter(c => c.instanceId !== self.instanceId), graveyard: [...p.graveyard, self] };
+        };
+
         if (others.length < 2) {
-            setGs(p => {
-               const self = p.battleZone.find(c => c.name === "Gigaberos");
-               if (!self) return p;
-               return { ...p, battleZone: p.battleZone.filter(c => c.instanceId !== self.instanceId), graveyard: [...p.graveyard, self] };
-            });
+            setGs(destroySelf);
+            toast("Gigaberos: Not enough others to sacrifice, destroyed itself");
             return;
         }
-        setTargeting({
-            message: "Select 2 other creatures to sacrifice",
-            count: 2,
-            validTargets: others.map(c => c.instanceId),
-            onComplete: (selectedIds) => {
-                setGs(s => {
-                    const targets = s.battleZone.filter(c => selectedIds.includes(c.instanceId));
-                    return { ...s, battleZone: s.battleZone.filter(c => !selectedIds.includes(c.instanceId)), graveyard: [...s.graveyard, ...targets] };
+
+        askMay({
+            message: "Gigaberos: Sacrifice 2 other creatures? (No will destroy Gigaberos)",
+            onYes: () => {
+                setTargeting({
+                    message: "Select 2 other creatures to sacrifice",
+                    count: 2,
+                    validTargets: others.map(c => c.instanceId),
+                    onComplete: (selectedIds) => {
+                        setGs(s => {
+                            const targets = s.battleZone.filter(c => selectedIds.includes(c.instanceId));
+                            return { ...s, battleZone: s.battleZone.filter(c => !selectedIds.includes(c.instanceId)), graveyard: [...s.graveyard, ...targets] };
+                        });
+                        toast("Gigaberos sacrifice complete!");
+                    }
                 });
-                toast("Gigaberos sacrifice complete!");
+            },
+            onNo: () => {
+                setGs(destroySelf);
+                toast("Gigaberos destroyed itself");
             }
         });
     },
@@ -655,15 +788,25 @@ export const SPELL_EFFECTS = {
             }
         });
     },
-    "Searing Wave": ({ net, setGs, toast }) => { 
+    "Searing Wave": ({ gsR, net, setGs, setTargeting, toast }) => { 
         net.send("ACTION", { action: "DESTROY_ALL_WEAK", details: { maxPower: 3000 } }); 
-        setGs(p => {
-            if (p.shields.length === 0) return p;
-            const ns = [...p.shields];
-            const removed = ns.pop();
-            return { ...p, shields: ns, graveyard: [...p.graveyard, removed] };
+        const s = gsR.current;
+        if (!s.shields.length) return;
+        setTargeting({
+            message: "Searing Wave: Select a shield to put into graveyard",
+            count: 1,
+            validTargets: s.shields.map((_, i) => `shield-${i}`),
+            isShieldTarget: true,
+            onComplete: (ids) => {
+                const idx = parseInt(ids[0].split('-')[1]);
+                setGs(p => {
+                    const ns = [...p.shields];
+                    const removed = ns.splice(idx, 1)[0];
+                    return { ...p, shields: ns, graveyard: [...p.graveyard, removed] };
+                });
+                toast("Searing Wave: Destroyed weak enemies & sacrificed shield!"); 
+            }
         });
-        toast("Searing Wave: Destroyed weak enemies & sacrificed shield!"); 
     },
     "Clone Factory": ({ gsR, setSearchingDeck, setGs, toast }) => {
         const s = gsR.current;
@@ -685,8 +828,8 @@ export const SPELL_EFFECTS = {
     },
     "Burst Shot": ({ setGs, net, toast, CardEngine }) => { 
         setGs(p => {
-            const toDestroy = p.battleZone.filter(c => CardEngine.basePower(c, p.battleZone, p.mana) <= 2000);
-            return { ...p, battleZone: p.battleZone.filter(c => CardEngine.basePower(c, p.battleZone, p.mana) > 2000), graveyard: [...p.graveyard, ...toDestroy] };
+            const toDestroy = p.battleZone.filter(c => CardEngine.getCurrentPower(c, p.battleZone, p.mana) <= 2000);
+            return { ...p, battleZone: p.battleZone.filter(c => CardEngine.getCurrentPower(c, p.battleZone, p.mana) > 2000), graveyard: [...p.graveyard, ...toDestroy] };
         });
         net.send("ACTION", { action: "DESTROY_ALL_WEAK", details: { maxPower: 2000 } });
         toast("Burst Shot cast!");
@@ -789,17 +932,22 @@ export const SPELL_EFFECTS = {
             }
         });
     },
-    "Crystal Memory": ({ setSearchingDeck, setGs, toast }) => { 
-        setSearchingDeck({
-            message: "Crystal Memory: Search Deck",
-            count: 1,
-            filter: () => true,
-            onComplete: (card) => {
-                setGs(s => {
-                    const newDeck = s.deck.filter(x => x.instanceId !== card.instanceId).sort(() => Math.random() - 0.5);
-                    return { ...s, deck: newDeck, hand: [...s.hand, card] };
+    "Crystal Memory": ({ setSearchingDeck, setGs, toast, askMay }) => { 
+        askMay({
+            message: "Use Crystal Memory's effect to search your deck?",
+            onYes: () => {
+                setSearchingDeck({
+                    message: "Crystal Memory: Search Deck",
+                    count: 1,
+                    filter: () => true,
+                    onComplete: (card) => {
+                        setGs(s => {
+                            const newDeck = s.deck.filter(x => x.instanceId !== card.instanceId).sort(() => Math.random() - 0.5);
+                            return { ...s, deck: newDeck, hand: [...s.hand, card] };
+                        });
+                        toast("Card added to hand!");
+                    }
                 });
-                toast("Card added to hand!");
             }
         });
     },
@@ -877,7 +1025,7 @@ export const SPELL_EFFECTS = {
             draw(); draw(); draw();
             toast("Thought Probe: Draw 3 cards!");
         } else {
-            toast("Less than 3 creatures — no draw");
+            toast("Less than 3 creatures \u2014 no draw");
         }
     },
     "Terror Pit": ({ gsR, setTargeting, net, toast }) => {
@@ -924,7 +1072,7 @@ export const SPELL_EFFECTS = {
         toast("Creeping Plague active! All creatures get Slayer when blocked.", "error"); 
     },
     "Crimson Hammer": ({ gsR, setTargeting, net, toast, CardEngine }) => {
-        const targets = gsR.current.opponent.battleZone.filter(c => CardEngine.basePower(c, gsR.current.opponent.battleZone, gsR.current.opponent.mana) <= 2000);
+        const targets = gsR.current.opponent.battleZone.filter(c => CardEngine.getCurrentPower(c, gsR.current.opponent.battleZone, gsR.current.opponent.mana) <= 2000);
         if (!targets.length) { toast("No creatures with power <= 2000"); return; }
         setTargeting({
             message: "Destroy an enemy creature (Max 2000 power)",
@@ -937,7 +1085,7 @@ export const SPELL_EFFECTS = {
         });
     },
     "Tornado Flame": ({ gsR, setTargeting, net, toast, CardEngine }) => {
-        const targets = gsR.current.opponent.battleZone.filter(c => CardEngine.basePower(c, gsR.current.opponent.battleZone, gsR.current.opponent.mana) <= 4000);
+        const targets = gsR.current.opponent.battleZone.filter(c => CardEngine.getCurrentPower(c, gsR.current.opponent.battleZone, gsR.current.opponent.mana) <= 4000);
         if (!targets.length) { toast("No creatures with power <= 4000"); return; }
         setTargeting({
             message: "Destroy an enemy creature (Max 4000 power)",
@@ -1102,32 +1250,38 @@ export const SPELL_EFFECTS = {
             }
         });
     },
-    "Eldritch Poison": ({ gsR, setTargeting, setGs, toast }) => {
+    "Eldritch Poison": ({ gsR, setTargeting, setGs, toast, askMay }) => {
         const darks = gsR.current.battleZone.filter(c => c.civilizations?.includes('Darkness'));
         if (!darks.length) return;
-        setTargeting({
-            message: "Eldritch Poison: Select a Darkness creature to destroy",
-            count: 1,
-            validTargets: darks.map(c => c.instanceId),
-            onComplete: (creatureIds) => {
+        askMay({
+            message: "Use Eldritch Poison's effect?",
+            onYes: () => {
                 setTargeting({
-                    message: "Select mana to return to hand",
+                    message: "Eldritch Poison: Select a Darkness creature to destroy",
                     count: 1,
-                    validTargets: gsR.current.mana.map(m => m.instanceId),
-                    isManaTarget: true,
-                    onComplete: (manaIds) => {
-                        setGs(p => {
-                            const c = p.battleZone.find(x => x.instanceId === creatureIds[0]);
-                            const m = p.mana.find(x => x.instanceId === manaIds[0]);
-                            return {
-                                ...p,
-                                battleZone: p.battleZone.filter(x => x.instanceId !== creatureIds[0]),
-                                graveyard: [...p.graveyard, c],
-                                mana: p.mana.filter(x => x.instanceId !== manaIds[0]),
-                                hand: [...p.hand, m]
-                            };
+                    validTargets: darks.map(c => c.instanceId),
+                    onComplete: (creatureIds) => {
+                        if (!gsR.current.mana.length) return;
+                        setTargeting({
+                            message: "Select mana to return to hand",
+                            count: 1,
+                            validTargets: gsR.current.mana.map(m => m.instanceId),
+                            isManaTarget: true,
+                            onComplete: (manaIds) => {
+                                setGs(p => {
+                                    const c = p.battleZone.find(x => x.instanceId === creatureIds[0]);
+                                    const m = p.mana.find(x => x.instanceId === manaIds[0]);
+                                    return {
+                                        ...p,
+                                        battleZone: p.battleZone.filter(x => x.instanceId !== creatureIds[0]),
+                                        graveyard: [...p.graveyard, c],
+                                        mana: p.mana.filter(x => x.instanceId !== manaIds[0]),
+                                        hand: [...p.hand, m]
+                                    };
+                                });
+                                toast("Eldritch Poison complete!");
+                            }
                         });
-                        toast("Eldritch Poison complete!");
                     }
                 });
             }
@@ -1243,22 +1397,33 @@ export const SPELL_EFFECTS = {
             }
         });
     },
-    "Snake Attack": ({ setGs, toast }) => {
-        setGs(p => {
-            if (p.shields.length === 0) return p;
-            const ns = [...p.shields];
-            const removed = ns.pop();
-            return { 
-                ...p, 
-                shields: ns, 
-                graveyard: [...p.graveyard, removed],
-                battleZone: p.battleZone.map(c => ({ ...c, tempDoubleBreaker: true }))
-            };
+    "Snake Attack": ({ gsR, setGs, setTargeting, toast }) => {
+        const s = gsR.current;
+        if (!s.shields.length) return;
+        setTargeting({
+            message: "Snake Attack: Select a shield to put into graveyard",
+            count: 1,
+            validTargets: s.shields.map((_, i) => `shield-${i}`),
+            isShieldTarget: true,
+            onComplete: (ids) => {
+                const idx = parseInt(ids[0].split('-')[1]);
+                setGs(p => {
+                    const ns = [...p.shields];
+                    const removed = ns.splice(idx, 1)[0];
+                    return { 
+                        ...p, 
+                        shields: ns, 
+                        graveyard: [...p.graveyard, removed],
+                        battleZone: p.battleZone.map(c => ({ ...c, tempDoubleBreaker: true }))
+                    };
+                });
+                toast("Snake Attack: Mass Double Breaker but lost a shield!");
+            }
         });
-        toast("Snake Attack: Mass Double Breaker but lost a shield!");
     },
     "Volcanic Arrows": ({ gsR, setTargeting, setGs, net, toast, CardEngine }) => {
-        const targets = gsR.current.opponent.battleZone.filter(c => CardEngine.basePower(c, gsR.current.opponent.battleZone, gsR.current.opponent.mana) <= 6000);
+        const s = gsR.current;
+        const targets = s.opponent.battleZone.filter(c => CardEngine.getCurrentPower(c, s.opponent.battleZone, s.opponent.mana) <= 6000);
         if (!targets.length) return;
         setTargeting({
             message: "Volcanic Arrows: Destroy creature (6000 or less)",
@@ -1266,66 +1431,99 @@ export const SPELL_EFFECTS = {
             validTargets: targets.map(c => c.instanceId),
             onComplete: (ids) => {
                 net.send("ACTION", { action: "DESTROY_TARGET", details: { targetId: ids[0] } });
-                setGs(p => {
-                    if (p.shields.length === 0) return p;
-                    const ns = [...p.shields];
-                    const removed = ns.pop();
-                    return { ...p, shields: ns, graveyard: [...p.graveyard, removed] };
+                if (!s.shields.length) return;
+                setTargeting({
+                    message: "Volcanic Arrows: Select a shield to put into graveyard",
+                    count: 1,
+                    validTargets: s.shields.map((_, i) => `shield-${i}`),
+                    isShieldTarget: true,
+                    onComplete: (shieldIds) => {
+                        const idx = parseInt(shieldIds[0].split('-')[1]);
+                        setGs(p => {
+                            const ns = [...p.shields];
+                            const removed = ns.splice(idx, 1)[0];
+                            return { ...p, shields: ns, graveyard: [...p.graveyard, removed] };
+                        });
+                        toast("Volcanic Arrows: Target destroyed, shield sacrificed!");
+                    }
                 });
-                toast("Volcanic Arrows: Target destroyed, shield sacrificed!");
             }
         });
     },
-    "Sundrop Armor": ({ setSearchingDeck, setGs, toast }) => {
-        setGs(p => {
-            if (p.hand.length === 0) return p;
-            setSearchingDeck({
-                message: "Sundrop Armor: Select a card from hand to put into shields",
-                count: 1,
-                customList: p.hand,
-                onComplete: (card) => {
-                    setGs(prev => ({
-                        ...prev,
-                        hand: prev.hand.filter(x => x.instanceId !== card.instanceId),
-                        shields: [...prev.shields, card]
-                    }));
-                    toast("Card put into shields!");
-                }
-            });
-            return p;
+    "Sundrop Armor": ({ gsR, setSearchingDeck, setGs, toast }) => {
+        const s = gsR.current;
+        if (!s.hand.length) return;
+        setSearchingDeck({
+            message: "Sundrop Armor: Select a card from hand to put into shields",
+            count: 1,
+            customList: s.hand,
+            onComplete: (card) => {
+                setGs(prev => ({
+                    ...prev,
+                    hand: prev.hand.filter(x => x.instanceId !== card.instanceId),
+                    shields: [...prev.shields, card]
+                }));
+                toast("Card put into shields!");
+            }
         });
     },
 };
 
 export const DESTROY_EFFECTS = {
-    "Bombersaur": ({ setGs, net, toast }) => {
-        setGs(p => {
-            const count = Math.min(p.mana.length, 2);
-            const toGrave = p.mana.slice(-count);
-            return { ...p, mana: p.mana.slice(0, -count), graveyard: [...p.graveyard, ...toGrave] };
-        });
+    "Bombersaur": ({ gsR, setGs, setTargeting, net, toast }) => {
+        const s = gsR.current;
+        if (s.mana.length > 0) {
+            setTargeting({
+                message: "Bombersaur: Select up to 2 mana to put into graveyard",
+                count: 2,
+                validTargets: s.mana.map(m => m.instanceId),
+                isManaTarget: true,
+                allowPartial: true,
+                onComplete: (ids) => {
+                    setGs(p => {
+                        const targets = p.mana.filter(m => ids.includes(m.instanceId));
+                        return { ...p, mana: p.mana.filter(m => !ids.includes(m.instanceId)), graveyard: [...p.graveyard, ...targets] };
+                    });
+                }
+            });
+        }
         net.send("ACTION", { action: "DESTROY_MANA_CHOICE", details: { count: 2 } });
         toast("Bombersaur: Each player loses 2 mana!");
     },
-    "Engineer Kipo": ({ setGs, net, toast }) => {
-        setGs(p => {
-            const count = Math.min(p.mana.length, 1);
-            const toGrave = p.mana.slice(-count);
-            return { ...p, mana: p.mana.slice(0, -count), graveyard: [...p.graveyard, ...toGrave] };
-        });
+    "Engineer Kipo": ({ gsR, setGs, setTargeting, net, toast }) => {
+        const s = gsR.current;
+        if (s.mana.length > 0) {
+            setTargeting({
+                message: "Engineer Kipo: Select mana to put into graveyard",
+                count: 1,
+                validTargets: s.mana.map(m => m.instanceId),
+                isManaTarget: true,
+                onComplete: (ids) => {
+                    setGs(p => {
+                        const target = p.mana.find(m => m.instanceId === ids[0]);
+                        return { ...p, mana: p.mana.filter(m => m.instanceId !== ids[0]), graveyard: [...p.graveyard, target] };
+                    });
+                }
+            });
+        }
         net.send("ACTION", { action: "DESTROY_MANA_CHOICE", details: { count: 1 } });
         toast("Engineer Kipo: Each player loses 1 mana!");
     },
-    "Bone Piercer": ({ gsR, setSearchingDeck, setGs, toast }) => {
+    "Bone Piercer": ({ gsR, setSearchingDeck, setGs, toast, askMay }) => {
         const creatures = gsR.current.mana.filter(c => c.type === 'Creature');
         if (!creatures.length) return;
-        setSearchingDeck({
-            message: "Bone Piercer: Select creature from mana to return to hand",
-            count: 1,
-            customList: creatures,
-            onComplete: (card) => {
-                setGs(p => ({ ...p, mana: p.mana.filter(m => m.instanceId !== card.instanceId), hand: [...p.hand, card] }));
-                toast("Bone Piercer: Creature recovered from mana!");
+        askMay({
+            message: "Use Bone Piercer's effect to return a creature from mana?",
+            onYes: () => {
+                setSearchingDeck({
+                    message: "Bone Piercer: Select creature from mana to return to hand",
+                    count: 1,
+                    customList: creatures,
+                    onComplete: (card) => {
+                        setGs(p => ({ ...p, mana: p.mana.filter(m => m.instanceId !== card.instanceId), hand: [...p.hand, card] }));
+                        toast("Bone Piercer: Creature recovered from mana!");
+                    }
+                });
             }
         });
     },
@@ -1372,6 +1570,7 @@ export const ATTACK_TRIGGERS = {
         });
     },
     "Dark Titan Maginn": ({ net, toast }) => { net.send("ACTION", { action: "DISCARD_RANDOM" }); toast("Dark Titan Maginn: Opponent discards!"); },
+    "Horrid Worm": ({ net, toast }) => { net.send("ACTION", { action: "DISCARD_RANDOM" }); toast("Horrid Worm: Opponent discards!"); },
     "Hypersquid Walter": ({ draw, toast, askMay }) => { 
         askMay({
             message: "Use Hypersquid Walter's effect to draw a card?",
@@ -1557,7 +1756,7 @@ export const ATTACK_TRIGGERS = {
         });
     },
     "King Neptas": ({ gsR, setTargeting, net, toast, CardEngine, askMay }) => {
-        const targets = [...gsR.current.battleZone, ...gsR.current.opponent.battleZone].filter(c => CardEngine.basePower(c, [], []) <= 2000);
+        const targets = [...gsR.current.battleZone, ...gsR.current.opponent.battleZone].filter(c => CardEngine.getCurrentPower(c, [], []) <= 2000);
         if (!targets.length) return;
         askMay({
             message: "Use King Neptas's effect to bounce a creature?",
@@ -1581,7 +1780,7 @@ export const ATTACK_TRIGGERS = {
         });
     },
     "Muramasa, Duke of Blades": ({ gsR, setTargeting, net, toast, CardEngine, askMay }) => {
-        const targets = gsR.current.opponent.battleZone.filter(c => CardEngine.basePower(c, gsR.current.opponent.battleZone, gsR.current.opponent.mana) <= 2000);
+        const targets = gsR.current.opponent.battleZone.filter(c => CardEngine.getCurrentPower(c, gsR.current.opponent.battleZone, gsR.current.opponent.mana) <= 2000);
         if (!targets.length) return;
         askMay({
             message: "Use Muramasa's effect to destroy an enemy creature?",
