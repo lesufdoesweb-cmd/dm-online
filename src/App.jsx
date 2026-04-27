@@ -99,6 +99,12 @@ const App = () => {
                     return;
                 }
                 if (data.type === 'CONNECT_REQUEST') {
+                    if (data.payload.format && data.payload.format !== currentFormat) {
+                        toast(`Declined: Opponent is playing ${data.payload.format} format`, "error");
+                        c.send({ type: 'CONNECT_REJECT', payload: { reason: 'FORMAT_MISMATCH' } });
+                        setTimeout(() => c.close(), 500);
+                        return;
+                    }
                     localStorage.removeItem(`dm_gs_${c.peer}`);
                     localStorage.removeItem(`dm_logs_${c.peer}`);
                 }
@@ -128,7 +134,7 @@ const App = () => {
         }
         setPlayerName(savedName);
 
-        const sets = ["dm-01", "dm-02", "dm-03", "dm-04"];
+        const sets = ["dm-01", "dm-02", "dm-03", "dm-04", "dm-05", "dm-06"];
         Promise.all(sets.map(s => fetch(`/cards/${s}/metadata.json`).then(r => r.json())))
             .then(allSets => { setCards(allSets.flat()); setLoading(false); }).catch(() => setLoading(false));
 
@@ -231,7 +237,7 @@ const App = () => {
         const connTimeout = setTimeout(() => { if (!c.open) { toast("Opponent unavailable", "error"); c.close(); } }, 10000);
         c.on('open', () => { 
             clearTimeout(connTimeout);
-            c.send({ type: 'CONNECT_REQUEST', payload: { name: playerName } }); 
+            c.send({ type: 'CONNECT_REQUEST', payload: { name: playerName, format: currentFormat } }); 
             toast("Challenge sent!", "success"); 
         }); 
         setupConnection(c);

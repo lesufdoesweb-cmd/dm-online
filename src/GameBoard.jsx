@@ -75,6 +75,10 @@ const GameBoard = (props) => {
         const canAtkUntapped = CardEngine.canAttackUntapped(c, gs.battleZone, gs.mana);
         
         const items = [];
+        const abs = CardEngine.parseAbilities(c, gs.battleZone, gs.mana);
+        if (abs.hasTapAbility && !c.isTapped && !c.summonedThisTurn) {
+            items.push({ label: "Use Tap Ability", icon: "💎", cls: "ctx-item--effect", action: "TAP", data: { a: c } });
+        }
         if (!c.isTapped && !c.summonedThisTurn && canAtk) {
             if (canAtkPlayer) {
                 const breaksCount = CardEngine.shieldsToBreak(c, gs.battleZone, gs.mana);
@@ -96,6 +100,10 @@ const GameBoard = (props) => {
         if (!items.length) {
             const reason = c.summonedThisTurn ? "Summoning sickness" : c.isTapped ? "Already tapped" : !canAtk ? "Can't attack" : !canAtkPlayer ? "Can't attack players" : "No targets";
             items.push({ label: reason, icon: "⚠", action: "_", data: {} });
+        }
+        const arcBine = gs.battleZone.find(x => x.name === "Arc Bine, the Astounding" && !x.isTapped);
+        if (arcBine && c.civilizations?.includes('Light') && !c.isTapped && !c.summonedThisTurn) {
+             items.push({ label: "Use Arc Bine Ability", icon: "✨", cls: "ctx-item--effect", action: "TAP_ARC_BINE", data: { a: c, arc: arcBine } });
         }
         setCtx({ x: e.clientX, y: e.clientY, items });
     };

@@ -1,0 +1,2688 @@
+[
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 3,
+    "name": "Adomis, the Oracle",
+    "power": "2000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "11/110",
+        "rarity": "Uncommon",
+        "illustrator": "Naoki Saito",
+        "flavor": "\"Aw, man-I got a speck of asteroid in my eye.\""
+      }
+    ],
+    "subtypes": [
+      "Light Bringer"
+    ],
+    "text": "Instead of having this creature attack, you may tap it to use its $tap ability.\n$tap Choose a shield and look at it. Then put it back where it was.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 7,
+    "name": "Aeropica",
+    "power": "4000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "3/110",
+        "rarity": "Very Rare",
+        "illustrator": "Hisashi Momose",
+        "flavor": "\"I'm the garbage collector. You're the garbage.\""
+      }
+    ],
+    "subtypes": [
+      "Sea Hacker"
+    ],
+    "text": "Instead of having this creature attack, you may tap it to use its $tap ability.\n$tap Choose a creature in the battle zone and return it to its owner's hand.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 4,
+    "name": "Aqua Rider",
+    "power": "2000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "31/110",
+        "rarity": "Common",
+        "illustrator": "Kou1",
+        "flavor": "\"Hey, pal-watch where you stick that fin!\""
+      }
+    ],
+    "subtypes": [
+      "Liquid People"
+    ],
+    "text": "Whenever your opponent summons a creature or casts a spell, this creature gets \"blocker\" until the end of the turn. (Whenever an opponent's creature attacks, you may tap a creature that has \"blocker\" to stop the attack. Then the 2 creatures battle.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 5,
+    "name": "Arc Bine, the Astounding",
+    "power": "5000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "12/110",
+        "rarity": "Rare",
+        "illustrator": "D-Suzuki",
+        "flavor": "\"Dragonoids like explosions? Then this is their lucky day!\""
+      },
+      {
+        "set": "Promotional",
+        "id": "P1/Y1",
+        "rarity": "Rare",
+        "illustrator": "D-Suzuki",
+        "flavor": "\"Dragonoids like explosions? Then this is their lucky day!\""
+      }
+    ],
+    "subtypes": [
+      "Guardian"
+    ],
+    "supertypes": [
+      "Evolution"
+    ],
+    "text": "Evolutionâ€”Put on one of your Guardians.\nEach of your light creatures may tap instead of attacking to use this creature's ability. : Choose one of your opponent's creatures in the battle zone and tap it.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 5,
+    "name": "Armored Decimator Valkaizer",
+    "power": "5000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "71/110",
+        "rarity": "Rare",
+        "illustrator": "Shishizaru",
+        "flavor": "\"With a gun this big, how can I miss?\""
+      }
+    ],
+    "subtypes": [
+      "Human"
+    ],
+    "supertypes": [
+      "Evolution"
+    ],
+    "text": "Evolutionâ€”Put on one of your Humans.\nWhen you put this creature into the battle zone, you may destroy one of your opponent's creatures that has power 4000 or less.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 5,
+    "name": "Armored Scout Gestuchar",
+    "power": "4000+",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "72/110",
+        "rarity": "Common",
+        "illustrator": "Tomofumi Ogasawara",
+        "flavor": "An Armorloid's career has two stages: fearsome warrior and scrap metal."
+      }
+    ],
+    "subtypes": [
+      "Armorloid"
+    ],
+    "text": "While you have no other fire creatures in the battle zone, this creature has \"power attacker +3000\" and \"double breaker.\" (A creature that has \"power attacker +3000\" and \"double breaker\" gets +3000 power while attacking and breaks 2 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 4,
+    "name": "Automated Weaponmaster Machai",
+    "power": "4000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "73/110",
+        "rarity": "Common",
+        "illustrator": "Imo Kajii",
+        "flavor": "\"Stupid Light creatures-all spheres and blobs and energy clouds. How can I blow their heads off if they don't have any?\""
+      }
+    ],
+    "subtypes": [
+      "Armorloid"
+    ],
+    "text": "This creature attacks each turn if able.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 5,
+    "name": "Badlands Lizard",
+    "power": "3000+",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "74/110",
+        "rarity": "Rare",
+        "illustrator": "Miho Midorikawa",
+        "flavor": "\"I traded in my sport utility Gecko for a stretch Geckousine.\" â€” Artisan Picora"
+      }
+    ],
+    "subtypes": [
+      "Dune Gecko"
+    ],
+    "text": "Power attacker +3000 (While attacking, this creature gets +3000 power.)\nWhenever this creature becomes blocked, no battle happens. (Both creatures stay tapped.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 2,
+    "name": "Ballas, Vizier of Electrons",
+    "power": "2000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "13/110",
+        "rarity": "Common",
+        "illustrator": "Naoki Saito",
+        "flavor": "For the first time since before the Megapocalypse, the forces of Light launched a full-fledged invasion of the planet surface. The Fire troops had no choice but to retreat."
+      }
+    ],
+    "subtypes": [
+      "Initiate"
+    ],
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 8,
+    "name": "Bazagazeal Dragon",
+    "power": "8000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "75/110",
+        "rarity": "Rare",
+        "illustrator": "Ken Sugawara"
+      },
+      {
+        "set": "Promotional",
+        "id": "P2/Y3",
+        "rarity": "Rare",
+        "illustrator": "Ken Sugawara"
+      }
+    ],
+    "subtypes": [
+      "Armored Dragon"
+    ],
+    "text": "Speed attacker (This creature doesn't get summoning sickness.)\nThis creature can attack untapped creatures.\nDouble breaker (This creature breaks 2 shields.)\nAt the end of your turn, return this creature to your hand.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 4,
+    "name": "Bazooka Mutant",
+    "power": "8000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "51/110",
+        "rarity": "Uncommon",
+        "illustrator": "Naoki Saito",
+        "flavor": "The cannon is covered in slime. It runs on slime. It's fired by slime. Guess what it shoots?"
+      }
+    ],
+    "subtypes": [
+      "Hedrian"
+    ],
+    "text": "This creature can attack only creatures that have \"blocker.\"\nThis creature can't attack players.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 6,
+    "name": "Bliss Totem, Avatar of Luck",
+    "power": "5000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "91/110",
+        "rarity": "Uncommon",
+        "illustrator": "Katsuya",
+        "flavor": "\"Someone call a doctor-I've got bongo fever!\""
+      },
+      {
+        "set": "Promotional",
+        "id": "91/110 (German)",
+        "rarity": "Uncommon",
+        "illustrator": "Katsuya",
+        "flavor": "\"Someone call a doctor-I've got bongo fever!\""
+      },
+      {
+        "set": "Promotional",
+        "id": "91/110 (Italian)",
+        "rarity": "Uncommon",
+        "illustrator": "Katsuya",
+        "flavor": "\"Someone call a doctor-I've got bongo fever!\""
+      },
+      {
+        "set": "Promotional",
+        "id": "K5/Y1",
+        "rarity": "Uncommon",
+        "illustrator": "Katsuya",
+        "flavor": "\"Someone call a doctor-I've got bongo fever!\""
+      }
+    ],
+    "subtypes": [
+      "Mystery Totem"
+    ],
+    "text": "Instead of having this creature attack, you may tap it to use its $tap ability.\n$tap Put up to 3 cards from your graveyard into your mana zone.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 7,
+    "name": "Bolmeteus Steel Dragon",
+    "power": "7000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "S7/110",
+        "rarity": "Super Rare",
+        "illustrator": "Shishizaru",
+        "flavor": "Part robot. Part Dragon. All robo-Dragon."
+      }
+    ],
+    "subtypes": [
+      "Armored Dragon"
+    ],
+    "text": "Double breaker (This creature breaks 2 shields.)\nWhenever this creature would break a shield, your opponent puts that shield into his graveyard instead.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 4,
+    "name": "Bonds of Justice",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "14/110",
+        "rarity": "Rare",
+        "illustrator": "Katsuya",
+        "flavor": "\"Need a lift?\" â€”Kanesill, the Explorer"
+      }
+    ],
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nTap all creatures in the battle zone that don't have \"blocker.\"",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 7,
+    "name": "Cantankerous Giant",
+    "power": "8000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "92/110",
+        "rarity": "Uncommon",
+        "illustrator": "Hisashi Momose",
+        "flavor": "\"I've been tracking an immense creature across the continent by following its huge footprints. One thing puzzles me, though-since when do footprints have thumbs?\" â€”Feather Horn, the Tracker"
+      }
+    ],
+    "subtypes": [
+      "Giant"
+    ],
+    "text": "Double breaker (This creature breaks 2 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 3,
+    "name": "Carrier Shell",
+    "power": "2000+",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "93/110",
+        "rarity": "Common",
+        "illustrator": "Eiji Kaneda",
+        "flavor": "The rocky plains where Colony Beetles lay their eggs eventually become fertile fields covered in grass and flowers."
+      }
+    ],
+    "subtypes": [
+      "Colony Beetle"
+    ],
+    "text": "Power attacker +3000 (While attacking, this creature gets +3000 power.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 4,
+    "name": "Charmilia, the Enticer",
+    "power": "3000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "94/110",
+        "rarity": "Rare",
+        "illustrator": "Jason",
+        "flavor": "\"Hmm. Flurry or blizzard?\""
+      },
+      {
+        "set": "Promotional",
+        "id": "94a/110",
+        "rarity": "Rare",
+        "illustrator": "Jason",
+        "flavor": "\"Hmm. Flurry or blizzard?\""
+      },
+      {
+        "set": "Promotional",
+        "id": "L3 Y2",
+        "rarity": "Rare",
+        "illustrator": "Jason",
+        "flavor": "\"Hmm. Flurry or blizzard?\""
+      }
+    ],
+    "subtypes": [
+      "Snow Faerie"
+    ],
+    "text": "Instead of having this creature attack, you may tap it to use its $tap ability.\n$tap Search your deck. You may take a creature from your deck, show that creature to your opponent, and put it into your hand. Then shuffle your deck.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 5,
+    "name": "Chekicul, Vizier of Endurance",
+    "power": "1000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "15/110",
+        "rarity": "Common",
+        "illustrator": "Naoki Saito",
+        "flavor": "\"If you don't chill out, I'll start an ice age and make you chill out!\""
+      }
+    ],
+    "subtypes": [
+      "Initiate"
+    ],
+    "text": "Blocker\nWhenever this creature blocks, no battle happens. (Both creatures stay tapped.)\nThis creature can't attack.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 5,
+    "name": "Chen Treg, Vizier of Blades",
+    "power": "2000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "16/110",
+        "rarity": "Common",
+        "illustrator": "Hikaru Ikusa",
+        "flavor": "\"Its blade, forged in the heat of stars, can penetrate any armor.\""
+      }
+    ],
+    "subtypes": [
+      "Initiate"
+    ],
+    "text": "Instead of having this creature attack, you may tap it to use its $tap ability.\n$tap Choose one of your opponent's creatures in the battle zone and tap it.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 2,
+    "name": "Choya, the Unheeding",
+    "power": "1000+",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "76/110",
+        "rarity": "Common",
+        "illustrator": "Dai",
+        "flavor": "\"Dude, check this out.\" SPROING!"
+      }
+    ],
+    "subtypes": [
+      "Human"
+    ],
+    "text": "Power attacker +1000 (While attacking, this creature gets +1000 power.)\nWhenever this creature becomes blocked, no battle happens. (Both creatures stay tapped.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 5,
+    "name": "Cliffcrush Giant",
+    "power": "7000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "S9/110",
+        "rarity": "Super Rare",
+        "illustrator": "Sansyu",
+        "flavor": "\"The last time he high-fived someone, he knocked over a mountain.\""
+      }
+    ],
+    "subtypes": [
+      "Giant"
+    ],
+    "text": "While you have any other untapped creatures in the battle zone, this creature can't attack.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 6,
+    "name": "Clobber Totem",
+    "power": "4000+",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "95/110",
+        "rarity": "Rare",
+        "illustrator": "Youichi Kai"
+      }
+    ],
+    "subtypes": [
+      "Mystery Totem"
+    ],
+    "text": "Power attacker +2000 (While attacking, this creature gets +2000 power.)\nThis creature can't be blocked by any creature that has power 5000 or less.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 3,
+    "name": "Cocco Lupia",
+    "power": "1000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "77/110",
+        "rarity": "Uncommon",
+        "illustrator": "Akifumi Yamamoto",
+        "flavor": "\"Each Fire Bird is given one Dragon egg to take care of. After the Dragon hatches, the friendship lasts a lifetime.\""
+      }
+    ],
+    "subtypes": [
+      "Fire Bird"
+    ],
+    "text": "Your creatures that have Dragon in their race each cost 2 less to summon. (Dragonoids don't count.) They can't cost less than 2.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 1,
+    "name": "Comet Missile",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "78/110",
+        "rarity": "Uncommon",
+        "illustrator": "Jason",
+        "flavor": "\"The masters of subtlety are at it again.\" â€”Craze Valkyrie, the Drastic"
+      }
+    ],
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nDestroy one of your opponent's creatures that has \"blocker\" and power 6000 or less.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 4,
+    "name": "Cosmogold, Spectral Knight",
+    "power": "3000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "17/110",
+        "rarity": "Rare",
+        "illustrator": "Ryoya Yuki",
+        "flavor": "He glows with the reflection of a million stars."
+      }
+    ],
+    "subtypes": [
+      "Rainbow Phantom"
+    ],
+    "text": "Instead of having this creature attack, you may tap it to use its $tap ability.\n$tap Return a spell from your mana zone to your hand.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 6,
+    "name": "Craze Valkyrie, the Drastic",
+    "power": "7500",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "S1/110",
+        "rarity": "Super Rare",
+        "illustrator": "Kou1",
+        "flavor": "\"Time to get Drastic!\""
+      }
+    ],
+    "subtypes": [
+      "Initiate"
+    ],
+    "supertypes": [
+      "Evolution"
+    ],
+    "text": "Evolutionâ€”Put on one of your Initiates.\nWhen you put this creature into the battle zone, choose up to 2 of your opponent's creatures in the battle zone and tap them.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 4,
+    "name": "Crisis Boulder",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "79/110",
+        "rarity": "Rare",
+        "illustrator": "Hideaki Takamura"
+      }
+    ],
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nYour opponent chooses one of his creatures in the battle zone or a card in his mana zone and puts it into his graveyard.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 7,
+    "name": "Crystal Jouster",
+    "power": "7000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "S3/110",
+        "rarity": "Super Rare",
+        "illustrator": "Masaki Hirooka",
+        "flavor": "An infinite number of warriors in one."
+      }
+    ],
+    "subtypes": [
+      "Liquid People"
+    ],
+    "supertypes": [
+      "Evolution"
+    ],
+    "text": "Evolutionâ€”Put on one of your Liquid People.\nDouble breaker (This creature breaks 2 shields.)\nWhen this creature would be destroyed, return it to your hand instead.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 4,
+    "name": "Cursed Pincher",
+    "power": "2000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "52/110",
+        "rarity": "Common",
+        "illustrator": "Akifumi Yamamoto"
+      }
+    ],
+    "subtypes": [
+      "Brain Jacker"
+    ],
+    "text": "Blocker (Whenever an opponent's creature attacks, you may tap this creature to stop the attack. Then the 2 creatures battle.)\nSlayer (Whenever this creature battles, destroy the other creature after the battle.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 3,
+    "name": "Cutthroat Skyterror",
+    "power": "5000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "80/110",
+        "rarity": "Uncommon",
+        "illustrator": "Takesi Kuno"
+      }
+    ],
+    "subtypes": [
+      "Armored Wyvern"
+    ],
+    "text": "Speed attacker (This creature doesn't get summoning sickness.)\nThis creature can't attack players.\nAt the end of your turn, return this creature to your hand.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 4,
+    "name": "Daidalos, General of Fury",
+    "power": "11000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "S5/110",
+        "rarity": "Super Rare",
+        "illustrator": "Yarunoca",
+        "flavor": "\"Friend or foe? Dragonoid, Guardian, or Giant? They're all the same. They're all dinner.\""
+      }
+    ],
+    "subtypes": [
+      "Demon Command"
+    ],
+    "text": "Whenever this creature attacks, destroy one of your creatures.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 6,
+    "name": "Dava Torey, Seeker of Clouds",
+    "power": "5500",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "18/110",
+        "rarity": "Uncommon",
+        "illustrator": "Norikatsu Miyoshi",
+        "flavor": "\"I refuse to be forgotten.\""
+      }
+    ],
+    "subtypes": [
+      "Mecha Thunder"
+    ],
+    "text": "During your opponent's turn, if this creature would be discarded from your hand, put it into the battle zone instead.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 4,
+    "name": "Death Smoke",
+    "printings": [
+      {
+        "set": "DM-01 Base Set",
+        "id": "53/110",
+        "rarity": "Common",
+        "illustrator": "Dustmoss",
+        "flavor": "Savor the taste of fear!"
+      },
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "53/110",
+        "rarity": "Common",
+        "illustrator": "Dustmoss",
+        "flavor": "\"Life is like this joke. It's very, very funny, and now it's over.\" â€”Trixo, Wicked Doll"
+      },
+      {
+        "set": "DM-10 Shockwaves of the Shattered Rainbow",
+        "id": "46/110",
+        "rarity": "Common",
+        "illustrator": "Yarunoca",
+        "flavor": "\"Tune in next week for more of the exciting adventures of Quixotic Hero Swine Snou-Oh, Never mind.\""
+      }
+    ],
+    "text": "Destroy one of your opponent's untapped creatures.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 3,
+    "name": "Dimension Gate",
+    "printings": [
+      {
+        "set": "DM-01 Base Set",
+        "id": "93/110",
+        "rarity": "Common",
+        "illustrator": "Jason"
+      },
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "96/110",
+        "rarity": "Common",
+        "illustrator": "Jason"
+      }
+    ],
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nSearch your deck. You may take a creature from your deck, show that creature to your opponent, and put it into your hand. Then shuffle your deck.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 3,
+    "name": "Energy Stream",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "32/110",
+        "rarity": "Common",
+        "illustrator": "Katsuya",
+        "flavor": "\"Some computer programs attack our enemies. Some defend our cities. And some-the most perfect of all-just write more computer programs.\" â€”Emeral"
+      }
+    ],
+    "text": "Draw 2 cards.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 6,
+    "name": "Factory Shell Q",
+    "power": "2000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "97/110",
+        "rarity": "Rare",
+        "illustrator": "Daisuke Izuka"
+      }
+    ],
+    "subtypes": [
+      "Survivor",
+      "Colony Beetle"
+    ],
+    "text": "Survivor (Each of your Survivors has this creature's Survivor ability.) : When you put this creature into the battle zone, search your deck. You may take a Survivor from your deck, show that Survivor to your opponent, and put it into your hand. Then shuffle your deck.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 2,
+    "name": "Faerie Life",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "98/110",
+        "rarity": "Common",
+        "illustrator": "Tomofumi Ogasawara"
+      },
+      {
+        "set": "DM-10 Shockwaves of the Shattered Rainbow",
+        "id": "83/110",
+        "rarity": "Common",
+        "illustrator": "Miya",
+        "flavor": "The Faeries took the shattered rainbow in stride. To them, magic is magic."
+      }
+    ],
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nPut the top card of your deck into your mana zone.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 4,
+    "name": "Feather Horn, the Tracker",
+    "power": "4000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "99/110",
+        "rarity": "Uncommon",
+        "illustrator": "Katsuhiko Kojoh",
+        "flavor": "\"If it's true that you are what you eat, it looks like somebody's been chowing down on way too many flamingos.\" â€”Kyuroro"
+      }
+    ],
+    "subtypes": [
+      "Horned Beast"
+    ],
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 5,
+    "name": "Forbidding Totem",
+    "power": "4000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "100/110",
+        "rarity": "Rare",
+        "illustrator": "Naoki Saito",
+        "flavor": "\"The personality of an avatar is a reflection of the concept he represents. For example, the avatar of war is straightforward and difficult to control.\""
+      }
+    ],
+    "subtypes": [
+      "Mystery Totem"
+    ],
+    "text": "Your opponent's attacking creatures attack Mystery Totems if able.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 6,
+    "name": "Forbos, Sanctum Guardian Q",
+    "power": "4000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "19/110",
+        "rarity": "Rare",
+        "illustrator": "Akifumi Yamamoto"
+      }
+    ],
+    "subtypes": [
+      "Survivor",
+      "Guardian"
+    ],
+    "text": "Survivor (Each of your Survivors has this creature's Survivor ability.) : When you put this creature into the battle zone, search your deck. You may take a spell from your deck, show that spell to your opponent, and put it into your hand. Then shuffle your deck.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 5,
+    "name": "Fort Megacluster",
+    "power": "5000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "33/110",
+        "rarity": "Rare",
+        "illustrator": "Shishizaru",
+        "flavor": "The Cyber Lords are racing the Dragonoids to be the first to drill to the planet's core."
+      }
+    ],
+    "subtypes": [
+      "Cyber Cluster"
+    ],
+    "supertypes": [
+      "Evolution"
+    ],
+    "text": "Evolutionâ€”Put on one of your Cyber Clusters.\nEach of your water creatures may tap instead of attacking to use this creature's ability. : Draw a card.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 3,
+    "name": "Frost Specter, Shadow of Age",
+    "power": "5000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "54/110",
+        "rarity": "Rare",
+        "illustrator": "Ittoku",
+        "flavor": "\"The young get older. The old get older. And everyone forgets my birthday.\""
+      }
+    ],
+    "subtypes": [
+      "Ghost"
+    ],
+    "supertypes": [
+      "Evolution"
+    ],
+    "text": "Evolutionâ€”Put on one of your Ghosts.\nEach of your Ghosts in the battle zone has \"slayer.\" (Whenever a creature that has \"slayer\" battles, destroy the other creature after the battle.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 7,
+    "name": "Future Slash",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "55/110",
+        "rarity": "Uncommon",
+        "illustrator": "Dreamwave",
+        "flavor": "\"Look on the bright side. Next time a fortune-teller predicts your future, you can ask for a discount.\" â€”Schuka, Duke of Amnesia"
+      }
+    ],
+    "text": "Search your opponent's deck. Take up to 2 cards from his deck and put them into his graveyard. Then your opponent shuffles his deck.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 2,
+    "name": "Garabon, the Glider",
+    "power": "1000+",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "101/110",
+        "rarity": "Common",
+        "illustrator": "Hideaki Takamura",
+        "flavor": "\"Yaaaurgh! Who's up for a snowball fight?\""
+      }
+    ],
+    "subtypes": [
+      "Snow Faerie"
+    ],
+    "text": "Power attacker +2000 (While attacking, this creature gets +2000 power.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 5,
+    "name": "Gariel, Elemental of Sunbeams",
+    "power": "7500",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "20/110",
+        "rarity": "Rare",
+        "illustrator": "Akifumi Yamamoto",
+        "flavor": "\"Elementals can't stand being on the ground instead of in the sky. So when they start a war, they make sure it ends quickly.\""
+      },
+      {
+        "set": "Promotional",
+        "id": "P2 Y1",
+        "rarity": "Rare",
+        "illustrator": "Akifumi Yamamoto",
+        "flavor": "\"Elementals can't stand being on the ground instead of in the sky. So when they start a war, they make sure it ends quickly.\""
+      }
+    ],
+    "subtypes": [
+      "Angel Command"
+    ],
+    "text": "You can summon this creature only if you have cast a spell this turn.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 6,
+    "name": "Gigagriff",
+    "power": "4000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "56/110",
+        "rarity": "Uncommon",
+        "illustrator": "Eiji Kaneda"
+      }
+    ],
+    "subtypes": [
+      "Chimera"
+    ],
+    "text": "Blocker (Whenever an opponent's creature attacks, you may tap this creature to stop the attack. Then the 2 creatures battle.)\nSlayer (Whenever this creature battles, destroy the other creature after the battle.)\nThis creature can't attack.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 6,
+    "name": "Gnarvash, Merchant of Blood",
+    "power": "8000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "57/110",
+        "rarity": "Rare",
+        "illustrator": "Sansyu",
+        "flavor": "His mother was right. His face did freeze like that."
+      }
+    ],
+    "subtypes": [
+      "Demon Command"
+    ],
+    "text": "Double breaker (This creature breaks 2 shields.)\nAt the end of each of your turns, if this is your only creature in the battle zone, destroy it.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 5,
+    "name": "Grave Worm Q",
+    "power": "3000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "58/110",
+        "rarity": "Rare",
+        "illustrator": "Yoko Tsukamoto",
+        "flavor": "Its unvenom can unkill an unvictim in thirty seconds flat."
+      },
+      {
+        "set": "Promotional",
+        "id": "L19/20 Y1",
+        "rarity": "Rare",
+        "illustrator": "Yoko Tsukamoto",
+        "flavor": "Its unvenom can unkill an unvictim in thirty seconds flat."
+      }
+    ],
+    "subtypes": [
+      "Survivor",
+      "Parasite Worm"
+    ],
+    "text": "Survivor (Each of your Survivors has this creature's Survivor ability.) : When you put this creature into the battle zone, you may return a Survivor from your graveyard to your hand.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 5,
+    "name": "Grim Soul, Shadow of Reversal",
+    "power": "3000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "59/110",
+        "rarity": "Common",
+        "illustrator": "Masaki Hirooka",
+        "flavor": "\"Quit being dead. Your lifetime contract with Ballom hasn't expired yet.\""
+      }
+    ],
+    "subtypes": [
+      "Ghost"
+    ],
+    "text": "Instead of having this creature attack, you may tap it to use its $tap ability.\n$tap Return a darkness creature from your graveyard to your hand.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 3,
+    "name": "Grinning Axe, the Monstrosity",
+    "power": "1000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "60/110",
+        "rarity": "Common",
+        "illustrator": "Akifumi Yamamoto",
+        "flavor": "\"That thing looks like it's eating its own face!\" â€”Mini Titan Gett"
+      }
+    ],
+    "subtypes": [
+      "Devil Mask"
+    ],
+    "text": "Slayer (Whenever this creature battles, destroy the other creature after the battle.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 5,
+    "name": "Hazard Crawler",
+    "power": "6000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "34/110",
+        "rarity": "Uncommon",
+        "illustrator": "Tsuu",
+        "flavor": "All life came from the sea. Now the sea's coming to take it back."
+      }
+    ],
+    "subtypes": [
+      "Earth Eater"
+    ],
+    "text": "Blocker (Whenever an opponent's creature attacks, you may tap this creature to stop the attack. Then the 2 creatures battle.)\nThis creature can't attack.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 3,
+    "name": "Illusory Berry",
+    "power": "3000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "102/110",
+        "rarity": "Common",
+        "illustrator": "Norikatsu Miyoshi",
+        "flavor": "\"We rise from the shadow of the Fiona Woods. We rise to exact our well-earned revenge. We rise to-oh, man, did Sluppo's head pop again? Great. Way to ruin my dramatic speech, Sluppo.\""
+      }
+    ],
+    "subtypes": [
+      "Tree Folk"
+    ],
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 4,
+    "name": "Innocent Hunter, Blade of All",
+    "power": "1000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "103/110",
+        "rarity": "Uncommon",
+        "illustrator": "Syuichi Obata",
+        "flavor": "His soul is so pure that anywhere he wanders accepts him as a native son. His infinite destinies lie just over the horizon."
+      },
+      {
+        "set": "Promotional",
+        "id": "E6/Y1",
+        "rarity": "Uncommon",
+        "illustrator": "Syuichi Obata",
+        "flavor": "His soul is so pure that anywhere he wanders accepts him as a native son. His infinite destinies lie just over the horizon."
+      }
+    ],
+    "subtypes": [
+      "Beast Folk"
+    ],
+    "text": "You can put an evolution creature of any race on this creature.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 3,
+    "name": "Intense Evil",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "61/110",
+        "rarity": "Rare",
+        "illustrator": "Dreamwave",
+        "flavor": "Every soul has a price-and today they're on sale!"
+      }
+    ],
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nDestroy any number of your creatures. Then draw that many cards.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 13,
+    "name": "Invincible Abyss",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "5/110",
+        "rarity": "Very Rare",
+        "illustrator": "Atsushi Kawasaki",
+        "flavor": "\"After the latest Nature victories in the Fiona Woods, Ballom decided to host peace talks at the sacred Xhalmic Crater. The stadium filled with Nature and Light representatives, but Ballom, Trox and Daidalos never showed. As if on cue, the crater started belching toxic gas...\""
+      }
+    ],
+    "text": "Destroy all your opponent's creatures.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 13,
+    "name": "Invincible Aura",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "1/110",
+        "rarity": "Very Rare",
+        "illustrator": "Masaki Hirooka",
+        "flavor": "The Fire army has enough firepower to lay waste to a planet-but even that isn't enough to bring down the wall of Light."
+      }
+    ],
+    "text": "Add up to 3 cards from the top of your deck to your shields face down.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 13,
+    "name": "Invincible Cataclysm",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "7/110",
+        "rarity": "Very Rare",
+        "illustrator": "Shishizaru",
+        "flavor": "\"The brutal forces of Light leveled the capital of the Fire realm. But deep in the mountains, the Fire doomsday weapon waits to take revenge.\""
+      }
+    ],
+    "text": "Choose up to 3 of your opponent's shields and put them into his graveyard.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 13,
+    "name": "Invincible Technology",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "4/110",
+        "rarity": "Very Rare",
+        "illustrator": "D-Suzuki",
+        "flavor": "\"The Acashic Database holds the secrets of the universe. After centuries of searching, the Cyber Lords have at last found a clue to deciphering it.\""
+      }
+    ],
+    "text": "Search your deck. You may take any number of cards from your deck, show those cards to your opponent, and put them into your hand. Then shuffle your deck.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 13,
+    "name": "Invincible Unity",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "9/110",
+        "rarity": "Very Rare",
+        "illustrator": "Hisashi Momose",
+        "flavor": "The roots of the World Tree reach into the hearts of all who cherish life."
+      }
+    ],
+    "text": "Each of your creatures in the battle zone gets +8000 power and \"triple breaker\" until the end of the turn. (A creature that has \"triple breaker\" breaks 3 shields.)",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 2,
+    "name": "Junkatz, Rabid Doll",
+    "power": "2000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "62/110",
+        "rarity": "Common",
+        "illustrator": "Eiji Kaneda",
+        "flavor": "After a humiliating defeat under the hooves of the Nature hordes, Ballom started to play with Dolls."
+      }
+    ],
+    "subtypes": [
+      "Death Puppet"
+    ],
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 3,
+    "name": "Kanesill, the Explorer",
+    "power": "4000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "21/110",
+        "rarity": "Common",
+        "illustrator": "Akifumi Yamamoto",
+        "flavor": "The Gladiators' only job is to study the science of war. They like their job."
+      }
+    ],
+    "subtypes": [
+      "Gladiator"
+    ],
+    "text": "Blocker (Whenever an opponent's creature attacks, you may tap this creature to stop the attack. Then the 2 creatures battle.)\nThis creature can't attack players.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 8,
+    "name": "King Triumphant",
+    "power": "7000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "35/110",
+        "rarity": "Rare",
+        "illustrator": "Taro Yamazaki"
+      }
+    ],
+    "subtypes": [
+      "Leviathan"
+    ],
+    "text": "Whenever your opponent summons a creature or casts a spell, this creature gets \"blocker\" until the end of the turn. (Whenever an opponent's creature attacks, you may tap a creature that has \"blocker\" to stop the attack. Then the 2 creatures battle.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 6,
+    "name": "Kyuroro",
+    "power": "2000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "36/110",
+        "rarity": "Rare",
+        "illustrator": "Miho Midorikawa",
+        "flavor": "\"These tubes connect me to everything. That fat one there goes right into your brain.\""
+      }
+    ],
+    "subtypes": [
+      "Cyber Lord"
+    ],
+    "text": "Whenever an opponent's creature would break a shield, you choose the shield instead of your opponent.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 4,
+    "name": "Lava Walker Executo",
+    "power": "5000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "S8/110",
+        "rarity": "Super Rare",
+        "illustrator": "Tomofumi Ogasawara",
+        "flavor": "\"Ooh! Ouch! Hot hot hot!\""
+      }
+    ],
+    "subtypes": [
+      "Dragonoid"
+    ],
+    "supertypes": [
+      "Evolution"
+    ],
+    "text": "Evolutionâ€”Put on one of your Dragonoids.\nEach of your fire creatures may tap instead of attacking to use this creature's ability. : One of your fire creatures in the battle zone gets +3000 power until the end of the turn.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 8,
+    "name": "Laveil, Seeker of Catastrophe",
+    "power": "8500",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "S2/110",
+        "rarity": "Super Rare",
+        "illustrator": "Masaki Hirooka"
+      }
+    ],
+    "subtypes": [
+      "Mecha Thunder"
+    ],
+    "text": "Blocker (Whenever an opponent's creature attacks, you may tap this creature to stop the attack. Then the 2 creatures battle.)\nAt the end of each of your turns, you may untap this creature.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 6,
+    "name": "Legionnaire Lizard",
+    "power": "4000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "81/110",
+        "rarity": "Common",
+        "illustrator": "Yarunoca"
+      }
+    ],
+    "subtypes": [
+      "Dune Gecko"
+    ],
+    "text": "Speed attacker (This creature doesn't get summoning sickness.)\nInstead of having this creature attack, you may tap it to use its $tap ability.\n$tap One of your creatures in the battle zone gets \"speed attacker\" until the end of the turn.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 3,
+    "name": "Lightning Grass",
+    "power": "3000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "22/110",
+        "rarity": "Common",
+        "illustrator": "Akira Hamada",
+        "flavor": "Â´\"The StarLight Trees' typical diet consists of moonbeams, lightning, and wisps of clouds. But they're just as happy eating the burning wreckage of broken Armorloids.\""
+      }
+    ],
+    "subtypes": [
+      "Starlight Tree"
+    ],
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 5,
+    "name": "Living Citadel Vosh",
+    "power": "5000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "104/110",
+        "rarity": "Rare",
+        "illustrator": "Akira Hamada",
+        "flavor": "A faithful imitation of the World Tree."
+      }
+    ],
+    "subtypes": [
+      "Colony Beetle"
+    ],
+    "supertypes": [
+      "Evolution"
+    ],
+    "text": "Evolutionâ€”Put on one of your Colony Beetles.\nEach of your nature creatures may tap instead of attacking to use this creature's ability. : Put the top card of your deck into your mana zone.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 1,
+    "name": "Lone Tear, Shadow of Solitude",
+    "power": "2000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "63/110",
+        "rarity": "Common",
+        "illustrator": "Asai Genji",
+        "flavor": "It's the tollbooth operator on the highway of despair."
+      }
+    ],
+    "subtypes": [
+      "Ghost"
+    ],
+    "text": "At the end of each of your turns, if this is your only creature in the battle zone, destroy it.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 5,
+    "name": "Lu Gila, Silver Rift Guardian",
+    "power": "4000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "2/110",
+        "rarity": "Very Rare",
+        "illustrator": "Takesi Kuno"
+      }
+    ],
+    "subtypes": [
+      "Guardian"
+    ],
+    "text": "Blocker (Whenever an opponent's creature attacks, you may tap this creature to stop the attack. Then the 2 creatures battle.)\nEvolution creatures are put into the battle zone tapped.\nThis creature can't attack players.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 2,
+    "name": "Lupa, Poison-Tipped Doll",
+    "power": "1000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "64/110",
+        "rarity": "Uncommon",
+        "illustrator": "Norikatsu Miyoshi"
+      }
+    ],
+    "subtypes": [
+      "Death Puppet"
+    ],
+    "text": "Instead of having this creature attack, you may tap it to use its $tap ability.\n$tap One of your creatures in the battle zone gets \"slayer\" until the end of the turn. (Whenever a creature that has \"slayer\" battles, destroy the other creature after the battle.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 2,
+    "name": "Madrillon Fish",
+    "power": "3000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "37/110",
+        "rarity": "Common",
+        "illustrator": "Akira Hamada",
+        "flavor": "\"I see they've loosened the definition of 'fish.'\" â€”Cantankerous Giant"
+      }
+    ],
+    "subtypes": [
+      "Gel Fish"
+    ],
+    "text": "Blocker (Whenever an opponent's creature attacks, you may tap this creature to stop the attack. Then the 2 creatures battle.)\nThis creature can't attack.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 8,
+    "name": "Midnight Crawler",
+    "power": "6000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "38/110",
+        "rarity": "Rare",
+        "illustrator": "Syuichi Obata"
+      }
+    ],
+    "subtypes": [
+      "Earth Eater"
+    ],
+    "text": "When you put this creature into the battle zone, choose a card in your opponent's mana zone and return it to his hand.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 3,
+    "name": "Migasa, Adept of Chaos",
+    "power": "2000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "82/110",
+        "rarity": "Uncommon",
+        "illustrator": "Hikaru Ikusa"
+      }
+    ],
+    "subtypes": [
+      "Human"
+    ],
+    "text": "Instead of having this creature attack, you may tap it to use its $tap ability.\n$tap One of your fire creatures in the battle zone gets \"double breaker\" until the end of the turn. (A creature that has \"double breaker\" breaks 2 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 3,
+    "name": "Mighty Bandit, Ace of Thieves",
+    "power": "2000+",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "105/110",
+        "rarity": "Common",
+        "illustrator": "Jason",
+        "flavor": "\"Get real. I've never buckled a swash in my life.\""
+      }
+    ],
+    "subtypes": [
+      "Beast Folk"
+    ],
+    "text": "Instead of having this creature attack, you may tap it to use its $tap ability.\n$tap One of your creatures in the battle zone gets +5000 power until the end of the turn.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 2,
+    "name": "Moontear, Spectral Knight",
+    "power": "3500",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "23/110",
+        "rarity": "Uncommon",
+        "illustrator": "Syuichi Obata",
+        "flavor": "All who see his sword undergo a change of heart. All who feel his sword undergo a change of intestines."
+      }
+    ],
+    "subtypes": [
+      "Rainbow Phantom"
+    ],
+    "text": "You can summon this creature only if you have cast a spell this turn.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 4,
+    "name": "Mystic Dreamscape",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "39/110",
+        "rarity": "Uncommon",
+        "illustrator": "Imo Kajii",
+        "flavor": "\"Don't worry! No one gets arrested for breaking the laws of nature anymore.\""
+      }
+    ],
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nReturn up to 3 cards from your mana zone to your hand.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 3,
+    "name": "Mystic Treasure Chest",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "106/110",
+        "rarity": "Rare",
+        "illustrator": "Norikatsu Miyoshi",
+        "flavor": "\"Mighty Bandit didn't earn his name by robbing piggy banks. Well, not just piggy banks.\""
+      }
+    ],
+    "text": "Search your deck. You may take a non-nature card from your deck and put it into your mana zone. Then shuffle your deck.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 7,
+    "name": "Neon Cluster",
+    "power": "4000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "40/110",
+        "rarity": "Uncommon",
+        "illustrator": "Sansyu",
+        "flavor": "\"You can win more wars by thinking than you can by fighting.\" â€”Marinomancer"
+      }
+    ],
+    "subtypes": [
+      "Cyber Cluster"
+    ],
+    "text": "Instead of having this creature attack, you may tap it to use its $tap ability.\n$tap Draw 2 cards.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 5,
+    "name": "Overload Cluster",
+    "power": "4000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "41/110",
+        "rarity": "Uncommon",
+        "illustrator": "Katsuya"
+      }
+    ],
+    "subtypes": [
+      "Cyber Cluster"
+    ],
+    "text": "Whenever your opponent summons a creature or casts a spell, this creature gets \"blocker\" until the end of the turn. (Whenever an opponent's creature attacks, you may tap a creature that has \"blocker\" to stop the attack. Then the 2 creatures battle.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 3,
+    "name": "Pangaea's Will",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "107/110",
+        "rarity": "Uncommon",
+        "illustrator": "Masaki Hirooka"
+      }
+    ],
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nChoose one of your opponent's evolution creatures in the battle zone and put the top card of that creature into your opponent's mana zone.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 4,
+    "name": "Paradise Horn",
+    "power": "3000+",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "108/110",
+        "rarity": "Uncommon",
+        "illustrator": "Imo Kajii",
+        "flavor": "Few places on the planet still know the joy of absolute peace. Paradise Horn makes sure this is one of them."
+      }
+    ],
+    "subtypes": [
+      "Horned Beast"
+    ],
+    "text": "Power attacker +2000 (While attacking, this creature gets +2000 power.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 5,
+    "name": "Phantasmal Horror Gigazald",
+    "power": "5000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "S6/110",
+        "rarity": "Super Rare",
+        "illustrator": "Nottsuo",
+        "flavor": "\"Pretend I'm a nightmare. You won't go as insane that way.\""
+      }
+    ],
+    "subtypes": [
+      "Chimera"
+    ],
+    "supertypes": [
+      "Evolution"
+    ],
+    "text": "Evolutionâ€”Put on one of your Chimeras.\nEach of your darkness creatures may tap instead of attacking to use this creature's ability. : Your opponent discards a card at random from his hand.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 3,
+    "name": "Phantom Dragon's Flame",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "83/110",
+        "rarity": "Common",
+        "illustrator": "Taro Yamazaki",
+        "flavor": "\"Would you prefer a real Dragon?\""
+      },
+      {
+        "set": "DM-10 Shockwaves of the Shattered Rainbow",
+        "id": "73/110",
+        "rarity": "Common",
+        "illustrator": "Naoki Saito",
+        "flavor": "Some phantoms have healthier appetites than others."
+      }
+    ],
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nDestroy one of your opponent's creatures that has power 2000 or less.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 2,
+    "name": "Picora's Wrench",
+    "power": "2000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "84/110",
+        "rarity": "Common",
+        "illustrator": "Dai",
+        "flavor": "\"The Machine Eaters are a race of inventors and mechanics. One day, bored out of their minds, they decided it would be funny to grant life to their tools-and the XenoParts were born.\""
+      }
+    ],
+    "subtypes": [
+      "Xenoparts"
+    ],
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 4,
+    "name": "Proclamation of Death",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "65/110",
+        "rarity": "Uncommon",
+        "illustrator": "Atsushi Kawasaki"
+      }
+    ],
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nYour opponent chooses one of his creatures in the battle zone and destroys it.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 3,
+    "name": "Promephius Q",
+    "power": "2000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "42/110",
+        "rarity": "Common",
+        "illustrator": "D-Suzuki",
+        "flavor": "\"It is my spy into the Survivor clan. They have accepted it as one of their own, and it has learned all their secrets.\" â€”Emperor Quazla"
+      }
+    ],
+    "subtypes": [
+      "Survivor",
+      "Sea Hacker"
+    ],
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 1,
+    "name": "Protective Force",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "24/110",
+        "rarity": "Uncommon",
+        "illustrator": "Kou1"
+      }
+    ],
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nOne of your creatures in the battle zone that has \"blocker\" gets +4000 power until the end of the turn.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 3,
+    "name": "Pyrofighter Magnus",
+    "power": "3000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "85/110",
+        "rarity": "Common",
+        "illustrator": "Yarunoca",
+        "flavor": "\"At maximum speed, he reaches escape velocity and teleports to a whole new dimension... but which one?\""
+      },
+      {
+        "set": "Promotional",
+        "id": "85a/110 (Duel Masters Starter Deck 2)",
+        "rarity": "Common",
+        "illustrator": "Yarunoca",
+        "flavor": "\"At maximum speed, he reaches escape velocity and teleports to a whole new dimension... but which one?\""
+      }
+    ],
+    "subtypes": [
+      "Dragonoid"
+    ],
+    "text": "Speed attacker (This creature doesn't get summoning sickness.)\nAt the end of your turn, return this creature to your hand.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 6,
+    "name": "Q-tronic Gargantua",
+    "power": "9000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "86/110",
+        "rarity": "Rare",
+        "illustrator": "Shishizaru",
+        "flavor": "A disaster nearly doomed the Survivors. Now disasters merely fuel their fury."
+      }
+    ],
+    "subtypes": [
+      "Survivor"
+    ],
+    "supertypes": [
+      "Evolution"
+    ],
+    "text": "Evolutionâ€”Put on one of your Survivors.\nCrew breaker - Survivor (This creature breaks one more shield for each of your other Survivors in the battle zone.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 8,
+    "name": "Q-tronic Hypermind",
+    "power": "8000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "S4/110",
+        "rarity": "Super Rare",
+        "illustrator": "Jason",
+        "flavor": "\"Don't let me think too hard. It makes the world explode.\""
+      }
+    ],
+    "subtypes": [
+      "Survivor"
+    ],
+    "supertypes": [
+      "Evolution"
+    ],
+    "text": "Evolutionâ€”Put on one of your Survivors.\nWhen you put this creature into the battle zone, you may draw a card for each Survivor in the battle zone.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 2,
+    "name": "Rain of Arrows",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "25/110",
+        "rarity": "Uncommon",
+        "illustrator": "Katsuhiko Kojoh",
+        "flavor": "\"Today's weather report calls for sunshine, with an 80 percent chance of kicking your butt.\" â€”Laveil, Seeker of Catastrophe"
+      }
+    ],
+    "text": "Look at your opponent's hand. He discards all darkness spells from it.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 6,
+    "name": "Raptor Fish",
+    "power": "3000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "43/110",
+        "rarity": "Rare",
+        "illustrator": "Atsushi Kawasaki",
+        "flavor": "\"Its control chip is busted. Each time it blinks, I- Its control chip is busted. Each time it blinks, I-\" â€”Sopian"
+      }
+    ],
+    "subtypes": [
+      "Gel Fish"
+    ],
+    "text": "When you put this creature into the battle zone, count the cards in your hand, shuffle those cards into your deck, then draw that many cards.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 5,
+    "name": "Razorpine Tree",
+    "power": "1000+",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "26/110",
+        "rarity": "Uncommon",
+        "illustrator": "Taro Yamazaki",
+        "flavor": "It looks harmless . . . until it starts shooting its steel-piercing needles at you."
+      }
+    ],
+    "subtypes": [
+      "Starlight Tree"
+    ],
+    "text": "This creature gets +2000 power for each shield you have.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 2,
+    "name": "Rikabu's Screwdriver",
+    "power": "1000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "87/110",
+        "rarity": "Rare",
+        "illustrator": "Atsushi Kawasaki",
+        "flavor": "It's good at putting things together. It's better at taking things apart."
+      }
+    ],
+    "subtypes": [
+      "Xenoparts"
+    ],
+    "text": "Instead of having this creature attack, you may tap it to use its $tap ability.\n$tap Destroy one of your opponent's creatures that has \"blocker.\"",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 6,
+    "name": "Ripple Lotus Q",
+    "power": "2000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "44/110",
+        "rarity": "Rare",
+        "illustrator": "Katsuhiko Kojoh",
+        "flavor": "\"Its petals wave gently in the current, tempting prey to come closer to its poisonous tendrils.\""
+      }
+    ],
+    "subtypes": [
+      "Survivor",
+      "Cyber Virus"
+    ],
+    "text": "Survivor (Each of your Survivors has this creature's Survivor ability.) : When you put this creature into the battle zone, you may choose one of your opponent's creatures in the battle zone and tap it.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 6,
+    "name": "Rumblesaur Q",
+    "power": "3000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "88/110",
+        "rarity": "Uncommon",
+        "illustrator": "Akira Hamada",
+        "flavor": "\"You'd run fast too, if you were on fire.\""
+      },
+      {
+        "set": "Promotional",
+        "id": "L1 Y2",
+        "rarity": "Uncommon",
+        "illustrator": "Akira Hamada",
+        "flavor": "\"You'd run fast too, if you were on fire.\""
+      }
+    ],
+    "subtypes": [
+      "Survivor",
+      "Rock Beast"
+    ],
+    "text": "Survivor (Each of your Survivors has this creature's Survivor ability.) : Speed attacker (This creature doesn't get summoning sickness.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 6,
+    "name": "Schuka, Duke of Amnesia",
+    "power": "5000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "66/110",
+        "rarity": "Rare",
+        "illustrator": "Daisuke Izuka",
+        "flavor": "\"All the mysteries of the universe-the eternal questions of past, present, and future-pretty much boil down to this: how do you like my spiffy new cape?\""
+      },
+      {
+        "set": "Promotional",
+        "id": "66a/110",
+        "rarity": "Rare",
+        "illustrator": "Daisuke Izuka",
+        "flavor": "\"All the mysteries of the universe-the eternal questions of past, present, and future-pretty much boil down to this: how do you like my spiffy new cape?\""
+      }
+    ],
+    "subtypes": [
+      "Dark Lord"
+    ],
+    "text": "When this creature is destroyed, each player discards his hand.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 5,
+    "name": "Shock Hurricane",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "45/110",
+        "rarity": "Uncommon",
+        "illustrator": "Akifumi Yamamoto",
+        "flavor": "\"I wish I had my umbrellaaaaaaaaaaaaaaaaaaaa!\""
+      }
+    ],
+    "text": "Return any number of your creatures from the battle zone to your hand. Then you may choose that many of your opponent's creatures in the battle zone and return them to your opponent's hand.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 4,
+    "name": "Skullcutter, Swarm Leader",
+    "power": "4000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "67/110",
+        "rarity": "Uncommon",
+        "illustrator": "Daisuke Izuka",
+        "flavor": "\"Good job, everyone! The diet is really working!\""
+      }
+    ],
+    "subtypes": [
+      "Devil Mask"
+    ],
+    "text": "At the end of each of your turns, if this is your only creature in the battle zone, destroy it.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 2,
+    "name": "Slumber Shell",
+    "power": "2000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "109/110",
+        "rarity": "Common",
+        "illustrator": "Hikaru Ikusa",
+        "flavor": "\"It hasn't moved from that spot for a hundred years. Based on the normal lifespan of a Colony Beetle, it's taking a quick nap.\""
+      }
+    ],
+    "subtypes": [
+      "Colony Beetle"
+    ],
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 4,
+    "name": "Sopian",
+    "power": "2000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "46/110",
+        "rarity": "Common",
+        "illustrator": "Katsuhiko Kojoh",
+        "flavor": "It doesn't just live inside the Ultracomputer-it's part of the circuitry."
+      }
+    ],
+    "subtypes": [
+      "Cyber Lord"
+    ],
+    "text": "Instead of having this creature attack, you may tap it to use its $tap ability.\n$tap Choose one of your creatures in the battle zone. It can't be blocked this turn.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 3,
+    "name": "Spastic Missile",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "89/110",
+        "rarity": "Uncommon",
+        "illustrator": "Iron Pot",
+        "flavor": "\"Hee hee! The missiles are having as much fun as I am!\" â€”Rikabu, the Dismantler"
+      }
+    ],
+    "text": "Destroy one of your opponent's creatures that has power 3000 or less.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 4,
+    "name": "Sphere of Wonder",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "27/110",
+        "rarity": "Common",
+        "illustrator": "Youichi Kai",
+        "flavor": "\"It's immune to swords, lasers, flames, cannonballs, acid, missiles, battering rams, bee stings, paper cuts, little wooden sticks...\" â€” Telitol, the Explorer"
+      }
+    ],
+    "text": "If your opponent has more shields than you do, add the top card of your deck to your shields face down.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 2,
+    "name": "Spiral Gate",
+    "printings": [
+      {
+        "set": "DM-01 Base Set",
+        "id": "40/110",
+        "rarity": "Common",
+        "illustrator": "Tomofumi Ogasawara"
+      },
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "47/110",
+        "rarity": "Common",
+        "illustrator": "Tomofumi Ogasawara"
+      },
+      {
+        "set": "DM-10 Shockwaves of the Shattered Rainbow",
+        "id": "40/110",
+        "rarity": "Common",
+        "illustrator": "Eiji Kaneda",
+        "flavor": "\"Come back when you can handle it.\" â€”Zaltan"
+      }
+    ],
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nChoose a creature in the battle zone and return it to its owner's hand.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 7,
+    "name": "Splinterclaw Wasp",
+    "power": "4000+",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "10/110",
+        "rarity": "Very Rare",
+        "illustrator": "Nottsuo",
+        "flavor": "\"Buzz off.\""
+      }
+    ],
+    "subtypes": [
+      "Giant Insect"
+    ],
+    "text": "Power attacker +3000 (While attacking, this creature gets +3000 power.)\nDouble breaker (This creature breaks 2 shields.)\nWhenever this creature becomes blocked, it breaks one of your opponent's shields.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 2,
+    "name": "Steam Star",
+    "power": "1000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "48/110",
+        "rarity": "Common",
+        "illustrator": "D-Suzuki",
+        "flavor": "\"The Cyber Lords deploy them at volcanic vents on the bottom of the ocean. They monitor the superheated steam, collect it, and-when necessary-use it as a weapon.\""
+      }
+    ],
+    "subtypes": [
+      "Cyber Virus"
+    ],
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 9,
+    "name": "Tank Mutant",
+    "power": "6000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "6/110",
+        "rarity": "Very Rare",
+        "illustrator": "Akira Hamada",
+        "flavor": "\"Fire the Shocktacular Zaptronic Megaparticle Lasoblaster Disruptulating Cannon! No, the other one.\""
+      }
+    ],
+    "subtypes": [
+      "Hedrian"
+    ],
+    "text": "Instead of having this creature attack, you may tap it to use its $tap ability.\n$tap Your opponent chooses one of his creatures in the battle zone and destroys it.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 4,
+    "name": "Telitol, the Explorer",
+    "power": "3000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "28/110",
+        "rarity": "Rare",
+        "illustrator": "Asai Genji",
+        "flavor": "\"Wherever I go, daylight follows.\""
+      }
+    ],
+    "subtypes": [
+      "Gladiator"
+    ],
+    "text": "Blocker\nWhen you put this creature into the battle zone, you may look at your shields. Then put them back where they were.\nThis creature can't attack players.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 4,
+    "name": "Tentacle Worm",
+    "power": "3000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "68/110",
+        "rarity": "Common",
+        "illustrator": "Koji Watanabe",
+        "flavor": "\"Deep in the roots of the Fiona Woods, the seeds of destruction writhe, squirm, crawl...and multiply.\""
+      }
+    ],
+    "subtypes": [
+      "Parasite Worm"
+    ],
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 4,
+    "name": "Thrash Crawler",
+    "power": "5000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "49/110",
+        "rarity": "Uncommon",
+        "illustrator": "Yoko Tsukamoto",
+        "flavor": "Erosion...with a vengeance."
+      }
+    ],
+    "subtypes": [
+      "Earth Eater"
+    ],
+    "text": "Blocker\nWhen you put this creature into the battle zone, return a card from your mana zone to your hand.\nThis creature can't attack.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 3,
+    "name": "Torchclencher",
+    "power": "2000+",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "90/110",
+        "rarity": "Common",
+        "illustrator": "Kou1",
+        "flavor": "\"When the Elementals attacked, no one in the Fire realm joined the army. They were all already in it.\""
+      }
+    ],
+    "subtypes": [
+      "Dragonoid"
+    ],
+    "text": "While you have at least one other fire creature in the battle zone, this creature has \"Power attacker +3000 (While attacking, this creature gets +3000 power).\"",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 3,
+    "name": "Trench Scarab",
+    "power": "4000+",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "110/110",
+        "rarity": "Common",
+        "illustrator": "Iron Pot",
+        "flavor": "\"Since their sharp blades are dangerous even to one another, these Insects tend to live alone.\""
+      }
+    ],
+    "subtypes": [
+      "Giant Insect"
+    ],
+    "text": "This creature can't attack players.\nPower attacker +4000 (While attacking, this creature gets +4000 power.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 6,
+    "name": "Ultra Mantis, Scourge of Fate",
+    "power": "9000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "S10/110",
+        "rarity": "Super Rare",
+        "illustrator": "Seki",
+        "flavor": "It doesn't need a weapon-it is a weapon."
+      }
+    ],
+    "subtypes": [
+      "Giant Insect"
+    ],
+    "supertypes": [
+      "Evolution"
+    ],
+    "text": "Evolutionâ€”Put on one of your Giant Insects.\nThis creature can't be blocked by any creature that has power 8000 or less.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 6,
+    "name": "Valiant Warrior Exorious",
+    "power": "4000+",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "8/110",
+        "rarity": "Very Rare",
+        "illustrator": "Seki",
+        "flavor": "\"If you ever want to find me, just look between the explosions.\""
+      }
+    ],
+    "subtypes": [
+      "Armorloid"
+    ],
+    "text": "This creature can attack untapped creatures.\nPower attacker +3000 (While attacking, this creature gets +3000 power.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 1,
+    "name": "Vess, the Oracle",
+    "power": "2000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "29/110",
+        "rarity": "Common",
+        "illustrator": "Ken Sugawara",
+        "flavor": "The glow surrounding an Oracle's body is created by the songs of the Elementals."
+      }
+    ],
+    "subtypes": [
+      "Light Bringer"
+    ],
+    "text": "Blocker (Whenever an opponent's creature attacks, you may tap this creature to stop the attack. Then the 2 creatures battle.)\nThis creature can't attack players.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 4,
+    "name": "Vile Mulder, Wing of the Void",
+    "power": "7000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "69/110",
+        "rarity": "Rare",
+        "illustrator": "D-Suzuki",
+        "flavor": "Its heart cries for conquest. Its blood sings a dirge of doom."
+      }
+    ],
+    "subtypes": [
+      "Demon Command"
+    ],
+    "text": "This creature can't attack creatures.\nDouble breaker (This creature breaks 2 shields.)\nWhen this creature battles, destroy it after the battle.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 1,
+    "name": "Yuluk, the Oracle",
+    "power": "2500",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "30/110",
+        "rarity": "Common",
+        "illustrator": "Sansyu",
+        "flavor": "\"As an Oracle, I have the power to see the future. But my lottery numbers still never get picked!\""
+      }
+    ],
+    "subtypes": [
+      "Light Bringer"
+    ],
+    "text": "You can summon this creature only if you have cast a spell this turn.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 1,
+    "name": "Zepimeteus",
+    "power": "2000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "50/110",
+        "rarity": "Common",
+        "illustrator": "Naoki Saito",
+        "flavor": "Those used to be nuclear submarines. Now they're bathtub toys."
+      }
+    ],
+    "subtypes": [
+      "Sea Hacker"
+    ],
+    "text": "Blocker (Whenever an opponent's creature attacks, you may tap this creature to stop the attack. Then the 2 creatures battle.)\nThis creature can't attack.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 5,
+    "name": "Zorvaz, the Bonecrusher",
+    "power": "8000",
+    "printings": [
+      {
+        "set": "DM-06 Stomp-A-Trons of Invincible Wrath",
+        "id": "70/110",
+        "rarity": "Common",
+        "illustrator": "Hisashi Momose"
+      }
+    ],
+    "subtypes": [
+      "Demon Command"
+    ],
+    "text": "Blocker (Whenever an opponent's creature attacks, you may tap this creature to stop the attack. Then the 2 creatures battle.)\nThis creature can't attack.\nWhen this creature battles, destroy it after the battle.",
+    "type": "Creature"
+  }
+]

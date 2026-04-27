@@ -1,0 +1,1341 @@
+[
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 5,
+    "name": "Ambush Scorpion",
+    "power": "3000+",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "46/55",
+        "rarity": "Common",
+        "illustrator": "Tomofumi Ogasawara",
+        "flavor": "Its hard outer shell covers up an even harder inner core."
+      }
+    ],
+    "subtypes": [
+      "Giant Insect"
+    ],
+    "text": "Power attacker +3000 (While attacking, this creature gets +3000 power.)\nWhen this creature is destroyed, you may choose an Ambush Scorpion in your mana zone and put it into the battle zone.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 6,
+    "name": "Aqua Surfer",
+    "power": "2000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "16/55",
+        "rarity": "Uncommon",
+        "illustrator": "Yoshio Sugiura",
+        "flavor": "\"Wave goodbye!\""
+      }
+    ],
+    "subtypes": [
+      "Liquid People"
+    ],
+    "text": "Shield trigger (When this creature is put into your hand from your shield zone, you may summon it immediately for no cost.)\nWhen you put this creature into the battle zone, you may choose a creature in the battle zone and return it to its owner's hand.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 6,
+    "name": "Avalanche Giant",
+    "power": "8000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "S5/55",
+        "rarity": "Super Rare",
+        "illustrator": "Nottsuo",
+        "flavor": "Its name is misleading. Mountains tremble in fear at the sight of it, and that causes avalanches. What it actually does to the mountains is much, much worse."
+      }
+    ],
+    "subtypes": [
+      "Giant"
+    ],
+    "text": "This creature can't attack creatures.\nWhenever this creature becomes blocked, it breaks one of your opponent's shields.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 4,
+    "name": "Balloonshroom Q",
+    "power": "2000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "47/55",
+        "rarity": "Uncommon",
+        "illustrator": "Ken Sugawara",
+        "flavor": "During the Megapocalypse, the only way to survive was to cooperate...and adapt."
+      }
+    ],
+    "subtypes": [
+      "Survivor",
+      "Balloon Mushroom"
+    ],
+    "text": "Survivor (Each of your Survivors has this creature's Survivor ability.) : When this creature would be destroyed, put it into your mana zone instead.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 5,
+    "name": "Ballus, Dogfight Enforcer Q",
+    "power": "3000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "6/55",
+        "rarity": "Uncommon",
+        "illustrator": "Naoki Saito",
+        "flavor": "To indicate the telepathic link shared by all Survivors, scientists added a code letter to their names."
+      },
+      {
+        "set": "Promotional",
+        "id": "L13/20 Y1",
+        "rarity": "Uncommon",
+        "illustrator": "Naoki Saito",
+        "flavor": "To indicate the telepathic link shared by all Survivors, scientists added a code letter to their names."
+      }
+    ],
+    "subtypes": [
+      "Survivor",
+      "Berserker"
+    ],
+    "text": "Survivor (Each of your Survivors has this creature's Survivor ability.) : At the end of each of your turns, untap this creature.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 10,
+    "name": "Billion-Degree Dragon",
+    "power": "15000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "S4/55",
+        "rarity": "Super Rare",
+        "illustrator": "Seki",
+        "flavor": "The Megapocalypse woke it from its slumber deep within the molten core of the planet. It is the avenger of the world. It is legendary. And it is very, very cranky."
+      }
+    ],
+    "subtypes": [
+      "Armored Dragon"
+    ],
+    "text": "Triple breaker (This creature breaks 3 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 7,
+    "name": "Bladerush Skyterror Q",
+    "power": "5000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "4/55",
+        "rarity": "Very Rare",
+        "illustrator": "Shishizaru",
+        "flavor": "Its war cry shreds the clouds. Its blades shred everything else."
+      }
+    ],
+    "subtypes": [
+      "Survivor",
+      "Armored Wyvern"
+    ],
+    "text": "Survivor (Each of your Survivors has this creature's Survivor ability.) : Double breaker (This creature breaks 2 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 2,
+    "name": "Blazosaur Q",
+    "power": "1000+",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "36/55",
+        "rarity": "Common",
+        "illustrator": "Sansyu",
+        "flavor": "The Blazosaur's roar echoes in the ears of every Survivor."
+      }
+    ],
+    "subtypes": [
+      "Survivor",
+      "Rock Beast"
+    ],
+    "text": "Survivor (Each of your Survivors has this creature's Survivor ability.) : Power attacker +1000 (While attacking, this creature gets +1000 power.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 5,
+    "name": "Bloodwing Mantis",
+    "power": "6000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "48/55",
+        "rarity": "Rare",
+        "illustrator": "Sansyu",
+        "flavor": "From the moment it's born to the moment it dies, its wings never stop moving."
+      }
+    ],
+    "subtypes": [
+      "Giant Insect"
+    ],
+    "text": "Whenever this creature attacks, return 2 creatures from your mana zone to your hand.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 8,
+    "name": "Bolgash Dragon",
+    "power": "4000+",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "37/110",
+        "rarity": "Uncommon",
+        "illustrator": "Atsushi Kawasaki",
+        "flavor": "Its suit of armor belches out an electric smog cloud that serves as both camouflage and weapon."
+      },
+      {
+        "set": "Promotional",
+        "id": "L20/20 Y1",
+        "rarity": "Uncommon",
+        "illustrator": "Atsushi Kawasaki",
+        "flavor": "Its suit of armor belches out an electric smog cloud that serves as both camouflage and weapon."
+      }
+    ],
+    "subtypes": [
+      "Armored Dragon"
+    ],
+    "text": "Power attacker +8000 (While attacking, this creature gets +8000 power.)\nTriple breaker (This creature breaks 3 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 5,
+    "name": "Bombat, General of Speed",
+    "power": "3000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "38/55",
+        "rarity": "Uncommon",
+        "illustrator": "Naoki Saito",
+        "flavor": "\"Too slow! Do I have to sit on a rocket to go faster?!\""
+      }
+    ],
+    "subtypes": [
+      "Dragonoid"
+    ],
+    "text": "Speed attacker (This creature doesn't get summoning sickness.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 2,
+    "name": "Brutal Charge",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "49/55",
+        "rarity": "Rare",
+        "illustrator": "Dustmoss",
+        "flavor": "Kondu started to regret joining Wrugh's carpool."
+      }
+    ],
+    "text": "At the end of this turn, search your deck. For each of your opponent's shields your creatures broke this turn, you may take a creature from your deck, show it to your opponent, and put it into your hand. Then shuffle your deck.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 3,
+    "name": "Calgo, Vizier of Rainclouds",
+    "power": "2000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "7/55",
+        "rarity": "Common",
+        "illustrator": "Masaki Hirooka",
+        "flavor": "\"Arise, Vizier of Rainclouds. Your lash is the blade of justice.\" â€”Hanusa, Radiance Elemental"
+      }
+    ],
+    "subtypes": [
+      "Initiate"
+    ],
+    "text": "This creature can't be blocked by creatures that have power 4000 or more.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 4,
+    "name": "Cannoneer Bargon",
+    "power": "4000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "39/55",
+        "rarity": "Rare",
+        "illustrator": "Nottsuo",
+        "flavor": "\"Why bother aiming? I just fire in all directions at once.\""
+      }
+    ],
+    "subtypes": [
+      "Armorloid"
+    ],
+    "text": "Shield trigger (When this creature is put into your hand from your shield zone, you may summon it immediately for no cost.)\nThis creature can't attack players.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 8,
+    "name": "Cataclysmic Eruption",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "40/55",
+        "rarity": "Rare",
+        "illustrator": "Katsuhiko Kojoh",
+        "flavor": "The skies fell, the seas boiled, the caves collapsed, the volcanoes melted, and the forests burned. The planet cracked open, and the Megapocalypse began."
+      }
+    ],
+    "text": "For each nature creature you have in the battle zone, you may choose a card in your opponent's mana zone and put it into his graveyard.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 2,
+    "name": "Crow Winger",
+    "power": "1000+",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "50/55",
+        "rarity": "Common",
+        "illustrator": "Miho Midorikawa",
+        "flavor": "The Dark Lords' presence in the Fiona Woods warped more than just the trees."
+      }
+    ],
+    "subtypes": [
+      "Beast Folk"
+    ],
+    "text": "This creature gets +1000 power for each water creature and darkness creature your opponent has in the battle zone.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 3,
+    "name": "Cyclone Panic",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "41/55",
+        "rarity": "Uncommon",
+        "illustrator": "Eiji Kaneda"
+      }
+    ],
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nEach player counts the cards in his hand, shuffles these cards into his deck, then draws that many cards.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 7,
+    "name": "Death Cruzer, the Annihilator",
+    "power": "13000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "S3/55",
+        "rarity": "Super Rare",
+        "illustrator": "Yoshio Sugiura",
+        "flavor": "Its only friend is the empty echo of death."
+      }
+    ],
+    "subtypes": [
+      "Demon Command"
+    ],
+    "text": "When you put this creature into the battle zone, destroy all your other creatures.\nTriple breaker (This creature breaks 3 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 9,
+    "name": "Divine Riptide",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "17/55",
+        "rarity": "Rare",
+        "illustrator": "D-Suzuki",
+        "flavor": "\"The Megapocalypse has arrived. It's a bit early, huh?\" â€”Pokolul"
+      }
+    ],
+    "text": "Each player returns all cards from his mana zone to his hand.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 4,
+    "name": "Enchanted Soil",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "51/55",
+        "rarity": "Uncommon",
+        "illustrator": "Akifumi Yamamoto",
+        "flavor": "\"Souls don't truly depart this world. They merely rest for a time.\" â€”Fighter Dual Fang"
+      }
+    ],
+    "text": "Put up to 2 creatures from your graveyard into your mana zone.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 5,
+    "name": "Gallia Zohl, Iron Guardian Q",
+    "power": "2000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "8/55",
+        "rarity": "Common",
+        "illustrator": "Jason",
+        "flavor": "My true home is not in the Light realm. It is with the Survivors."
+      }
+    ],
+    "subtypes": [
+      "Survivor",
+      "Guardian"
+    ],
+    "text": "Survivor (Each of your Survivors has this creature's Survivor ability.) : Blocker (Whenever an opponent's creature attacks, you may tap this creature to stop the attack. Then the 2 creatures battle.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 5,
+    "name": "Gigakail",
+    "power": "4000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "26/55",
+        "rarity": "Uncommon",
+        "illustrator": "Kou1",
+        "flavor": "What it was built out of isn't nearly as disturbing as what was done with the leftovers."
+      },
+      {
+        "set": "Promotional",
+        "id": "L16/20 Y1",
+        "rarity": "Uncommon",
+        "illustrator": "Kou1",
+        "flavor": "What it was built out of isn't nearly as disturbing as what was done with the leftovers."
+      }
+    ],
+    "subtypes": [
+      "Chimera"
+    ],
+    "text": "Nature and light slayer (Whenever this creature battles a nature or light creature, destroy the nature or light creature after the battle.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 5,
+    "name": "Gigaling Q",
+    "power": "2000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "27/55",
+        "rarity": "Common",
+        "illustrator": "Ken Sugawara",
+        "flavor": "Did the Megapocalypse create the Survivors, or did it just set them free?"
+      }
+    ],
+    "subtypes": [
+      "Survivor",
+      "Chimera"
+    ],
+    "text": "Survivor (Each of your Survivors has this creature's Survivor ability.) : Slayer (Whenever this creature battles, destroy the other creature after the battle.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 3,
+    "name": "Gigazoul",
+    "power": "3000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "28/55",
+        "rarity": "Common",
+        "illustrator": "Katsuya",
+        "flavor": "\"Perhaps I went a little too far with the experiment....\" â€”Ballom, Master of Death"
+      }
+    ],
+    "subtypes": [
+      "Chimera"
+    ],
+    "text": "While your opponent has no shields, this creature can't attack.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 4,
+    "name": "Glory Snow",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "9/55",
+        "rarity": "Rare",
+        "illustrator": "Sansyu"
+      }
+    ],
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nIf your opponent has more cards in his mana zone than you have in yours, put the top 2 cards of your deck into your mana zone.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 5,
+    "name": "Horned Mutant",
+    "power": "3000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "29/55",
+        "rarity": "Uncommon",
+        "illustrator": "Dai",
+        "flavor": "After pulling out its own horns to use as weapons, it can grow a new pair in less than a day."
+      }
+    ],
+    "subtypes": [
+      "Hedrian"
+    ],
+    "text": "Each nature creature costs 1 more to summon, and each nature spell costs 1 more to cast.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 2,
+    "name": "Jewel Spider",
+    "power": "1000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "30/55",
+        "rarity": "Common",
+        "illustrator": "Masaki Hirooka",
+        "flavor": "It climbs webs, walls, trees-anything and everything-in search of warm blood."
+      }
+    ],
+    "subtypes": [
+      "Brain Jacker"
+    ],
+    "text": "When this creature is destroyed, you may choose one of your shields and put it into your hand. You can't use the \"shield trigger\" ability of that shield.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 8,
+    "name": "King Mazelan",
+    "power": "7000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "2/55",
+        "rarity": "Very Rare",
+        "illustrator": "Katsuya",
+        "flavor": "It patrols the Cyber Lords' new undersea city. In exchange, it gets to eat any intruders it finds."
+      }
+    ],
+    "subtypes": [
+      "Leviathan"
+    ],
+    "text": "When you put this creature into the battle zone, you may choose a creature in the battle zone and return it to its owner's hand.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 12,
+    "name": "King Tsunami",
+    "power": "12000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "S2/55",
+        "rarity": "Super Rare",
+        "illustrator": "Akifumi Yamamoto",
+        "flavor": "The last time it did a backflip, the resulting tidal waves sank three islands."
+      }
+    ],
+    "subtypes": [
+      "Leviathan"
+    ],
+    "text": "When you put this creature into the battle zone, return all other creatures from the battle zone to their owners' hands.\nTriple breaker (This creature breaks 3 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 2,
+    "name": "Kip Chippotto",
+    "power": "1000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "42/55",
+        "rarity": "Common",
+        "illustrator": "Imo Kajii",
+        "flavor": "Only the Dragons realize these cute little birds hold the secrets of immortality."
+      }
+    ],
+    "subtypes": [
+      "Fire Bird"
+    ],
+    "text": "When one of your Armored Dragons would be destroyed, you may destroy this creature instead.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 4,
+    "name": "Kulus, Soulshine Enforcer",
+    "power": "3500",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "10/55",
+        "rarity": "Common",
+        "illustrator": "Taro Yamazaki",
+        "flavor": "Right-side up, it's solar powered. Upside down, it's lunar powered!"
+      }
+    ],
+    "subtypes": [
+      "Berserker"
+    ],
+    "text": "When you put this creature into the battle zone, if your opponent has more cards in his mana zone than you have in yours, put the top card of your deck into your mana zone.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 7,
+    "name": "La Byle, Seeker of the Winds",
+    "power": "5000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "1/55",
+        "rarity": "Very Rare",
+        "illustrator": "Hisashi Momose",
+        "flavor": "\"Breeze? Nah. Gust? Nah. Tornado? Aw, yeah.\""
+      }
+    ],
+    "subtypes": [
+      "Mecha Thunder"
+    ],
+    "text": "Blocker (Whenever an opponent's creature attacks, you may tap this creature to stop the attack. Then the 2 creatures battle.)\nWhenever this creature blocks, untap it after it battles.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 6,
+    "name": "La Guile, Seeker of Skyfire",
+    "power": "7500",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "11/55",
+        "rarity": "Uncommon",
+        "illustrator": "Akira Hamada",
+        "flavor": "Today's weather report: partly cloudy, with an 80 percent chance of being blasted from space."
+      }
+    ],
+    "subtypes": [
+      "Mecha Thunder"
+    ],
+    "text": "Double breaker (This creature breaks 2 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 2,
+    "name": "Le Quist, the Oracle",
+    "power": "1500",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "12/55",
+        "rarity": "Common",
+        "illustrator": "Katsuhiko Kojoh",
+        "flavor": "\"I have developed a devastating new weapon to combat the forces of chaos. I call it ?nap time.'\""
+      }
+    ],
+    "subtypes": [
+      "Light Bringer"
+    ],
+    "text": "Whenever this creature attacks, you may choose a darkness or fire creature in the battle zone and tap it. (First choose what this creature is attacking. Then choose a creature to tap.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 6,
+    "name": "Lurking Eel",
+    "power": "4000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "18/55",
+        "rarity": "Common",
+        "illustrator": "Taro Yamazaki",
+        "flavor": "The safest place can conceal the greatest danger."
+      }
+    ],
+    "subtypes": [
+      "Gel Fish"
+    ],
+    "text": "Fire and nature blocker (Whenever an opponent's fire or nature creature attacks, you may tap this creature to stop the attack. Then the 2 creatures battle.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 3,
+    "name": "Miracle Quest",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "19/55",
+        "rarity": "Uncommon",
+        "illustrator": "Takesi Kuno",
+        "flavor": "\"Search high and low! We must find the jade idol! And while you're at it, see if you can find my car keys.\" â€”Tropico"
+      }
+    ],
+    "text": "Whenever any of your creatures finishes attacking this turn, you may draw 2 cards for each shield it broke.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 6,
+    "name": "Moon Horn",
+    "power": "6000+",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "52/55",
+        "rarity": "Uncommon",
+        "illustrator": "Akifumi Yamamoto",
+        "flavor": "\"Sometimes he'll go hog wild at a party and totally pig out. But he's usually such a boar.\" â€”Fear Fang"
+      }
+    ],
+    "subtypes": [
+      "Horned Beast"
+    ],
+    "text": "This creature gets +1000 power for each water creature and darkness creature your opponent has in the battle zone.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 7,
+    "name": "Nocturnal Giant",
+    "power": "7000+",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "53/55",
+        "rarity": "Rare",
+        "illustrator": "Hikaru Ikusa",
+        "flavor": "Does it harness the power of the stars? Does it prefer the cover of night? Or does it just get sunburned really easily?"
+      },
+      {
+        "set": "Promotional",
+        "id": "L15/20 Y1",
+        "rarity": "Rare",
+        "illustrator": "Hikaru Ikusa",
+        "flavor": "Does it harness the power of the stars? Does it prefer the cover of night? Or does it just get sunburned really easily?"
+      }
+    ],
+    "subtypes": [
+      "Giant"
+    ],
+    "text": "This creature can't attack creatures.\nPower attacker +7000 (While attacking, this creature gets +7000 power.)\nTriple breaker (This creature breaks 3 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 6,
+    "name": "Obsidian Scarab",
+    "power": "5000+",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "5/55",
+        "rarity": "Very Rare",
+        "illustrator": "Masaki Hirooka"
+      }
+    ],
+    "subtypes": [
+      "Giant Insect"
+    ],
+    "text": "Power attacker +3000 (While attacking, this creature gets +3000 power.)\nDouble breaker (This creature breaks 2 shields.)\nWhen this creature is destroyed, you may put an Obsidian Scarab from your mana zone into the battle zone.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 4,
+    "name": "Pokolul",
+    "power": "2000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "20/55",
+        "rarity": "Rare",
+        "illustrator": "Norikatsu Miyoshi",
+        "flavor": "The cosmic offspring of Father Time and a motherboard."
+      }
+    ],
+    "subtypes": [
+      "Cyber Lord"
+    ],
+    "text": "Whenever your opponent uses the \"shield trigger\" ability of a shield broken by this creature, you may untap this creature.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 3,
+    "name": "Rikabu, the Dismantler",
+    "power": "1000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "43/55",
+        "rarity": "Common",
+        "illustrator": "Syuichi Obata",
+        "flavor": "\"I'll have that ripped apart in no time!\""
+      }
+    ],
+    "subtypes": [
+      "Machine Eater"
+    ],
+    "text": "Speed attacker (This creature doesn't get summoning sickness.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 4,
+    "name": "Ruthless Skyterror",
+    "power": "6000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "44/55",
+        "rarity": "Common",
+        "illustrator": "Yoko Tsukamoto",
+        "flavor": "\"If you don't kneel before my wrath, you'll certainly kneel after it.\""
+      }
+    ],
+    "subtypes": [
+      "Armored Wyvern"
+    ],
+    "text": "This creature can attack untapped water creatures.\nThis creature can't attack players.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 5,
+    "name": "Scheming Hands",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "31/55",
+        "rarity": "Uncommon",
+        "illustrator": "Hikaru Ikusa",
+        "flavor": "\"Everyone has secrets. Everyone but you.\" â€”Trox, General of Destruction"
+      }
+    ],
+    "text": "Look at your opponent's hand and choose a card from it. Your opponent discards that card.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 7,
+    "name": "Scissor Scarab",
+    "power": "5000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "54/55",
+        "rarity": "Common",
+        "illustrator": "Norikatsu Miyoshi"
+      }
+    ],
+    "subtypes": [
+      "Giant Insect"
+    ],
+    "text": "When you put this creature into the battle zone, search your deck. You may take a Giant Insect from your deck, show that Giant Insect to your opponent, and put it into your hand. Then shuffle your deck.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 8,
+    "name": "Sea Slug",
+    "power": "6000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "21/55",
+        "rarity": "Rare",
+        "illustrator": "Naoki Saito",
+        "flavor": "The Cyber Lords have high standards of beauty for their creations. They have even higher standards of ugliness."
+      }
+    ],
+    "subtypes": [
+      "Gel Fish"
+    ],
+    "text": "Blocker (Whenever an opponent's creature attacks, you may tap this creature to stop the attack. Then the 2 creatures battle.)\nThis creature can't be blocked.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 6,
+    "name": "Sinister General Damudo",
+    "power": "5000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "3/55",
+        "rarity": "Very Rare",
+        "illustrator": "Atsushi Kawasaki",
+        "flavor": "\"The Fiona Woods will sustain us only for so long. We must push deeper into the Nature realm.\""
+      }
+    ],
+    "subtypes": [
+      "Dark Lord"
+    ],
+    "text": "When this creature is destroyed, destroy all creatures that have power 3000 or less.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 4,
+    "name": "Skullsweeper Q",
+    "power": "1000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "32/55",
+        "rarity": "Rare",
+        "illustrator": "Jason",
+        "flavor": "They don't like it when their victims twitch. They're ticklish."
+      },
+      {
+        "set": "Promotional",
+        "id": "L17/20 Y1",
+        "rarity": "Rare",
+        "illustrator": "Jason",
+        "flavor": "They don't like it when their victims twitch. They're ticklish."
+      }
+    ],
+    "subtypes": [
+      "Survivor",
+      "Brain Jacker"
+    ],
+    "text": "Survivor (Each of your Survivors has this creature's Survivor ability.) : Whenever this creature attacks, your opponent chooses and discards a card from his hand.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 1,
+    "name": "Slime Veil",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "33/55",
+        "rarity": "Rare",
+        "illustrator": "Daisuke Izuka",
+        "flavor": "\"Hey, you're really getting the hang of that. Now make him do a little dance.\" â€”Dark Titan Maginn"
+      }
+    ],
+    "text": "During your opponent's next turn, each of his creatures attacks if able.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 3,
+    "name": "Smash Horn Q",
+    "power": "2000+",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "55/55",
+        "rarity": "Common",
+        "illustrator": "Norikatsu Miyoshi",
+        "flavor": "The symbol on its back is proof of its refusal to die."
+      }
+    ],
+    "subtypes": [
+      "Survivor",
+      "Horned Beast"
+    ],
+    "text": "Survivor (Each of your Survivors has this creature's Survivor ability.) : This creature gets +1000 power.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 3,
+    "name": "Snork La, Shrine Guardian",
+    "power": "3000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "13/55",
+        "rarity": "Rare",
+        "illustrator": "Dustmoss"
+      }
+    ],
+    "subtypes": [
+      "Guardian"
+    ],
+    "text": "Blocker (Whenever an opponent's creature attacks, you may tap this creature to stop the attack. Then the 2 creatures battle.)\nThis creature can't attack players.\nWhenever your opponent causes a card to be put into your graveyard from your mana zone, you may return that card to your mana zone.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 3,
+    "name": "Solidskin Fish",
+    "power": "3000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "22/55",
+        "rarity": "Common",
+        "illustrator": "Youichi Kai",
+        "flavor": "If you look closely enough, you'll notice the rock has eyes. And teeth."
+      }
+    ],
+    "subtypes": [
+      "Fish"
+    ],
+    "text": "When you put this creature into the battle zone, return a card from your mana zone to your hand.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 6,
+    "name": "Spikestrike Ichthys Q",
+    "power": "3000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "23/55",
+        "rarity": "Common",
+        "illustrator": "Shishizaru",
+        "flavor": "\"If the Megapocalypse couldn't stop me, what makes you think you can?\""
+      }
+    ],
+    "subtypes": [
+      "Survivor",
+      "Fish"
+    ],
+    "text": "Survivor (Each of your Survivors has this creature's Survivor ability.) : This creature can't be blocked.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 5,
+    "name": "Split-Head Hydroturtle Q",
+    "power": "2000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "24/55",
+        "rarity": "Uncommon",
+        "illustrator": "Daisuke Izuka",
+        "flavor": "\"No fair! The more Survivors there are, the stronger they become!\" â€”Mini Titan Gett"
+      }
+    ],
+    "subtypes": [
+      "Survivor",
+      "Gel Fish"
+    ],
+    "text": "Survivor (Each of your Survivors has this creature's Survivor ability.) : Whenever this creature attacks, you may draw a card.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 5,
+    "name": "Steel-Turret Cluster",
+    "power": "3000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "25/55",
+        "rarity": "Common",
+        "illustrator": "D-Suzuki",
+        "flavor": "After an analysis of its armor was performed, a squad of decoy troops was quickly constructed."
+      }
+    ],
+    "subtypes": [
+      "Cyber Cluster"
+    ],
+    "text": "This creature can't be attacked by fire or nature creatures.",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 7,
+    "name": "Syforce, Aurora Elemental",
+    "power": "7000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "14/55",
+        "rarity": "Rare",
+        "illustrator": "Shishizaru"
+      },
+      {
+        "set": "Promotional",
+        "id": "15/46",
+        "rarity": "Rare",
+        "illustrator": "Shishizaru"
+      }
+    ],
+    "subtypes": [
+      "Angel Command"
+    ],
+    "text": "Blocker (When an opponent's creature attacks, you may tap this creature to stop the attack. Then the 2 creatures battle.)\nWhen you put this creature into the battle zone, you may return a spell from your mana zone to your hand.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 11,
+    "name": "Syrius, Firmament Elemental",
+    "power": "12000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "S1/55",
+        "rarity": "Super Rare",
+        "illustrator": "Ryoya Yuki",
+        "flavor": "\"The Megapocalypse is over. But the damage has just begun.\""
+      }
+    ],
+    "subtypes": [
+      "Angel Command"
+    ],
+    "text": "Blocker (Whenever an opponent's creature attacks, you may tap this creature to stop the attack. Then the 2 creatures battle.)\nTriple breaker (This creature breaks 3 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 2,
+    "name": "Thunder Net",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "15/55",
+        "rarity": "Uncommon",
+        "illustrator": "Katsuya",
+        "flavor": "\"When the device is activated, a net of electricity snares our enemies!\" â€”Syrius, Firmament Elemental"
+      }
+    ],
+    "text": "For each water creature you have in the battle zone, you may choose one of your opponent's creatures in the battle zone and tap it.",
+    "type": "Spell"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 7,
+    "name": "Twin-Cannon Skyterror",
+    "power": "7000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "45/55",
+        "rarity": "Rare",
+        "illustrator": "Hideaki Takamura",
+        "flavor": "The first cannon blasts your flesh. The second cannon blasts your soul."
+      },
+      {
+        "set": "Promotional",
+        "id": "E5/Y1",
+        "rarity": "Rare",
+        "illustrator": "Hideaki Takamura",
+        "flavor": "The first cannon blasts your flesh. The second cannon blasts your soul."
+      }
+    ],
+    "subtypes": [
+      "Armored Wyvern"
+    ],
+    "text": "Speed attacker (This creature doesn't get summoning sickness.)\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 5,
+    "name": "Vashuna, Sword Dancer",
+    "power": "7000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "34/55",
+        "rarity": "Rare",
+        "illustrator": "Jason",
+        "flavor": "\"Now, you shall see the ancient secrets of the East!\""
+      },
+      {
+        "set": "Promotional",
+        "id": "32/46",
+        "rarity": "Rare",
+        "illustrator": "Jason",
+        "flavor": "\"Now, you shall see the ancient secrets of the East!\""
+      }
+    ],
+    "subtypes": [
+      "Demon Command"
+    ],
+    "text": "While your opponent has no shields, this creature can't attack.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 3,
+    "name": "Wisp Howler, Shadow of Tears",
+    "power": "2000",
+    "printings": [
+      {
+        "set": "DM-05 Survivors of the Megapocalypse",
+        "id": "35/55",
+        "rarity": "Common",
+        "illustrator": "Sansyu",
+        "flavor": "Although it has no body to feed, it never stops devouring souls."
+      }
+    ],
+    "subtypes": [
+      "Ghost"
+    ],
+    "text": "Nature and light slayer (Whenever this creature battles a nature or light creature, destroy the nature or light creature after the battle.)",
+    "type": "Creature"
+  }
+]

@@ -724,4 +724,347 @@ export const SPELL_EFFECTS = {
             }
         });
     },
+    "Chains of Sacrifice": ({ gsR, setTargeting, setGs, net, toast }) => {
+        const oppCreatures = gsR.current.opponent.battleZone;
+        if (!oppCreatures.length) return;
+        setTargeting({
+            message: "Chains of Sacrifice: Destroy up to 2 enemy creatures",
+            count: 2,
+            exact: false,
+            validTargets: oppCreatures.map(c => c.instanceId),
+            onComplete: (ids) => {
+                ids.forEach(id => net.send("ACTION", { action: "DESTROY_TARGET", details: { targetId: id } }));
+                if (!gsR.current.battleZone.length) return;
+                setTargeting({
+                    message: "Chains of Sacrifice: Select one of your creatures to destroy",
+                    count: 1,
+                    validTargets: gsR.current.battleZone.map(c => c.instanceId),
+                    onComplete: (myIds) => {
+                        const target = gsR.current.battleZone.find(x => x.instanceId === myIds[0]);
+                        setGs(s => ({ ...s, battleZone: s.battleZone.filter(x => x.instanceId !== myIds[0]), graveyard: [...s.graveyard, target] }));
+                        toast("Chains of Sacrifice complete!");
+                    }
+                });
+            }
+        });
+    },
+    "Darkpact": ({ gsR, setSearchingDeck, setGs, toast, draw }) => {
+        const s = gsR.current;
+        if (!s.mana.length) return;
+        setSearchingDeck({
+            message: "Darkpact: Select any number of mana to sacrifice",
+            count: s.mana.length,
+            exact: false,
+            customList: s.mana,
+            onComplete: (selected) => {
+                const cards = Array.isArray(selected) ? selected : [selected];
+                const ids = cards.map(c => c.instanceId);
+                setGs(p => ({
+                    ...p,
+                    mana: p.mana.filter(m => !ids.includes(m.instanceId)),
+                    graveyard: [...p.graveyard, ...cards]
+                }));
+                for (let i = 0; i < cards.length; i++) setTimeout(() => draw(), i * 200);
+                toast(`Darkpact: Drew ${cards.length} cards!`);
+            }
+        });
+    },
+    "Full Defensor": ({ setGs, toast }) => {
+        setGs(p => ({
+            ...p,
+            battleZone: p.battleZone.map(c => ({ ...c, tempBlocker: true }))
+        }));
+        toast("Full Defensor: Your creatures are blockers until next turn!");
+    },
+    "Hydro Hurricane": ({ gsR, setGs, setSearchingDeck, setTargeting, net, toast }) => {
+        const lightCount = gsR.current.battleZone.filter(c => c.civilizations?.includes('Light')).length;
+        const darkCount = gsR.current.battleZone.filter(c => c.civilizations?.includes('Darkness')).length;
+        
+        const mCount = Math.min(lightCount, gsR.current.opponent.mana.length);
+        if (mCount > 0) {
+            setSearchingDeck({
+                message: `Hydro Hurricane: Bounce ${mCount} enemy mana`,
+                customList: gsR.current.opponent.mana,
+                count: mCount,
+                exact: true,
+                onComplete: (cards) => {
+                    const selected = Array.isArray(cards) ? cards : [cards];
+                    selected.forEach(c => net.send("ACTION", { action: "MANA_TO_HAND_TARGET", details: { targetId: c.instanceId } }));
+                    
+                    const cCount = Math.min(darkCount, gsR.current.opponent.battleZone.length);
+                    if (cCount > 0) {
+                        setTargeting({
+                            message: `Hydro Hurricane: Bounce ${cCount} enemy creatures`,
+                            count: cCount,
+                            exact: true,
+                            validTargets: gsR.current.opponent.battleZone.map(c => c.instanceId),
+                            onComplete: (ids) => {
+                                ids.forEach(id => net.send("ACTION", { action: "BOUNCE_TARGET", details: { targetId: id } }));
+                            }
+                        });
+                    }
+                }
+            });
+        } else {
+            const cCount = Math.min(darkCount, gsR.current.opponent.battleZone.length);
+            if (cCount > 0) {
+                setTargeting({
+                    message: `Hydro Hurricane: Bounce ${cCount} enemy creatures`,
+                    count: cCount,
+                    exact: true,
+                    validTargets: gsR.current.opponent.battleZone.map(c => c.instanceId),
+                    onComplete: (ids) => {
+                        ids.forEach(id => net.send("ACTION", { action: "BOUNCE_TARGET", details: { targetId: id } }));
+                    }
+                });
+            }
+        }
+        toast("Hydro Hurricane triggered!");
+    },
+    "Brutal Charge": ({ setGs, toast }) => {
+        setGs(p => ({ ...p, turnEffects: { ...p.turnEffects, brutalCharge: true } }));
+        toast("Brutal Charge: Search effect active for end of turn!");
+    },
+    "Cataclysmic Eruption": ({ gsR, setSearchingDeck, net, toast }) => {
+        const natureCount = gsR.current.battleZone.filter(c => c.civilizations?.includes('Nature')).length;
+        if (natureCount === 0 || !gsR.current.opponent.mana.length) return;
+        setSearchingDeck({
+            message: `Cataclysmic Eruption: Select ${natureCount} enemy mana to destroy`,
+            customList: gsR.current.opponent.mana,
+            count: Math.min(natureCount, gsR.current.opponent.mana.length),
+            exact: true,
+            onComplete: (cards) => {
+                const selected = Array.isArray(cards) ? cards : [cards];
+                selected.forEach(c => net.send("ACTION", { action: "DESTROY_MANA_TARGET", details: { targetId: c.instanceId } }));
+                toast("Mana destroyed!");
+            }
+        });
+    },
+    "Cyclone Panic": ({ setGs, net, toast }) => {
+        setGs(p => {
+            const count = p.hand.length;
+            const newDeck = [...p.deck, ...p.hand].sort(() => Math.random() - 0.5);
+            const newHand = newDeck.splice(0, count);
+            return { ...p, hand: newHand, deck: newDeck };
+        });
+        net.send("ACTION", { action: "CYCLONE_PANIC" });
+        toast("Hand shuffled into deck and redrawn!");
+    },
+    "Divine Riptide": ({ setGs, net, toast }) => {
+        setGs(p => ({ ...p, hand: [...p.hand, ...p.mana], mana: [] }));
+        net.send("ACTION", { action: "MANA_TO_HAND_ALL" });
+        toast("All mana returned to hand!");
+    },
+    "Enchanted Soil": ({ gsR, setSearchingDeck, setGs, toast, CardEngine }) => {
+        const creatures = gsR.current.graveyard.filter(c => CardEngine.isCreature(c));
+        if (!creatures.length) return;
+        setSearchingDeck({
+            message: "Enchanted Soil: Select up to 2 creatures to move to mana",
+            customList: creatures,
+            count: 2,
+            exact: false,
+            onComplete: (cards) => {
+                const selected = Array.isArray(cards) ? cards : [cards];
+                setGs(p => {
+                    const ids = selected.map(x => x.instanceId);
+                    return { ...p, graveyard: p.graveyard.filter(x => !ids.includes(x.instanceId)), mana: [...p.mana, ...selected.map(x => ({ ...x, isTapped: false }))] };
+                });
+                toast("Creatures moved to mana zone!");
+            }
+        });
+    },
+    "Glory Snow": ({ gsR, setGs, toast }) => {
+        const s = gsR.current;
+        if (s.opponent.mana.length > s.mana.length) {
+            setGs(p => {
+                const top2 = p.deck.slice(0, 2);
+                return { ...p, deck: p.deck.slice(2), mana: [...p.mana, ...top2.map(x => ({ ...x, isTapped: false }))] };
+            });
+            toast("Glory Snow: 2 mana ramped!");
+        }
+    },
+    "Miracle Quest": ({ setGs, toast }) => {
+        setGs(p => ({ ...p, turnEffects: { ...p.turnEffects, miracleQuest: true } }));
+        toast("Miracle Quest: Draw 2 effect active for each shield break!");
+    },
+    "Mega Detonator": ({ gsR, setGs, setSearchingDeck, setTargeting, toast }) => {
+        const s = gsR.current;
+        if (!s.hand.length || !s.battleZone.length) return;
+        setSearchingDeck({
+            message: "Mega Detonator: Discard cards to give creatures Double Breaker",
+            count: s.hand.length,
+            exact: false,
+            customList: s.hand,
+            onComplete: (discarded) => {
+                const discards = Array.isArray(discarded) ? discarded : [discarded];
+                const count = discards.length;
+                setGs(p => ({ ...p, hand: p.hand.filter(c => !discards.map(d => d.instanceId).includes(c.instanceId)), graveyard: [...p.graveyard, ...discards] }));
+                
+                setTargeting({
+                    message: `Mega Detonator: Select ${count} creatures to give Double Breaker`,
+                    count: count,
+                    exact: true,
+                    validTargets: gsR.current.battleZone.map(c => c.instanceId),
+                    onComplete: (ids) => {
+                        setGs(p => ({
+                            ...p,
+                            battleZone: p.battleZone.map(c => ids.includes(c.instanceId) ? { ...c, tempDoubleBreaker: true } : c)
+                        }));
+                        toast("Creatures buffed!");
+                    }
+                });
+            }
+        });
+    },
+    "Mystic Inscription": ({ draw, setGs, toast }) => {
+        setGs(p => {
+            const d = [...p.deck];
+            if (!d.length) return p;
+            const c = d.pop();
+            return { ...p, deck: d, shields: [...p.shields, c] };
+        });
+        toast("Mystic Inscription: Card added to shields!");
+    },
+    "Screaming Sunburst": ({ setGs, net, toast }) => {
+        setGs(p => ({
+            ...p,
+            battleZone: p.battleZone.map(c => !c.civilizations?.includes('Light') ? { ...c, isTapped: true } : c)
+        }));
+        net.send("ACTION", { action: "TAP_ALL_EXCEPT_LIGHT" });
+        toast("Screaming Sunburst: Tapped non-light creatures!");
+    },
+    "Soul Gulp": ({ gsR, net, toast }) => {
+        net.send("ACTION", { action: "DISCARD_FOR_EACH_LIGHT" });
+        toast("Soul Gulp: Opponent discards for their light creatures!");
+    },
+    "Sword of Benevolent Life": ({ gsR, setGs, toast }) => {
+        const lightCount = gsR.current.battleZone.filter(c => c.civilizations?.includes('Light')).length;
+        const bonus = lightCount * 1000;
+        setGs(p => ({
+            ...p,
+            battleZone: p.battleZone.map(c => ({ ...c, powerBonus: (c.powerBonus || 0) + bonus }))
+        }));
+        toast(`Sword of Benevolent Life: All creatures +${bonus}!`);
+    },
+    "Sword of Malevolent Death": ({ setGs, toast }) => {
+        setGs(p => ({
+            ...p,
+            turnEffects: { ...p.turnEffects, swordOfMalevolentDeath: true }
+        }));
+        toast("Sword of Malevolent Death: Power boost while attacking based on Darkness mana!");
+    },
+    "Whisking Whirlwind": ({ setGs, toast }) => {
+        setGs(p => ({ ...p, turnEffects: { ...p.turnEffects, whiskingWhirlwind: true } }));
+        toast("Whisking Whirlwind: All creatures will untap at end of turn!");
+    },
+    "Brutal Charge Trigger": ({ gsR, setSearchingDeck, setGs, toast, CardEngine }) => {
+        const count = gsR.current.shieldsBrokenThisTurn;
+        if (count === 0) return;
+        setSearchingDeck({
+            message: `Brutal Charge: Search up to ${count} creatures from deck`,
+            count: count,
+            exact: false,
+            onComplete: (cards) => {
+                const selected = Array.isArray(cards) ? cards : [cards];
+                setGs(p => {
+                    const ids = selected.map(x => x.instanceId);
+                    return { ...p, deck: p.deck.filter(x => !ids.includes(x.instanceId)), hand: [...p.hand, ...selected] };
+                });
+                toast("Creatures added to hand!");
+            }
+        });
+    },
+    "Bonds of Justice": ({ gsR, setGs, net, toast, CardEngine }) => {
+        const creatures = [...gsR.current.battleZone, ...gsR.current.opponent.battleZone];
+        creatures.forEach(c => {
+            const abs = CardEngine.parseAbilities(c, [], []);
+            if (!abs.blocker) {
+                const isMine = gsR.current.battleZone.some(x => x.instanceId === c.instanceId);
+                if (isMine) {
+                    setGs(p => ({ ...p, battleZone: p.battleZone.map(x => x.instanceId === c.instanceId ? { ...x, isTapped: true } : x) }));
+                } else {
+                    net.send("ACTION", { action: "TAP_TARGET", details: { targetId: c.instanceId } });
+                }
+            }
+        });
+        toast("Bonds of Justice: Tapped all non-blockers!");
+    },
+    "Comet Missile": ({ gsR, setTargeting, net, toast, CardEngine }) => {
+        const targets = gsR.current.opponent.battleZone.filter(c => {
+            const abs = CardEngine.parseAbilities(c, [], []);
+            const power = CardEngine.getCurrentPower(c, gsR.current.opponent.battleZone, gsR.current.opponent.mana);
+            return abs.blocker && power <= 6000;
+        });
+        if (!targets.length) return;
+        setTargeting({
+            message: "Comet Missile: Select a blocker to destroy (power 6000 or less)",
+            count: 1,
+            validTargets: targets.map(c => c.instanceId),
+            onComplete: (ids) => {
+                net.send("ACTION", { action: "CREATURE_DESTROYED", details: { targetId: ids[0] } });
+                toast("Blocker destroyed!");
+            }
+        });
+    },
+    "Crisis Boulder": ({ net, toast }) => {
+        net.send("ACTION", { action: "CRISIS_BOULDER" });
+        toast("Crisis Boulder: Opponent must choose a card to destroy!");
+    },
+    "Dimension Gate": ({ setSearchingDeck, setGs, toast }) => {
+        setSearchingDeck({
+            message: "Dimension Gate: Search a creature from deck",
+            count: 1,
+            onComplete: (cards) => {
+                const card = cards[0];
+                setGs(p => ({
+                    ...p,
+                    deck: p.deck.filter(c => c.instanceId !== card.instanceId),
+                    hand: [...p.hand, card]
+                }));
+                toast("Creature added to hand!");
+            }
+        });
+    },
+    "Invincible Abyss": ({ gsR, net, toast }) => {
+        gsR.current.opponent.battleZone.forEach(c => {
+            net.send("ACTION", { action: "CREATURE_DESTROYED", details: { targetId: c.instanceId } });
+        });
+        toast("Invincible Abyss: All enemy creatures destroyed!");
+    },
+    "Invincible Aura": ({ setGs, toast }) => {
+        setGs(p => {
+            const top3 = p.deck.slice(0, 3);
+            return { ...p, deck: p.deck.slice(3), shields: [...p.shields, ...top3] };
+        });
+        toast("Invincible Aura: 3 shields added from deck!");
+    },
+    "Invincible Cataclysm": ({ gsR, net, toast }) => {
+        const count = Math.min(3, gsR.current.opponent.shields.length);
+        for (let i = 0; i < count; i++) {
+            setTimeout(() => net.send("ACTION", { action: "SHIELD_INCINERATED" }), i * 400);
+        }
+        toast(`Invincible Cataclysm: ${count} shields incinerated!`);
+    },
+    "Invincible Fortress": ({ gsR, net, toast }) => {
+        const count = Math.min(3, gsR.current.opponent.shields.length);
+        for (let i = 0; i < count; i++) {
+            setTimeout(() => net.send("ACTION", { action: "SHIELD_BROKEN" }), i * 400);
+        }
+        toast(`Invincible Fortress: ${count} shields broken!`);
+    },
+    "Invincible Technology": ({ gsR, setSearchingDeck, setGs, toast }) => {
+        setSearchingDeck({
+            message: "Invincible Technology: Select any number of cards from deck",
+            count: gsR.current.deck.length,
+            exact: false,
+            onComplete: (cards) => {
+                const selected = Array.isArray(cards) ? cards : [cards];
+                setGs(p => {
+                    const ids = selected.map(x => x.instanceId);
+                    return { ...p, deck: p.deck.filter(x => !ids.includes(x.instanceId)), hand: [...p.hand, ...selected] };
+                });
+                toast("Selected cards added to hand!");
+            }
+        });
+    }
 };

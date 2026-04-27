@@ -378,5 +378,161 @@ export const ATTACK_TRIGGERS = {
         }
         net.send("ACTION", { action: "FORCE_DISCARD_NON_FIRE_MANA" });
         toast("Quelos: Mutual mana destruction!");
+    },
+    "Smile Angler": ({ gsR, setSearchingDeck, net, toast, askMay }) => {
+        const s = gsR.current;
+        if (!s.opponent.mana.length) return;
+        askMay({
+            message: "Use Smile Angler's effect to bounce enemy mana?",
+            onYes: () => {
+                setSearchingDeck({
+                    message: "Smile Angler: Choose enemy mana to return to hand",
+                    customList: s.opponent.mana,
+                    count: 1,
+                    onComplete: (card) => {
+                        net.send("ACTION", { action: "MANA_TO_HAND_TARGET", details: { targetId: card.instanceId } });
+                        toast("Mana returned to hand!");
+                    }
+                });
+            }
+        });
+    },
+    "Three-Eyed Dragonfly": ({ gsR, setGs, setTargeting, toast, askMay }) => {
+        const others = gsR.current.battleZone.filter(c => c.name !== "Three-Eyed Dragonfly");
+        if (!others.length) return;
+        askMay({
+            message: "Use Three-Eyed Dragonfly's effect to sacrifice a creature for a buff?",
+            onYes: () => {
+                setTargeting({
+                    message: "Three-Eyed Dragonfly: Select a creature to sacrifice",
+                    count: 1,
+                    validTargets: others.map(c => c.instanceId),
+                    onComplete: (ids) => {
+                        const id = ids[0];
+                        setGs(s => {
+                            const c = s.battleZone.find(x => x.instanceId === id);
+                            return {
+                                ...s,
+                                battleZone: s.battleZone.map(x => x.name === "Three-Eyed Dragonfly" ? { ...x, powerBonus: (x.powerBonus || 0) + 2000, tempDoubleBreaker: true } : x.instanceId === id ? null : x).filter(Boolean),
+                                graveyard: [...s.graveyard, c]
+                            };
+                        });
+                        toast("Three-Eyed Dragonfly: Buffed!");
+                    }
+                });
+            }
+        });
+    },
+    "Fu Reil, the Chosen": ({ gsR, setTargeting, setGs, net, toast, askMay }) => {
+        const creatures = gsR.current.battleZone;
+        if (!creatures.length) return;
+        askMay({
+            message: "Use Fu Reil's effect to put one of your creatures into mana?",
+            onYes: () => {
+                setTargeting({
+                    message: "Fu Reil: Select a creature to send to mana zone",
+                    count: 1,
+                    validTargets: creatures.map(c => c.instanceId),
+                    onComplete: (ids) => {
+                        const target = gsR.current.battleZone.find(x => x.instanceId === ids[0]);
+                        setGs(p => ({ ...p, battleZone: p.battleZone.filter(x => x.instanceId !== ids[0]), mana: [...p.mana, { ...target, isTapped: false }] }));
+                        toast("Creature sent to mana zone!");
+                    }
+                });
+            }
+        });
+    },
+    "Gulan Rias, Speed Guardian": ({ gsR, setTargeting, net, toast, askMay }) => {
+        const oppCreatures = gsR.current.opponent.battleZone;
+        if (!oppCreatures.length) return;
+        askMay({
+            message: "Use Gulan Rias's effect to tap an enemy?",
+            onYes: () => {
+                setTargeting({
+                    message: "Gulan Rias: Select an enemy to tap",
+                    count: 1,
+                    validTargets: oppCreatures.map(c => c.instanceId),
+                    onComplete: (ids) => {
+                        net.send("ACTION", { action: "TAP_TARGET", details: { targetId: ids[0] } });
+                        toast("Enemy tapped!");
+                    }
+                });
+            }
+        });
+    },
+    "Bloodwing Mantis": ({ gsR, setSearchingDeck, setGs, net, toast }) => {
+        const mana = gsR.current.mana;
+        if (!mana.length) return;
+        setSearchingDeck({
+            message: "Bloodwing Mantis: Select 2 mana to return to hand",
+            customList: mana,
+            count: 2,
+            exact: false,
+            onComplete: (cards) => {
+                const selected = Array.isArray(cards) ? cards : [cards];
+                setGs(p => {
+                    const ids = selected.map(x => x.instanceId);
+                    return { ...p, mana: p.mana.filter(x => !ids.includes(x.instanceId)), hand: [...p.hand, ...selected] };
+                });
+                toast("Mana returned to hand!");
+            }
+        });
+    },
+    "Le Quist, the Oracle": ({ gsR, setTargeting, net, toast, askMay }) => {
+        const targets = gsR.current.opponent.battleZone.filter(c => c.civilizations?.includes('Darkness') || c.civilizations?.includes('Fire'));
+        if (!targets.length) return;
+        askMay({
+            message: "Le Quist: Tap a darkness or fire creature?",
+            onYes: () => {
+                setTargeting({
+                    message: "Le Quist: Select an enemy to tap",
+                    count: 1,
+                    validTargets: targets.map(c => c.instanceId),
+                    onComplete: (ids) => {
+                        net.send("ACTION", { action: "TAP_TARGET", details: { targetId: ids[0] } });
+                        toast("Enemy tapped!");
+                    }
+                });
+            }
+        });
+    },
+    "Rikabu's Screwdriver": ({ gsR, setTargeting, setGs, toast, askMay }) => {
+        const targets = gsR.current.battleZone;
+        if (!targets.length) return;
+        askMay({
+            message: "Rikabu's Screwdriver Survivor: Untap a creature?",
+            onYes: () => {
+                setTargeting({
+                    message: "Select a creature to untap",
+                    count: 1,
+                    validTargets: targets.map(c => c.instanceId),
+                    onComplete: (ids) => {
+                        setGs(p => ({
+                            ...p,
+                            battleZone: p.battleZone.map(c => c.instanceId === ids[0] ? { ...c, isTapped: false } : c)
+                        }));
+                        toast("Creature untapped!");
+                    }
+                });
+            }
+        });
+    },
+    "Daidalos, General of Fury": ({ gsR, setTargeting, setGs, toast }) => {
+        setTargeting({
+            message: "Daidalos: Select one of your creatures to destroy",
+            count: 1,
+            validTargets: gsR.current.battleZone.map(c => c.instanceId),
+            onComplete: (ids) => {
+                const target = gsR.current.battleZone.find(c => c.instanceId === ids[0]);
+                if (target) {
+                    setGs(p => ({
+                        ...p,
+                        battleZone: p.battleZone.filter(c => c.instanceId !== ids[0]),
+                        graveyard: [...p.graveyard, target]
+                    }));
+                    toast(`${target.name} sacrificed!`);
+                }
+            }
+        });
     }
 };
