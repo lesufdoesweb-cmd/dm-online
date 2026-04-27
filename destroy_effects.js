@@ -1,14 +1,16 @@
 export const DESTROY_EFFECTS = {
-    "Bombersaur": ({ gsR, setGs, setTargeting, net, toast }) => {
+    "Bombersaur": ({ gsR, setGs, setSearchingDeck, net, toast }) => {
         const s = gsR.current;
         if (s.mana.length > 0) {
-            setTargeting({
-                message: "Bombersaur: Select up to 2 mana to put into graveyard",
-                count: 2,
-                validTargets: s.mana.map(m => m.instanceId),
-                isManaTarget: true,
-                allowPartial: true,
-                onComplete: (ids) => {
+            const count = Math.min(2, s.mana.length);
+            setSearchingDeck({
+                message: "Bombersaur: Select " + count + " mana to put into graveyard",
+                customList: s.mana,
+                count: count,
+                exact: true,
+                onComplete: (selected) => {
+                    const cards = Array.isArray(selected) ? selected : [selected];
+                    const ids = cards.map(c => c.instanceId);
                     setGs(p => {
                         const targets = p.mana.filter(m => ids.includes(m.instanceId));
                         return { ...p, mana: p.mana.filter(m => !ids.includes(m.instanceId)), graveyard: [...p.graveyard, ...targets] };
@@ -19,18 +21,16 @@ export const DESTROY_EFFECTS = {
         net.send("ACTION", { action: "DESTROY_MANA_CHOICE", details: { count: 2 } });
         toast("Bombersaur: Each player loses 2 mana!");
     },
-    "Engineer Kipo": ({ gsR, setGs, setTargeting, net, toast }) => {
+    "Engineer Kipo": ({ gsR, setGs, setSearchingDeck, net, toast }) => {
         const s = gsR.current;
         if (s.mana.length > 0) {
-            setTargeting({
+            setSearchingDeck({
                 message: "Engineer Kipo: Select mana to put into graveyard",
+                customList: s.mana,
                 count: 1,
-                validTargets: s.mana.map(m => m.instanceId),
-                isManaTarget: true,
-                onComplete: (ids) => {
+                onComplete: (card) => {
                     setGs(p => {
-                        const target = p.mana.find(m => m.instanceId === ids[0]);
-                        return { ...p, mana: p.mana.filter(m => m.instanceId !== ids[0]), graveyard: [...p.graveyard, target] };
+                        return { ...p, mana: p.mana.filter(m => m.instanceId !== card.instanceId), graveyard: [...p.graveyard, card] };
                     });
                 }
             });

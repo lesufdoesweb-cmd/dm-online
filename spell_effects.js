@@ -43,35 +43,32 @@ export const SPELL_EFFECTS = {
         }));
         toast("Diamond Cutter: Your creatures can attack as if not blockers!");
     },
-    "Mana Crisis": ({ gsR, setTargeting, net, toast }) => {
+    "Mana Crisis": ({ gsR, setSearchingDeck, net, toast }) => {
         const s = gsR.current;
         if (!s.opponent.mana.length) return;
-        setTargeting({
+        setSearchingDeck({
             message: "Mana Crisis: Choose enemy mana to destroy",
+            customList: s.opponent.mana,
             count: 1,
-            validTargets: s.opponent.mana.map(m => m.instanceId),
-            isManaTarget: true,
-            onComplete: (ids) => {
-                net.send("ACTION", { action: "DESTROY_MANA", details: { targetId: ids[0] } });
+            onComplete: (card) => {
+                net.send("ACTION", { action: "DESTROY_MANA", details: { targetId: card.instanceId } });
                 toast("Mana destroyed!");
             }
         });
     },
-    "Searing Wave": ({ gsR, net, setGs, setTargeting, toast }) => {
+    "Searing Wave": ({ gsR, net, setGs, setSearchingDeck, toast }) => {
         net.send("ACTION", { action: "DESTROY_ALL_WEAK", details: { maxPower: 3000 } });
         const s = gsR.current;
         if (!s.shields.length) return;
-        setTargeting({
+        setSearchingDeck({
             message: "Searing Wave: Select a shield to put into graveyard",
             count: 1,
-            validTargets: s.shields.map((_, i) => `shield-${i}`),
-            isShieldTarget: true,
-            onComplete: (ids) => {
-                const idx = parseInt(ids[0].split('-')[1]);
+            customList: s.shields,
+            isFaceDown: true,
+            onComplete: (shield) => {
                 setGs(p => {
-                    const ns = [...p.shields];
-                    const removed = ns.splice(idx, 1)[0];
-                    return { ...p, shields: ns, graveyard: [...p.graveyard, removed] };
+                    const ns = p.shields.filter(x => x.instanceId !== shield.instanceId);
+                    return { ...p, shields: ns, graveyard: [...p.graveyard, shield] };
                 });
                 toast("Searing Wave: Destroyed weak enemies & sacrificed shield!");
             }
@@ -85,11 +82,12 @@ export const SPELL_EFFECTS = {
             count: 2,
             customList: s.mana,
             onComplete: (cards) => {
-                const ids = Array.isArray(cards) ? cards.map(c => c.instanceId) : [cards.instanceId];
+                const selected = Array.isArray(cards) ? cards : [cards];
+                const ids = selected.map(c => c.instanceId);
                 setGs(prev => ({
                     ...prev,
                     mana: prev.mana.filter(m => !ids.includes(m.instanceId)),
-                    hand: [...prev.hand, ...(Array.isArray(cards) ? cards : [cards])]
+                    hand: [...prev.hand, ...selected]
                 }));
                 toast("Cards returned from mana!");
             }
@@ -463,23 +461,23 @@ export const SPELL_EFFECTS = {
         });
     },
     "Coiling Vines": ({ net, toast }) => { net.send("ACTION", { action: "CREATURE_TO_MANA_CHOICE" }); toast("Coiling Vines: Creature to mana!"); },
-    "Aurora of Reversal": ({ gsR, setTargeting, setGs, toast }) => {
+    "Aurora of Reversal": ({ gsR, setGs, setSearchingDeck, toast }) => {
         const s = gsR.current;
         if (!s.shields.length) return;
-        setTargeting({
+        setSearchingDeck({
             message: "Aurora of Reversal: Select any number of shields to move to mana",
             count: s.shields.length,
-            validTargets: s.shields.map((_, i) => `shield-${i}`),
-            isShieldTarget: true,
-            allowPartial: true,
-            onComplete: (selectedIds) => {
-                const indices = selectedIds.map(id => parseInt(id.split('-')[1]));
+            customList: s.shields,
+            isFaceDown: true,
+            exact: false,
+            onComplete: (selectedCards) => {
+                const cards = Array.isArray(selectedCards) ? selectedCards : [selectedCards];
+                const ids = cards.map(c => c.instanceId);
                 setGs(p => {
-                    const targets = p.shields.filter((_, i) => indices.includes(i));
                     return {
                         ...p,
-                        shields: p.shields.filter((_, i) => !indices.includes(i)),
-                        mana: [...p.mana, ...targets.map(c => ({...c, isTapped: false}))]
+                        shields: p.shields.filter(c => !ids.includes(c.instanceId)),
+                        mana: [...p.mana, ...cards.map(c => ({...c, isTapped: false}))]
                     };
                 });
                 toast("Shields moved to mana!");
@@ -498,28 +496,26 @@ export const SPELL_EFFECTS = {
         }));
         toast("Blaze Cannon: All units +4000 and Double Breaker!");
     },
-    "Boomerang Comet": ({ card, gsR, setTargeting, setGs, toast }) => {
+    "Boomerang Comet": ({ card, gsR, setSearchingDeck, setGs, toast }) => {
         const s = gsR.current;
         if (!s.mana.length) return;
-        setTargeting({
+        setSearchingDeck({
             message: "Boomerang Comet: Select a card from mana to return to hand",
+            customList: s.mana,
             count: 1,
-            validTargets: s.mana.map(m => m.instanceId),
-            isManaTarget: true,
-            onComplete: (ids) => {
+            onComplete: (cardFromMana) => {
                 setGs(prev => {
-                    const target = prev.mana.find(m => m.instanceId === ids[0]);
                     return {
                         ...prev,
-                        mana: [...prev.mana.filter(m => m.instanceId !== ids[0]), { ...card, isTapped: false }],
-                        hand: [...prev.hand, target]
+                        mana: [...prev.mana.filter(m => m.instanceId !== cardFromMana.instanceId), { ...card, isTapped: false }],
+                        hand: [...prev.hand, cardFromMana]
                     };
                 });
                 toast("Mana returned and spell moved to mana!");
             }
         });
     },
-    "Eldritch Poison": ({ gsR, setTargeting, setGs, toast, askMay }) => {
+    "Eldritch Poison": ({ gsR, setTargeting, setSearchingDeck, setGs, toast, askMay }) => {
         const darks = gsR.current.battleZone.filter(c => c.civilizations?.includes('Darkness'));
         if (!darks.length) return;
         askMay({
@@ -531,21 +527,19 @@ export const SPELL_EFFECTS = {
                     validTargets: darks.map(c => c.instanceId),
                     onComplete: (creatureIds) => {
                         if (!gsR.current.mana.length) return;
-                        setTargeting({
+                        setSearchingDeck({
                             message: "Select mana to return to hand",
+                            customList: gsR.current.mana,
                             count: 1,
-                            validTargets: gsR.current.mana.map(m => m.instanceId),
-                            isManaTarget: true,
-                            onComplete: (manaIds) => {
+                            onComplete: (manaCard) => {
                                 setGs(p => {
                                     const c = p.battleZone.find(x => x.instanceId === creatureIds[0]);
-                                    const m = p.mana.find(x => x.instanceId === manaIds[0]);
                                     return {
                                         ...p,
                                         battleZone: p.battleZone.filter(x => x.instanceId !== creatureIds[0]),
                                         graveyard: [...p.graveyard, c],
-                                        mana: p.mana.filter(x => x.instanceId !== manaIds[0]),
-                                        hand: [...p.hand, m]
+                                        mana: p.mana.filter(x => x.instanceId !== manaCard.instanceId),
+                                        hand: [...p.hand, manaCard]
                                     };
                                 });
                                 toast("Eldritch Poison complete!");
@@ -556,18 +550,16 @@ export const SPELL_EFFECTS = {
             }
         });
     },
-    "Flood Valve": ({ gsR, setTargeting, setGs, toast }) => {
+    "Flood Valve": ({ gsR, setSearchingDeck, setGs, toast }) => {
         const s = gsR.current;
         if (!s.mana.length) return;
-        setTargeting({
+        setSearchingDeck({
             message: "Flood Valve: Select mana to return to hand",
+            customList: s.mana,
             count: 1,
-            validTargets: s.mana.map(m => m.instanceId),
-            isManaTarget: true,
-            onComplete: (ids) => {
+            onComplete: (card) => {
                 setGs(p => {
-                    const target = p.mana.find(m => m.instanceId === ids[0]);
-                    return { ...p, mana: p.mana.filter(m => m.instanceId !== ids[0]), hand: [...p.hand, target] };
+                    return { ...p, mana: p.mana.filter(m => m.instanceId !== card.instanceId), hand: [...p.hand, card] };
                 });
                 toast("Mana returned to hand!");
             }
@@ -599,23 +591,23 @@ export const SPELL_EFFECTS = {
             }
         });
     },
-    "Ghastly Drain": ({ gsR, setTargeting, setGs, toast }) => {
+    "Ghastly Drain": ({ gsR, setGs, setSearchingDeck, toast }) => {
         const s = gsR.current;
         if (!s.shields.length) return;
-        setTargeting({
+        setSearchingDeck({
             message: "Ghastly Drain: Select any number of shields to take (No trigger)",
             count: s.shields.length,
-            validTargets: s.shields.map((_, i) => `shield-${i}`),
-            isShieldTarget: true,
-            allowPartial: true,
-            onComplete: (selectedIds) => {
-                const indices = selectedIds.map(id => parseInt(id.split('-')[1]));
+            customList: s.shields,
+            isFaceDown: true,
+            exact: false,
+            onComplete: (selectedCards) => {
+                const cards = Array.isArray(selectedCards) ? selectedCards : [selectedCards];
+                const ids = cards.map(c => c.instanceId);
                 setGs(p => {
-                    const targets = p.shields.filter((_, i) => indices.includes(i));
                     return {
                         ...p,
-                        shields: p.shields.filter((_, i) => !indices.includes(i)),
-                        hand: [...p.hand, ...targets]
+                        shields: p.shields.filter(c => !ids.includes(c.instanceId)),
+                        hand: [...p.hand, ...cards]
                     };
                 });
                 toast("Shields taken to hand!");
@@ -666,23 +658,21 @@ export const SPELL_EFFECTS = {
             }
         });
     },
-    "Snake Attack": ({ gsR, setGs, setTargeting, toast }) => {
+    "Snake Attack": ({ gsR, setGs, setSearchingDeck, toast }) => {
         const s = gsR.current;
         if (!s.shields.length) return;
-        setTargeting({
+        setSearchingDeck({
             message: "Snake Attack: Select a shield to put into graveyard",
             count: 1,
-            validTargets: s.shields.map((_, i) => `shield-${i}`),
-            isShieldTarget: true,
-            onComplete: (ids) => {
-                const idx = parseInt(ids[0].split('-')[1]);
+            customList: s.shields,
+            isFaceDown: true,
+            onComplete: (shield) => {
                 setGs(p => {
-                    const ns = [...p.shields];
-                    const removed = ns.splice(idx, 1)[0];
+                    const ns = p.shields.filter(x => x.instanceId !== shield.instanceId);
                     return {
                         ...p,
                         shields: ns,
-                        graveyard: [...p.graveyard, removed],
+                        graveyard: [...p.graveyard, shield],
                         battleZone: p.battleZone.map(c => ({ ...c, tempDoubleBreaker: true }))
                     };
                 });
@@ -690,7 +680,7 @@ export const SPELL_EFFECTS = {
             }
         });
     },
-    "Volcanic Arrows": ({ gsR, setTargeting, setGs, net, toast, CardEngine }) => {
+    "Volcanic Arrows": ({ gsR, setTargeting, setSearchingDeck, setGs, net, toast, CardEngine }) => {
         const s = gsR.current;
         const targets = s.opponent.battleZone.filter(c => CardEngine.getCurrentPower(c, s.opponent.battleZone, s.opponent.mana) <= 6000);
         if (!targets.length) return;
@@ -701,17 +691,15 @@ export const SPELL_EFFECTS = {
             onComplete: (ids) => {
                 net.send("ACTION", { action: "DESTROY_TARGET", details: { targetId: ids[0] } });
                 if (!s.shields.length) return;
-                setTargeting({
+                setSearchingDeck({
                     message: "Volcanic Arrows: Select a shield to put into graveyard",
                     count: 1,
-                    validTargets: s.shields.map((_, i) => `shield-${i}`),
-                    isShieldTarget: true,
-                    onComplete: (shieldIds) => {
-                        const idx = parseInt(shieldIds[0].split('-')[1]);
+                    customList: s.shields,
+                    isFaceDown: true,
+                    onComplete: (shield) => {
                         setGs(p => {
-                            const ns = [...p.shields];
-                            const removed = ns.splice(idx, 1)[0];
-                            return { ...p, shields: ns, graveyard: [...p.graveyard, removed] };
+                            const ns = p.shields.filter(x => x.instanceId !== shield.instanceId);
+                            return { ...p, shields: ns, graveyard: [...p.graveyard, shield] };
                         });
                         toast("Volcanic Arrows: Target destroyed, shield sacrificed!");
                     }

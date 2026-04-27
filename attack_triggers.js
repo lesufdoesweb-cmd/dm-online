@@ -24,16 +24,15 @@ export const ATTACK_TRIGGERS = {
             }
         });
     },
-    "Bolzard Dragon": ({ gsR, setTargeting, net, toast }) => {
+    "Bolzard Dragon": ({ gsR, setSearchingDeck, net, toast }) => {
         const s = gsR.current;
         if (!s.opponent.mana.length) return;
-        setTargeting({
+        setSearchingDeck({
             message: "Bolzard Dragon: Choose enemy mana to destroy",
+            customList: s.opponent.mana,
             count: 1,
-            validTargets: s.opponent.mana.map(m => m.instanceId),
-            isManaTarget: true,
-            onComplete: (ids) => {
-                net.send("ACTION", { action: "DESTROY_MANA", details: { targetId: ids[0] } });
+            onComplete: (card) => {
+                net.send("ACTION", { action: "DESTROY_MANA", details: { targetId: card.instanceId } });
                 toast("Mana destroyed!");
             }
         });
@@ -46,15 +45,22 @@ export const ATTACK_TRIGGERS = {
             onYes: () => { draw(); toast("Hypersquid Walter: Draw 1!"); }
         });
     },
-    "General Dark Fiend": ({ setGs, toast }) => {
-        setGs(p => {
-            if (p.shields.length === 0) return p;
-            const idx = Math.floor(Math.random() * p.shields.length);
-            const ns = [...p.shields];
-            const removed = ns.splice(idx, 1)[0];
-            return { ...p, shields: ns, graveyard: [...p.graveyard, removed] };
+    "General Dark Fiend": ({ gsR, setGs, setSearchingDeck, toast }) => {
+        const s = gsR.current;
+        if (!s.shields.length) return;
+        setSearchingDeck({
+            message: "General Dark Fiend: Select a shield to sacrifice",
+            count: 1,
+            customList: s.shields,
+            isFaceDown: true,
+            onComplete: (shield) => {
+                setGs(p => {
+                    const ns = p.shields.filter(x => x.instanceId !== shield.instanceId);
+                    return { ...p, shields: ns, graveyard: [...p.graveyard, shield] };
+                });
+                toast("General Dark Fiend: Sacrificed a shield!");
+            }
         });
-        toast("General Dark Fiend: Sacrificed a shield!");
     },
     "Laguna, Lightning Enforcer": ({ setSearchingDeck, net, setGs, toast, askMay }) => {
         askMay({
@@ -178,24 +184,22 @@ export const ATTACK_TRIGGERS = {
         }));
         toast("Earthstomp Giant: Creatures returned from mana!");
     },
-    "Flametropus": ({ gsR, setTargeting, setGs, toast, askMay }) => {
+    "Flametropus": ({ gsR, setSearchingDeck, setGs, toast, askMay }) => {
         const s = gsR.current;
         if (!s.mana.length) return;
         askMay({
             message: "Use Flametropus's effect to sacrifice mana for a buff?",
             onYes: () => {
-                setTargeting({
+                setSearchingDeck({
                     message: "Flametropus: Select mana to sacrifice for buff",
+                    customList: s.mana,
                     count: 1,
-                    validTargets: s.mana.map(m => m.instanceId),
-                    isManaTarget: true,
-                    onComplete: (ids) => {
+                    onComplete: (card) => {
                         setGs(p => {
-                            const target = p.mana.find(m => m.instanceId === ids[0]);
                             return {
                                 ...p,
-                                mana: p.mana.filter(m => m.instanceId !== ids[0]),
-                                graveyard: [...p.graveyard, target],
+                                mana: p.mana.filter(m => m.instanceId !== card.instanceId),
+                                graveyard: [...p.graveyard, card],
                                 battleZone: p.battleZone.map(c => c.name === "Flametropus" ? { ...c, powerBonus: (c.powerBonus || 0) + 3000, tempDoubleBreaker: true } : c)
                             };
                         });
@@ -323,18 +327,16 @@ export const ATTACK_TRIGGERS = {
             }
         });
     },
-    "Sniper Mosquito": ({ gsR, setTargeting, setGs, toast }) => {
+    "Sniper Mosquito": ({ gsR, setSearchingDeck, setGs, toast }) => {
         const s = gsR.current;
         if (!s.mana.length) return;
-        setTargeting({
+        setSearchingDeck({
             message: "Sniper Mosquito: Select mana to return to hand",
+            customList: s.mana,
             count: 1,
-            validTargets: s.mana.map(m => m.instanceId),
-            isManaTarget: true,
-            onComplete: (ids) => {
+            onComplete: (card) => {
                 setGs(p => {
-                    const target = p.mana.find(m => m.instanceId === ids[0]);
-                    return { ...p, mana: p.mana.filter(m => m.instanceId !== ids[0]), hand: [...p.hand, target] };
+                    return { ...p, mana: p.mana.filter(m => m.instanceId !== card.instanceId), hand: [...p.hand, card] };
                 });
                 toast("Sniper Mosquito: Mana returned!");
             }
@@ -359,19 +361,17 @@ export const ATTACK_TRIGGERS = {
             }
         });
     },
-    "Armored Warrior Quelos": ({ gsR, setTargeting, setGs, net, toast }) => {
+    "Armored Warrior Quelos": ({ gsR, setSearchingDeck, setGs, net, toast }) => {
         const s = gsR.current;
         const nonFire = s.mana.filter(m => !m.civilizations?.includes('Fire'));
         if (nonFire.length > 0) {
-            setTargeting({
+            setSearchingDeck({
                 message: "Quelos: Select a non-Fire mana to sacrifice",
+                customList: nonFire,
                 count: 1,
-                validTargets: nonFire.map(m => m.instanceId),
-                isManaTarget: true,
-                onComplete: (ids) => {
+                onComplete: (card) => {
                     setGs(prev => {
-                        const target = prev.mana.find(m => m.instanceId === ids[0]);
-                        return { ...prev, mana: prev.mana.filter(m => m.instanceId !== ids[0]), graveyard: [...prev.graveyard, target] };
+                        return { ...prev, mana: prev.mana.filter(m => m.instanceId !== card.instanceId), graveyard: [...prev.graveyard, card] };
                     });
                 }
             });

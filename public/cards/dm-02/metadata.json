@@ -1,0 +1,1083 @@
+[
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 4,
+    "name": "Amber Piercer",
+    "power": "2000",
+    "subtypes": [
+      "Brain Jacker"
+    ],
+    "text": "Whenever this creature attacks, you may return a creature from your graveyard to your hand.",
+    "type": "Creature",
+    "id": "23/55",
+    "rarity": "Rare",
+    "illustrator": "Daisuke Izuka",
+    "flavor": "\"Let's see what we can dig up.\"",
+    "image_file": "amber-piercer.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 6,
+    "name": "Aqua Bouncer",
+    "power": "1000",
+    "subtypes": [
+      "Liquid People"
+    ],
+    "text": "Blocker (When an opponent's creature attacks, you may tap this creature to stop the attack. Then the 2 creatures battle.)\nWhen you put this creature into the battle zone, you may choose a creature in the battle zone and return it to its owner's hand.",
+    "type": "Creature",
+    "id": "12/55",
+    "rarity": "Rare",
+    "illustrator": "Ryoya Yuki",
+    "image_file": "aqua-bouncer.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 4,
+    "name": "Aqua Shooter",
+    "power": "2000",
+    "subtypes": [
+      "Liquid People"
+    ],
+    "text": "Blocker (When an opponent's creature attacks, you may tap this creature to stop the attack. Then the 2 creatures battle.)",
+    "type": "Creature",
+    "id": "13/55",
+    "rarity": "Common",
+    "illustrator": "Tsutomu Kawade",
+    "flavor": "Liquid People can modify their abilities by reprogramming themselves.",
+    "image_file": "aqua-shooter.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 4,
+    "name": "Armored Blaster Valdios",
+    "power": "6000+",
+    "subtypes": [
+      "Human"
+    ],
+    "text": "Evolutionâ€”Put on one of your Humans.\nEach of your other Humans in the battle zone gets +1000 power.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature",
+    "id": "S4/55",
+    "rarity": "Super Rare",
+    "illustrator": "Hisashi Momose",
+    "image_file": "armored-blaster-valdios.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 3,
+    "name": "Armored Cannon Balbaro",
+    "power": "3000+",
+    "subtypes": [
+      "Human"
+    ],
+    "text": "Evolutionâ€”Put on one of your Humans.\nWhile attacking, this creature gets +2000 power for each other Human in the battle zone.",
+    "type": "Creature",
+    "id": "34/55",
+    "rarity": "Uncommon",
+    "illustrator": "Dai",
+    "flavor": "\"Can someone reload me?\"",
+    "image_file": "armored-cannon-balbaro.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 2,
+    "name": "Barkwhip, the Smasher",
+    "power": "5000+",
+    "subtypes": [
+      "Beast Folk"
+    ],
+    "text": "Evolutionâ€”Put on one of your Beast Folk.\nWhile this creature is tapped, each of your other Beast Folk in the battle zone gets +2000 power.",
+    "type": "Creature",
+    "id": "45/55",
+    "rarity": "Uncommon",
+    "illustrator": "Tsutomu Kawade",
+    "flavor": "\"Rage leads to war. War leads to rage. Isn't it magical?\" â€”General Dark Fiend",
+    "image_file": "barkwhip-the-smasher.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 6,
+    "name": "Bolzard Dragon",
+    "power": "5000",
+    "subtypes": [
+      "Armored Dragon"
+    ],
+    "text": "Whenever this creature attacks, choose a card in your opponent's mana zone and put it into his graveyard.",
+    "type": "Creature",
+    "id": "35/55",
+    "rarity": "Very Rare",
+    "illustrator": "Dustmoss",
+    "flavor": "When Bolshack awakes in the east, Bolzard roars in the west.",
+    "image_file": "bolzard-dragon.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 5,
+    "name": "Bombersaur",
+    "power": "5000",
+    "subtypes": [
+      "Rock Beast"
+    ],
+    "text": "When this creature is destroyed, each player chooses 2 cards in his mana zone and puts them into his graveyard.",
+    "type": "Creature",
+    "id": "36/55",
+    "rarity": "Rare",
+    "illustrator": "Akira Hamada",
+    "flavor": "\"This species inhabits liquid rock. Highly dangerous.\" â€”Liquid People scouting report",
+    "image_file": "bombersaur.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 6,
+    "name": "Burst Shot",
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nDestroy all creatures that have power 2000 or less.",
+    "type": "Spell",
+    "id": "37/55",
+    "rarity": "Uncommon",
+    "illustrator": "Sansyu",
+    "image_file": "burst-shot.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 3,
+    "name": "Cavalry General Curatops",
+    "power": "2000",
+    "subtypes": [
+      "Dragonoid"
+    ],
+    "text": "This creature can attack untapped creatures.",
+    "type": "Creature",
+    "id": "38/55",
+    "rarity": "Uncommon",
+    "illustrator": "Atsushi Kawasaki",
+    "flavor": "\"Doesn't your scooter have a flamethrower, a grenade launcher, a bazooka, and a pair of roto-blades too?\"",
+    "image_file": "cavalry-general-curatops.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 5,
+    "name": "Chaos Worm",
+    "power": "5000",
+    "subtypes": [
+      "Parasite Worm"
+    ],
+    "text": "Evolutionâ€”Put on one of your Parasite Worms.\nWhen you put this creature into the battle zone, you may destroy one of your opponent's creatures.",
+    "type": "Creature",
+    "id": "24/55",
+    "rarity": "Uncommon",
+    "illustrator": "Naoki Saito",
+    "image_file": "chaos-worm.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 5,
+    "name": "Corile",
+    "power": "2000",
+    "subtypes": [
+      "Cyber Lord"
+    ],
+    "text": "When you put this creature into the battle zone, choose one of your opponent's creatures in the battle zone and put it on top of his deck.",
+    "type": "Creature",
+    "id": "14/55",
+    "rarity": "Common",
+    "illustrator": "Hikaru Ikusa",
+    "flavor": "When the cataclysm struck, all the science of the Cyber Lords couldn't prevent the collapse of their underwater city.",
+    "image_file": "corile.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 2,
+    "name": "Critical Blade",
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nDestroy one of your opponent's creatures that has \"blocker.\"",
+    "type": "Spell",
+    "id": "25/55",
+    "rarity": "Common",
+    "illustrator": "Nottsuo",
+    "image_file": "critical-blade.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 6,
+    "name": "Crystal Lancer",
+    "power": "8000",
+    "subtypes": [
+      "Liquid People"
+    ],
+    "text": "Evolutionâ€”Put on one of your Liquid People.\nThis creature can't be blocked.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature",
+    "id": "15/55",
+    "rarity": "Uncommon",
+    "illustrator": "Norikatsu Miyoshi",
+    "image_file": "crystal-lancer.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 4,
+    "name": "Crystal Paladin",
+    "power": "5000",
+    "subtypes": [
+      "Liquid People"
+    ],
+    "text": "Evolutionâ€”Put on one of your Liquid People.\nWhen you put this creature into the battle zone, return all creatures in the battle zone that have \"blocker\" to their owners' hands.",
+    "type": "Creature",
+    "id": "S2/55",
+    "rarity": "Super Rare",
+    "illustrator": "Eiji Kaneda",
+    "image_file": "crystal-paladin.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 6,
+    "name": "Dark Titan Maginn",
+    "power": "4000",
+    "subtypes": [
+      "Demon Command"
+    ],
+    "text": "Whenever this creature attacks, your opponent discards a card at random from his hand.",
+    "type": "Creature",
+    "id": "26/55",
+    "rarity": "Very Rare",
+    "illustrator": "Masateru Ikeda",
+    "flavor": "The forces of Darkness began their invasion by turning the Fiana Woods into a nice, comfortable realm of horror.",
+    "image_file": "dark-titan-maginn.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 5,
+    "name": "Diamond Cutter",
+    "text": "This turn, ignore any effects that would prevent your creatures from attacking your opponent. (For example, ignore summoning sickness and card effects that say \"This creature can't attack\" or \"This creature can't attack players.\" Your creatures can't attack creatures this way.)",
+    "type": "Spell",
+    "id": "1/55",
+    "rarity": "Uncommon",
+    "illustrator": "Akifumi Yamamoto",
+    "image_file": "diamond-cutter.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 3,
+    "name": "Dogarn, the Marauder",
+    "power": "2000+",
+    "subtypes": [
+      "Armorloid"
+    ],
+    "text": "While attacking, this creature gets +2000 power for each other tapped creature you have in the battle zone.",
+    "type": "Creature",
+    "id": "39/55",
+    "rarity": "Rare",
+    "illustrator": "Akifumi Yamamoto",
+    "flavor": "With a raucous cry, the first Fire reinforcements reached the shore.",
+    "image_file": "dogarn-the-marauder.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 4,
+    "name": "Elf-X",
+    "power": "2000",
+    "subtypes": [
+      "Tree Folk"
+    ],
+    "text": "Your creatures each cost 1 less to summon. They can't cost less than 1.",
+    "type": "Creature",
+    "id": "46/55",
+    "rarity": "Rare",
+    "illustrator": "Yusaku Nakaaki",
+    "flavor": "The first Chimeras to invade the Fiana Woods didn't expect an attack from the forest itself.",
+    "image_file": "elf-x.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 2,
+    "name": "Engineer Kipo",
+    "power": "2000",
+    "subtypes": [
+      "Machine Eater"
+    ],
+    "text": "When this creature is destroyed, each player chooses a card in his mana zone and puts it into his graveyard.",
+    "type": "Creature",
+    "id": "40/55",
+    "rarity": "Common",
+    "illustrator": "Seki",
+    "flavor": "\"Perfect. Fine. No problem. It's a piece of cake to disassemble these Water machines.\"",
+    "image_file": "engineer-kipo.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 2,
+    "name": "Essence Elf",
+    "power": "1000",
+    "subtypes": [
+      "Tree Folk"
+    ],
+    "text": "Your spells each cost 1 less to cast. They can't cost less than 1.",
+    "type": "Creature",
+    "id": "47/55",
+    "rarity": "Common",
+    "illustrator": "Eiji Kaneda",
+    "flavor": "When the Silver Beards fell, mystical elves came to rescue them.",
+    "image_file": "essence-elf.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 6,
+    "name": "Ethel, Star Sea Elemental",
+    "power": "5500",
+    "subtypes": [
+      "Angel Command"
+    ],
+    "text": "This creature can't be blocked.",
+    "type": "Creature",
+    "id": "2/55",
+    "rarity": "Very Rare",
+    "illustrator": "Seki",
+    "flavor": "The glow of the elementals reaches out even to the stars.",
+    "image_file": "ethel-star-sea-elemental.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 6,
+    "name": "Fighter Dual Fang",
+    "power": "8000",
+    "subtypes": [
+      "Beast Folk"
+    ],
+    "text": "Evolutionâ€”Put on one of your Beast Folk.\nWhen you put this creature into the battle zone, put the top 2 cards of your deck into your mana zone.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature",
+    "id": "S5/55",
+    "rarity": "Super Rare",
+    "illustrator": "Ryoya Yuki",
+    "image_file": "fighter-dual-fang.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 4,
+    "name": "Fonch, the Oracle",
+    "power": "2000",
+    "subtypes": [
+      "Light Bringer"
+    ],
+    "text": "When you put this creature into the battle zone, you may choose one of your opponent's creatures in the battle zone and tap it.",
+    "type": "Creature",
+    "id": "3/55",
+    "rarity": "Common",
+    "illustrator": "Dustmoss",
+    "flavor": "The shining steel oracles choose to stay out of the way and simply observe the invasion...for now.",
+    "image_file": "fonch-the-oracle.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 9,
+    "name": "Fortress Shell",
+    "power": "5000",
+    "subtypes": [
+      "Colony Beetle"
+    ],
+    "text": "When you put this creature into the battle zone, choose up to 2 cards in your opponent's mana zone and put them into his graveyard.",
+    "type": "Creature",
+    "id": "48/55",
+    "rarity": "Rare",
+    "illustrator": "Masaki Hirooka",
+    "flavor": "\"Wow! I can't wait to disassemble this!\" â€”Nomad Hero Gigio",
+    "image_file": "fortress-shell.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 5,
+    "name": "Galsaur",
+    "power": "4000+",
+    "subtypes": [
+      "Rock Beast"
+    ],
+    "text": "While you have no other creatures in the battle zone, this creature has \"power attacker +4000\" and \"double breaker.\" (A creature that has \"power attacker +4000\" and \"double breaker\" gets +4000 power while attacking and breaks 2 shields.)",
+    "type": "Creature",
+    "id": "41/55",
+    "rarity": "Common",
+    "illustrator": "Sansyu",
+    "flavor": "The first Liquid People troops to land on the shore evaporated as soon as they touched the ground.",
+    "image_file": "galsaur.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 5,
+    "name": "General Dark Fiend",
+    "power": "6000",
+    "subtypes": [
+      "Dark Lord"
+    ],
+    "text": "Whenever this creature attacks, choose one of your shields without looking and put it into your graveyard. You can't use the \"shield trigger\" ability of that shield.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature",
+    "id": "27/55",
+    "rarity": "Rare",
+    "illustrator": "Hideaki Takamura",
+    "flavor": "That day, the Dark Lords decided to carry out their long-awaited invasion of the world.",
+    "image_file": "general-dark-fiend.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 4,
+    "name": "Gigastand",
+    "power": "3000",
+    "subtypes": [
+      "Chimera"
+    ],
+    "text": "When this creature would be put into your graveyard from the battle zone, you may return it to your hand instead. If you do, discard a card from your hand.",
+    "type": "Creature",
+    "id": "28/55",
+    "rarity": "Common",
+    "illustrator": "Jason",
+    "flavor": "Even nasty, rampaging invaders get a little homesick sometimes.",
+    "image_file": "gigastand.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 3,
+    "name": "Gray Balloon, Shadow of Greed",
+    "power": "3000",
+    "subtypes": [
+      "Ghost"
+    ],
+    "text": "Blocker (When an opponent's creature attacks, you may tap this creature to stop the attack. Then the 2 creatures battle.)\nThis creature can't attack players.",
+    "type": "Creature",
+    "id": "29/55",
+    "rarity": "Uncommon",
+    "illustrator": "Nottsuo",
+    "flavor": "It's the thing that goes squish in the night.",
+    "image_file": "gray-balloon-shadow-of-greed.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 3,
+    "name": "Horrid Worm",
+    "power": "2000",
+    "subtypes": [
+      "Parasite Worm"
+    ],
+    "text": "Whenever this creature attacks, your opponent discards a card at random from his hand.",
+    "type": "Creature",
+    "id": "30/55",
+    "rarity": "Common",
+    "illustrator": "Naoki Saito",
+    "flavor": "Worms never refuse a good meal. They never refuse a bad meal either.",
+    "image_file": "horrid-worm.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 3,
+    "name": "Hypersquid Walter",
+    "power": "1000",
+    "subtypes": [
+      "Cyber Lord"
+    ],
+    "text": "Whenever this creature attacks, you may draw a card.",
+    "type": "Creature",
+    "id": "16/55",
+    "rarity": "Rare",
+    "illustrator": "Youichi Kai",
+    "flavor": "Using the twelve forbidden programs, the Cyber Lords created the elite Liquid People assault troops.",
+    "image_file": "hypersquid-walter.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 8,
+    "name": "King Nautilus",
+    "power": "6000",
+    "subtypes": [
+      "Leviathan"
+    ],
+    "text": "Liquid People can't be blocked.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature",
+    "id": "17/55",
+    "rarity": "Rare",
+    "illustrator": "Tomofumi Ogasawara",
+    "flavor": "Stopping at nothing in their quest for victory, the Cyber Lords transformed even the largest sea creatures into weapons.",
+    "image_file": "king-nautilus.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 6,
+    "name": "Ladia Bale, the Inspirational",
+    "power": "9500",
+    "subtypes": [
+      "Guardian"
+    ],
+    "text": "Blocker (Whenever an opponent's creature attacks, you may tap this creature to stop the attack. Then the 2 creatures battle.)\nEvolutionâ€”Put on one of your Guardians.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature",
+    "id": "S1/55",
+    "rarity": "Super Rare",
+    "illustrator": "Kou1",
+    "image_file": "ladia-bale-the-inspirational.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 5,
+    "name": "Laguna, Lightning Enforcer",
+    "power": "2500",
+    "subtypes": [
+      "Berserker"
+    ],
+    "text": "Whenever this creature attacks, search your deck. You may take a spell from your deck, show that spell to your opponent, and put it into your hand. Then shuffle your deck.",
+    "type": "Creature",
+    "id": "4/55",
+    "rarity": "Rare",
+    "illustrator": "D-Suzuki",
+    "flavor": "The oracles sent the Enforcers to see how badly the cataclysm damaged the planet.",
+    "image_file": "laguna-lightning-enforcer.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 3,
+    "name": "Larba Geer, the Immaculate",
+    "power": "5000",
+    "subtypes": [
+      "Guardian"
+    ],
+    "text": "Evolutionâ€”Put on one of your Guardians.\nWhen you put this creature into the battle zone, tap all your opponent's creatures in the battle zone that have \"blocker.\"",
+    "type": "Creature",
+    "id": "5/55",
+    "rarity": "Uncommon",
+    "illustrator": "Akifumi Yamamoto",
+    "image_file": "larba-geer-the-immaculate.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 3,
+    "name": "Leaping Tornado Horn",
+    "power": "2000+",
+    "subtypes": [
+      "Horned Beast"
+    ],
+    "text": "While attacking, this creature gets +1000 power for each other creature you have in the battle zone.",
+    "type": "Creature",
+    "id": "49/55",
+    "rarity": "Common",
+    "illustrator": "Miho Midorikawa",
+    "flavor": "Beautiful-and deadly-beasts.",
+    "image_file": "leaping-tornado-horn.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 3,
+    "name": "Logic Cube",
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nSearch your deck. You may take a spell from your deck, show that spell to your opponent, and put it into your hand. Then shuffle your deck.",
+    "type": "Spell",
+    "id": "6/55",
+    "rarity": "Common",
+    "illustrator": "kou1",
+    "image_file": "logic-cube.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 7,
+    "name": "Lost Soul",
+    "text": "Your opponent discards all cards from his hand.",
+    "type": "Spell",
+    "id": "31/55",
+    "rarity": "Uncommon",
+    "illustrator": "Tomofumi Ogasawara",
+    "flavor": "\"Looks like you're getting forgetful.\"",
+    "image_file": "lost-soul.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 4,
+    "name": "Magris, Vizier of Magnetism",
+    "power": "3000",
+    "subtypes": [
+      "Initiate"
+    ],
+    "text": "When you put this creature into the battle zone, you may draw a card.",
+    "type": "Creature",
+    "id": "7/55",
+    "rarity": "Common",
+    "illustrator": "Hisanobu Kometani",
+    "flavor": "\"Vizier of Magnetism, arise. Your wings are a compass that points to the truth.\" â€”Hanusa, Radiance Elemental",
+    "image_file": "magris-vizier-of-magnetism.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 4,
+    "name": "Mana Crisis",
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nChoose a card in your opponent's mana zone and put it into his graveyard.",
+    "type": "Spell",
+    "id": "50/55",
+    "rarity": "Uncommon",
+    "illustrator": "Tsutomu Kawade",
+    "image_file": "mana-crisis.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 1,
+    "name": "Marrow Ooze, the Twister",
+    "power": "1000",
+    "subtypes": [
+      "Living Dead"
+    ],
+    "text": "Blocker (When an opponent's creature attacks, you may tap this creature to stop the attack. Then the 2 creatures battle.)\nWhen this creature attacks a player, destroy it after the attack.",
+    "type": "Creature",
+    "id": "32/55",
+    "rarity": "Common",
+    "illustrator": "Katsuya",
+    "flavor": "The massive cataclysm brought on a night so deep even the forces of Darkness were afraid of it.",
+    "image_file": "marrow-ooze-the-twister.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 7,
+    "name": "Metalwing Skyterror",
+    "power": "6000",
+    "subtypes": [
+      "Armored Wyvern"
+    ],
+    "text": "Whenever this creature attacks, you may destroy one of your opponent's creatures that has \"blocker.\" (Destroy the creature before your opponent can block with it.)\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature",
+    "id": "42/55",
+    "rarity": "Rare",
+    "illustrator": "Jason",
+    "image_file": "metalwing-skyterror.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 2,
+    "name": "Mini Titan Gett",
+    "power": "2000+",
+    "subtypes": [
+      "Human"
+    ],
+    "text": "This creature attacks each turn if able.\nPower attacker +1000 (While attacking, this creature gets +1000 power.)",
+    "type": "Creature",
+    "id": "43/55",
+    "rarity": "Common",
+    "illustrator": "Ittoku",
+    "flavor": "\"Someday I'll be strong enough to wear battle armor! You'll see!\" â€”Mini Titan Gett",
+    "image_file": "mini-titan-gett.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 5,
+    "name": "Phal Eega, Dawn Guardian",
+    "power": "4000",
+    "subtypes": [
+      "Guardian"
+    ],
+    "text": "When you put this creature into the battle zone, you may return a spell from your graveyard to your hand.",
+    "type": "Creature",
+    "id": "8/55",
+    "rarity": "Rare",
+    "illustrator": "Daisuke Izuka",
+    "flavor": "\"Like the sun, I'm just getting warmed up.\"",
+    "image_file": "phal-eega-dawn-guardian.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 6,
+    "name": "Plasma Chaser",
+    "power": "4000",
+    "subtypes": [
+      "Gel Fish"
+    ],
+    "text": "Whenever this creature attacks, you may draw a number of cards equal to the number of creatures your opponent has in the battle zone.",
+    "type": "Creature",
+    "id": "18/55",
+    "rarity": "Very Rare",
+    "illustrator": "Daisuke Izuka",
+    "flavor": "A program to aid the Cyber Lords' land assault, it contains an advanced tracking system designed to function against multiple opponents.",
+    "image_file": "plasma-chaser.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 4,
+    "name": "Poison Worm",
+    "power": "4000",
+    "subtypes": [
+      "Parasite Worm"
+    ],
+    "text": "When you put this creature into the battle zone, destroy one of your creatures that has power 3000 or less.",
+    "type": "Creature",
+    "id": "33/55",
+    "rarity": "Rare",
+    "illustrator": "Masaki Hirooka",
+    "flavor": "\"You won't get any dessert until you finish eating your friends!\" â€”Dark Titan Maginn",
+    "image_file": "poison-worm.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 4,
+    "name": "Rainbow Stone",
+    "text": "Search your deck. You may take a card from your deck and put it into your mana zone. Then shuffle your deck.",
+    "type": "Spell",
+    "id": "51/55",
+    "rarity": "Common",
+    "illustrator": "Yusaku Nakaaki",
+    "flavor": "Pick a color. Any color.",
+    "image_file": "rainbow-stone.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 2,
+    "name": "Recon Operation",
+    "text": "Look at up to 3 of your opponent's shields. Then put them back where they were.",
+    "type": "Spell",
+    "id": "19/55",
+    "rarity": "Common",
+    "illustrator": "Katsuya",
+    "flavor": "That's not a puddle...",
+    "image_file": "recon-operation.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 3,
+    "name": "Reso Pacos, Clear Sky Guardian",
+    "power": "3000",
+    "subtypes": [
+      "Guardian"
+    ],
+    "type": "Creature",
+    "id": "9/55",
+    "rarity": "Common",
+    "illustrator": "Norikatsu Miyoshi",
+    "flavor": "Thanks to their especially keen senses, the Guardians were the first to react to the cataclysm.",
+    "image_file": "reso-pacos-clear-sky-guardian.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Fire"
+    ],
+    "cost": 4,
+    "name": "Rumble Gate",
+    "text": "Each of your creatures in the battle zone gets +1000 power until the end of the turn.\nEach of your creatures in the battle zone that can attack creatures can attack untapped creatures this turn.",
+    "type": "Spell",
+    "id": "44/55",
+    "rarity": "Common",
+    "illustrator": "Kou1",
+    "flavor": "It's too soon to let down your guard.",
+    "image_file": "rumble-gate.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 5,
+    "name": "Rumbling Terahorn",
+    "power": "3000",
+    "subtypes": [
+      "Horned Beast"
+    ],
+    "text": "When you put this creature into the battle zone, search your deck. You may take a creature from your deck, show that creature to your opponent, and put it into your hand. Then shuffle your deck.",
+    "type": "Creature",
+    "id": "52/55",
+    "rarity": "Rare",
+    "illustrator": "Ittoku",
+    "image_file": "rumbling-terahorn.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 4,
+    "name": "Scissor Eye",
+    "power": "3000",
+    "subtypes": [
+      "Gel Fish"
+    ],
+    "type": "Creature",
+    "id": "20/55",
+    "rarity": "Common",
+    "illustrator": "Seki",
+    "flavor": "The shores of the Fire territory turned blue as wave after wave of Water creatures landed.",
+    "image_file": "scissor-eye.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 3,
+    "name": "Silver Axe",
+    "power": "1000",
+    "subtypes": [
+      "Beast Folk"
+    ],
+    "text": "Whenever this creature attacks, you may put the top card of your deck into your mana zone.",
+    "type": "Creature",
+    "id": "53/55",
+    "rarity": "Common",
+    "illustrator": "Syuichi Obata",
+    "flavor": "The Silver Beards rose to defend their families and their forest home.",
+    "image_file": "silver-axe.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 4,
+    "name": "Silver Fist",
+    "power": "3000+",
+    "subtypes": [
+      "Beast Folk"
+    ],
+    "text": "Power attacker +2000 (While attacking, this creature gets +2000 power.)",
+    "type": "Creature",
+    "id": "54/55",
+    "rarity": "Uncommon",
+    "illustrator": "Sansyu",
+    "flavor": "\"Is one life too high a price to pay to save an entire forest?\"",
+    "image_file": "silver-fist.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 4,
+    "name": "Spiral Grass",
+    "power": "2500",
+    "subtypes": [
+      "Starlight Tree"
+    ],
+    "text": "Blocker (Whenever an opponent's creature attacks, you may tap this creature to stop the attack. Then the 2 creatures battle.)\nWhenever this creature blocks, untap it after it battles.",
+    "type": "Creature",
+    "id": "10/55",
+    "rarity": "Rare",
+    "illustrator": "Hisashi Momose",
+    "image_file": "spiral-grass.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 3,
+    "name": "Stained Glass",
+    "power": "1000",
+    "subtypes": [
+      "Cyber Virus"
+    ],
+    "text": "Whenever this creature attacks, you may choose one of your opponent's fire or nature creatures in the battle zone and return it to its owner's hand.",
+    "type": "Creature",
+    "id": "21/55",
+    "rarity": "Uncommon",
+    "illustrator": "Atsushi Kawasaki",
+    "flavor": "The only function of Stained Glass, the most adaptable program ever designed by the Cyber Lords, is to help their invasion of the surface world.",
+    "image_file": "stained-glass.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Water"
+    ],
+    "cost": 4,
+    "name": "Thought Probe",
+    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nWhen you cast this spell, if your opponent has 3 or more creatures in the battle zone, draw 3 cards.",
+    "type": "Spell",
+    "id": "22/55",
+    "rarity": "Uncommon",
+    "illustrator": "Dreamwave",
+    "image_file": "thought-probe.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Darkness"
+    ],
+    "cost": 6,
+    "name": "Ultracide Worm",
+    "power": "11000",
+    "subtypes": [
+      "Parasite Worm"
+    ],
+    "text": "Evolutionâ€”Put on one of your Parasite Worms. Double breaker (This creature breaks 2 shields.)",
+    "type": "Creature",
+    "id": "S3/55",
+    "rarity": "Super Rare",
+    "illustrator": "Hikaru Ikusa",
+    "flavor": "\"Aww. My little Worm is all grown up.\" â€”Ballom, Master of Death",
+    "image_file": "ultracide-worm.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Light"
+    ],
+    "cost": 2,
+    "name": "Wyn, the Oracle",
+    "power": "1500",
+    "subtypes": [
+      "Light Bringer"
+    ],
+    "text": "Whenever this creature attacks, you may look at one of your opponent's shields. Then put it back where it was.",
+    "type": "Creature",
+    "id": "11/55",
+    "rarity": "Uncommon",
+    "illustrator": "Kou1",
+    "flavor": "As the oracles disappeared one by one, they each proclaimed the dawn of a new era.",
+    "image_file": "wyn-the-oracle.webp",
+    "set_id": "dm-02"
+  },
+  {
+    "civilizations": [
+      "Nature"
+    ],
+    "cost": 7,
+    "name": "Xeno Mantis",
+    "power": "6000",
+    "subtypes": [
+      "Giant Insect"
+    ],
+    "text": "This creature can't be blocked by any creature that has power 5000 or less.\nDouble breaker (This creature breaks 2 shields.)",
+    "type": "Creature",
+    "id": "55/55",
+    "rarity": "Very Rare",
+    "illustrator": "Katsuya",
+    "flavor": "The invading Worms drained the magical life out of the forest...and the cataclysm began.",
+    "image_file": "xeno-mantis.webp",
+    "set_id": "dm-02"
+  }
+]

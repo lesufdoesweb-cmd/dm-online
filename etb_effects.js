@@ -29,7 +29,7 @@ export const ETB_EFFECTS = {
             onYes: () => { draw(); setTimeout(() => draw(), 200); toast("King Ripped-Hide: Draw 2 cards!"); }
         });
     },
-    "Emeral": ({ gsR, setSearchingDeck, setTargeting, setGs, toast, askMay }) => {
+    "Emeral": ({ gsR, setSearchingDeck, setGs, toast, askMay }) => {
         const s = gsR.current;
         if (!s.hand.length) return;
         askMay({
@@ -40,20 +40,18 @@ export const ETB_EFFECTS = {
                     count: 1,
                     customList: s.hand,
                     onComplete: (handCard) => {
-                        setTargeting({
+                        setSearchingDeck({
                             message: "Emeral: Select a shield to take to hand",
                             count: 1,
-                            validTargets: s.shields.map((_, i) => `shield-${i}`),
-                            isShieldTarget: true,
-                            onComplete: (shieldIds) => {
-                                const shieldIdx = parseInt(shieldIds[0].split('-')[1]);
+                            customList: s.shields,
+                            isFaceDown: true,
+                            onComplete: (shield) => {
                                 setGs(prev => {
                                     const newHand = prev.hand.filter(x => x.instanceId !== handCard.instanceId);
-                                    const newShields = [...prev.shields];
-                                    const takenShield = newShields.splice(shieldIdx, 1, handCard)[0];
+                                    const newShields = prev.shields.map(x => x.instanceId === shield.instanceId ? handCard : x);
                                     return {
                                         ...prev,
-                                        hand: [...newHand, takenShield],
+                                        hand: [...newHand, shield],
                                         shields: newShields
                                     };
                                 });
@@ -73,23 +71,28 @@ export const ETB_EFFECTS = {
         net.send("ACTION", { action: "BOUNCE_WEAK", details: { maxPower: 2000 } });
         toast("Saucer-Head Shark: Bounce weak creatures!");
     },
-    "Unicorn Fish": ({ gsR, setTargeting, net, setGs, toast }) => {
+    "Unicorn Fish": ({ gsR, setTargeting, net, setGs, toast, askMay }) => {
         const s = gsR.current;
         const allCreatures = [...s.battleZone, ...s.opponent.battleZone];
         if (!allCreatures.length) return;
-        setTargeting({
-            message: "Select a creature to bounce",
-            count: 1,
-            validTargets: allCreatures.map(c => c.instanceId),
-            onComplete: (selectedIds) => {
-                const id = selectedIds[0];
-                net.send("ACTION", { action: "BOUNCE_TARGET", details: { targetId: id } });
-                setGs(s => {
-                    const c = s.battleZone.find(x => x.instanceId === id);
-                    if (!c) return s;
-                    return { ...s, battleZone: s.battleZone.filter(x => x.instanceId !== id), hand: [...s.hand, c] };
+        askMay({
+            message: "Use Unicorn Fish's effect to bounce a creature?",
+            onYes: () => {
+                setTargeting({
+                    message: "Select a creature to bounce",
+                    count: 1,
+                    validTargets: allCreatures.map(c => c.instanceId),
+                    onComplete: (selectedIds) => {
+                        const id = selectedIds[0];
+                        net.send("ACTION", { action: "BOUNCE_TARGET", details: { targetId: id } });
+                        setGs(s => {
+                            const c = s.battleZone.find(x => x.instanceId === id);
+                            if (!c) return s;
+                            return { ...s, battleZone: s.battleZone.filter(x => x.instanceId !== id), hand: [...s.hand, c] };
+                        });
+                        toast("Creature bounced!");
+                    }
                 });
-                toast("Creature bounced!");
             }
         });
     },
@@ -112,8 +115,6 @@ export const ETB_EFFECTS = {
                 toast("Artisan Picora: Mana to graveyard!");
             }
         });
-    }
-        });
     },
     "Onslaughter Triceps": ({ gsR, setGs, setSearchingDeck, toast }) => {
         const s = gsR.current;
@@ -128,8 +129,6 @@ export const ETB_EFFECTS = {
                 });
                 toast("Onslaughter Triceps: Mana to graveyard!");
             }
-        });
-    }
         });
     },
     "Explosive Fighter Ucarn": ({ gsR, setGs, setSearchingDeck, toast }) => {
@@ -313,8 +312,6 @@ export const ETB_EFFECTS = {
                 toast("Mana moved to graveyard!");
             }
         });
-    }
-        });
     },
     "Trox, General of Destruction": ({ net, toast }) => {
         net.send("ACTION", { action: "DISCARD_RANDOM" });
@@ -341,10 +338,6 @@ export const ETB_EFFECTS = {
                 toast("Aqua Deformer: Mutual mana return!");
             }
         });
-    } });
-                toast("Aqua Deformer: Mutual mana return!");
-            }
-        });
     },
     "Syforce, Aurora Elemental": ({ gsR, setSearchingDeck, setGs, toast }) => {
         const s = gsR.current;
@@ -359,8 +352,6 @@ export const ETB_EFFECTS = {
                 });
                 toast("Mana returned to hand!");
             }
-        });
-    }
         });
     },
     "Reese, the Oracle": ({ gsR, setTargeting, net, toast }) => {
@@ -538,20 +529,18 @@ export const ETB_EFFECTS = {
             }
         });
     },
-    "Baraga, Blade of Gloom": ({ gsR, setTargeting, setGs, toast }) => {
+    "Baraga, Blade of Gloom": ({ gsR, setSearchingDeck, setGs, toast }) => {
         const s = gsR.current;
         if (!s.shields.length) return;
-        setTargeting({
+        setSearchingDeck({
             message: "Baraga: Select a shield to take to hand (No trigger)",
             count: 1,
-            validTargets: s.shields.map((_, i) => `shield-${i}`),
-            isShieldTarget: true,
-            onComplete: (ids) => {
-                const idx = parseInt(ids[0].split('-')[1]);
+            customList: s.shields,
+            isFaceDown: true,
+            onComplete: (shield) => {
                 setGs(p => {
-                    const ns = [...p.shields];
-                    const card = ns.splice(idx, 1)[0];
-                    return { ...p, shields: ns, hand: [...p.hand, card] };
+                    const ns = p.shields.filter(x => x.instanceId !== shield.instanceId);
+                    return { ...p, shields: ns, hand: [...p.hand, shield] };
                 });
                 toast("Baraga: Shield to hand!");
             }
@@ -607,10 +596,6 @@ export const ETB_EFFECTS = {
                     return { ...prev, mana: prev.mana.filter(m => m.instanceId !== card.instanceId), hand: [...prev.hand, card] };
                 });
                 net.send("ACTION", { action: "MANA_TO_HAND_CHOICE", details: { count: 1 } });
-                toast("Shtra: Mutual mana return!");
-            }
-        });
-    } });
                 toast("Shtra: Mutual mana return!");
             }
         });
