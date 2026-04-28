@@ -31,7 +31,7 @@
     "supertypes": [
       "Evolution"
     ],
-    "text": "Evolutionâ€”Put on one of your Angel Commands.\nDouble breaker (This creature breaks 2 shields.)\nPlayers can't cast spells other than light spells.",
+    "text": "Evolution—Put on one of your Angel Commands.\nDouble breaker (This creature breaks 2 shields.)\nPlayers can't cast spells other than light spells.",
     "type": "Creature",
     "id": "1/55",
     "rarity": "Very Rare",
@@ -74,7 +74,7 @@
     "id": "48/55",
     "rarity": "Rare",
     "illustrator": "Jason",
-    "flavor": "\"I don't care how hugely, massively, gigantically big it is! Stop it before it gets to General Trox!\" â€”Zagaan, Knight of Darkness",
+    "flavor": "\"I don't care how hugely, massively, gigantically big it is! Stop it before it gets to General Trox!\" —Zagaan, Knight of Darkness",
     "image_file": "ancient-giant.webp",
     "set_id": "dm-04"
   },
@@ -129,7 +129,7 @@
     "supertypes": [
       "Evolution"
     ],
-    "text": "Evolutionâ€”Put on one of your Cyber Viruses.\nWhen you put this creature into the battle zone, draw up to 3 cards.",
+    "text": "Evolution—Put on one of your Cyber Viruses.\nWhen you put this creature into the battle zone, draw up to 3 cards.",
     "type": "Creature",
     "id": "2/55",
     "rarity": "Very Rare",
@@ -151,7 +151,7 @@
     "supertypes": [
       "Evolution"
     ],
-    "text": "Evolutionâ€”Put on one of your Demon Commands.\nWhen you put this creature into the battle zone, destroy all creatures except darkness creatures.\nDouble breaker (This creature breaks 2 shields.)",
+    "text": "Evolution—Put on one of your Demon Commands.\nWhen you put this creature into the battle zone, destroy all creatures except darkness creatures.\nDouble breaker (This creature breaks 2 shields.)",
     "type": "Creature",
     "id": "S3/55",
     "rarity": "Super Rare",
@@ -175,7 +175,7 @@
     "id": "40/55",
     "rarity": "Common",
     "illustrator": "Ryoya Yuki",
-    "flavor": "\"How dare you doubt me? I have called for reinforcements...from the Fire Realm.\" â€” Trox, General of Destruction",
+    "flavor": "\"How dare you doubt me? I have called for reinforcements...from the Fire Realm.\" — Trox, General of Destruction",
     "image_file": "blasto-explosive-soldier.webp",
     "set_id": "dm-04"
   },
@@ -209,7 +209,7 @@
     "id": "27/55",
     "rarity": "Rare",
     "illustrator": "Sansyu",
-    "flavor": "\"The only thing stronger than my chains is your fear.\" â€”Trox, General of Destruction",
+    "flavor": "\"The only thing stronger than my chains is your fear.\" —Trox, General of Destruction",
     "image_file": "chains-of-sacrifice.webp",
     "set_id": "dm-04"
   },
@@ -258,7 +258,7 @@
     "id": "28/55",
     "rarity": "Common",
     "illustrator": "Katsuya",
-    "flavor": "\"Why don't mortals embrace despair? All my ghoul friends really seem to enjoy it.\" â€”Ballom, Master of Death",
+    "flavor": "\"Why don't mortals embrace despair? All my ghoul friends really seem to enjoy it.\" —Ballom, Master of Death",
     "image_file": "darkpact.webp",
     "set_id": "dm-04"
   },
@@ -277,7 +277,7 @@
     "id": "50/55",
     "rarity": "Uncommon",
     "illustrator": "Masaki Hirooka",
-    "flavor": "\"The only thing grosser than eating a mushroom is having a mushroom eat me.\" â€”Giliam the Tormentor",
+    "flavor": "\"The only thing grosser than eating a mushroom is having a mushroom eat me.\" —Giliam the Tormentor",
     "image_file": "dew-mushroom.webp",
     "set_id": "dm-04"
   },
@@ -294,7 +294,7 @@
     "supertypes": [
       "Evolution"
     ],
-    "text": "Evolutionâ€”Put on one of your Rock Beasts.\nWhen you put this creature into the battle zone, you may destroy one of your opponent's creatures that has power 3000 or less.\nDouble breaker (This creature breaks 2 shields.)",
+    "text": "Evolution—Put on one of your Rock Beasts.\nWhen you put this creature into the battle zone, you may destroy one of your opponent's creatures that has power 3000 or less.\nDouble breaker (This creature breaks 2 shields.)",
     "type": "Creature",
     "id": "4/55",
     "rarity": "Very Rare",
@@ -318,7 +318,7 @@
     "id": "51/55",
     "rarity": "Common",
     "illustrator": "D-Suzuki",
-    "flavor": "\"Eww! Now that's disgusting.\" â€” Mongrel Man",
+    "flavor": "\"Eww! Now that's disgusting.\" — Mongrel Man",
     "image_file": "exploding-cactus.webp",
     "set_id": "dm-04"
   },
@@ -625,7 +625,7 @@
     "id": "44/55",
     "rarity": "Rare",
     "illustrator": "Atsushi Kawasaki",
-    "flavor": "\"They don't call me an arms dealer for nothing.\" â€”Engineer Pipo",
+    "flavor": "\"They don't call me an arms dealer for nothing.\" —Engineer Pipo",
     "image_file": "mega-detonator.webp",
     "set_id": "dm-04"
   },
@@ -732,7 +732,7 @@
     "supertypes": [
       "Evolution"
     ],
-    "text": "Evolutionâ€”Put on one of your Horned Beasts.\nWhen you put this creature into the battle zone, search your deck. You may take a nature creature from your deck, show that creature to your opponent, and put it into your hand. Then shuffle your deck.\nDouble breaker (This creature breaks 2 shields.)",
+    "text": "Evolution—Put on one of your Horned Beasts.\nWhen you put this creature into the battle zone, search your deck. You may take a nature creature from your deck, show that creature to your opponent, and put it into your hand. Then shuffle your deck.\nDouble breaker (This creature breaks 2 shields.)",
     "type": "Creature",
     "id": "S5/55",
     "rarity": "Super Rare",
@@ -990,7 +990,7 @@
     "id": "53/55",
     "rarity": "Rare",
     "illustrator": "Kou1",
-    "flavor": "\"Alcadeias has given us a great gift! We're saved! We're...ummm, can anyone lift that thing?\" â€” Fear Fang",
+    "flavor": "\"Alcadeias has given us a great gift! We're saved! We're...ummm, can anyone lift that thing?\" — Fear Fang",
     "image_file": "sword-of-benevolent-life.webp",
     "set_id": "dm-04"
   },

@@ -804,6 +804,23 @@ body {
     border-color: var(--gold);
 }
 
+.set-filter-btn {
+    transition: all 0.2s;
+}
+.set-filter-btn:hover {
+    filter: brightness(1.2);
+}
+.set-filter-btn.active {
+    box-shadow: 0 0 10px rgba(255,214,68,0.3);
+}
+
+.card--disabled {
+    pointer-events: none !important;
+}
+.card--disabled img {
+    filter: grayscale(1) contrast(0.8) brightness(0.6) !important;
+}
+
 /* ===== CONTEXT MENU ===== */
 .ctx-backdrop { position: fixed; inset: 0; z-index: 1999; }
 .ctx-menu {

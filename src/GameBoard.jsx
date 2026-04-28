@@ -31,7 +31,7 @@ const GameBoard = (props) => {
         const abs = CardEngine.parseAbilities(c, bz, mz);
         const isTargetable = targeting && targeting.validTargets.includes(c.instanceId);
         const isSelected = targeting && targeting.selected?.includes(c.instanceId);
-        const canDragAttack = !isOpponent && !c.isTapped && !c.summonedThisTurn && !isLocked && gs.turn;
+        const canDragAttack = !isOpponent && !c.isTapped && (!c.summonedThisTurn || c.canAttackPlayersOverride || abs.speedAttacker) && !isLocked && gs.turn;
         const hasActiveEffect = CardEngine.hasActiveGlobalEffect(c, bz);
         const civColors = { 'Light': '#ffd644', 'Water': '#4fc3f7', 'Darkness': '#9c27b0', 'Fire': '#ff5722', 'Nature': '#66bb6a' };
         const mainCiv = c.civilizations?.[0] || 'Fire';
@@ -84,8 +84,8 @@ const GameBoard = (props) => {
                 const breaksCount = CardEngine.shieldsToBreak(c, gs.battleZone, gs.mana);
                 items.push({ label: `Attack Shields${breaksCount > 1 ? ` (×${breaksCount})` : ''}`, icon: "🛡", cls: "ctx-item--atk", action: "AS", data: { a: c } });
             }
-            const tappedOpps = gs.opponent.battleZone.filter(x => x.isTapped || x.chaosStrikeTarget);
-            const untappedOpps = canAtkUntapped ? gs.opponent.battleZone.filter(x => !x.isTapped && !x.chaosStrikeTarget) : [];
+            const tappedOpps = gs.opponent.battleZone.filter(x => (x.isTapped || x.chaosStrikeTarget) && CardEngine.canBeAttacked(c, x, gs.battleZone, gs.opponent.battleZone));
+            const untappedOpps = canAtkUntapped ? gs.opponent.battleZone.filter(x => !x.isTapped && !x.chaosStrikeTarget && CardEngine.canBeAttacked(c, x, gs.battleZone, gs.opponent.battleZone)) : [];
             const targets = [...tappedOpps, ...untappedOpps];
             if (targets.length) {
                 items.push({ type: 'sep' });
@@ -130,10 +130,12 @@ const GameBoard = (props) => {
             <DecisionModals 
                 targeting={targeting} blockingRequest={blockingRequest} 
                 waitingForOpponent={waitingForOpponent} trigger={trigger} 
-                pendingDecision={pendingDecision} setBlockingRequest={setBlockingRequest}
-                setTargeting={setTargeting} setTrigger={setTrigger}
-                setPendingDecision={setPendingDecision} net={net} gs={gs}
-                addLog={addLog} triggerEffect={triggerEffect} toast={toast} setGs={setGs}
+                pendingDecision={pendingDecision} pendingDestruction={pendingDestruction}
+                setBlockingRequest={setBlockingRequest} setTargeting={setTargeting} 
+                setTrigger={setTrigger} setPendingDecision={setPendingDecision} 
+                setPendingDestruction={setPendingDestruction}
+                net={net} gs={gs} addLog={addLog} triggerEffect={triggerEffect} 
+                toast={toast} setGs={setGs} finishDestruction={finishDestruction}
             />
 
             {gs.gameOver && (

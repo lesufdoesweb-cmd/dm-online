@@ -65,7 +65,7 @@
     "subtypes": [
       "Human"
     ],
-    "text": "Evolutionâ€”Put on one of your Humans.\nEach of your other Humans in the battle zone gets +1000 power.\nDouble breaker (This creature breaks 2 shields.)",
+    "text": "Evolution—Put on one of your Humans.\nEach of your other Humans in the battle zone gets +1000 power.\nDouble breaker (This creature breaks 2 shields.)",
     "type": "Creature",
     "id": "S4/55",
     "rarity": "Super Rare",
@@ -83,7 +83,7 @@
     "subtypes": [
       "Human"
     ],
-    "text": "Evolutionâ€”Put on one of your Humans.\nWhile attacking, this creature gets +2000 power for each other Human in the battle zone.",
+    "text": "Evolution—Put on one of your Humans.\nWhile attacking, this creature gets +2000 power for each other Human in the battle zone.",
     "type": "Creature",
     "id": "34/55",
     "rarity": "Uncommon",
@@ -102,12 +102,12 @@
     "subtypes": [
       "Beast Folk"
     ],
-    "text": "Evolutionâ€”Put on one of your Beast Folk.\nWhile this creature is tapped, each of your other Beast Folk in the battle zone gets +2000 power.",
+    "text": "Evolution—Put on one of your Beast Folk.\nWhile this creature is tapped, each of your other Beast Folk in the battle zone gets +2000 power.",
     "type": "Creature",
     "id": "45/55",
     "rarity": "Uncommon",
     "illustrator": "Tsutomu Kawade",
-    "flavor": "\"Rage leads to war. War leads to rage. Isn't it magical?\" â€”General Dark Fiend",
+    "flavor": "\"Rage leads to war. War leads to rage. Isn't it magical?\" —General Dark Fiend",
     "image_file": "barkwhip-the-smasher.webp",
     "set_id": "dm-02"
   },
@@ -145,7 +145,7 @@
     "id": "36/55",
     "rarity": "Rare",
     "illustrator": "Akira Hamada",
-    "flavor": "\"This species inhabits liquid rock. Highly dangerous.\" â€”Liquid People scouting report",
+    "flavor": "\"This species inhabits liquid rock. Highly dangerous.\" —Liquid People scouting report",
     "image_file": "bombersaur.webp",
     "set_id": "dm-02"
   },
@@ -192,7 +192,7 @@
     "subtypes": [
       "Parasite Worm"
     ],
-    "text": "Evolutionâ€”Put on one of your Parasite Worms.\nWhen you put this creature into the battle zone, you may destroy one of your opponent's creatures.",
+    "text": "Evolution—Put on one of your Parasite Worms.\nWhen you put this creature into the battle zone, you may destroy one of your opponent's creatures.",
     "type": "Creature",
     "id": "24/55",
     "rarity": "Uncommon",
@@ -243,7 +243,7 @@
     "subtypes": [
       "Liquid People"
     ],
-    "text": "Evolutionâ€”Put on one of your Liquid People.\nThis creature can't be blocked.\nDouble breaker (This creature breaks 2 shields.)",
+    "text": "Evolution—Put on one of your Liquid People.\nThis creature can't be blocked.\nDouble breaker (This creature breaks 2 shields.)",
     "type": "Creature",
     "id": "15/55",
     "rarity": "Uncommon",
@@ -261,7 +261,7 @@
     "subtypes": [
       "Liquid People"
     ],
-    "text": "Evolutionâ€”Put on one of your Liquid People.\nWhen you put this creature into the battle zone, return all creatures in the battle zone that have \"blocker\" to their owners' hands.",
+    "text": "Evolution—Put on one of your Liquid People.\nWhen you put this creature into the battle zone, return all creatures in the battle zone that have \"blocker\" to their owners' hands.",
     "type": "Creature",
     "id": "S2/55",
     "rarity": "Super Rare",
@@ -407,7 +407,7 @@
     "subtypes": [
       "Beast Folk"
     ],
-    "text": "Evolutionâ€”Put on one of your Beast Folk.\nWhen you put this creature into the battle zone, put the top 2 cards of your deck into your mana zone.\nDouble breaker (This creature breaks 2 shields.)",
+    "text": "Evolution—Put on one of your Beast Folk.\nWhen you put this creature into the battle zone, put the top 2 cards of your deck into your mana zone.\nDouble breaker (This creature breaks 2 shields.)",
     "type": "Creature",
     "id": "S5/55",
     "rarity": "Super Rare",
@@ -449,7 +449,7 @@
     "id": "48/55",
     "rarity": "Rare",
     "illustrator": "Masaki Hirooka",
-    "flavor": "\"Wow! I can't wait to disassemble this!\" â€”Nomad Hero Gigio",
+    "flavor": "\"Wow! I can't wait to disassemble this!\" —Nomad Hero Gigio",
     "image_file": "fortress-shell.webp",
     "set_id": "dm-02"
   },
@@ -596,7 +596,7 @@
     "subtypes": [
       "Guardian"
     ],
-    "text": "Blocker (Whenever an opponent's creature attacks, you may tap this creature to stop the attack. Then the 2 creatures battle.)\nEvolutionâ€”Put on one of your Guardians.\nDouble breaker (This creature breaks 2 shields.)",
+    "text": "Blocker (Whenever an opponent's creature attacks, you may tap this creature to stop the attack. Then the 2 creatures battle.)\nEvolution—Put on one of your Guardians.\nDouble breaker (This creature breaks 2 shields.)",
     "type": "Creature",
     "id": "S1/55",
     "rarity": "Super Rare",
@@ -633,7 +633,7 @@
     "subtypes": [
       "Guardian"
     ],
-    "text": "Evolutionâ€”Put on one of your Guardians.\nWhen you put this creature into the battle zone, tap all your opponent's creatures in the battle zone that have \"blocker.\"",
+    "text": "Evolution—Put on one of your Guardians.\nWhen you put this creature into the battle zone, tap all your opponent's creatures in the battle zone that have \"blocker.\"",
     "type": "Creature",
     "id": "5/55",
     "rarity": "Uncommon",
@@ -704,7 +704,7 @@
     "id": "7/55",
     "rarity": "Common",
     "illustrator": "Hisanobu Kometani",
-    "flavor": "\"Vizier of Magnetism, arise. Your wings are a compass that points to the truth.\" â€”Hanusa, Radiance Elemental",
+    "flavor": "\"Vizier of Magnetism, arise. Your wings are a compass that points to the truth.\" —Hanusa, Radiance Elemental",
     "image_file": "magris-vizier-of-magnetism.webp",
     "set_id": "dm-02"
   },
@@ -774,7 +774,7 @@
     "id": "43/55",
     "rarity": "Common",
     "illustrator": "Ittoku",
-    "flavor": "\"Someday I'll be strong enough to wear battle armor! You'll see!\" â€”Mini Titan Gett",
+    "flavor": "\"Someday I'll be strong enough to wear battle armor! You'll see!\" —Mini Titan Gett",
     "image_file": "mini-titan-gett.webp",
     "set_id": "dm-02"
   },
@@ -831,7 +831,7 @@
     "id": "33/55",
     "rarity": "Rare",
     "illustrator": "Masaki Hirooka",
-    "flavor": "\"You won't get any dessert until you finish eating your friends!\" â€”Dark Titan Maginn",
+    "flavor": "\"You won't get any dessert until you finish eating your friends!\" —Dark Titan Maginn",
     "image_file": "poison-worm.webp",
     "set_id": "dm-02"
   },
@@ -1033,12 +1033,12 @@
     "subtypes": [
       "Parasite Worm"
     ],
-    "text": "Evolutionâ€”Put on one of your Parasite Worms. Double breaker (This creature breaks 2 shields.)",
+    "text": "Evolution—Put on one of your Parasite Worms. Double breaker (This creature breaks 2 shields.)",
     "type": "Creature",
     "id": "S3/55",
     "rarity": "Super Rare",
     "illustrator": "Hikaru Ikusa",
-    "flavor": "\"Aww. My little Worm is all grown up.\" â€”Ballom, Master of Death",
+    "flavor": "\"Aww. My little Worm is all grown up.\" —Ballom, Master of Death",
     "image_file": "ultracide-worm.webp",
     "set_id": "dm-02"
   },

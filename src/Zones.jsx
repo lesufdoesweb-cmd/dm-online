@@ -66,7 +66,7 @@ export const PlayerSide = ({ gs, avail, targeting, onTargetClick, renderCreature
                         <div key={c.instanceId} className="hand-slot" style={{ zIndex: i + 10 }}>
                             <div className="card card--lg hand-card" onClick={e => handCtx(e, c)} onContextMenu={e => handCtx(e, c)} onMouseEnter={() => hover(c)} onMouseLeave={unhover}>
                                 <img src={`./cards/${c.set_id || 'dm-01'}/${c.image_file}`} alt={c.name} />
-                                {c.cost != null && (() => { const calcCost = CardEngine.calculateCost(c, gs.battleZone); const isDiscounted = calcCost < c.cost; return <div className={`cost-gem ${isDiscounted ? 'cost-gem--discounted' : ''}`}>{calcCost}</div>; })()}
+                                {c.cost != null && (() => { const calcCost = CardEngine.getCost(c, gs.battleZone); const isDiscounted = calcCost < c.cost; return <div className={`cost-gem ${isDiscounted ? 'cost-gem--discounted' : ''}`}>{calcCost}</div>; })()}
                                 {c.power && <div className="power-gem">{c.power}</div>}
                                 {CardEngine.isSpell(c) && <div style={{position:'absolute',top:4,right:30,fontSize:12,filter:'drop-shadow(0 1px 3px rgba(0,0,0,0.8))',zIndex:5}}>✨</div>}
                                 {CardEngine.parseAbilities(c, gs.battleZone, gs.mana).shieldTrigger && <div className="trigger-badge" title="Shield Trigger">⚡</div>}

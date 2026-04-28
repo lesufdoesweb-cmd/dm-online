@@ -13,16 +13,35 @@ export function useNetwork(conn) {
             pending.current = null;
         }, 50); // Small 50ms debounce
     }, [send]);
+    const [isOpen, setIsOpen] = useState(conn?.open || false);
+
     useEffect(() => {
-        if (!conn) return;
+        if (!conn) {
+            setIsOpen(false);
+            return;
+        }
+        
+        setIsOpen(conn.open);
+        
         const h = d => { const fn = handlers.current[d.type]; if (fn) fn(d.payload); };
+        const onOpen = () => setIsOpen(true);
+        const onClose = () => setIsOpen(false);
+
         conn.on('data', h);
+        conn.on('open', onOpen);
+        conn.on('close', onClose);
+        conn.on('error', onClose);
+        
         return () => {
             conn.off('data', h);
+            conn.off('open', onOpen);
+            conn.off('close', onClose);
+            conn.off('error', onClose);
             if (pending.current) clearTimeout(pending.current);
         };
     }, [conn]);
-    return useMemo(() => ({ on, send, sync, isOpen: conn?.open }), [on, send, sync, conn?.open]);
+
+    return useMemo(() => ({ on, send, sync, isOpen }), [on, send, sync, isOpen]);
 }
 
 export function useDrag(onDrop) {

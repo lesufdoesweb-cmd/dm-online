@@ -1010,21 +1010,6 @@ export const SPELL_EFFECTS = {
         net.send("ACTION", { action: "CRISIS_BOULDER" });
         toast("Crisis Boulder: Opponent must choose a card to destroy!");
     },
-    "Dimension Gate": ({ setSearchingDeck, setGs, toast }) => {
-        setSearchingDeck({
-            message: "Dimension Gate: Search a creature from deck",
-            count: 1,
-            onComplete: (cards) => {
-                const card = cards[0];
-                setGs(p => ({
-                    ...p,
-                    deck: p.deck.filter(c => c.instanceId !== card.instanceId),
-                    hand: [...p.hand, card]
-                }));
-                toast("Creature added to hand!");
-            }
-        });
-    },
     "Invincible Abyss": ({ gsR, net, toast }) => {
         gsR.current.opponent.battleZone.forEach(c => {
             net.send("ACTION", { action: "CREATURE_DESTROYED", details: { targetId: c.instanceId } });

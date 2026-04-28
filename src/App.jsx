@@ -74,11 +74,9 @@ const App = () => {
         if (!reconnectPending || !peer) return;
         const { opponentId, isHost: wasHost } = reconnectPending;
         setIsHost(wasHost);
-        if (!wasHost) {
-            const c = peer.connect(opponentId);
-            c.on('open', () => { c.send({ type: 'RECONNECT_REQUEST', payload: { name: playerName } }); });
-            setupConnection(c);
-        }
+        const c = peer.connect(opponentId);
+        c.on('open', () => { c.send({ type: 'RECONNECT_REQUEST', payload: { name: playerName } }); });
+        setupConnection(c);
         setView("game");
         setReconnectPending(null);
     };
@@ -93,7 +91,7 @@ const App = () => {
             if (data.type === 'CONNECT_REQUEST' || data.type === 'RECONNECT_REQUEST') {
                 const activeGame = JSON.parse(localStorage.getItem('dm_active_game'));
                 if (data.type === 'RECONNECT_REQUEST' && activeGame && activeGame.opponentId === c.peer) {
-                    c.send({ type: 'CONNECT_ACCEPT', payload: { name: playerName } });
+                    c.send({ type: 'CONNECT_ACCEPT', payload: { name: playerName, isReconnect: true } });
                     setConn(c); setIsHost(activeGame.isHost); setView("game");
                     toast("Reconnected to duel!", "success");
                     return;
@@ -111,12 +109,18 @@ const App = () => {
                 setPendingRequest({ conn: c, name: data.payload.name });
             }
             if (data.type === 'CONNECT_ACCEPT') {
-                localStorage.removeItem(`dm_gs_${c.peer}`);
-                localStorage.removeItem(`dm_logs_${c.peer}`);
-                setConn(c); setIsHost(false); setView("game");
-                localStorage.setItem("dm_active_game", JSON.stringify({ opponentId: c.peer, isHost: false }));
-                incrementPlayedCount(communityDecks[selIdx]);
-                toast("Connected to " + data.payload.name, "success");
+                const activeGame = JSON.parse(localStorage.getItem('dm_active_game'));
+                if (!data.payload?.isReconnect) {
+                    localStorage.removeItem(`dm_gs_${c.peer}`);
+                    localStorage.removeItem(`dm_logs_${c.peer}`);
+                    setIsHost(false);
+                    localStorage.setItem("dm_active_game", JSON.stringify({ opponentId: c.peer, isHost: false }));
+                    incrementPlayedCount(communityDecks[selIdx]);
+                } else if (activeGame && activeGame.opponentId === c.peer) {
+                    setIsHost(activeGame.isHost);
+                }
+                setConn(c); setView("game");
+                toast(data.payload?.isReconnect ? "Reconnected to duel!" : "Connected to " + data.payload.name, "success");
             }
             if (data.type === 'CONNECT_REJECT') { toast("Challenge declined", "error"); c.close(); }
             if (data.type === 'LEAVE_GAME') { toast("Opponent left the game"); exitGame(); }
@@ -135,8 +139,14 @@ const App = () => {
         setPlayerName(savedName);
 
         const sets = ["dm-01", "dm-02", "dm-03", "dm-04", "dm-05", "dm-06"];
-        Promise.all(sets.map(s => fetch(`/cards/${s}/metadata.json`).then(r => r.json())))
-            .then(allSets => { setCards(allSets.flat()); setLoading(false); }).catch(() => setLoading(false));
+        Promise.all(sets.map(s => fetch(`/cards/${s}/metadata.json`)
+            .then(r => r.json())
+            .then(data => data.map(c => ({ ...c, set_id: s })))
+        )).then(allSets => { 
+            const flat = allSets.flat();
+            setCards(prev => prev.length > 0 ? prev : flat); 
+            setLoading(false); 
+        }).catch(() => setLoading(false));
 
         let savedId = localStorage.getItem('dm_peer_id_v2');
         if (!savedId) { savedId = Math.random().toString(36).substr(2, 9); localStorage.setItem('dm_peer_id_v2', savedId); }
@@ -254,6 +264,7 @@ const App = () => {
             initialDeck={initialDeck} 
             readOnly={!!viewOnlyDeck}
             onSave={saveCommunityDeck} 
+            currentFormat={currentFormat}
             onExit={() => { 
                 setView("home"); 
                 setEditingDeckIdx(null); 
@@ -302,10 +313,10 @@ const App = () => {
             {showDeckModal && (
                 <div className="trigger-modal" style={{zIndex: 5000}}>
                     <div className="search-container" style={{maxWidth: 1000, height: '80vh', background: 'var(--board-dark)', border: '2px solid var(--gold)', borderRadius: 12, padding: 30, display:'flex', flexDirection:'column'}}>
-                        <div className="search-header"><h2>Community Decks</h2><button className="btn-secondary" onClick={() => setShowDeckModal(false)}>Close</button></div>
-                        <div className="desc" style={{marginBottom: 20}}>Browse any deck created by the community. Your decks are shown first.</div>
+                        <div className="search-header"><h2>Community Decks ({FORMATS[currentFormat].name})</h2><button className="btn-secondary" onClick={() => setShowDeckModal(false)}>Close</button></div>
+                        <div className="desc" style={{marginBottom: 20}}>Browse any deck created by the community for the <strong>{FORMATS[currentFormat].name}</strong> format. Your decks are shown first.</div>
                         <div style={{flex:1, overflowY:'auto', display:'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 15, paddingRight: 10}}>
-                            {[...communityDecks].sort((a,b) => (a.ownerId === code ? -1 : (b.ownerId === code ? 1 : 0))).map((d) => (
+                            {communityDecks.filter(d => d.format === currentFormat).sort((a,b) => (a.ownerId === code ? -1 : (b.ownerId === code ? 1 : 0))).map((d) => (
                                 <div key={d.gunId} onClick={() => { setSelIdx(communityDecks.indexOf(d)); setShowDeckModal(false); }} className="deck-pill" style={{ 
                                     borderColor: communityDecks[selIdx]?.gunId === d.gunId ? 'var(--gold)' : 'rgba(255,255,255,0.1)',
                                     background: d.ownerId === code ? 'rgba(255,214,68,0.1)' : 'rgba(255,255,255,0.05)'
@@ -342,6 +353,8 @@ const App = () => {
                                 onClick={() => {
                                     setCurrentFormat(f.id);
                                     localStorage.setItem('dm_preferred_format', f.id);
+                                    const firstInFormat = communityDecks.find(d => d.format === f.id);
+                                    if (firstInFormat) setSelIdx(communityDecks.indexOf(firstInFormat));
                                     toast(`Switched to ${f.name} format`);
                                 }}
                             >

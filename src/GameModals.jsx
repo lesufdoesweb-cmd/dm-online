@@ -61,9 +61,9 @@ export const SearchOverlay = ({ searchingDeck, setSearchingDeck, gs }) => {
 };
 
 export const DecisionModals = ({ 
-    targeting, blockingRequest, waitingForOpponent, trigger, pendingDecision, 
-    setBlockingRequest, setTargeting, setTrigger, setPendingDecision,
-    net, gs, addLog, triggerEffect, toast, setGs
+    targeting, blockingRequest, waitingForOpponent, trigger, pendingDecision, pendingDestruction,
+    setBlockingRequest, setTargeting, setTrigger, setPendingDecision, setPendingDestruction,
+    net, gs, addLog, triggerEffect, toast, setGs, finishDestruction
 }) => {
     return (
         <>
@@ -118,7 +118,7 @@ export const DecisionModals = ({
                     <div className="actions">
                         <button className="btn-primary" onClick={() => {
                             const isSpell = CardEngine.isSpell(trigger);
-                            addLog(`Activated Shield Trigger: {trigger.name}`, 'effect', false, trigger);
+                            addLog(`Activated Shield Trigger: ${trigger.name}`, 'effect', false, trigger);
                             if (isSpell) {
                                 setGs(s => ({ ...s, graveyard: [...s.graveyard, trigger] }));
                                 triggerEffect("SPELL_EFFECTS", trigger);
@@ -154,6 +154,52 @@ export const DecisionModals = ({
                             pendingDecision.onNo();
                             setPendingDecision(null);
                         }}>No / Skip</button>
+                    </div>
+                </div>
+            )}
+
+            {pendingDestruction && (
+                <div className="decision-box">
+                    <h2>🛡️ DESTRUCTION REPLACEMENT</h2>
+                    <div style={{display:'flex', gap:12}}>
+                        <img src={`./cards/${pendingDestruction.card.set_id || 'dm-01'}/${pendingDestruction.card.image_file}`} style={{width:100, borderRadius:6, border:'1px solid var(--gold)'}} alt="Dying" />
+                        <div className="desc" style={{flex:1}}>
+                            <strong>{pendingDestruction.card.name}</strong> is about to be destroyed.
+                            <br/>
+                            {pendingDestruction.card.name === "Gigastand" ? "Discard 1 card to return it to your hand instead?" : "Use replacement effect?"}
+                        </div>
+                    </div>
+                    <div className="actions">
+                        <button className="btn-primary" onClick={() => {
+                            if (pendingDestruction.card.name === "Gigastand") {
+                                if (gs.hand.length === 0) {
+                                    toast("No cards in hand to discard!", "error");
+                                    return;
+                                }
+                                // Trigger discard
+                                const currentCard = pendingDestruction.card;
+                                setPendingDestruction(null);
+                                setGs(p => {
+                                    const idx = Math.floor(Math.random() * p.hand.length);
+                                    const disc = p.hand[idx];
+                                    toast(`Discarded ${disc.name} for Gigastand!`);
+                                    return { 
+                                        ...p, 
+                                        hand: [...p.hand.filter((_, i) => i !== idx), currentCard],
+                                        battleZone: p.battleZone.filter(c => c.instanceId !== currentCard.instanceId),
+                                        graveyard: [...p.graveyard, disc]
+                                    };
+                                });
+                                net.send("ACTION", { action: "FINISH_DESTRUCTION_SYNC", details: { instanceId: currentCard.instanceId, dest: 'hand' } });
+                            } else {
+                                finishDestruction(pendingDestruction.card, pendingDestruction.replacement);
+                                setPendingDestruction(null);
+                            }
+                        }}>Yes (Replace)</button>
+                        <button className="btn-secondary" onClick={() => {
+                            finishDestruction(pendingDestruction.card);
+                            setPendingDestruction(null);
+                        }}>No (Destroy)</button>
                     </div>
                 </div>
             )}

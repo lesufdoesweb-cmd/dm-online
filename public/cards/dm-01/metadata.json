@@ -71,7 +71,7 @@
     "id": "25/110",
     "rarity": "Uncommon",
     "illustrator": "Jason",
-    "flavor": "\"What a spirit for such a skinny little thing.\" â€”Brawler Zyler",
+    "flavor": "\"What a spirit for such a skinny little thing.\" —Brawler Zyler",
     "image_file": "aqua-soldier.jpg",
     "set_id": "dm-01"
   },
@@ -127,7 +127,7 @@
     "id": "68/110",
     "rarity": "Common",
     "illustrator": "Akifumi Yamamoto",
-    "flavor": "\"Fix it? That's easy. Just hit it.\" â€”Legendary Artisan Picora",
+    "flavor": "\"Fix it? That's easy. Just hit it.\" —Legendary Artisan Picora",
     "image_file": "artisan-picora.jpg",
     "set_id": "dm-01"
   },
@@ -798,7 +798,7 @@
     "id": "4/110",
     "rarity": "Uncommon",
     "illustrator": "Yusaku Nakaaki",
-    "flavor": "\"Vizier of Air, arise. Your fingers are sacred swords.\" â€”Hanusa, Radiance Elemental",
+    "flavor": "\"Vizier of Air, arise. Your fingers are sacred swords.\" —Hanusa, Radiance Elemental",
     "image_file": "frei-vizier-of-air.jpg",
     "set_id": "dm-01"
   },
@@ -995,7 +995,7 @@
     "id": "7/110",
     "rarity": "Common",
     "illustrator": "Akira Hamada",
-    "flavor": "\"Vizier of Bullets, arise. Your will is an arrow that never misses the target.\" â€”Hanusa, Radiance Elemental",
+    "flavor": "\"Vizier of Bullets, arise. Your will is an arrow that never misses the target.\" —Hanusa, Radiance Elemental",
     "image_file": "iere-vizier-of-bullets.jpg",
     "set_id": "dm-01"
   },
@@ -1177,7 +1177,7 @@
     "id": "12/110",
     "rarity": "Uncommon",
     "illustrator": "Hisanobu Kometani",
-    "flavor": "\"Vizier of Hunting, arise. Your words are arrows of light.\" â€”Hanusa, Radiance Elemental",
+    "flavor": "\"Vizier of Hunting, arise. Your words are arrows of light.\" —Hanusa, Radiance Elemental",
     "image_file": "lok-vizier-of-hunting.jpg",
     "set_id": "dm-01"
   },
@@ -1266,7 +1266,7 @@
     "id": "13/110",
     "rarity": "Common",
     "illustrator": "Dai",
-    "flavor": "\"Vizier of Lightning, arise. Your eyes are a bow of judgment.\" â€”Hanusa, Radiance Elemental",
+    "flavor": "\"Vizier of Lightning, arise. Your eyes are a bow of judgment.\" —Hanusa, Radiance Elemental",
     "image_file": "miele-vizier-of-lightning.jpg",
     "set_id": "dm-01"
   },
@@ -1352,7 +1352,7 @@
     "id": "83/110",
     "rarity": "Rare",
     "illustrator": "Eiji Kaneda",
-    "flavor": "\"Time to move on. So many unexplored worlds; so much trash to find!\" â€”Nomad Hero Gigio",
+    "flavor": "\"Time to move on. So many unexplored worlds; so much trash to find!\" —Nomad Hero Gigio",
     "image_file": "nomad-hero-gigio.jpg",
     "set_id": "dm-01"
   },
@@ -1386,7 +1386,7 @@
     "id": "100/110",
     "rarity": "Uncommon",
     "illustrator": "Seki",
-    "flavor": "\"Here's something better for you to do.\" â€”Fighter Dual Fang",
+    "flavor": "\"Here's something better for you to do.\" —Fighter Dual Fang",
     "image_file": "pangaeas-song.jpg",
     "set_id": "dm-01"
   },
@@ -1423,7 +1423,7 @@
     "id": "101/110",
     "rarity": "Uncommon",
     "illustrator": "Hideaki Takamura",
-    "flavor": "\"I will never give you up.\" â€”Symbolic meaning of the poisonous dahlia in flower language",
+    "flavor": "\"I will never give you up.\" —Symbolic meaning of the poisonous dahlia in flower language",
     "image_file": "poisonous-dahlia.jpg",
     "set_id": "dm-01"
   },
@@ -1591,7 +1591,7 @@
     "id": "38/110",
     "rarity": "Rare",
     "illustrator": "Naoki Saito",
-    "flavor": "\"Isn't it cool? The heads can be combined.\" â€”Tropico",
+    "flavor": "\"Isn't it cool? The heads can be combined.\" —Tropico",
     "image_file": "saucer-head-shark.jpg",
     "set_id": "dm-01"
   },
@@ -1747,7 +1747,7 @@
     "id": "105/110",
     "rarity": "Common",
     "illustrator": "Katsuya",
-    "flavor": "\"Me big. Me tough. Me smash.\" â€”Iron Hammer, Boar Warrior",
+    "flavor": "\"Me big. Me tough. Me smash.\" —Iron Hammer, Boar Warrior",
     "image_file": "steel-smasher.jpg",
     "set_id": "dm-01"
   },
@@ -1876,7 +1876,7 @@
     "id": "41/110",
     "rarity": "Rare",
     "illustrator": "Akifumi Yamamoto",
-    "flavor": "\"Start all over from your previous life!\" â€”Crystal Lancer",
+    "flavor": "\"Start all over from your previous life!\" —Crystal Lancer",
     "image_file": "teleportation.jpg",
     "set_id": "dm-01"
   },
@@ -1928,7 +1928,7 @@
     "id": "22/110",
     "rarity": "Uncommon",
     "illustrator": "Masaki Hirooka",
-    "flavor": "\"Vizier of Hope, arise. Your singing voice is a breeze of dawn.\" â€”Hanusa, Radiance Elemental",
+    "flavor": "\"Vizier of Hope, arise. Your singing voice is a breeze of dawn.\" —Hanusa, Radiance Elemental",
     "image_file": "toel-vizier-of-hope.jpg",
     "set_id": "dm-01"
   },
@@ -2013,7 +2013,7 @@
     "id": "110/110",
     "rarity": "Common",
     "illustrator": "Sansyu",
-    "flavor": "\"Great Earth, give me your might!\" â€”Fighter Dual Fang",
+    "flavor": "\"Great Earth, give me your might!\" —Fighter Dual Fang",
     "image_file": "ultimate-force.jpg",
     "set_id": "dm-01"
   },
@@ -2141,7 +2141,7 @@
     "id": "S6/110",
     "rarity": "Super Rare",
     "illustrator": "Tsutomu Kawade",
-    "flavor": "\"If I were to send him to the field, he would overwhelm the enemy in an instant. Where is the fun in that?\" â€”Ballom, Master of Death",
+    "flavor": "\"If I were to send him to the field, he would overwhelm the enemy in an instant. Where is the fun in that?\" —Ballom, Master of Death",
     "image_file": "zagaan-knight-of-darkness.jpg",
     "set_id": "dm-01"
   }

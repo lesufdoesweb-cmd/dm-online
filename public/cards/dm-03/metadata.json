@@ -264,7 +264,7 @@
     "id": "S5/55",
     "rarity": "Super Rare",
     "illustrator": "Yoshio Sugiura",
-    "flavor": "\"He's doing more damage to the forest than the Parasite Worms! Are you sure he's on our side?\" â€”Fighter Dual Fang",
+    "flavor": "\"He's doing more damage to the forest than the Parasite Worms! Are you sure he's on our side?\" —Fighter Dual Fang",
     "image_file": "earthstomp-giant.webp",
     "set_id": "dm-03"
   },
@@ -306,7 +306,7 @@
       "Fire"
     ],
     "cost": 3,
-    "name": "adExplosive Dude Joe",
+    "name": "Explosive Dude Joe",
     "power": "3000",
     "subtypes": [
       "Human"
@@ -415,12 +415,12 @@
     "subtypes": [
       "Giant Insect"
     ],
-    "text": "Evolutionâ€”Put on one of your Giant Insects.\nWhenever another of your nature creatures would be put into your graveyard from the battle zone, put it into your mana zone instead.",
+    "text": "Evolution—Put on one of your Giant Insects.\nWhenever another of your nature creatures would be put into your graveyard from the battle zone, put it into your mana zone instead.",
     "type": "Creature",
     "id": "47/55",
     "rarity": "Very Rare",
     "illustrator": "Katsuya",
-    "flavor": "\"But I don't wanna be a tree!\" â€”Fear Fang",
+    "flavor": "\"But I don't wanna be a tree!\" —Fear Fang",
     "image_file": "gigamantis.webp",
     "set_id": "dm-03"
   },
@@ -471,7 +471,7 @@
     "subtypes": [
       "Ghost"
     ],
-    "text": "Evolutionâ€”Put on one of your Ghosts.\nWhenever another of your darkness creatures would be put into your graveyard from the battle zone, you may return it to your hand instead.",
+    "text": "Evolution—Put on one of your Ghosts.\nWhenever another of your darkness creatures would be put into your graveyard from the battle zone, you may return it to your hand instead.",
     "type": "Creature",
     "id": "29/55",
     "rarity": "Very Rare",
@@ -528,7 +528,7 @@
     "subtypes": [
       "Leviathan"
     ],
-    "text": "Evolutionâ€”Put on one of your Leviathans.\nYour other water creatures in the battle zone can't be blocked.\nDouble breaker (This creature breaks 2 shields.)",
+    "text": "Evolution—Put on one of your Leviathans.\nYour other water creatures in the battle zone can't be blocked.\nDouble breaker (This creature breaks 2 shields.)",
     "type": "Creature",
     "id": "18/55",
     "rarity": "Very Rare",
@@ -552,7 +552,7 @@
     "id": "4/55",
     "rarity": "Common",
     "illustrator": "Ryoya Yuki",
-    "flavor": "\"Vizier of Brilliance, arise. Your fangs are swords of cleansing.\" â€”Hanusa, Radiance Elemental",
+    "flavor": "\"Vizier of Brilliance, arise. Your fangs are swords of cleansing.\" —Hanusa, Radiance Elemental",
     "image_file": "lena-vizier-of-brilliance.webp",
     "set_id": "dm-03"
   },
@@ -567,7 +567,7 @@
     "id": "19/55",
     "rarity": "Common",
     "illustrator": "Akifumi Yamamoto",
-    "flavor": "\"Let's find out if your brain is ticklish.\" â€”Legendary Bynor",
+    "flavor": "\"Let's find out if your brain is ticklish.\" —Legendary Bynor",
     "image_file": "liquid-scope.webp",
     "set_id": "dm-03"
   },
@@ -863,7 +863,7 @@
     "subtypes": [
       "Initiate"
     ],
-    "text": "Evolutionâ€”Put on one of your Initiates.\nEach of your other light creatures in the battle zone has \"blocker.\" (Whenever one of your opponent's creatures attacks, you may tap a creature that has \"blocker\" to stop the attack. Then the 2 creatures battle.)",
+    "text": "Evolution—Put on one of your Initiates.\nEach of your other light creatures in the battle zone has \"blocker.\" (Whenever one of your opponent's creatures attacks, you may tap a creature that has \"blocker\" to stop the attack. Then the 2 creatures battle.)",
     "type": "Creature",
     "id": "8/55",
     "rarity": "Very Rare",
@@ -973,7 +973,7 @@
     "id": "10/55",
     "rarity": "Common",
     "illustrator": "Sansyu",
-    "flavor": "\"The danger hasn't passed. But we have.\" â€”Miar, Comet Elemental",
+    "flavor": "\"The danger hasn't passed. But we have.\" —Miar, Comet Elemental",
     "image_file": "sundrop-armor.webp",
     "set_id": "dm-03"
   },
@@ -1011,7 +1011,7 @@
     "id": "11/55",
     "rarity": "Common",
     "illustrator": "Naoki Saito",
-    "flavor": "\"What will it do if it finds the sunlight?\" â€”Bloody Squito",
+    "flavor": "\"What will it do if it finds the sunlight?\" —Bloody Squito",
     "image_file": "ur-pale-seeker-of-sunlight.webp",
     "set_id": "dm-03"
   },
@@ -1053,17 +1053,17 @@
       "Fire"
     ],
     "cost": 7,
-    "name": "Ãœberdragon Jabaha",
+    "name": "Überdragon Jabaha",
     "power": "11000+",
     "subtypes": [
       "Armored Dragon"
     ],
-    "text": "Evolutionâ€”Put on one of your Armored Dragons. Each of your other fire creatures in the battle zone has \"power attacker +2000.\" (While attacking, a creature that has \"power attacker +2000\" gets +2000 power.)\nDouble breaker (This creature breaks 2 shields.)",
+    "text": "Evolution—Put on one of your Armored Dragons. Each of your other fire creatures in the battle zone has \"power attacker +2000.\" (While attacking, a creature that has \"power attacker +2000\" gets +2000 power.)\nDouble breaker (This creature breaks 2 shields.)",
     "type": "Creature",
     "id": "43/55",
     "rarity": "Very Rare",
     "illustrator": "Masaki Hirooka",
-    "image_file": "ãœberdragon-jabaha.webp",
+    "image_file": "uberdragon-jabaha.webp",
     "set_id": "dm-03"
   }
 ]

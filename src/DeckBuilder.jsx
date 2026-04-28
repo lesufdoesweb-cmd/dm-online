@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Preview } from "./components.jsx";
 import { FORMATS } from "./engine.js";
 
-const DeckBuilder = ({ cards, initialDeck, onSave, onExit, readOnly = false }) => {
-    const [selectedFormat, setSelectedFormat] = useState(initialDeck?.format || 'CLASSIC');
+const DeckBuilder = ({ cards, initialDeck, onSave, onExit, readOnly = false, currentFormat }) => {
+    const [selectedFormat, setSelectedFormat] = useState(initialDeck?.format || currentFormat || 'CLASSIC');
     const [deck, setDeck] = useState(() => {
         if (!initialDeck) return [];
         const full = [];
@@ -16,11 +16,13 @@ const DeckBuilder = ({ cards, initialDeck, onSave, onExit, readOnly = false }) =
         return full;
     });
     const [filter, setFilter] = useState("All");
+    const [selectedSet, setSelectedSet] = useState("All"); // Set filter state
     const [preview, setPreview] = useState(null);
     const [deckName, setDeckName] = useState(initialDeck?.name || "Custom Deck");
 
     const addCard = (card) => {
         if (readOnly || deck.length >= 40) return;
+        if (['dm-05', 'dm-06'].includes(card.set_id)) return; // Disabled for now
         const count = deck.filter(c => c.name === card.name).length;
         if (count >= 4) return;
         setDeck([...deck, { ...card, instanceId: Math.random().toString(36).substr(2, 9) }]);
@@ -33,7 +35,16 @@ const DeckBuilder = ({ cards, initialDeck, onSave, onExit, readOnly = false }) =
 
     const formatInfo = FORMATS[selectedFormat];
     const cardsInFormat = cards.filter(c => formatInfo.sets.includes(c.set_id || 'dm-01'));
-    const filteredCards = filter === "All" ? cardsInFormat : cardsInFormat.filter(c => c.civilizations?.includes(filter));
+    
+    // Logic: If "All" is selected, hide Coming Soon sets (dm-05, dm-06)
+    // If a specific set is selected, show it even if it's Coming Soon
+    const setFiltered = selectedSet === "All" 
+        ? cardsInFormat.filter(c => !['dm-05', 'dm-06'].includes(c.set_id))
+        : cardsInFormat.filter(c => c.set_id === selectedSet);
+
+    const filteredCards = filter === "All" 
+        ? setFiltered 
+        : setFiltered.filter(c => c.civilizations?.includes(filter));
     
     // In readOnly mode, we show only the cards in the deck
     const displayCards = readOnly ? [...new Set(deck.map(c => c.name))].map(name => deck.find(c => c.name === name)) : filteredCards;
@@ -65,10 +76,22 @@ const DeckBuilder = ({ cards, initialDeck, onSave, onExit, readOnly = false }) =
                         )}
                     </div>
                     {!readOnly && (
-                        <div style={{display:'flex', gap:6}}>
-                            {["All", "Light", "Water", "Darkness", "Fire", "Nature"].map(c => (
-                                <button key={c} className={`civ-filter-btn ${filter === c ? 'active' : ''}`} onClick={() => setFilter(c)}>{c}</button>
-                            ))}
+                        <div style={{display:'flex', flexDirection:'column', gap:8, alignItems:'flex-end'}}>
+                            <div style={{display:'flex', gap:6}}>
+                                {["All", "Light", "Water", "Darkness", "Fire", "Nature"].map(c => (
+                                    <button key={c} className={`civ-filter-btn ${filter === c ? 'active' : ''}`} onClick={() => setFilter(c)}>{c}</button>
+                                ))}
+                            </div>
+                            <div style={{display:'flex', gap:4}}>
+                                <span style={{fontSize:10, opacity:0.5, alignSelf:'center', marginRight:4}}>SETS:</span>
+                                {["All", ...formatInfo.sets].map(s => (
+                                    <button key={s} className={`set-filter-btn ${selectedSet === s ? 'active' : ''}`} 
+                                            style={{fontSize:9, padding:'2px 6px', background: selectedSet === s ? 'var(--gold)' : 'rgba(255,255,255,0.1)', border:'none', color: selectedSet === s ? 'black' : 'white', borderRadius:4, cursor:'pointer'}}
+                                            onClick={() => setSelectedSet(s)}>
+                                        {s.toUpperCase()}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
                     )}
                     {readOnly && <button className="btn-secondary" onClick={onExit}>Back to Lobby</button>}
@@ -76,13 +99,15 @@ const DeckBuilder = ({ cards, initialDeck, onSave, onExit, readOnly = false }) =
                 <div className="db-catalog-grid">
                     {displayCards.map(c => {
                         const count = deck.filter(x => x.name === c.name).length;
+                        const isDisabled = ['dm-05', 'dm-06'].includes(c.set_id);
                         return (
-                            <div key={`${c.set_id}-${c.id}`} className={`card card--md ${!readOnly && count >= 4 ? 'limit-reached' : ''}`}
-                                 onClick={() => addCard(c)}
+                            <div key={`${c.set_id}-${c.id}`} className={`card card--md ${!readOnly && count >= 4 ? 'limit-reached' : ''} ${isDisabled ? 'card--disabled' : ''}`}
+                                 onClick={() => !isDisabled && addCard(c)}
                                  onMouseEnter={() => setPreview(c)}
                                  onMouseLeave={() => setPreview(null)}
-                                 style={{cursor: readOnly ? 'default' : 'pointer'}}>
+                                 style={{cursor: (readOnly || isDisabled) ? 'default' : 'pointer', opacity: isDisabled ? 0.4 : 1, filter: isDisabled ? 'grayscale(1)' : 'none'}}>
                                 <img src={`./cards/${c.set_id || 'dm-01'}/${c.image_file}`} alt={c.name} />
+                                {isDisabled && <div style={{position:'absolute', top:'50%', left:'50%', transform:'translate(-50%, -50%) rotate(-30deg)', background:'red', color:'white', padding:'2px 8px', fontSize:10, fontWeight:900, borderRadius:4, boxShadow:'0 0 10px black', whiteSpace:'nowrap'}}>COMING SOON</div>}
                                 {count > 0 && <div className="power-gem" style={{background:'var(--gold)', color:'black', top: -5, right: -5, bottom: 'auto', borderRadius: '50%', width: 22}}>{count}</div>}
                             </div>
                         );

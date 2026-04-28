@@ -144,27 +144,6 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
         }
     }, [net]);
 
-    const triggerTapAbility = useCallback((card) => {
-        if (!gsR.current.turn) return;
-        if (card.summonedThisTurn && !CardEngine.parseAbilities(card, gsR.current.battleZone, gsR.current.mana).speedAttacker) {
-            toast("Summoning sickness!", "error");
-            return;
-        }
-        if (card.isTapped) {
-            toast("Already tapped!", "error");
-            return;
-        }
-
-        setGs(p => ({
-            ...p,
-            battleZone: p.battleZone.map(c => c.instanceId === card.instanceId ? { ...c, isTapped: true } : c)
-        }));
-
-        addLog(`${card.name} uses its Tap ability!`, 'effect', false, card);
-        triggerEffect("TAP_EFFECTS", card);
-        net.send("ACTION", { action: "TAP_TARGET", details: { targetId: card.instanceId } });
-    }, [net, toast, triggerEffect, addLog]);
-
     const triggerEffect = useCallback((type, card, extraParams = {}) => {
         const map = window.GAME_EFFECTS[type];
         if (!map) return;
@@ -199,6 +178,29 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
             });
         }
     }, [net, toast, addLog]);
+
+    const triggerTapAbility = useCallback((card) => {
+        if (!gsR.current.turn) return;
+        const abs = CardEngine.parseAbilities(card, gsR.current.battleZone, gsR.current.mana);
+        if (card.summonedThisTurn && !abs.speedAttacker && !card.canAttackPlayersOverride) {
+            toast("Summoning sickness!", "error");
+            return;
+        }
+        if (card.isTapped) {
+            toast("Already tapped!", "error");
+            return;
+        }
+
+        setGs(p => ({
+            ...p,
+            battleZone: p.battleZone.map(c => c.instanceId === card.instanceId ? { ...c, isTapped: true } : c)
+        }));
+
+        addLog(`${card.name} uses its Tap ability!`, 'effect', false, card);
+        triggerEffect("TAP_EFFECTS", card);
+        net.send("ACTION", { action: "TAP_TARGET", details: { targetId: card.instanceId } });
+    }, [net, toast, triggerEffect, addLog]);
+
 
     const triggerGlobalEffect = useCallback((type, eventData) => {
         const map = GLOBAL_TRIGGERS[type];
@@ -314,6 +316,14 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
 
     useEffect(() => { broadcast(gs); }, [gs.hand.length, gs.mana, gs.battleZone, gs.shields.length, gs.graveyard.length, broadcast]);
 
+    useEffect(() => {
+        if (net.isOpen && isHost) {
+            setTimeout(() => {
+                net.send("ACTION", { action: "SYNC_TURN", details: { hostTurn: gsR.current.turn } });
+            }, 500);
+        }
+    }, [net.isOpen, isHost, net]);
+
     const play = useCallback((card, target, targetId) => {
         if (isLocked) return;
         
@@ -332,7 +342,7 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
             return;
         }
 
-        actualCost = CardEngine.calculateCost(card, gsR.current.battleZone);
+        actualCost = CardEngine.getCost(card, gsR.current.battleZone);
         if (avail < actualCost) { toast(`Not enough mana! (Need ${actualCost})`, "error"); return; }
 
         setGs(p => {
@@ -375,6 +385,7 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                 setGs(p => ({ ...p, gameOver: 'win' }));
             } else {
                 const actualBreaks = Math.min(shieldsToBreak, oppShieldCount);
+                const abs = CardEngine.parseAbilities(atk, gsR.current.battleZone, gsR.current.mana);
                 for (let i = 0; i < actualBreaks; i++) {
                     setTimeout(() => { 
                         if (abs.incinerate) {
@@ -384,9 +395,8 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                             net.send("ACTION", { action: "SHIELD_BROKEN" }); 
                         }
                         setGs(p => ({ ...p, shieldsBrokenThisTurn: p.shieldsBrokenThisTurn + 1 }));
-                        const absActual = CardEngine.parseAbilities(atk, gsR.current.battleZone, gsR.current.mana);
-                        if (absActual.drawOnShieldBreak) { draw(); toast(`${atk.name} Survivor: Draw a card!`); }
-                        if (absActual.discardOnShieldBreak) { net.send("ACTION", { action: "DISCARD_RANDOM" }); toast(`${atk.name} Survivor: Opponent discards a card!`); }
+                        if (abs.drawOnShieldBreak) { draw(); toast(`${atk.name} Survivor: Draw a card!`); }
+                        if (abs.discardOnShieldBreak) { net.send("ACTION", { action: "DISCARD_RANDOM" }); toast(`${atk.name} Survivor: Opponent discards a card!`); }
                         if (gsR.current.turnEffects.miracleQuest) {
                             setTimeout(() => { draw(); draw(); }, 200);
                             toast("Miracle Quest: Draw 2 cards!");
@@ -419,14 +429,14 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
             }
             const defPower = CardEngine.getCurrentPower(opp, s.opponent.battleZone, s.opponent.mana, s.opponent.shields) + (opp.powerBonus || 0);
 
+            const atkAbs = CardEngine.parseAbilities(atk, s.battleZone, s.mana);
+            const defAbs = CardEngine.parseAbilities(opp, s.opponent.battleZone, s.opponent.mana);
+
             const win = atkPower > defPower;
             const lose = atkPower < defPower;
             const tie = atkPower === defPower;
-            const attackerHasSlayer = CardEngine.hasSlayer(atk) || (isBlocked && gsR.current.turnEffects.creepingPlague);
-            const defenderHasSlayer = CardEngine.hasSlayer(opp);
-
-            const atkAbs = CardEngine.parseAbilities(atk, s.battleZone, s.mana);
-            const defAbs = CardEngine.parseAbilities(opp, s.opponent.battleZone, s.opponent.mana);
+            const attackerHasSlayer = atkAbs.slayer || (isBlocked && gsR.current.turnEffects.creepingPlague);
+            const defenderHasSlayer = defAbs.slayer;
 
             if (win || tie || attackerHasSlayer) {
                 addLog(`${opp.name} was destroyed`, 'battle', false, opp);
@@ -472,9 +482,9 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                 toast("Avalanche Giant: Shield broken because blocked!");
             }
 
-            if (isBlocked && (opp.name === "Spiral Grass" || defAbs.untapAfterBattle)) {
+            if (isBlocked && defAbs.untapAfterBattle) {
                 setTimeout(() => net.send("ACTION", { action: "UNTAP_TARGET", details: { targetId: tid } }), 600);
-                if (defAbs.untapAfterBattle) toast(`${opp.name}: Untapped after battle!`);
+                toast(`${opp.name}: Untapped after battle!`);
             }
 
             if (tie) toast("Tie! Both destroyed!", "error");
@@ -497,7 +507,8 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
 
     const attack = useCallback((atk, tgt, tid) => {
         if (isLocked) return;
-        if (atk.summonedThisTurn) { toast("Summoning sickness!", "error"); return; }
+        const abs = CardEngine.parseAbilities(atk, gsR.current.battleZone, gsR.current.mana);
+        if (atk.summonedThisTurn && !abs.speedAttacker && !atk.canAttackPlayersOverride) { toast("Summoning sickness!", "error"); return; }
         if (atk.isTapped) { toast("Already tapped", "error"); return; }
         if (!CardEngine.canAttack(atk, gsR.current.battleZone, gsR.current.opponent.battleZone, gsR.current.mana)) { toast("This creature can't attack!", "error"); return; }
 
@@ -591,6 +602,11 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                     };
                 });
                 toast("Creature returned to top of deck!", "error");
+            }
+            if (action === "SYNC_TURN") {
+                if (!isHost) {
+                    setGs(p => ({ ...p, turn: !details.hostTurn }));
+                }
             }
             if (action === "FREEZE_TARGET") {
                 setGs(p => ({
@@ -722,10 +738,17 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                     if (!ns.length) return { ...prev, gameOver: 'lose' };
                     const c = ns.pop();
                     if (c.text?.toLowerCase().includes("shield trigger")) {
-                        const hasGigabolver = [...gsR.current.battleZone, ...gsR.current.opponent.battleZone].some(x => x.name === "Gigabolver");
+                        const allBz = [...gsR.current.battleZone, ...gsR.current.opponent.battleZone];
+                        const hasGigabolver = allBz.some(x => x.name === "Gigabolver");
+                        const hasFuReil = allBz.some(x => x.name === "Fu Reil, Seeker of Storms");
+                        const isLight = c.civilizations?.includes('Light');
                         const isDarkness = c.civilizations?.includes('Darkness');
-                        if (hasGigabolver && isDarkness) {
+
+                        if (hasGigabolver && isLight) {
                             addLog(`Gigabolver prevented shield trigger for ${c.name}`, 'effect');
+                            setTimeout(() => setGs(s => ({ ...s, hand: [...s.hand, c] })), 800);
+                        } else if (hasFuReil && isDarkness) {
+                            addLog(`Fu Reil prevented shield trigger for ${c.name}`, 'effect');
                             setTimeout(() => setGs(s => ({ ...s, hand: [...s.hand, c] })), 800);
                         } else {
                             setTrigger(c);
@@ -1095,7 +1118,8 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
 
     const onArrowDrop = useCallback((card, pt) => {
         if (isLocked) return;
-        if (card.summonedThisTurn) { toast("Summoning sickness!", "error"); return; }
+        const abs = CardEngine.parseAbilities(card, gsR.current.battleZone, gsR.current.mana);
+        if (card.summonedThisTurn && !abs.speedAttacker && !card.canAttackPlayersOverride) { toast("Summoning sickness!", "error"); return; }
         if (card.isTapped) { toast("Already tapped", "error"); return; }
         if (!CardEngine.canAttack(card, gsR.current.battleZone, gsR.current.opponent.battleZone, gsR.current.mana)) { toast("Can't attack!", "error"); return; }
 
@@ -1116,6 +1140,10 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                         const opp = gsR.current.opponent.battleZone.find(c => c.instanceId === tid);
                         if (opp) {
                             const canAtkUntapped = CardEngine.canAttackUntapped(card, gsR.current.battleZone, gsR.current.mana, opp);
+                            if (!CardEngine.canBeAttacked(card, opp, gsR.current.battleZone, gsR.current.opponent.battleZone)) {
+                                toast(`${opp.name} can't be attacked by this creature!`, "error");
+                                return;
+                            }
                             if (!opp.isTapped && !opp.chaosStrikeTarget && !canAtkUntapped) {
                                 toast("Can only attack tapped creatures", "error");
                                 return;
@@ -1135,7 +1163,16 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
     useEffect(() => {
         if (initializedRef.current) return;
 
-        const opponentId = conn?.peer;
+        let opponentId = conn?.peer;
+        if (!opponentId) {
+            try {
+                const activeGame = JSON.parse(localStorage.getItem('dm_active_game'));
+                if (activeGame && activeGame.opponentId) {
+                    opponentId = activeGame.opponentId;
+                }
+            } catch (e) {}
+        }
+
         if (opponentId) {
             const savedGs = localStorage.getItem(`dm_gs_${opponentId}`);
             const savedLogs = localStorage.getItem(`dm_logs_${opponentId}`);
