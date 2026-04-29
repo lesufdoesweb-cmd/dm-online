@@ -124,7 +124,7 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
         }
     }, [targeting]);
 
-    const hover = useCallback(c => { if (prevT.current) clearTimeout(prevT.current); prevT.current = setTimeout(() => setPreview(c), 300); }, []);
+    const hover = useCallback(c => { if (prevT.current) clearTimeout(prevT.current); prevT.current = setTimeout(() => setPreview(c), 50); }, []);
     const unhover = useCallback(() => { if (prevT.current) clearTimeout(prevT.current); prevT.current = null; setPreview(null); }, []);
 
     const isLocked = !gs.turn || gs.gameOver || waitingForOpponent || !!waitingForBlock || !!searchingDeck || !!targeting || !!pendingDestruction || !!pendingDecision || !!trigger;
@@ -324,34 +324,52 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
         }
     }, [net.isOpen, isHost, net]);
 
+    const playingRef = useRef(false);
     const play = useCallback((card, target, targetId) => {
-        if (isLocked) return;
+        if (isLocked || playingRef.current) return;
         
         if (CardEngine.isSpellRestricted(card, gsR.current.battleZone, gsR.current.opponent.battleZone)) {
             toast("Alcadeias prevents you from casting this spell!", "error");
             return;
         }
 
-        let actualCost = card.cost;
-        const isSpell = CardEngine.isSpell(card);
-        const avail = gsR.current.mana.filter(m => !m.isTapped).length;
-
         if (target === "mana") {
-            setGs(p => ({ ...p, hand: p.hand.filter(c => c.instanceId !== card.instanceId), mana: [...p.mana, { ...card, isTapped: false }], hasPlacedMana: true }));
+            setGs(p => {
+                if (!p.hand.some(c => c.instanceId === card.instanceId)) return p;
+                return { ...p, hand: p.hand.filter(c => c.instanceId !== card.instanceId), mana: [...p.mana, { ...card, isTapped: false }], hasPlacedMana: true };
+            });
             addLog(`Placed ${card.name} in mana zone`, 'mana', false, card);
             return;
         }
 
-        actualCost = CardEngine.getCost(card, gsR.current.battleZone);
-        if (avail < actualCost) { toast(`Not enough mana! (Need ${actualCost})`, "error"); return; }
+        playingRef.current = true;
+        let success = false;
+        const isSpell = CardEngine.isSpell(card);
 
         setGs(p => {
-            const newMana = [...p.mana];
-            let tapped = 0;
-            for (let i = 0; i < newMana.length && tapped < actualCost; i++) {
-                if (!newMana[i].isTapped) { newMana[i].isTapped = true; tapped++; }
+            // Atomic check inside the state update
+            if (!p.hand.some(c => c.instanceId === card.instanceId)) return p;
+            
+            const avail = p.mana.filter(m => !m.isTapped).length;
+            const actualCost = CardEngine.getCost(card, p.battleZone);
+            
+            if (avail < actualCost) {
+                // We can't toast inside setGs, so we rely on the outer check or just return
+                return p;
             }
+
+            success = true;
+            let tapped = 0;
+            const newMana = p.mana.map(m => {
+                if (!m.isTapped && tapped < actualCost) {
+                    tapped++;
+                    return { ...m, isTapped: true };
+                }
+                return m;
+            });
+
             const newHand = p.hand.filter(c => c.instanceId !== card.instanceId);
+            
             if (target === "evolution") {
                 const filteredBz = p.battleZone.filter(c => c.instanceId !== targetId);
                 return { ...p, hand: newHand, mana: newMana, battleZone: [...filteredBz, { ...card, summonedThisTurn: false, isTapped: false, powerBonus: 0 }] };
@@ -360,15 +378,24 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
             return { ...p, hand: newHand, mana: newMana, battleZone: [...p.battleZone, { ...card, summonedThisTurn: true, isTapped: false, powerBonus: 0 }] };
         });
 
-        if (isSpell) {
-            addLog(`Cast ${card.name}`, 'spell', false, card);
-            triggerEffect("SPELL_EFFECTS", card);
+        if (success) {
+            if (isSpell) {
+                addLog(`Cast ${card.name}`, 'spell', false, card);
+                triggerEffect("SPELL_EFFECTS", card);
+            } else {
+                addLog(`Summoned ${card.name}`, 'summon', false, card);
+                triggerEffect("ETB_EFFECTS", card);
+                triggerGlobalEffect("ON_SUMMON", { card });
+                net.send("ACTION", { action: "GLOBAL_EVENT", details: { type: "ON_SUMMON", card } });
+            }
         } else {
-            addLog(`Summoned ${card.name}`, 'summon', false, card);
-            triggerEffect("ETB_EFFECTS", card);
-            triggerGlobalEffect("ON_SUMMON", { card });
-            net.send("ACTION", { action: "GLOBAL_EVENT", details: { type: "ON_SUMMON", card } });
+            // Re-check why it failed outside setGs to show toast
+            const avail = gsR.current.mana.filter(m => !m.isTapped).length;
+            const actualCost = CardEngine.getCost(card, gsR.current.battleZone);
+            if (avail < actualCost) toast(`Not enough mana! (Need ${actualCost})`, "error");
         }
+        
+        setTimeout(() => { playingRef.current = false; }, 400);
     }, [isLocked, triggerEffect, triggerGlobalEffect, addLog, toast]);
 
     const resolveAttack = useCallback((atk, tgt, tid, isBlocked) => {
@@ -868,6 +895,10 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                 toast("Creature sent to mana!", "error");
             }
             if (action === "CREATURE_TO_MANA_CHOICE") {
+                if (gsR.current.battleZone.length === 0) {
+                    toast("No creatures to send to mana!", "info");
+                    return;
+                }
                 setTargeting({
                     message: "Select one of your creatures to send to mana",
                     count: 1,
@@ -946,10 +977,15 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                 }
             }
             if (action === "DESTROY_MANA_CHOICE") {
+                if (gsR.current.mana.length === 0) {
+                    toast("No mana to destroy!", "info");
+                    return;
+                }
+                const count = Math.min(details.count, gsR.current.mana.length);
                 setSearchingDeck({
-                    message: `Select ${details.count} of your mana to destroy`,
+                    message: `Select ${count} of your mana to destroy`,
                     customList: gsR.current.mana,
-                    count: details.count,
+                    count: count,
                     exact: true,
                     onComplete: (selected) => {
                         const cards = Array.isArray(selected) ? selected : [selected];
@@ -967,6 +1003,10 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                 toast("Forced to sacrifice!", "error");
             }
             if (action === "FORCE_DESTROY_OWN_CHOICE") {
+                if (gsR.current.battleZone.length === 0) {
+                    toast("No creatures to sacrifice!", "info");
+                    return;
+                }
                 setTargeting({
                     message: "Select one of your creatures to destroy",
                     count: 1,

@@ -53,21 +53,21 @@ export const Preview = ({ card }) => {
                         {card.subtypes && card.subtypes.length > 0 && (
                             <div style={{display:'flex', flexWrap:'wrap', gap:4, justifyContent:'center', marginTop:10}}>
                                 {card.subtypes.map((s, i) => (
-                                    <span key={i} style={{fontSize:10,fontWeight:900,padding:'2px 8px',background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.2)',borderRadius:100,color:'var(--cream)',textTransform:'uppercase'}}>{s}</span>
+                                    <span key={i} className="race-tag" style={{fontSize:10,fontWeight:900,padding:'2px 8px',background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.2)',borderRadius:100,color:'var(--cream)',textTransform:'uppercase'}}>{s}</span>
                                 ))}
                             </div>
                         )}
                         {card.civilizations && (
                             <div style={{display:'flex', flexWrap:'wrap', gap:4, justifyContent:'center', marginTop:6}}>
                                 {card.civilizations.map((c, i) => (
-                                    <span key={i} style={{fontSize:9,fontWeight:900,padding:'1px 8px',background:'rgba(0,0,0,0.3)',border:`1px solid ${civColors[c] || '#fff'}`,borderRadius:4,color:civColors[c] || '#fff',textTransform:'uppercase'}}>{c}</span>
+                                    <span key={i} className="civ-tag" style={{fontSize:9,fontWeight:900,padding:'1px 8px',background:'rgba(0,0,0,0.3)',border:`1px solid ${civColors[c] || '#fff'}`,borderRadius:4,color:civColors[c] || '#fff',textTransform:'uppercase'}}>{c}</span>
                                 ))}
                             </div>
                         )}
                         {abilityTags.length > 0 && (
                             <div style={{display:'flex', flexWrap:'wrap', gap:3, justifyContent:'center', marginTop:10}}>
                                 {abilityTags.map((tag, i) => (
-                                    <span key={i} style={{fontSize:8,fontWeight:800,padding:'2px 6px',background:'rgba(255,214,68,0.1)',border:'1px solid rgba(255,214,68,0.2)',borderRadius:4,color:'var(--gold)',textTransform:'uppercase',letterSpacing:'0.05em'}}>{tag}</span>
+                                    <span key={i} className="ability-tag" style={{fontSize:8,fontWeight:800,padding:'2px 6px',background:'rgba(255,214,68,0.1)',border:'1px solid rgba(255,214,68,0.2)',borderRadius:4,color:'var(--gold)',textTransform:'uppercase',letterSpacing:'0.05em'}}>{tag}</span>
                                 ))}
                             </div>
                         )}

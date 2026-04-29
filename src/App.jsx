@@ -3,7 +3,11 @@ import Peer from 'peerjs';
 import Gun from 'gun/gun';
 import { DECKS } from './decks.js';
 import GameBoard from './GameBoard.jsx';
+import MobileGameBoard from './MobileGameBoard.jsx';
 import DeckBuilder from './DeckBuilder.jsx';
+import MobileLobby from './MobileLobby.jsx';
+import DesktopLobby from './DesktopLobby.jsx';
+import LobbyModals from './LobbyModals.jsx';
 import { FORMATS } from './engine.js';
 
 const gun = Gun({ peers: ["//dm-online.fun/gun"], localStorage: true });
@@ -32,6 +36,13 @@ const App = () => {
     const [viewOnlyDeck, setViewOnlyDeck] = useState(null);
     const [reconnectPending, setReconnectPending] = useState(null);
     const [currentFormat, setCurrentFormat] = useState(() => localStorage.getItem('dm_preferred_format') || 'CLASSIC');
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 932);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth <= 932);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const toast = useCallback((msg, type = "info") => {
         const id = Date.now();
@@ -255,7 +266,10 @@ const App = () => {
 
     if (loading || !cards.length) return <div className="loading"><div className="ring" /><p>Loading...</p></div>;
 
-    if (view === "game") return <GameBoard cards={cards} deck={communityDecks[selIdx]} conn={conn} isHost={isHost} onLeave={handleLeave} />;
+    if (view === "game") {
+        const BoardComponent = isMobile ? MobileGameBoard : GameBoard;
+        return <BoardComponent cards={cards} deck={communityDecks[selIdx]} conn={conn} isHost={isHost} onLeave={handleLeave} />;
+    }
     
     if (view === "deckbuilder") {
         const initialDeck = editingDeckIdx !== null ? communityDecks[editingDeckIdx] : viewOnlyDeck;
@@ -273,133 +287,20 @@ const App = () => {
         />;
     }
 
+    const lobbyProps = {
+        code, playerName, setPlayerName, isReady, setIsReady, waitingPlayers, 
+        join, communityDecks, selIdx, setSelIdx, setShowDeckModal, showDeckModal,
+        currentFormat, setCurrentFormat, setIsNaming, isNaming, jc, setJc, setView,
+        setEditingDeckIdx, setViewOnlyDeck, deleteDeck, toast, reconnectPending,
+        handleResume, handleDiscard, pendingRequest, acceptRequest, setPendingRequest,
+        toasts
+    };
+
     return (
-        <div className="lobby">
-            {reconnectPending && (
-                <div className="trigger-modal" style={{zIndex: 6000}}>
-                    <div className="decision-box" style={{left:'50%', top:'50%', transform:'translate(-50%, -50%)'}}>
-                        <h2>RESUME GAME?</h2>
-                        <div className="desc">An active duel with <strong>{reconnectPending.opponentId.substring(3, 9)}...</strong> was found. Would you like to reconnect?</div>
-                        <div className="actions">
-                            <button className="btn-primary" onClick={handleResume}>Resume</button>
-                            <button className="btn-secondary" onClick={handleDiscard}>Discard</button>
-                        </div>
-                    </div>
-                </div>
-            )}
-            {isNaming && (
-                <div className="trigger-modal" style={{zIndex: 4000}}>
-                    <div className="decision-box" style={{left:'50%', top:'50%', transform:'translate(-50%, -50%)'}}>
-                        <h2>CHANGE NAME</h2>
-                        <input className="lobby-input" value={playerName} onChange={e => setPlayerName(e.target.value)} autoFocus />
-                        <div className="actions">
-                            <button className="btn-primary" onClick={() => { localStorage.setItem("dm_player_name", playerName); setIsNaming(false); }}>Save</button>
-                        </div>
-                    </div>
-                </div>
-            )}
-            {pendingRequest && (
-                <div className="trigger-modal" style={{zIndex: 4000}}>
-                    <div className="decision-box" style={{left:'50%', top:'50%', transform:'translate(-50%, -50%)'}}>
-                        <h2>DUEL REQUEST</h2>
-                        <div className="desc"><strong>{pendingRequest.name}</strong> wants to duel!</div>
-                        <div className="actions">
-                            <button className="btn-primary" onClick={acceptRequest}>Accept</button>
-                            <button className="btn-secondary" onClick={() => { pendingRequest.conn.send({ type: 'CONNECT_REJECT' }); setPendingRequest(null); }}>Decline</button>
-                        </div>
-                    </div>
-                </div>
-            )}
-            {showDeckModal && (
-                <div className="trigger-modal" style={{zIndex: 5000}}>
-                    <div className="search-container" style={{maxWidth: 1000, height: '80vh', background: 'var(--board-dark)', border: '2px solid var(--gold)', borderRadius: 12, padding: 30, display:'flex', flexDirection:'column'}}>
-                        <div className="search-header"><h2>Community Decks ({FORMATS[currentFormat].name})</h2><button className="btn-secondary" onClick={() => setShowDeckModal(false)}>Close</button></div>
-                        <div className="desc" style={{marginBottom: 20}}>Browse any deck created by the community for the <strong>{FORMATS[currentFormat].name}</strong> format. Your decks are shown first.</div>
-                        <div style={{flex:1, overflowY:'auto', display:'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 15, paddingRight: 10}}>
-                            {communityDecks.filter(d => d.format === currentFormat).sort((a,b) => (a.ownerId === code ? -1 : (b.ownerId === code ? 1 : 0))).map((d) => (
-                                <div key={d.gunId} onClick={() => { setSelIdx(communityDecks.indexOf(d)); setShowDeckModal(false); }} className="deck-pill" style={{ 
-                                    borderColor: communityDecks[selIdx]?.gunId === d.gunId ? 'var(--gold)' : 'rgba(255,255,255,0.1)',
-                                    background: d.ownerId === code ? 'rgba(255,214,68,0.1)' : 'rgba(255,255,255,0.05)'
-                                }}>
-                                    <div className="deck-pill-info">
-                                        <div className="deck-pill-dot" style={{background: `var(--${d.color?.toLowerCase()})`}}></div>
-                                        <span className="deck-pill-name">{d.name}</span>
-                                        <span className="deck-pill-count">⚔️ {d.playedCount || 0}</span>
-                                    </div>
-                                    <div className="deck-pill-actions">
-                                        <button onClick={(e) => { e.stopPropagation(); setViewOnlyDeck(d); setView("deckbuilder"); setShowDeckModal(false); }} className="pill-btn" title="View">👁️</button>
-                                        {d.ownerId === code && (
-                                            <>
-                                                <button onClick={(e) => { e.stopPropagation(); setEditingDeckIdx(communityDecks.indexOf(d)); setView("deckbuilder"); setShowDeckModal(false); }} className="pill-btn pill-btn--edit" title="Edit">✏️</button>
-                                                <button onClick={(e) => deleteDeck(d, e)} className="pill-btn pill-btn--delete" title="Delete">🗑️</button>
-                                            </>
-                                        )}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            )}
-            <div className="toast-layer">{toasts.map(t => (<div key={t.id} className={`toast toast--${t.type}`} style={{animation:'toast-in 0.3s ease-out forwards'}}>{t.type === 'error' ? '⚠️' : '✨'} {t.message}</div>))}</div>
-            <div style={{display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom: 20}}>
-                <div>
-                    <h1 style={{margin: 0}}>Duel<span>Masters</span></h1>
-                    <div className="format-selector">
-                        {Object.values(FORMATS).map(f => (
-                            <button 
-                                key={f.id} 
-                                className={`format-btn ${currentFormat === f.id ? 'active' : ''}`}
-                                onClick={() => {
-                                    setCurrentFormat(f.id);
-                                    localStorage.setItem('dm_preferred_format', f.id);
-                                    const firstInFormat = communityDecks.find(d => d.format === f.id);
-                                    if (firstInFormat) setSelIdx(communityDecks.indexOf(firstInFormat));
-                                    toast(`Switched to ${f.name} format`);
-                                }}
-                            >
-                                {f.name}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-                <div className="player-tag" onClick={() => setIsNaming(true)}><span className="player-tag-label">DUELIST</span><span className="player-tag-name">{playerName} ✏️</span></div>
-            </div>
-            <div className="lobby-grid">
-                <div className="lobby-panel" style={{display:'flex', flexDirection:'column'}}>
-                    <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}><h2>Deck Library</h2><button className="btn-secondary btn-xs" onClick={() => setView("deckbuilder")}>+ New Deck</button></div>
-                    <p className="sub">Top played {FORMATS[currentFormat].name} decks</p>
-                    <div style={{flex:1, overflowY:'auto', display:'flex', flexDirection:'column', gap:8, marginTop:10, paddingRight:5}}>
-                        {communityDecks.filter(d => d.format === currentFormat).slice(0, 8).map((d, i) => (
-                            <div key={d.gunId || i} onClick={() => setSelIdx(communityDecks.indexOf(d))} style={{ padding: '12px 16px', borderRadius: 8, cursor: 'pointer', background: communityDecks[selIdx]?.gunId === d.gunId ? 'rgba(255,214,68,0.15)' : 'rgba(255,255,255,0.03)', border: communityDecks[selIdx]?.gunId === d.gunId ? '1px solid var(--gold)' : '1px solid rgba(255,255,255,0.1)', transition: 'all 0.2s', position: 'relative' }}>
-                                <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}><span style={{fontWeight: 700, color: communityDecks[selIdx]?.gunId === d.gunId ? 'var(--gold)' : 'var(--cream)'}}>{d.name}</span><div style={{display:'flex', alignItems:'center', gap:8}}>
-                                        <button onClick={(e) => { e.stopPropagation(); setViewOnlyDeck(d); setView("deckbuilder"); }} style={{background:'none', border:'none', color:'var(--ice)', cursor:'pointer', fontSize: 10, padding: 4}}>👁️</button><span style={{fontSize: 9, opacity: 0.4}}>⚔️ {d.playedCount || 0}</span><div style={{width:10, height:10, borderRadius:'50%', background: `var(--${d.color?.toLowerCase()})`}}></div></div></div>
-                            </div>
-                        ))}
-                    </div>
-                    <button className="btn-primary" style={{marginTop: 15, width: '100%'}} onClick={() => setShowDeckModal(true)}>Browse All Decks</button>
-                </div>
-                <div className="lobby-panel" style={{display:'flex', flexDirection:'column'}}>
-                    <h2>Manual Connection</h2><p className="sub">Host or join via code</p>
-                    <div style={{marginTop: 15, padding: 12, background: 'rgba(0,0,0,0.2)', borderRadius: 8}}>
-                        <h3 style={{fontSize: 10, color: 'var(--gold)', marginBottom: 8}}>YOUR HOST CODE</h3>
-                        {code ? (<div className="lobby-code-box" style={{padding: '8px 0'}}><span className="lobby-code" style={{fontSize: 14}} onClick={() => { navigator.clipboard.writeText(code); toast("Code copied!"); }}>{code}</span></div>) : <p style={{fontSize: 12}}>Generating...</p>}
-                    </div>
-                    <div style={{marginTop: 15}}><h3 style={{fontSize: 10, color: 'var(--gold)', marginBottom: 8}}>JOIN OPPONENT</h3><div style={{display:'flex', gap: 0}}><input className="lobby-input" style={{fontSize: 12, height: 32, borderRadius: '4px 0 0 4px', borderRight: 'none'}} placeholder="Paste Code..." value={jc} onChange={e => setJc(e.target.value)} /><button className="btn-primary" style={{height: 32, padding: '0 12px', fontSize: 11, borderRadius: '0 4px 4px 0'}} onClick={() => join()}>Connect</button></div></div>
-                    <div style={{marginTop: 'auto', paddingTop: 20, textAlign: 'center'}}>
-                        <h2>Duel Status</h2><button className={`ready-btn ${isReady ? 'ready-btn--active' : ''}`} onClick={() => setIsReady(!isReady)} style={{marginTop: 10, width: '100%'}}>{isReady ? 'READY FOR DUEL' : 'MARK AS READY'}</button>
-                    </div>
-                </div>
-                <div className="lobby-panel" style={{display:'flex', flexDirection:'column'}}>
-                    <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}><h2>Waiting Room</h2><span className="status-dot" style={{background: isReady ? '#4caf50' : '#777'}}></span></div>
-                    <p className="sub">Ready duelists appear here</p>
-                    <div style={{flex:1, overflowY:'auto', display:'flex', flexDirection:'column', gap:8, marginTop:10, paddingRight:5}}>
-                        {waitingPlayers.length === 0 && <div className="empty-text" style={{fontSize:11, opacity:0.4, textAlign:'center', marginTop:20}}>No other duelists ready...</div>}
-                        {waitingPlayers.map((p) => (<div key={p.id} className="player-item"><div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}><span style={{fontWeight: 700}}>{p.name}</span><span style={{fontSize:9, opacity:0.5}}>{p.id.substring(3, 9)}...</span></div><button className="btn-primary btn-xs" style={{marginTop:8, width:'100%', fontSize:10}} onClick={() => join(p.id)}>Challenge</button></div>))}
-                    </div>
-                </div>
-            </div>
-        </div>
+        <>
+            <LobbyModals {...lobbyProps} />
+            {isMobile ? <MobileLobby {...lobbyProps} /> : <DesktopLobby {...lobbyProps} />}
+        </>
     );
 };
 

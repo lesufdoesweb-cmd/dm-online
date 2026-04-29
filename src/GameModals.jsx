@@ -9,7 +9,7 @@ export const SearchOverlay = ({ searchingDeck, setSearchingDeck, gs }) => {
             <div className="search-container">
                 <div className="search-header">
                     <h2>{searchingDeck.message}</h2>
-                    {searchingDeck.isViewOnly && <button className="btn-secondary" onClick={() => setSearchingDeck(null)}>Close</button>}
+                    {(searchingDeck.isViewOnly || searchingDeck.isReveal) && <button className="btn-secondary" onClick={() => setSearchingDeck(null)}>Close</button>}
                     {!searchingDeck.isReveal && !searchingDeck.isViewOnly && <div style={{color:'rgba(255,255,255,0.5)', fontSize:12}}>Pick {searchingDeck.count} card(s)</div>}
                 </div>
                 <div className="search-grid" style={searchingDeck.isReveal ? {display:'flex', justifyContent:'center', alignItems:'center'} : {}}>
@@ -55,6 +55,11 @@ export const SearchOverlay = ({ searchingDeck, setSearchingDeck, gs }) => {
                         }} disabled={searchingDeck.exact ? (searchingDeck.selectedIds || []).length !== searchingDeck.count : (searchingDeck.selectedIds || []).length === 0}>Done Selection ({(searchingDeck.selectedIds || []).length})</button>
                     </div>
                 )}
+                {searchingDeck.isViewOnly && (
+                    <div style={{padding:15, textAlign:'center', borderTop:'1px solid rgba(255,255,255,0.1)'}}>
+                        <button className="btn-primary" onClick={() => setSearchingDeck(null)}>Dismiss</button>
+                    </div>
+                )}
             </div>
         </div>
     );
@@ -75,8 +80,12 @@ export const DecisionModals = ({
             )}
 
             {waitingForOpponent && (
-                <div className="trigger-modal trigger-modal--transparent" style={{ zIndex: 3000 }}>
-                    <div className="targeting-msg" style={{borderColor: 'var(--ice)', boxShadow: '0 0 30px rgba(79,195,247,0.2)'}}>
+                <div className="trigger-modal--blocker" style={{ 
+                    position: 'fixed', inset: 0, zIndex: 10000, 
+                    pointerEvents: 'auto', background: 'rgba(0,0,0,0.2)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}>
+                    <div className="targeting-msg" style={{borderColor: 'var(--ice)', boxShadow: '0 0 30px rgba(79,195,247,0.2)', pointerEvents: 'auto'}}>
                         <div className="loading" style={{height: 'auto', background: 'none', padding: 0}}>
                             <div className="ring" style={{width: 24, height: 24, borderWidth: 2}}></div>
                         </div>
