@@ -113,41 +113,22 @@ export const SPELL_EFFECTS = {
             }
         });
     },
-    "Mana Nexus": ({ card, gsR, setSearchingDeck, setGs, net, toast }) => {
+    "Mana Nexus": ({ gsR, setSearchingDeck, setGs, toast }) => {
         const s = gsR.current;
-        if (card.set_id === 'dm-03') {
-            if (!s.mana.length) return;
-            setSearchingDeck({
-                message: "Mana Nexus (DM-03): Select mana to put into shields",
-                count: 1,
-                customList: s.mana,
-                onComplete: (card) => {
-                    setGs(prev => ({
-                        ...prev,
-                        mana: prev.mana.filter(x => x.instanceId !== card.instanceId),
-                        shields: [...prev.shields, card]
-                    }));
-                    net.send("ACTION", { action: "GRAVE_TO_SHIELD" }); // reuse same action
-                    toast("Mana put into shields!");
-                }
-            });
-        } else {
-            if (!s.graveyard.length) return;
-            setSearchingDeck({
-                message: "Mana Nexus: Select a card from graveyard to put into shields",
-                count: 1,
-                customList: s.graveyard,
-                onComplete: (card) => {
-                    setGs(prev => ({
-                        ...prev,
-                        graveyard: prev.graveyard.filter(x => x.instanceId !== card.instanceId),
-                        shields: [...prev.shields, card]
-                    }));
-                    net.send("ACTION", { action: "GRAVE_TO_SHIELD" });
-                    toast("Card put into shields!");
-                }
-            });
-        }
+        if (!s.mana.length) return;
+        setSearchingDeck({
+            message: "Mana Nexus: Select mana to put into shields",
+            count: 1,
+            customList: s.mana,
+            onComplete: (card) => {
+                setGs(prev => ({
+                    ...prev,
+                    mana: prev.mana.filter(x => x.instanceId !== card.instanceId),
+                    shields: [...prev.shields, card]
+                }));
+                toast("Mana put into shields!");
+            }
+        });
     },
     "Sonic Wing": ({ gsR, setTargeting, setGs, toast }) => {
         if (!gsR.current.battleZone.length) return;

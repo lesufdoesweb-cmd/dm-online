@@ -1037,10 +1037,7 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                 });
                 toast("Mana returned to hand!", "error");
             }
-            if (action === "GRAVE_TO_SHIELD") {
-                setGs(p => ({ ...p, shields: [...p.shields, { name: "Mystery Shield", isFaceDown: true, image_file: "bg.png" }] }));
-                toast("Opponent put a card into shields!", "error");
-            }
+
             if (action === "GLOBAL_EVENT") {
                 triggerGlobalEffect(details.type, { card: details.card });
             }

@@ -1943,3 +1943,47 @@ body {
 .db-layout--readonly .db-catalog-grid {
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
 }
+
+/* ===== MOBILE OPTIMIZATIONS (Landscape) ===== */
+@media (max-width: 932px) {
+    .timeline-sidebar {
+        width: 130px;
+        background: linear-gradient(90deg, rgba(10,6,4,0.98) 0%, rgba(10,6,4,0.8) 100%);
+    }
+    .side-opponent, .side-player {
+        left: 135px;
+        right: 125px;
+    }
+    .game-hud, .opp-hud {
+        width: 120px;
+        right: 4px;
+    }
+    .card--md { width: 100px; height: 140px; }
+    .card--lg { width: 120px; height: 168px; }
+    .card--xl { width: 200px; height: 280px; }
+    
+    .hand-tray { height: 180px; transform: translateY(-100px); }
+    .hand-card:hover { transform: translateY(-40px) scale(1.15) !important; }
+    
+    .battle-row { min-height: 150px; padding: 4px 10px; gap: 6px; }
+    .end-turn-wrap { width: 110px; height: 48px; }
+    .mana-counter { width: 54px; height: 54px; }
+    .mana-counter-text { font-size: 15px; }
+    
+    .shield-gem--self { width: 60px; height: 84px; }
+    .shield-gem--opp { width: 80px; height: 112px; }
+    .mana-pip--player { width: 60px; height: 84px; }
+    .mana-pip--opp { width: 60px; height: 84px; }
+    
+    .decision-box { width: 90%; max-width: 400px; padding: 15px; }
+    .decision-box h2 { font-size: 14px; }
+    .decision-box .desc { font-size: 11px; }
+    
+    .search-overlay { padding: 10px; }
+    .search-container { max-height: 95vh; }
+    .search-header { padding: 10px 15px; }
+    .search-header h2 { font-size: 16px; }
+    .search-grid { padding: 10px; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px; }
+}
+
+

@@ -13,9 +13,11 @@ const GameBoard = (props) => {
         targeting, setTargeting, blockingRequest, setBlockingRequest,
         waitingForOpponent, searchingDeck, setSearchingDeck,
         pendingDecision, setPendingDecision,
+        pendingDestruction, setPendingDestruction,
         logs, showHistory, setShowHistory, isOpponentConnected,
         net, toast, onTargetClick, hover, unhover, isLocked, addLog,
-        triggerEffect, endTurn, ctxAction, arrow, startArrow, oppBzRef, oppShieldRef
+        triggerEffect, endTurn, ctxAction, arrow, startArrow, oppBzRef, oppShieldRef,
+        finishDestruction
     } = useGameLogic(props);
 
     const avail = gs.mana.filter(m => !m.isTapped).length;
@@ -40,7 +42,10 @@ const GameBoard = (props) => {
             <div key={c.instanceId} data-instance-id={c.instanceId}
                  className={`card card--md creature ${isOpponent ? 'creature--opp' : ''} ${c.isTapped ? 'creature--tapped' : ''} ${isTargetable ? 'selectable-glow' : ''} ${hasActiveEffect ? 'active-effect-pulse' : ''}`}
                  onContextMenu={e => !isOpponent && battleCtx(e, c)}
-                 onClick={() => isTargetable ? onTargetClick(c) : null}
+                 onClick={(e) => {
+                     if (isTargetable) onTargetClick(c);
+                     else if (!isOpponent && !isLocked) battleCtx(e, c);
+                 }}
                  onMouseDown={e => canDragAttack && !isTargetable ? startArrow(e, c) : null}
                  onMouseEnter={() => hover(c)} onMouseLeave={unhover}
                  style={{ cursor: isTargetable ? 'crosshair' : (canDragAttack ? 'grab' : (isOpponent ? 'default' : 'pointer')), position: 'relative' }}>
@@ -69,6 +74,7 @@ const GameBoard = (props) => {
     };
 
     const battleCtx = (e, c) => {
+        if (isLocked) return;
         e.preventDefault(); e.stopPropagation(); unhover();
         const canAtk = CardEngine.canAttack(c, gs.battleZone, gs.opponent.battleZone, gs.mana);
         const canAtkPlayer = CardEngine.canAttackPlayer(c, gs.battleZone, gs.mana);
