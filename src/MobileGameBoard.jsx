@@ -79,7 +79,7 @@ const MobileGameBoard = (props) => {
         setCtx({ x, y, items });
     };
 
-    const renderCreature = (c, isOpponent) => {
+    const renderCreature = (c, isOpponent, i, total) => {
         const s = gs;
         const bz = isOpponent ? s.opponent.battleZone : s.battleZone;
         const mz = isOpponent ? s.opponent.mana : s.mana;
@@ -89,9 +89,26 @@ const MobileGameBoard = (props) => {
         const canDragAttack = !isOpponent && !c.isTapped && (!c.summonedThisTurn || CardEngine.parseAbilities(c, bz, mz).speedAttacker) && !isLocked && gs.turn;
         const abs = CardEngine.parseAbilities(c, bz, mz);
 
+        // Squeezing logic
+        const cardWidth = 65;
+        const maxFieldWidth = window.innerWidth - 380; // Adjusted for zones and padding
+        const baseGap = 12; // More space as requested
+        
+        const requiredWidth = total * cardWidth + (total - 1) * baseGap;
+        let style = { transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)' };
+        
+        if (requiredWidth > maxFieldWidth && total > 1) {
+            const spacing = (maxFieldWidth - cardWidth) / (total - 1);
+            const overlap = cardWidth - spacing;
+            style.marginLeft = i === 0 ? 0 : -overlap;
+        } else {
+            style.margin = `0 ${baseGap / 2}px`;
+        }
+
         return (
             <div key={c.instanceId} data-instance-id={c.instanceId}
                  className={`mobile-unit ${isOpponent ? 'unit--opp' : ''} ${c.isTapped ? 'unit--tapped' : ''} ${isTargetable ? 'selectable-glow' : ''}`}
+                 style={style}
                  onClick={(e) => {
                      e.stopPropagation();
                      if (isTargetable) onTargetClick(c);
@@ -203,10 +220,10 @@ const MobileGameBoard = (props) => {
                             })}
                         </div>
                     </div>
-                    {gs.opponent.battleZone.map(c => renderCreature(c, true))}
+                    {gs.opponent.battleZone.map((c, i) => renderCreature(c, true, i, gs.opponent.battleZone.length))}
                 </div>
                 <div className="mobile-field-row mobile-field-row--player">
-                    {gs.battleZone.map(c => renderCreature(c, false))}
+                    {gs.battleZone.map((c, i) => renderCreature(c, false, i, gs.battleZone.length))}
                 </div>
 
                 {/* PLAYER FLOATING ZONE (Bottom Right) */}

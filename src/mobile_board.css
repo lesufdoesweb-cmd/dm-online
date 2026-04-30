@@ -9,6 +9,7 @@
         color: #f5e6c8;
         font-family: 'Inter', sans-serif;
         user-select: none;
+        padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
     }
 
     .mobile-lobby {
@@ -21,6 +22,7 @@
         color: #f5e6c8;
         font-family: 'Inter', sans-serif;
         user-select: none;
+        padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
     }
 
     /* Main Layout - Unified Battle Mat */
@@ -30,6 +32,7 @@
         background: radial-gradient(circle at center, #1a1005 0%, #0a0502 100%);
         display: block; /* Remove flex */
         overflow: hidden;
+        /* Safe area is handled by the container padding or individual elements */
     }
 
     .mobile-battlefield {
@@ -37,7 +40,7 @@
         inset: 0;
         width: 100% !important;
         height: 100%;
-        padding: 40px 220px 140px !important; /* Adjusted for larger zones */
+        padding: 40px 120px 140px 240px !important; /* Less right padding, enough left padding for zones */
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -46,7 +49,7 @@
 
     .mobile-floating-zone {
         position: absolute;
-        left: 20px;
+        left: calc(20px + env(safe-area-inset-left, 0px));
         width: 220px;
         display: flex;
         flex-direction: column;
@@ -113,7 +116,7 @@
     .mobile-end-turn-floating {
         position: absolute;
         top: 50%;
-        right: 20px;
+        right: calc(20px + env(safe-area-inset-right, 0px));
         transform: translateY(-50%);
         width: 70px;
         height: 70px;
@@ -146,8 +149,8 @@
 
     .mobile-hud-actions-floating {
         position: absolute;
-        bottom: 15px;
-        right: 20px;
+        bottom: calc(15px + env(safe-area-inset-bottom, 0px));
+        right: calc(20px + env(safe-area-inset-right, 0px));
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 8px;
@@ -241,8 +244,10 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 8px;
-        flex-wrap: wrap;
+        gap: 0px; /* Managed by JSX squeezing logic */
+        flex-wrap: nowrap;
+        width: 100%;
+        min-height: 100px;
     }
 
     .mobile-unit {
@@ -376,7 +381,7 @@
     /* Persistent Hand */
     .mobile-hand-persistent {
         position: fixed;
-        bottom: -15px;
+        bottom: calc(-15px + env(safe-area-inset-bottom, 0px));
         left: 50%;
         transform: translateX(-50%);
         width: 100%;
@@ -644,7 +649,7 @@
         flex-direction: column !important;
         justify-content: flex-end !important;
         align-items: flex-start !important;
-        padding: 20px !important;
+        padding: calc(20px + env(safe-area-inset-top, 0px)) calc(20px + env(safe-area-inset-right, 0px)) calc(20px + env(safe-area-inset-bottom, 0px)) calc(20px + env(safe-area-inset-left, 0px)) !important;
         pointer-events: none !important;
         background: none !important;
         z-index: 10000 !important;
@@ -734,7 +739,7 @@
     /* Premium Mobile Toasts */
     .toast-layer {
         position: fixed;
-        top: 60px; /* Below top status */
+        top: calc(60px + env(safe-area-inset-top, 0px)); /* Below top status */
         left: 50%;
         transform: translateX(-50%);
         z-index: 11000;

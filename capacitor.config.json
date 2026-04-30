@@ -4,5 +4,10 @@
   "webDir": "dist",
   "android": {
     "immersiveMode": true
+  },
+  "plugins": {
+    "StatusBar": {
+      "overlay": false
+    }
   }
 }
