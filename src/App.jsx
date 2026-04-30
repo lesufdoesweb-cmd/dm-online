@@ -11,6 +11,7 @@ import LobbyModals from './LobbyModals.jsx';
 import { FORMATS } from './engine.js';
 import { StatusBar } from '@capacitor/status-bar';
 import { NavigationBar } from '@hugotomazi/capacitor-navigation-bar';
+import { SplashScreen } from '@capacitor/splash-screen';
 
 const gun = Gun({ peers: ["//dm-online.fun/gun"], localStorage: true });
 const LOBBY_KEY = 'tcg_duel_masters_lobby_v3';
@@ -48,13 +49,29 @@ const App = () => {
             try {
                 await StatusBar.hide();
                 await NavigationBar.hide();
+                
+                setTimeout(async () => {
+                    await SplashScreen.hide();
+                }, 500);
             } catch (e) {
-                console.warn("Immersive mode not supported or plugin missing", e);
+                console.warn("Immersive mode setup failed", e);
+                await SplashScreen.hide().catch(() => {});
             }
         };
         setImmersiveMode();
 
-        return () => window.removeEventListener('resize', handleResize);
+        // Heartbeat to keep it immersive (prevents bars coming back after keyboard/etc)
+        const immersiveInterval = setInterval(async () => {
+            try {
+                await StatusBar.hide();
+                await NavigationBar.hide();
+            } catch {}
+        }, 3000);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+            clearInterval(immersiveInterval);
+        };
     }, []);
 
     const toast = useCallback((msg, type = "info") => {
