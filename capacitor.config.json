@@ -1,5 +1,8 @@
 {
   "appId": "com.lesuf.dmonline",
   "appName": "DM Online",
-  "webDir": "dist"
+  "webDir": "dist",
+  "android": {
+    "immersiveMode": true
+  }
 }
