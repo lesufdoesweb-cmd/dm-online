@@ -8,6 +8,12 @@
   "plugins": {
     "StatusBar": {
       "overlay": false
+    },
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "launchAutoHide": true,
+      "backgroundColor": "#1a1005",
+      "splashImmersive": true
     }
   }
 }

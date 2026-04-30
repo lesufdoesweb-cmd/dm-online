@@ -9,6 +9,8 @@ import MobileLobby from './MobileLobby.jsx';
 import DesktopLobby from './DesktopLobby.jsx';
 import LobbyModals from './LobbyModals.jsx';
 import { FORMATS } from './engine.js';
+import { StatusBar } from '@capacitor/status-bar';
+import { NavigationBar } from '@hugotomazi/capacitor-navigation-bar';
 
 const gun = Gun({ peers: ["//dm-online.fun/gun"], localStorage: true });
 const LOBBY_KEY = 'tcg_duel_masters_lobby_v3';
@@ -41,6 +43,17 @@ const App = () => {
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth <= 932);
         window.addEventListener('resize', handleResize);
+        
+        const setImmersiveMode = async () => {
+            try {
+                await StatusBar.hide();
+                await NavigationBar.hide();
+            } catch (e) {
+                console.warn("Immersive mode not supported or plugin missing", e);
+            }
+        };
+        setImmersiveMode();
+
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
