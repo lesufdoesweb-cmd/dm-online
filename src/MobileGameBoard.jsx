@@ -7,7 +7,7 @@ import { SearchOverlay, DecisionModals } from "./GameModals.jsx";
 import { PlayerHUD, OpponentHUD } from "./HUD.jsx";
 import "./mobile_board.css";
 
-const CARD_BACK = "./cards/bg.png";
+const CARD_BACK = "/cards/bg.png";
 
 const MobileGameBoard = (props) => {
     const {
@@ -157,6 +157,7 @@ const MobileGameBoard = (props) => {
                 {/* OPPONENT FLOATING ZONE */}
                 <div className="mobile-floating-zone mobile-floating-zone--opp">
                     {/* Mana behind shields */}
+
                     <div className="mobile-card-mini-stack">
                         {gs.opponent.mana.map((c, i) => {
                             const spacing = gs.opponent.mana.length > 1 ? Math.min(8, 70 / gs.opponent.mana.length) : 0;
@@ -179,12 +180,29 @@ const MobileGameBoard = (props) => {
                     {/* Shields in front */}
                     <div className="mobile-shield-grid" style={{marginTop: 15}}>
                         {Array.from({ length: typeof gs.opponent.shields === 'number' ? gs.opponent.shields : gs.opponent.shields.length }).map((_, i) => (
-                            <div key={i} className="mobile-shield-card" />
+                            <div key={i} className="mobile-shield-card" style={{ backgroundImage: `url(${CARD_BACK})` }} />
                         ))}
                     </div>
                 </div>
 
                 <div className="mobile-field-row mobile-field-row--opp" ref={oppBzRef}>
+                    {/* Opponent Hand Tray at the very top */}
+                    <div className="mobile-opp-hand-tray">
+                        <div className="mobile-opp-hand-fan">
+                            {Array.from({ length: gs.opponent.handCount || 0 }).map((_, i) => {
+                                const rotation = (i - (gs.opponent.handCount - 1) / 2) * -4;
+                                const transY = Math.abs(i - (gs.opponent.handCount - 1) / 2) * 1.5;
+                                return (
+                                    <div key={i} className="mobile-opp-card-back" 
+                                         style={{ 
+                                             backgroundImage: `url(${CARD_BACK})`,
+                                             transform: `rotate(${rotation}deg) translateY(${-transY}px)`,
+                                             marginLeft: i === 0 ? 0 : -20
+                                         }} />
+                                );
+                            })}
+                        </div>
+                    </div>
                     {gs.opponent.battleZone.map(c => renderCreature(c, true))}
                 </div>
                 <div className="mobile-field-row mobile-field-row--player">
@@ -201,6 +219,7 @@ const MobileGameBoard = (props) => {
                             return (
                                 <div key={i} 
                                      className={`mobile-shield-card ${isTargetable ? 'selectable-glow' : ''} ${isSelected ? 'target-selected' : ''}`} 
+                                     style={{ backgroundImage: `url(${CARD_BACK})` }}
                                      onClick={() => isTargetable && onTargetClick({ instanceId: `shield-${i}` })} 
                                 />
                             );

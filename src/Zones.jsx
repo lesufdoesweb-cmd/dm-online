@@ -1,6 +1,6 @@
 import React from 'react';
 import { CardEngine } from "./engine.js";
-const CARD_BACK = "./cards/bg.png";
+const CARD_BACK = "/cards/bg.png";
 
 export const OpponentSide = ({ gs, oppAvail, oppShieldRef, oppBzRef, renderCreature, hover, unhover }) => {
     return (

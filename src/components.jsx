@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CardEngine } from "./engine.js";
-const CARD_BACK = "./cards/bg.png";
+const CARD_BACK = "/cards/bg.png";
 
 export const Toast = ({ t }) => {
     const [exit, setExit] = useState(false);

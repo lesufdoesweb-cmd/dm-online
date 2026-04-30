@@ -49,14 +49,16 @@ const DeckBuilder = ({ cards, initialDeck, onSave, onExit, readOnly = false, cur
     // In readOnly mode, we show only the cards in the deck
     const displayCards = readOnly ? [...new Set(deck.map(c => c.name))].map(name => deck.find(c => c.name === name)) : filteredCards;
 
+    const [isMobile] = useState(window.innerWidth <= 932);
+    
     return (
-        <div className={`db-layout ${readOnly ? 'db-layout--readonly' : ''}`}>
-            {preview && <Preview card={preview} />}
+        <div className={`db-layout ${readOnly ? 'db-layout--readonly' : ''} ${isMobile ? 'db-layout--mobile' : ''}`}>
+            {!isMobile && preview && <Preview card={preview} />}
 
             <div className="db-catalog" style={readOnly ? { flex: 1 } : {}}>
                 <div className="db-catalog-header">
                     <div style={{display:'flex', flexDirection:'column', gap:4}}>
-                        <h2>{readOnly ? `Viewing Deck: ${deckName}` : "Card Catalog"}</h2>
+                        <h2 style={{fontSize: isMobile ? 14 : 20}}>{readOnly ? `Viewing Deck: ${deckName}` : "Card Catalog"}</h2>
                         {!readOnly && (
                             <div className="format-selector--mini">
                                 {Object.values(FORMATS).map(f => (
@@ -76,17 +78,19 @@ const DeckBuilder = ({ cards, initialDeck, onSave, onExit, readOnly = false, cur
                         )}
                     </div>
                     {!readOnly && (
-                        <div style={{display:'flex', flexDirection:'column', gap:8, alignItems:'flex-end'}}>
-                            <div style={{display:'flex', gap:6}}>
+                        <div className="db-filters">
+                            <div className="db-filter-row">
                                 {["All", "Light", "Water", "Darkness", "Fire", "Nature"].map(c => (
-                                    <button key={c} className={`civ-filter-btn ${filter === c ? 'active' : ''}`} onClick={() => setFilter(c)}>{c}</button>
+                                    <button key={c} className={`civ-filter-btn ${filter === c ? 'active' : ''}`} onClick={() => setFilter(c)}>
+                                        {isMobile ? c[0] : c}
+                                    </button>
                                 ))}
                             </div>
-                            <div style={{display:'flex', gap:4}}>
-                                <span style={{fontSize:10, opacity:0.5, alignSelf:'center', marginRight:4}}>SETS:</span>
+                            <div className="db-filter-row">
+                                <span style={{fontSize:9, opacity:0.5, alignSelf:'center', marginRight:4}}>SETS:</span>
                                 {["All", ...formatInfo.sets].map(s => (
                                     <button key={s} className={`set-filter-btn ${selectedSet === s ? 'active' : ''}`} 
-                                            style={{fontSize:9, padding:'2px 6px', background: selectedSet === s ? 'var(--gold)' : 'rgba(255,255,255,0.1)', border:'none', color: selectedSet === s ? 'black' : 'white', borderRadius:4, cursor:'pointer'}}
+                                            style={{fontSize:8, padding:'2px 4px', background: selectedSet === s ? 'var(--gold)' : 'rgba(255,255,255,0.1)', border:'none', color: selectedSet === s ? 'black' : 'white', borderRadius:4, cursor:'pointer'}}
                                             onClick={() => setSelectedSet(s)}>
                                         {s.toUpperCase()}
                                     </button>
@@ -101,39 +105,57 @@ const DeckBuilder = ({ cards, initialDeck, onSave, onExit, readOnly = false, cur
                         const count = deck.filter(x => x.name === c.name).length;
                         const isDisabled = ['dm-05', 'dm-06'].includes(c.set_id);
                         return (
-                            <div key={`${c.set_id}-${c.id}`} className={`card card--md ${!readOnly && count >= 4 ? 'limit-reached' : ''} ${isDisabled ? 'card--disabled' : ''}`}
-                                 onClick={() => !isDisabled && addCard(c)}
-                                 onMouseEnter={() => setPreview(c)}
-                                 onMouseLeave={() => setPreview(null)}
+                            <div key={`${c.set_id}-${c.id}`} className={`card ${isMobile ? 'card--md' : 'card--md'} ${!readOnly && count >= 4 ? 'limit-reached' : ''} ${isDisabled ? 'card--disabled' : ''}`}
+                                 onClick={() => {
+                                     if (isMobile) {
+                                         if (preview?.id === c.id) {
+                                             !isDisabled && addCard(c);
+                                         } else {
+                                             setPreview(c);
+                                         }
+                                     } else {
+                                         !isDisabled && addCard(c);
+                                     }
+                                 }}
+                                 onMouseEnter={() => !isMobile && setPreview(c)}
+                                 onMouseLeave={() => !isMobile && setPreview(null)}
                                  style={{cursor: (readOnly || isDisabled) ? 'default' : 'pointer', opacity: isDisabled ? 0.4 : 1, filter: isDisabled ? 'grayscale(1)' : 'none'}}>
                                 <img src={`./cards/${c.set_id || 'dm-01'}/${c.image_file}`} alt={c.name} />
-                                {isDisabled && <div style={{position:'absolute', top:'50%', left:'50%', transform:'translate(-50%, -50%) rotate(-30deg)', background:'red', color:'white', padding:'2px 8px', fontSize:10, fontWeight:900, borderRadius:4, boxShadow:'0 0 10px black', whiteSpace:'nowrap'}}>COMING SOON</div>}
-                                {count > 0 && <div className="power-gem" style={{background:'var(--gold)', color:'black', top: -5, right: -5, bottom: 'auto', borderRadius: '50%', width: 22}}>{count}</div>}
+                                {isDisabled && <div style={{position:'absolute', top:'50%', left:'50%', transform:'translate(-50%, -50%) rotate(-30deg)', background:'red', color:'white', padding:'2px 8px', fontSize:8, fontWeight:900, borderRadius:4, boxShadow:'0 0 10px black', whiteSpace:'nowrap'}}>SOON</div>}
+                                {count > 0 && <div className="power-gem" style={{background:'var(--gold)', color:'black', top: -5, right: -5, bottom: 'auto', borderRadius: '50%', width: 18, height: 18, fontSize: 9}}>{count}</div>}
+                                {isMobile && <div className="mobile-preview-hint" onClick={(e) => { e.stopPropagation(); setPreview(c); }}>ℹ️</div>}
                             </div>
                         );
                     })}
                 </div>
             </div>
 
+            {isMobile && !readOnly && (
+                <div className="db-preview-pane">
+                    {preview ? <Preview card={preview} /> : <div className="preview-empty">Tap card for info</div>}
+                </div>
+            )}
+
             {!readOnly && (
                 <div className="db-deck-pane">
                     <div className="db-deck-header">
                         <input value={deckName} onChange={e => setDeckName(e.target.value)}
-                               style={{background:'none', border:'none', borderBottom:'1px solid var(--gold)', color:'var(--gold)', font:'inherit', fontWeight:900, width:'100%', outline:'none'}} />
-                        <div style={{fontSize:12, marginTop:8, opacity:0.6}}>Format: {FORMATS[selectedFormat].name} • Cards: {deck.length} / 40</div>
+                               style={{background:'none', border:'none', borderBottom:'1px solid var(--gold)', color:'var(--gold)', font:'inherit', fontWeight:900, width:'100%', outline:'none', fontSize: isMobile ? 12 : 16}} />
+                        <div style={{fontSize:10, marginTop:4, opacity:0.6}}>Format: {FORMATS[selectedFormat].name} • {deck.length} / 40</div>
                     </div>
+                    
                     <div className="db-deck-list">
                         {deck.map((c, i) => (
-                            <div key={c.instanceId} className="db-deck-card card"
+                            <div key={c.instanceId} className={`db-deck-card card ${isMobile ? 'card--xs' : 'card--xs'}`}
                                  onClick={() => removeCard(i)}
-                                 onMouseEnter={() => setPreview(c)}
-                                 onMouseLeave={() => setPreview(null)}>
+                                 onMouseEnter={() => !isMobile && setPreview(c)}
+                                 onMouseLeave={() => !isMobile && setPreview(null)}>
                                 <img src={`./cards/${c.set_id || 'dm-01'}/${c.image_file}`} alt={c.name} />
                             </div>
                         ))}
                     </div>
                     <div className="db-footer">
-                        <button className="btn-primary" onClick={() => onSave({ name: deckName, cards: deck, format: selectedFormat })} disabled={deck.length !== 40}>Save Deck</button>
+                        <button className="btn-primary" onClick={() => onSave({ name: deckName, cards: deck, format: selectedFormat })} disabled={deck.length !== 40}>Save</button>
                         <button className="btn-secondary" onClick={onExit}>Exit</button>
                     </div>
                 </div>

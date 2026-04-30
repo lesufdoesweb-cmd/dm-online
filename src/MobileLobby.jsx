@@ -43,29 +43,39 @@ const MobileLobby = ({
                         <h2>DECK</h2>
                         <button className="btn-secondary btn-xs" onClick={() => setShowDeckModal(true)}>Library</button>
                     </div>
-                    <div className="mobile-selected-deck-preview">
-                        {selectedDeck ? (
-                            <>
-                                <div className="deck-preview-info">
-                                    <div className="deck-color-dot" style={{background: `var(--${selectedDeck.color?.toLowerCase()})`}}></div>
-                                    <span className="deck-name">{selectedDeck.name}</span>
-                                </div>
-                                <div className="deck-preview-stats">
-                                    <span>⚔️ {selectedDeck.playedCount || 0} Battles</span>
-                                    <span>{FORMATS[selectedDeck.format]?.name}</span>
-                                </div>
-                                <div className="deck-preview-actions">
-                                    <button className="btn-secondary btn-xs" onClick={() => { setViewOnlyDeck(selectedDeck); setView("deckbuilder"); }}>VIEW</button>
-                                    {selectedDeck.ownerId === code && (
-                                        <button className="btn-secondary btn-xs" onClick={() => { setEditingDeckIdx(selIdx); setView("deckbuilder"); }}>EDIT</button>
-                                    )}
-                                </div>
-                            </>
-                        ) : (
-                            <div className="empty-deck">No Deck Selected</div>
-                        )}
+                    <div className="mobile-deck-selection-area">
+                        <button className="mobile-new-deck-btn" onClick={() => setView("deckbuilder")}>
+                            <span>+</span> NEW DECK
+                        </button>
+                        <div className="mobile-deck-list-scroll">
+                            {communityDecks.filter(d => d.format === currentFormat).map((deck, idx) => {
+                                const realIdx = communityDecks.indexOf(deck);
+                                const isSelected = selIdx === realIdx;
+                                return (
+                                    <div key={deck.id || realIdx} 
+                                         className={`mobile-deck-pill ${isSelected ? 'active' : ''}`}
+                                         onClick={() => setSelIdx(realIdx)}>
+                                        <div className="deck-pill-info">
+                                            <div className="deck-pill-dot" style={{background: `var(--${deck.color?.toLowerCase() || 'gold'})`}}></div>
+                                            <span className="deck-pill-name">{deck.name}</span>
+                                        </div>
+                                        <div className="deck-pill-actions">
+                                            <button className="pill-btn pill-btn--view" onClick={(e) => { e.stopPropagation(); setViewOnlyDeck(deck); setView("deckbuilder"); }}>👁️</button>
+                                            {deck.ownerId === code && (
+                                                <>
+                                                    <button className="pill-btn pill-btn--edit" onClick={(e) => { e.stopPropagation(); setEditingDeckIdx(realIdx); setView("deckbuilder"); }}>✏️</button>
+                                                    <button className="pill-btn pill-btn--delete" onClick={(e) => { e.stopPropagation(); if(window.confirm("Delete?")) deleteDeck(realIdx); }}>🗑️</button>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                            {communityDecks.filter(d => d.format === currentFormat).length === 0 && (
+                                <div className="empty-text" style={{padding: 20}}>No {currentFormat} decks found. Create one!</div>
+                            )}
+                        </div>
                     </div>
-                    <button className="btn-primary" style={{marginTop: 'auto'}} onClick={() => setView("deckbuilder")}>+ NEW DECK</button>
                 </div>
 
                 {/* Column 2: Duel Actions */}

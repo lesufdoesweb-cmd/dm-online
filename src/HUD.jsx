@@ -1,5 +1,5 @@
 import React from 'react';
-const CARD_BACK = "./cards/bg.png";
+const CARD_BACK = "/cards/bg.png";
 
 export const PlayerHUD = ({ gs, avail, isLocked, waitingForOpponent, endTurn, setSearchingDeck, onLeave }) => {
     return (

@@ -1958,9 +1958,11 @@ body {
         width: 120px;
         right: 4px;
     }
-    .card--md { width: 100px; height: 140px; }
-    .card--lg { width: 120px; height: 168px; }
-    .card--xl { width: 200px; height: 280px; }
+    .card--md { width: 130px !important; height: 182px !important; }
+    .card--lg { width: 150px !important; height: 210px !important; }
+    .card--xl { width: 240px !important; height: 336px !important; }
+    .card--sm { width: 60px !important; height: 84px !important; }
+    .card--xs { width: 32px !important; height: 45px !important; }
     
     .hand-tray { height: 180px; transform: translateY(-100px); }
     .hand-card:hover { transform: translateY(-40px) scale(1.15) !important; }
@@ -1984,6 +1986,182 @@ body {
     .search-header { padding: 10px 15px; }
     .search-header h2 { font-size: 16px; }
     .search-grid { padding: 10px; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px; }
+
+    /* Deck Builder Mobile */
+    .db-layout--mobile {
+        position: fixed;
+        inset: 0;
+        background: #0a0604;
+        display: flex;
+        flex-direction: row !important;
+        overflow: hidden;
+        z-index: 15000;
+        color: var(--cream);
+    }
+
+    .db-layout--mobile .db-catalog {
+        flex: 1;
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        min-width: 0;
+    }
+
+    .db-layout--mobile .db-deck-pane {
+        width: 150px;
+        background: rgba(0,0,0,0.6);
+        border-left: 1px solid rgba(180, 130, 70, 0.4);
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .db-preview-pane {
+        width: 150px;
+        background: rgba(15, 8, 4, 0.9);
+        border-left: 1px solid rgba(180, 130, 70, 0.3);
+        display: flex;
+        flex-direction: column;
+        padding: 5px;
+        overflow: hidden;
+    }
+
+    .preview-empty {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 10px;
+        color: rgba(180, 130, 70, 0.5);
+        font-family: var(--font-title);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .db-layout--mobile .preview {
+        position: relative !important;
+        top: 0 !important;
+        right: 0 !important;
+        left: 0 !important;
+        transform: none !important;
+        width: 100% !important;
+        height: 100% !important;
+        background: none !important;
+    }
+
+    .db-layout--mobile .preview-frame {
+        padding: 2px !important;
+        border: none !important;
+        background: none !important;
+        box-shadow: none !important;
+        max-height: none !important;
+        overflow: visible !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 6px !important;
+    }
+
+    .db-layout--mobile .preview-frame img {
+        width: 110px !important;
+        height: auto !important;
+        margin-bottom: 5px;
+    }
+
+    .db-layout--mobile .preview-meta {
+        width: 100% !important;
+        flex: 1;
+        overflow-y: auto !important;
+        font-size: 9px !important;
+    }
+
+    .db-layout--mobile .preview-meta h3 { font-size: 11px !important; }
+
+    .db-layout--mobile .db-catalog-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important;
+        gap: 15px !important;
+        padding: 10px !important;
+        overflow-y: auto;
+        flex: 1;
+    }
+
+    .db-layout--mobile .db-deck-list {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 6px !important;
+        padding: 5px !important;
+        overflow-y: auto;
+        flex: 1;
+        min-height: 0;
+    }
+
+    .db-layout--mobile .db-deck-card {
+        margin: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .db-layout--mobile .db-deck-card:first-child {
+        margin-top: 0;
+    }
+
+    .db-layout--mobile .db-deck-card:hover {
+        transform: translateY(-20px);
+        z-index: 100;
+    }
+
+    .db-layout--mobile .db-footer {
+        padding: 6px;
+        gap: 6px;
+        background: rgba(0,0,0,0.6);
+    }
+
+    .db-layout--mobile .btn-primary, .db-layout--mobile .btn-secondary {
+        padding: 6px 10px;
+        font-size: 10px;
+        flex: 1;
+    }
+
+    .db-filters {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        align-items: flex-end;
+    }
+
+    .db-filter-row {
+        display: flex;
+        gap: 3px;
+    }
+    
+    .db-catalog-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding-bottom: 6px;
+        border-bottom: 1px solid rgba(180, 130, 70, 0.2);
+        margin-bottom: 6px;
+    }
+
+    .mobile-preview-hint {
+        position: absolute;
+        bottom: 2px;
+        right: 2px;
+        background: rgba(0,0,0,0.6);
+        border-radius: 50%;
+        width: 14px;
+        height: 14px;
+        font-size: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255,214,68,0.5);
+    }
 }
 
 
