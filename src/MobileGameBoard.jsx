@@ -114,8 +114,9 @@ const MobileGameBoard = (props) => {
             if (targeting || searchingDeck) return; 
             unhover(); 
             setCtx(null); 
+            setSelectedHandCardId(null);
         }}>
-            <SearchOverlay searchingDeck={searchingDeck} setSearchingDeck={setSearchingDeck} gs={gs} />
+            <SearchOverlay searchingDeck={searchingDeck} setSearchingDeck={setSearchingDeck} gs={gs} onHover={hover} />
             <DecisionModals 
                 targeting={targeting} blockingRequest={blockingRequest} 
                 waitingForOpponent={waitingForOpponent} trigger={trigger} 
@@ -134,96 +135,134 @@ const MobileGameBoard = (props) => {
                 </div>
             )}
 
-            {/* OPPONENT SIDEBAR (LEFT) */}
-            <div className="mobile-sidebar mobile-sidebar--opp">
-                <div className="mobile-portrait mobile-portrait--opp">
-                    <img src={CARD_BACK} alt="Opponent" />
-                    <div className="mobile-mana-counter mobile-mana-counter--opp">{oppAvail} / {gs.opponent.mana.length}</div>
-                    <div className={`mobile-end-turn-indicator ${!gs.turn ? 'active' : ''}`}>{!gs.turn ? 'TURN' : 'WAIT'}</div>
+            {/* FLOATING HUD (Top Level) */}
+            <div className="mobile-floating-hud">
+                <div className={`mobile-end-turn-floating ${!gs.turn || isLocked ? 'disabled' : ''}`} 
+                     onClick={() => gs.turn && !isLocked && endTurn()}>
+                    <span>{gs.turn ? 'END' : 'WAIT'}</span>
+                    <div className="sub">TURN</div>
                 </div>
-                <div className="mobile-hand-count-indicator">👐 {gs.opponent.handCount}</div>
+
+                <div className="mobile-hud-actions-floating">
+                    <button className="mobile-btn-glass" onClick={() => setSearchingDeck({ customList: gs.graveyard, message: "Your Graveyard", isViewOnly: true })}>GRAVE</button>
+                    <button className="mobile-btn-glass" onClick={() => setSearchingDeck({ customList: gs.mana, message: "Mana Zone", isViewOnly: true })}>MANA</button>
+                    <button className="mobile-btn-glass" onClick={() => setSearchingDeck({ customList: gs.deck, message: "Your Deck", isViewOnly: true })}>DECK</button>
+                    <button className="mobile-btn-glass" onClick={() => setShowHistory(true)}>📜 LOGS</button>
+                </div>
+            </div>
+
+            {/* BATTLEFIELD (MAT) */}
+            <div className="mobile-battlefield" onClick={() => { unhover(); setCtx(null); }}>
                 
-                <div className="mobile-sidebar-stacks">
-                    <div className="mobile-shield-stack mobile-shield-stack--opp">
+                {/* OPPONENT FLOATING ZONE */}
+                <div className="mobile-floating-zone mobile-floating-zone--opp">
+                    {/* Mana behind shields */}
+                    <div className="mobile-card-mini-stack">
+                        {gs.opponent.mana.map((c, i) => {
+                            const spacing = gs.opponent.mana.length > 1 ? Math.min(8, 70 / gs.opponent.mana.length) : 0;
+                            return (
+                                <div key={i} className="mobile-card-mini" 
+                                     style={{ 
+                                         left: i * spacing, 
+                                         zIndex: i, 
+                                         transform: c.isTapped ? 'rotate(90deg) translateY(6px)' : 'none',
+                                         filter: c.isTapped ? 'brightness(0.7)' : 'none',
+                                         cursor: 'pointer' 
+                                     }}
+                                     onClick={(e) => { e.stopPropagation(); hover(c); }}>
+                                    <img src={`./cards/${c.set_id || 'dm-01'}/${c.image_file}`} alt="mana" />
+                                </div>
+                            );
+                        })}
+                        <div style={{position:'absolute', bottom:-12, left:0, fontSize:10, fontWeight:900, color:'#0277bd', textShadow:'0 0 4px #000'}}>💧 {oppAvail}/{gs.opponent.mana.length}</div>
+                    </div>
+                    {/* Shields in front */}
+                    <div className="mobile-shield-grid" style={{marginTop: 15}}>
                         {Array.from({ length: typeof gs.opponent.shields === 'number' ? gs.opponent.shields : gs.opponent.shields.length }).map((_, i) => (
-                            <div key={i} className="mobile-shield-gem" />
+                            <div key={i} className="mobile-shield-card" />
                         ))}
                     </div>
-                    <div className="mobile-mana-stack">
-                        {gs.opponent.mana.map((c, i) => {
-                            const civ = c.civilizations?.[0] || 'Neutral';
-                            return <div key={i} className={`mobile-mana-bubble ${c.isTapped ? 'tapped' : ''} bubble--${civ.toLowerCase()}`} />;
-                        })}
-                    </div>
                 </div>
 
-                <div className="mobile-sidebar-piles">
-                    <button className="mobile-action-btn-sidebar" onClick={() => setSearchingDeck({ customList: gs.opponent.graveyard, message: "Opponent Graveyard", isViewOnly: true })}>GRAVE</button>
-                    <button className="mobile-action-btn-sidebar" onClick={() => setSearchingDeck({ customList: gs.opponent.mana, message: "Opponent Mana", isViewOnly: true })}>MANA</button>
-                </div>
-            </div>
-
-            {/* TOP STATUS BAR */}
-            <div className="mobile-top-status">
-                <div className={`status-bubble ${gs.turn ? 'status--your-turn' : 'status--opp-turn'}`}>
-                    {gs.turn ? "YOUR TURN" : "OPPONENT'S TURN"}
-                </div>
-            </div>
-
-            {/* BATTLEFIELD */}
-            <div className="mobile-battlefield" onClick={() => { unhover(); setCtx(null); }}>
                 <div className="mobile-field-row mobile-field-row--opp" ref={oppBzRef}>
                     {gs.opponent.battleZone.map(c => renderCreature(c, true))}
                 </div>
                 <div className="mobile-field-row mobile-field-row--player">
                     {gs.battleZone.map(c => renderCreature(c, false))}
                 </div>
-            </div>
 
-            {/* PLAYER SIDEBAR (RIGHT) */}
-            <div className="mobile-sidebar mobile-sidebar--player">
-                <div className={`mobile-portrait mobile-portrait--player ${gs.turn && !isLocked ? 'active-turn' : ''}`} onClick={() => gs.turn && !isLocked && endTurn()}>
-                    <img src={CARD_BACK} alt="You" />
-                    <div className={`mobile-end-turn-indicator ${gs.turn && !isLocked ? 'active' : ''}`}>END</div>
-                </div>
-                
-                <div className="mobile-sidebar-stacks">
-                    <div className="mobile-shield-stack">
+                {/* PLAYER FLOATING ZONE (Bottom Right) */}
+                <div className="mobile-floating-zone mobile-floating-zone--player">
+                    {/* Shields in front */}
+                    <div className="mobile-shield-grid" style={{marginBottom: 10}}>
                         {gs.shields.map((_, i) => {
                             const isTargetable = targeting && targeting.isShieldTarget && targeting.validTargets.includes(`shield-${i}`);
                             const isSelected = targeting && targeting.selected?.includes(`shield-${i}`);
-                            return <div key={i} className={`mobile-shield-gem ${isTargetable ? 'selectable-glow' : ''} ${isSelected ? 'target-selected' : ''}`} onClick={() => isTargetable && onTargetClick({ instanceId: `shield-${i}` })} />;
+                            return (
+                                <div key={i} 
+                                     className={`mobile-shield-card ${isTargetable ? 'selectable-glow' : ''} ${isSelected ? 'target-selected' : ''}`} 
+                                     onClick={() => isTargetable && onTargetClick({ instanceId: `shield-${i}` })} 
+                                />
+                            );
                         })}
                     </div>
-                    <div className="mobile-mana-stack">
+                    {/* Mana behind shields */}
+                    <div className="mobile-card-mini-stack">
                         {gs.mana.map((c, i) => {
-                            const civ = c.civilizations?.[0] || 'Neutral';
-                            return <div key={i} className={`mobile-mana-bubble ${c.isTapped ? 'tapped' : ''} bubble--${civ.toLowerCase()}`} />;
+                            const spacing = gs.mana.length > 1 ? Math.min(8, 70 / gs.mana.length) : 0;
+                            return (
+                                <div key={i} className="mobile-card-mini" 
+                                     style={{ 
+                                         left: i * spacing, 
+                                         zIndex: i, 
+                                         transform: c.isTapped ? 'rotate(90deg) translateY(-6px)' : 'none',
+                                         filter: c.isTapped ? 'brightness(0.7)' : 'none',
+                                         cursor: 'pointer' 
+                                     }}
+                                     onClick={(e) => { e.stopPropagation(); hover(c); }}>
+                                    <img src={`./cards/${c.set_id || 'dm-01'}/${c.image_file}`} alt="mana" />
+                                </div>
+                            );
                         })}
+                        <div style={{position:'absolute', top:-12, left:0, fontSize:10, fontWeight:900, color:'#0277bd', textShadow:'0 0 4px #000'}}>💧 {avail}/{gs.mana.length}</div>
                     </div>
-                </div>
-
-                <div className="mobile-sidebar-piles">
-                    <button className="mobile-action-btn-sidebar" onClick={() => setSearchingDeck({ customList: gs.graveyard, message: "Your Graveyard", isViewOnly: true })}>GRAVE</button>
-                    <button className="mobile-action-btn-sidebar" onClick={() => setSearchingDeck({ customList: gs.mana, message: "Mana Zone", isViewOnly: true })}>MANA</button>
-                    <button className="mobile-pile-btn" onClick={() => setSearchingDeck({ customList: gs.deck, message: "Your Deck", isViewOnly: true })}>🎴</button>
-                    <button className="mobile-log-toggle-sidebar" onClick={() => setShowHistory(true)}>📜</button>
                 </div>
             </div>
 
             {/* PERSISTENT HAND */}
             <div className="mobile-hand-persistent">
                 {gs.hand.map((c, i) => {
+                    const total = gs.hand.length;
                     const isSelected = selectedHandCardId === c.instanceId;
+                    
+                    const center = (total - 1) / 2;
+                    const dist = i - center;
+                    
+                    // Responsive spacing to fit ~65% width
+                    const maxHandWidth = window.innerWidth * 0.65; 
+                    const cardWidth = 70;
+                    const baseSpacing = 55; 
+                    const spacing = total > 1 ? Math.min(baseSpacing, (maxHandWidth - cardWidth) / (total - 1)) : 0;
+                    
+                    const rotation = dist * (12 / Math.max(2, total / 3)); 
+                    const translateY = Math.abs(dist) * Math.abs(dist) * (6 / Math.max(1, total / 3));
+                    const translateX = dist * spacing;
+
+                    const cardStyle = isSelected ? {} : {
+                        transform: `translateX(${translateX}px) translateY(${translateY}px) rotate(${rotation}deg)`,
+                        zIndex: 100 + i
+                    };
+
                     return (
                         <div key={c.instanceId} 
                              className={`mobile-hand-card-wrapper ${isSelected ? 'selected' : ''}`} 
+                             style={cardStyle}
                              onClick={(e) => {
                                  if (targeting || searchingDeck) return;
                                  e.stopPropagation();
                                  const rect = e.currentTarget.getBoundingClientRect();
-                                 const x = rect.left;
-                                 const y = rect.top - 160; // Position significantly above card
+                                 const x = rect.left + rect.width / 2; // Center horizontally
+                                 const y = rect.top - 220; // Higher position to clear scaled card
                                  
                                  setSelectedHandCardId(c.instanceId);
                                  hover(c);
@@ -253,10 +292,18 @@ const MobileGameBoard = (props) => {
                 </div>
             )}
 
-            <CtxMenu menu={ctx} onClose={() => setCtx(null)} onAction={ctxAction} />
+            <CtxMenu menu={ctx} 
+                     onClose={() => { setCtx(null); setSelectedHandCardId(null); unhover(); }} 
+                     onAction={(action, data) => { ctxAction(action, data); setSelectedHandCardId(null); unhover(); }} />
             {preview && <Preview card={preview} />}
             <ArrowOverlay arrow={arrow} />
-            <div className="toast-layer">{toasts.map(t => (<div key={t.id} className={`toast toast--${t.type}`} style={{fontSize: 12, padding: '8px 16px'}}>{t.message}</div>))}</div>
+            <div className="toast-layer">
+                {toasts.map(t => (
+                    <div key={t.id} className={`toast toast--${t.type}`}>
+                        {t.type === 'error' ? '⚠️' : t.type === 'success' ? '✨' : 'ℹ️'} {t.message}
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };

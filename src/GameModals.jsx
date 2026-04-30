@@ -2,7 +2,7 @@ import React from 'react';
 import { CardEngine } from "./engine.js";
 const CARD_BACK = "./cards/bg.png";
 
-export const SearchOverlay = ({ searchingDeck, setSearchingDeck, gs }) => {
+export const SearchOverlay = ({ searchingDeck, setSearchingDeck, gs, onHover }) => {
     if (!searchingDeck) return null;
     return (
         <div className="search-overlay">
@@ -21,7 +21,11 @@ export const SearchOverlay = ({ searchingDeck, setSearchingDeck, gs }) => {
                         (searchingDeck.customList || gs.deck.filter(searchingDeck.filter)).map(c => {
                             const isSel = (searchingDeck.selectedIds || []).includes(c.instanceId);
                             return (
-                                <div key={c.instanceId} className={`search-card-wrap ${isSel ? 'search-card--selected' : ''}`} onClick={() => {
+                                <div key={c.instanceId} className={`search-card-wrap ${isSel ? 'search-card--selected' : ''}`} onClick={(e) => {
+                                    if (searchingDeck.isViewOnly || searchingDeck.isReveal) {
+                                        onHover && onHover(c);
+                                        return;
+                                    }
                                     if (searchingDeck.count === 1) {
                                         const currentOnComplete = searchingDeck.onComplete;
                                         setSearchingDeck(null);

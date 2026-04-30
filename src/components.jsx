@@ -40,11 +40,7 @@ export const Preview = ({ card }) => {
                 <img src={src} alt={card.name || ""} />
                 {!card.isFaceDown && (
                     <div className="preview-meta">
-                        <div style={{display:'flex', justifyContent:'space-between', opacity:0.5, fontSize:11, fontWeight:900, marginBottom:4}}>
-                            <span>{card.id}</span>
-                            <span>{card.rarity}</span>
-                        </div>
-                        <h3>{card.name}</h3>
+                        <h3 style={{fontSize: 12, margin: '2px 0', color: 'var(--gold)', textTransform: 'uppercase'}}>{card.name}</h3>
                         <div className="stats">
                             {card.type && <em style={{color:'var(--fire-soft)'}}>{card.type}</em>}
                             {card.cost != null && <>&nbsp;| Cost: <em>{card.cost}</em></>}
@@ -82,7 +78,7 @@ export const Preview = ({ card }) => {
 
 export const CtxMenu = ({ menu, onClose, onAction }) => {
     if (!menu) return null;
-    const st = { left: Math.min(menu.x, window.innerWidth - 240), top: Math.min(menu.y, window.innerHeight - 300) };
+    const st = { left: Math.min(menu.x, window.innerWidth - 150), top: Math.min(menu.y, window.innerHeight - 200) };
     return (
         <>
             <div className="ctx-backdrop" onClick={onClose} onContextMenu={e => { e.preventDefault(); onClose(); }} />

@@ -21,7 +21,8 @@ const MobileLobby = ({
     setEditingDeckIdx,
     setViewOnlyDeck,
     deleteDeck,
-    toast
+    toast,
+    toasts
 }) => {
     const selectedDeck = communityDecks[selIdx];
 
@@ -127,6 +128,14 @@ const MobileLobby = ({
                         )}
                     </div>
                 </div>
+            </div>
+
+            <div className="toast-layer">
+                {toasts.map(t => (
+                    <div key={t.id} className={`toast toast--${t.type}`}>
+                        {t.type === 'error' ? '⚠️' : t.type === 'success' ? '✨' : 'ℹ️'} {t.message}
+                    </div>
+                ))}
             </div>
         </div>
     );

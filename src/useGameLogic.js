@@ -145,7 +145,8 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
     }, [net]);
 
     const triggerEffect = useCallback((type, card, extraParams = {}) => {
-        const map = window.GAME_EFFECTS[type];
+        const maps = { ETB_EFFECTS, SPELL_EFFECTS, ATTACK_TRIGGERS, DESTROY_EFFECTS, TAP_EFFECTS };
+        const map = maps[type];
         if (!map) return;
         
         // Original card effect
@@ -163,7 +164,13 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
             },
             ...extraParams
         };
-        if (fx) setTimeout(() => fx(params), 200);
+        
+        if (fx) {
+            console.log(`Triggering ${type} for ${card.name}`);
+            setTimeout(() => fx(params), 400);
+        } else {
+            console.warn(`No ${type} found for ${card.name}`);
+        }
 
         // Survivor shared triggers
         if (card.subtypes?.includes('Survivor')) {
@@ -173,11 +180,11 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                 const survivorFx = map[other.name];
                 // Only share if it's a Survivor ability
                 if (survivorFx && other.text?.includes('Survivor')) {
-                    setTimeout(() => survivorFx(params), 300);
+                    setTimeout(() => survivorFx(params), 500);
                 }
             });
         }
-    }, [net, toast, addLog]);
+    }, [net, toast, addLog, setGs, setSearchingDeck, setTargeting, setPendingDecision]);
 
     const triggerTapAbility = useCallback((card) => {
         if (!gsR.current.turn) return;
@@ -307,7 +314,7 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
     const broadcast = useCallback(s => {
         net.sync({
             handCount: s.hand.length,
-            mana: s.mana.map(c => ({ instanceId: c.instanceId, isTapped: !!c.isTapped, skipNextUntap: !!c.skipNextUntap, civilizations: c.civilizations, name: c.name, image_file: c.image_file, set_id: c.set_id })),
+            mana: s.mana.map(c => ({ ...c, isTapped: !!c.isTapped, skipNextUntap: !!c.skipNextUntap })),
             battleZone: s.battleZone.map(c => ({ instanceId: c.instanceId, name: c.name, power: c.power, cost: c.cost, civilizations: c.civilizations, image_file: c.image_file, set_id: c.set_id, isTapped: !!c.isTapped, skipNextUntap: !!c.skipNextUntap, chaosStrikeTarget: !!c.chaosStrikeTarget, text: c.text, type: c.type, subtypes: c.subtypes, powerBonus: c.powerBonus || 0, tempDoubleBreaker: c.tempDoubleBreaker })),
             shields: s.shields.map(c => ({ instanceId: c.instanceId, name: c.name, image_file: c.image_file, set_id: c.set_id, text: c.text, type: c.type, subtypes: c.subtypes })),
             graveyard: s.graveyard.map(c => ({ instanceId: c.instanceId, name: c.name, civilizations: c.civilizations, image_file: c.image_file, set_id: c.set_id })),
@@ -342,26 +349,28 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
             return;
         }
 
+        const avail = gsR.current.mana.filter(m => !m.isTapped).length;
+        const actualCost = CardEngine.getCost(card, gsR.current.battleZone);
+        
+        if (avail < actualCost) {
+            toast(`Not enough mana! (Need ${actualCost})`, "error");
+            return;
+        }
+
         playingRef.current = true;
-        let success = false;
         const isSpell = CardEngine.isSpell(card);
 
         setGs(p => {
-            // Atomic check inside the state update
+            // Re-check atomic condition inside state update
             if (!p.hand.some(c => c.instanceId === card.instanceId)) return p;
             
-            const avail = p.mana.filter(m => !m.isTapped).length;
-            const actualCost = CardEngine.getCost(card, p.battleZone);
-            
-            if (avail < actualCost) {
-                // We can't toast inside setGs, so we rely on the outer check or just return
-                return p;
-            }
+            const currentAvail = p.mana.filter(m => !m.isTapped).length;
+            const currentCost = CardEngine.getCost(card, p.battleZone);
+            if (currentAvail < currentCost) return p;
 
-            success = true;
             let tapped = 0;
             const newMana = p.mana.map(m => {
-                if (!m.isTapped && tapped < actualCost) {
+                if (!m.isTapped && tapped < currentCost) {
                     tapped++;
                     return { ...m, isTapped: true };
                 }
@@ -378,25 +387,18 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
             return { ...p, hand: newHand, mana: newMana, battleZone: [...p.battleZone, { ...card, summonedThisTurn: true, isTapped: false, powerBonus: 0 }] };
         });
 
-        if (success) {
-            if (isSpell) {
-                addLog(`Cast ${card.name}`, 'spell', false, card);
-                triggerEffect("SPELL_EFFECTS", card);
-            } else {
-                addLog(`Summoned ${card.name}`, 'summon', false, card);
-                triggerEffect("ETB_EFFECTS", card);
-                triggerGlobalEffect("ON_SUMMON", { card });
-                net.send("ACTION", { action: "GLOBAL_EVENT", details: { type: "ON_SUMMON", card } });
-            }
+        if (isSpell) {
+            addLog(`Cast ${card.name}`, 'spell', false, card);
+            triggerEffect("SPELL_EFFECTS", card);
         } else {
-            // Re-check why it failed outside setGs to show toast
-            const avail = gsR.current.mana.filter(m => !m.isTapped).length;
-            const actualCost = CardEngine.getCost(card, gsR.current.battleZone);
-            if (avail < actualCost) toast(`Not enough mana! (Need ${actualCost})`, "error");
+            addLog(`Summoned ${card.name}`, 'summon', false, card);
+            triggerEffect("ETB_EFFECTS", card);
+            triggerGlobalEffect("ON_SUMMON", { card });
+            net.send("ACTION", { action: "GLOBAL_EVENT", details: { type: "ON_SUMMON", card } });
         }
         
         setTimeout(() => { playingRef.current = false; }, 400);
-    }, [isLocked, triggerEffect, triggerGlobalEffect, addLog, toast]);
+    }, [isLocked, triggerEffect, triggerGlobalEffect, addLog, toast, net, setGs]);
 
     const resolveAttack = useCallback((atk, tgt, tid, isBlocked) => {
         if (tgt === "SHIELD") {
@@ -598,6 +600,8 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
         toast("Your turn ended");
     }, [isLocked, net, toast]);
 
+    actionsRef.current = { draw, play, attack, triggerEffect };
+
     useEffect(() => {
         net.on("SYNC", p => {
             setGs(s => ({
@@ -723,8 +727,16 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                         count: 1,
                         validTargets: blockers.map(c => c.instanceId),
                         onComplete: (ids) => {
-                            net.send("ACTION", { action: "BLOCK_DECISION", details: { blockerId: ids[0] } });
+                            const id = ids[0];
+                            if (id) {
+                                setGs(p => ({
+                                    ...p,
+                                    battleZone: p.battleZone.map(c => c.instanceId === id ? { ...c, isTapped: true } : c)
+                                }));
+                            }
+                            net.send("ACTION", { action: "BLOCK_DECISION", details: { blockerId: id } });
                             setBlockingRequest(null);
+                            setTargeting(null);
                         }
                     });
                 } else {
@@ -1122,11 +1134,12 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
     }, [net, draw, toast, triggerEffect, triggerGlobalEffect, resolveAttack, finishDestruction, addLog]);
 
     const ctxAction = useCallback((a, d) => {
+        const card = d?.card || d;
         if (a === "AS") attack(d.a, "SHIELD");
         if (a === "AC") attack(d.a, "CREATURE", d.tid);
-        if (a === "PB") play(d.card, "battle");
-        if (a === "PM") play(d.card, "mana");
-        if (a === "EV") {
+        if (a === "PB" || a === "PLAY") play(card, "battle");
+        if (a === "PM" || a === "MANA") play(card, "mana");
+        if (a === "EV" || a === "EVOLVE") {
             const race = CardEngine.evolutionBaitRace(d.card);
             const validBait = gs.battleZone.filter(c => c.subtypes?.some(s => {
                 const st = s.toLowerCase();
@@ -1247,7 +1260,6 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
     }, [conn?.peer, deck, cards]);
 
 
-    actionsRef.current = { draw, play, attack, triggerEffect };
 
     return {
         gs, setGs, toasts, setToasts, ctx, setCtx, preview, setPreview, trigger, setTrigger,
