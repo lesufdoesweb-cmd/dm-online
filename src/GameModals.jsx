@@ -41,6 +41,7 @@ export const SearchOverlay = ({ searchingDeck, setSearchingDeck, gs, onHover }) 
                                 }}>
                                     <div className="card card--md">
                                         <img src={searchingDeck.isFaceDown ? CARD_BACK : `./cards/${c.set_id || 'dm-01'}/${c.image_file}`} alt={c.name} />
+                                        {searchingDeck.message.toLowerCase().includes('shield') && <div className="shield-num-badge" style={{top:5, left:5, bottom:'auto', right:'auto', background:'var(--fire)', color:'white'}}>{(searchingDeck.customList || gs.deck.filter(searchingDeck.filter)).indexOf(c) + 1}</div>}
                                         {isSel && <div className="power-gem" style={{background:'var(--gold)', color:'black', top:0, left:0, bottom:'auto', right:'auto'}}>✓</div>}
                                     </div>
                                 </div>
@@ -61,7 +62,11 @@ export const SearchOverlay = ({ searchingDeck, setSearchingDeck, gs, onHover }) 
                 )}
                 {searchingDeck.isViewOnly && (
                     <div style={{padding:15, textAlign:'center', borderTop:'1px solid rgba(255,255,255,0.1)'}}>
-                        <button className="btn-primary" onClick={() => setSearchingDeck(null)}>Dismiss</button>
+                        <button className="btn-primary" onClick={() => {
+                            const currentOnComplete = searchingDeck.onComplete;
+                            setSearchingDeck(null);
+                            if (currentOnComplete) currentOnComplete();
+                        }}>Dismiss</button>
                     </div>
                 )}
             </div>
@@ -121,31 +126,34 @@ export const DecisionModals = ({
                 </div>
             )}
 
-            {trigger && (
+            {trigger && trigger.length > 0 && (
                 <div className="decision-box">
                     <h2>⚡ SHIELD TRIGGER</h2>
                     <div style={{display:'flex', gap:12}}>
-                        <img src={`./cards/${trigger.set_id || 'dm-01'}/${trigger.image_file}`} style={{width:100, borderRadius:6, border:'1px solid var(--gold)'}} alt="Trigger" />
-                        <div className="desc" style={{flex:1}}>{trigger.text}</div>
+                        <img src={`./cards/${trigger[0].set_id || 'dm-01'}/${trigger[0].image_file}`} style={{width:100, borderRadius:6, border:'1px solid var(--gold)'}} alt="Trigger" />
+                        <div className="desc" style={{flex:1}}>{trigger[0].text}</div>
                     </div>
                     <div className="actions">
                         <button className="btn-primary" onClick={() => {
-                            const isSpell = CardEngine.isSpell(trigger);
-                            addLog(`Activated Shield Trigger: ${trigger.name}`, 'effect', false, trigger);
+                            const current = trigger[0];
+                            const isSpell = CardEngine.isSpell(current);
+                            addLog(`Activated Shield Trigger: ${current.name}`, 'effect', false, current);
+                            net.send("ACTION", { action: "REVEAL_CARD", details: { card: current } });
                             if (isSpell) {
-                                setGs(s => ({ ...s, graveyard: [...s.graveyard, trigger] }));
-                                triggerEffect("SPELL_EFFECTS", trigger);
-                                toast(`${trigger.name} triggered!`);
+                                setGs(s => ({ ...s, graveyard: [...s.graveyard, current] }));
+                                triggerEffect("SPELL_EFFECTS", current);
+                                toast(`${current.name} triggered!`);
                             } else {
-                                setGs(s => ({ ...s, battleZone: [...s.battleZone, { ...trigger, summonedThisTurn: true, isTapped: false, powerBonus: 0 }] }));
-                                triggerEffect("ETB_EFFECTS", trigger);
-                                toast(`${trigger.name} summoned from shield!`);
+                                setGs(s => ({ ...s, battleZone: [...s.battleZone, { ...current, summonedThisTurn: true, isTapped: false, powerBonus: 0 }] }));
+                                triggerEffect("ETB_EFFECTS", current, { card: current });
+                                toast(`${current.name} summoned from shield!`);
                             }
-                            setTrigger(null);
-                        }}>{CardEngine.isSpell(trigger) ? 'Cast Spell' : 'Summon'}</button>
+                            setTrigger(prev => prev.slice(1));
+                        }}>{CardEngine.isSpell(trigger[0]) ? 'Cast Spell' : 'Summon'}</button>
                         <button className="btn-secondary" onClick={() => {
-                            setGs(s => ({ ...s, hand: [...s.hand, trigger] }));
-                            setTrigger(null);
+                            const current = trigger[0];
+                            setGs(s => ({ ...s, hand: [...s.hand, current] }));
+                            setTrigger(prev => prev.slice(1));
                         }}>To Hand</button>
                     </div>
                 </div>

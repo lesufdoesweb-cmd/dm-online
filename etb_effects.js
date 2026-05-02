@@ -685,17 +685,17 @@ export const ETB_EFFECTS = {
             }
         });
     },
-    "Gigaberos": ({ gsR, setGs, setTargeting, toast, askMay }) => {
+    "Gigaberos": ({ card, gsR, setGs, setTargeting, toast, askMay, finishDestruction }) => {
         const s = gsR.current;
-        const others = s.battleZone.filter(c => c.name !== "Gigaberos");
-        const destroySelf = (p) => {
-            const self = p.battleZone.find(c => c.name === "Gigaberos");
-            if (!self) return p;
-            return { ...p, battleZone: p.battleZone.filter(c => c.instanceId !== self.instanceId), graveyard: [...p.graveyard, self] };
+        const others = s.battleZone.filter(c => c.instanceId !== card.instanceId);
+        
+        const destroySelf = () => {
+            const self = gsR.current.battleZone.find(c => c.instanceId === card.instanceId);
+            if (self) finishDestruction(self);
         };
 
         if (others.length < 2) {
-            setGs(destroySelf);
+            destroySelf();
             toast("Gigaberos: Not enough others to sacrifice, destroyed itself");
             return;
         }
@@ -708,16 +708,16 @@ export const ETB_EFFECTS = {
                     count: 2,
                     validTargets: others.map(c => c.instanceId),
                     onComplete: (selectedIds) => {
-                        setGs(s => {
-                            const targets = s.battleZone.filter(c => selectedIds.includes(c.instanceId));
-                            return { ...s, battleZone: s.battleZone.filter(c => !selectedIds.includes(c.instanceId)), graveyard: [...s.graveyard, ...targets] };
+                        selectedIds.forEach(id => {
+                            const target = gsR.current.battleZone.find(c => c.instanceId === id);
+                            if (target) finishDestruction(target);
                         });
                         toast("Gigaberos sacrifice complete!");
                     }
                 });
             },
             onNo: () => {
-                setGs(destroySelf);
+                destroySelf();
                 toast("Gigaberos destroyed itself");
             }
         });

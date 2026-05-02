@@ -18,6 +18,12 @@ export const CardEngine = {
         if (!manaZone || manaZone.length === 0) return false;
         return manaZone.every(m => m.civilizations?.includes(civ));
     },
+    hasCivilization(manaZone, civilizations) {
+        if (!civilizations || civilizations.length === 0) return true;
+        return civilizations.every(reqCiv => 
+            manaZone.some(m => m.civilizations?.includes(reqCiv))
+        );
+    },
     getCost(card, battleZone, manaZone) {
         let cost = card.cost;
         if (!battleZone) return cost;
@@ -80,11 +86,17 @@ export const CardEngine = {
         if (text.includes("when this creature wins a battle, destroy it")) abilities.destroyOnWin = true;
         const paMatch = text.match(/power attacker \+(\d+)/);
         if (paMatch) abilities.powerAttacker = parseInt(paMatch[1]);
-        if (text.trim().startsWith("shield trigger")) abilities.shieldTrigger = true;
+        if (card.tempPowerAttacker) abilities.powerAttacker = (abilities.powerAttacker || 0) + card.tempPowerAttacker;
+        if (text.match(/(^|\n)shield trigger\b/)) abilities.shieldTrigger = true;
 
         if (card.name === "Spiral Grass" || text.includes("untap it after it battles")) abilities.untapAfterBattle = true;
 
         if (card.name === "Angler Cluster") abilities.cantAttack = true;
+        if (card.name === "Snip Striker Bullraizer") abilities.cantAttack = false;
+        if (card.name === "Galsaur" && battleZone) {
+            const others = battleZone.filter(c => c.instanceId !== card.instanceId).length;
+            if (others === 0) abilities.doubleBreaker = true;
+        }
         if (card.name === "Sparkle Flower" && this.isMono(manaZone, 'Light')) abilities.blocker = true;
         if (card.name === "Raging Dash-Horn" && this.isMono(manaZone, 'Nature')) abilities.doubleBreaker = true;
 
@@ -155,7 +167,7 @@ export const CardEngine = {
     },
     basePower(card) { if (!card.power) return 0; return parseInt(card.power.toString().replace(/[^0-9]/g, '')) || 0; },
     getCurrentPower(card, battleZone, manaZone, shields = []) {
-        let power = this.basePower(card);
+        let power = this.basePower(card) + (card.powerBonus || 0);
         if (!battleZone) return power;
         battleZone.forEach(other => {
             if (other.instanceId === card.instanceId) return;
@@ -321,8 +333,9 @@ export const CardEngine = {
     canBeBlocked(atk, def, atkContext, defContext) {
         const abs = this.parseAbilities(atk, atkContext.battleZone, atkContext.manaZone);
         if (abs.cantBeBlocked) return false;
+        if (atk.name === "Tower Shell" && this.getCurrentPower(def, defContext.battleZone, defContext.manaZone) <= 4000) return false;
         if (atk.name === "Calgo, Vizier of Rainclouds" && this.getCurrentPower(def, defContext.battleZone, defContext.manaZone) >= 4000) return false;
-        const defPower = this.getCurrentPower(def, defContext.battleZone, defContext.manaZone) + (def.powerBonus || 0);
+        const defPower = this.getCurrentPower(def, defContext.battleZone, defContext.manaZone);
         if (atk.name === "Xeno Mantis" && defPower <= 5000) return false;
         if (atk.subtypes?.includes('Survivor')) {
             const abs = this.parseAbilities(atk, atkContext.battleZone, atkContext.manaZone);

@@ -48,8 +48,8 @@ const MobileGameBoard = (props) => {
             if (targets.length) {
                 items.push({ type: 'sep' });
                 targets.forEach(t => {
-                    const atkPow = CardEngine.getPotentialPower(c, gs.battleZone, gs.graveyard, gs.mana) + (c.powerBonus || 0);
-                    const defPower = CardEngine.getCurrentPower(t, gs.opponent.battleZone, gs.opponent.mana) + (t.powerBonus || 0);
+                    const atkPow = CardEngine.getPotentialPower(c, gs.battleZone, gs.graveyard, gs.mana);
+                    const defPower = CardEngine.getCurrentPower(t, gs.opponent.battleZone, gs.opponent.mana);
                     items.push({ label: `${t.name} (${defPower})`, icon: atkPow >= defPower ? "⚔" : "💀", cls: "ctx-item--atk", action: "AC", data: { a: c, tid: t.instanceId } });
                 });
             }
@@ -65,11 +65,24 @@ const MobileGameBoard = (props) => {
         if (isLocked || gs.attackStarted) return;
         const isSpell = CardEngine.isSpell(c);
         const isEvo = CardEngine.isEvolution(c);
+        const hasCiv = CardEngine.hasCivilization(gs.mana, c.civilizations);
         const items = [];
         if (isEvo) {
-            items.push({ label: `Evolve (${c.cost})`, icon: "🧬", cls: "ctx-item--summon", action: "EV", data: { card: c } });
+            items.push({ 
+                label: hasCiv ? `Evolve (${c.cost})` : `Missing ${c.civilizations?.[0]} Mana`, 
+                icon: "🧬", 
+                cls: hasCiv ? "ctx-item--summon" : "ctx-item--disabled", 
+                action: hasCiv ? "EV" : "_", 
+                data: { card: c } 
+            });
         } else {
-            items.push({ label: isSpell ? `Cast Spell (${c.cost})` : `Summon (${c.cost})`, icon: isSpell ? "✨" : "⚡", cls: "ctx-item--summon", action: "PB", data: { card: c } });
+            items.push({ 
+                label: hasCiv ? (isSpell ? `Cast Spell (${c.cost})` : `Summon (${c.cost})`) : `Missing ${c.civilizations?.[0]} Mana`, 
+                icon: isSpell ? "✨" : "⚡", 
+                cls: hasCiv ? "ctx-item--summon" : "ctx-item--disabled", 
+                action: hasCiv ? "PB" : "_", 
+                data: { card: c } 
+            });
         }
         if (!gs.hasPlacedMana) items.push({ label: "Charge Mana", icon: "💧", cls: "ctx-item--mana", action: "PM", data: { card: c } });
         
@@ -163,9 +176,12 @@ const MobileGameBoard = (props) => {
                 <div className="mobile-hud-actions-floating">
                     <button className="mobile-btn-glass" onClick={() => setSearchingDeck({ customList: gs.graveyard, message: "Your Graveyard", isViewOnly: true })}>GRAVE</button>
                     <button className="mobile-btn-glass" onClick={() => setSearchingDeck({ customList: gs.mana, message: "Mana Zone", isViewOnly: true })}>MANA</button>
+                    <button className="mobile-btn-glass" onClick={() => setSearchingDeck({ customList: gs.opponent.graveyard, message: "Opponent Graveyard", isViewOnly: true })}>OPP GRAVE</button>
+                    <button className="mobile-btn-glass" onClick={() => setSearchingDeck({ customList: gs.opponent.mana, message: "Opponent Mana", isViewOnly: true })}>OPP MANA</button>
                     <button className="mobile-btn-glass" onClick={() => setSearchingDeck({ customList: gs.deck, message: "Your Deck", isViewOnly: true })}>DECK</button>
                     <button className="mobile-btn-glass" onClick={() => setShowHistory(true)}>📜 LOGS</button>
                 </div>
+
             </div>
 
             {/* BATTLEFIELD (MAT) */}
@@ -276,8 +292,8 @@ const MobileGameBoard = (props) => {
                     
                     // Responsive spacing to fit ~65% width
                     const maxHandWidth = window.innerWidth * 0.65; 
-                    const cardWidth = 70;
-                    const baseSpacing = 55; 
+                    const cardWidth = 60;
+                    const baseSpacing = 48; 
                     const spacing = total > 1 ? Math.min(baseSpacing, (maxHandWidth - cardWidth) / (total - 1)) : 0;
                     
                     const rotation = dist * (12 / Math.max(2, total / 3)); 
@@ -344,4 +360,6 @@ const MobileGameBoard = (props) => {
     );
 };
 
+
 export default MobileGameBoard;
+

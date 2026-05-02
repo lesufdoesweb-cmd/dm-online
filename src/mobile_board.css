@@ -385,7 +385,8 @@
         left: 50%;
         transform: translateX(-50%);
         width: 100%;
-        height: 100px;
+        height: 86px;
+
         display: flex;
         justify-content: center;
         align-items: flex-end;
@@ -394,8 +395,10 @@
     }
 
     .mobile-hand-card-wrapper {
-        width: 70px;
-        height: 98px;
+        width: 60px;
+        height: 84px;
+
+
         border-radius: 6px;
         overflow: hidden;
         border: 1.5px solid rgba(255,255,255,0.15);
@@ -412,7 +415,8 @@
     .mobile-hand-card-wrapper img { width: 100%; height: 100%; object-fit: cover; }
 
     .mobile-hand-card-wrapper.selected {
-        transform: translateY(-130px) scale(2.2) rotate(0deg) !important;
+        transform: translateY(-120px) scale(2.5) rotate(0deg) !important;
+
         z-index: 5000 !important;
         border-color: #ffd644;
         box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 20px rgba(255, 214, 68, 0.4);

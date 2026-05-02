@@ -22,7 +22,7 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
     const [toasts, setToasts] = useState([]);
     const [ctx, setCtx] = useState(null);
     const [preview, setPreview] = useState(null);
-    const [trigger, setTrigger] = useState(null);
+    const [trigger, setTrigger] = useState([]);
     const [targeting, setTargeting] = useState(null);
     const [blockingRequest, setBlockingRequest] = useState(null);
     const [waitingForBlock, setWaitingForBlock] = useState(null);
@@ -126,8 +126,13 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
 
     const hover = useCallback(c => { if (prevT.current) clearTimeout(prevT.current); prevT.current = setTimeout(() => setPreview(c), 50); }, []);
     const unhover = useCallback(() => { if (prevT.current) clearTimeout(prevT.current); prevT.current = null; setPreview(null); }, []);
+    
+    const askMay = useCallback(({ card, message, onYes, onNo }) => {
+        setPendingDecision({ card, message, onYes, onNo: onNo || (() => {}) });
+    }, []);
 
-    const isLocked = !gs.turn || gs.gameOver || waitingForOpponent || !!waitingForBlock || !!searchingDeck || !!targeting || !!pendingDestruction || !!pendingDecision || !!trigger;
+
+    const isLocked = !gs.turn || gs.gameOver || waitingForOpponent || !!waitingForBlock || !!searchingDeck || !!targeting || !!pendingDestruction || !!pendingDecision || trigger.length > 0;
 
     const addLog = useCallback((text, type = 'info', isOpponent = false, card = null) => {
         const entry = {
@@ -147,7 +152,7 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
     const triggerEffect = useCallback((type, card, extraParams = {}) => {
         const maps = { ETB_EFFECTS, SPELL_EFFECTS, ATTACK_TRIGGERS, DESTROY_EFFECTS, TAP_EFFECTS };
         const map = maps[type];
-        if (!map) return;
+        if (!map) return false;
         
         // Original card effect
         const fx = map[card.name];
@@ -157,19 +162,23 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
             setGs, toast, net, setSearchingDeck, setTargeting, gsR,
             play: actionsRef.current.play,
             attack: actionsRef.current.attack,
+            finishDestruction: actionsRef.current.finishDestruction,
             CardEngine,
             addLog,
-            askMay: ({ message, onYes, onNo }) => {
-                setPendingDecision({ card, message, onYes, onNo: onNo || (() => {}) });
-            },
+            askMay: (opts) => askMay({ card, ...opts }),
+
             ...extraParams
         };
         
+        let found = false;
         if (fx) {
             console.log(`Triggering ${type} for ${card.name}`);
-            setTimeout(() => fx(params), 400);
-        } else {
-            console.warn(`No ${type} found for ${card.name}`);
+            if (extraParams.sync) {
+                fx(params);
+            } else {
+                setTimeout(() => fx(params), 400);
+            }
+            found = true;
         }
 
         // Survivor shared triggers
@@ -180,11 +189,17 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                 const survivorFx = map[other.name];
                 // Only share if it's a Survivor ability
                 if (survivorFx && other.text?.includes('Survivor')) {
-                    setTimeout(() => survivorFx(params), 500);
+                    found = true;
+                    if (extraParams.sync) {
+                        survivorFx({ ...params, card: other });
+                    } else {
+                        setTimeout(() => survivorFx({ ...params, card: other }), 500);
+                    }
                 }
             });
         }
-    }, [net, toast, addLog, setGs, setSearchingDeck, setTargeting, setPendingDecision]);
+        return found;
+    }, [net, toast, addLog, setGs, setSearchingDeck, setTargeting, setPendingDecision, gsR]);
 
     const triggerTapAbility = useCallback((card) => {
         if (!gsR.current.turn) return;
@@ -224,9 +239,8 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                     attack: actionsRef.current.attack,
                     CardEngine,
                     addLog,
-                    askMay: ({ message, onYes, onNo }) => {
-                        setPendingDecision({ card: c, message, onYes, onNo: onNo || (() => {}) });
-                    }
+                    askMay: (opts) => askMay({ card: c, ...opts })
+
                 };
                 fx(params);
             }
@@ -234,6 +248,14 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
     }, [net, toast, addLog]);
 
     const finishDestruction = useCallback((card, destinationOverride = null) => {
+        if (!destinationOverride) {
+            const opt = CardEngine.getOptionalReplacement(card, gsR.current.battleZone);
+            if (opt) {
+                setPendingDestruction({ card, replacement: opt });
+                return;
+            }
+        }
+        triggerEffect("DESTROY_EFFECTS", card);
         setGs(p => {
             const target = p.battleZone.find(c => c.instanceId === card.instanceId);
             if (!target) return p;
@@ -262,6 +284,8 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                     const other = p.mana.find(c => c.name === "Ambush Scorpion");
                     if (other) {
                         askMay({
+                            card,
+
                             message: "Ambush Scorpion: Bring another from mana zone?",
                             onYes: () => {
                                 setGs(s => ({
@@ -276,6 +300,8 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                 if (card.name === "Jewel Spider") {
                     if (p.shields.length) {
                         askMay({
+                            card,
+
                             message: "Jewel Spider: Return a shield to hand?",
                             onYes: () => {
                                 setGs(s => {
@@ -291,6 +317,8 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                     const kip = p.battleZone.find(c => c.name === "Kip Chippotto");
                     if (kip) {
                         askMay({
+                            card: kip,
+
                             message: `Kip Chippotto: Destroy Kip instead of ${card.name}?`,
                             onYes: () => {
                                 finishDestruction(kip);
@@ -304,12 +332,13 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
         });
         triggerGlobalEffect("ON_DESTROY", { card });
         net.send("ACTION", { action: "FINISH_DESTRUCTION_SYNC", details: { instanceId: card.instanceId, dest: destinationOverride || CardEngine.onDestroyed(card, gsR.current.battleZone) } });
-    }, [net, triggerGlobalEffect]);
+    }, [net, triggerGlobalEffect, triggerEffect, CardEngine, askMay]);
 
     useEffect(() => {
-        const isMakingDecision = !!targeting || !!blockingRequest || !!trigger || !!searchingDeck || !!pendingDestruction || !!pendingDecision;
+        const isMakingDecision = !!targeting || !!blockingRequest || trigger.length > 0 || !!searchingDeck || !!pendingDestruction || !!pendingDecision;
         net.send("ACTION", { action: "WAIT_OPPONENT", details: { waiting: isMakingDecision } });
-    }, [!!targeting, !!blockingRequest, !!trigger, !!searchingDeck, !!pendingDestruction, !!pendingDecision]);
+    }, [!!targeting, !!blockingRequest, trigger.length > 0, !!searchingDeck, !!pendingDestruction, !!pendingDecision]);
+
 
     const broadcast = useCallback(s => {
         net.sync({
@@ -357,6 +386,11 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
             return;
         }
 
+        if (!CardEngine.hasCivilization(gsR.current.mana, card.civilizations)) {
+            toast(`Missing required civilization in mana zone!`, "error");
+            return;
+        }
+
         playingRef.current = true;
         const isSpell = CardEngine.isSpell(card);
 
@@ -389,6 +423,7 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
 
         if (isSpell) {
             addLog(`Cast ${card.name}`, 'spell', false, card);
+            net.send("ACTION", { action: "REVEAL_CARD", details: { card } });
             triggerEffect("SPELL_EFFECTS", card);
         } else {
             addLog(`Summoned ${card.name}`, 'summon', false, card);
@@ -451,12 +486,12 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
             addLog(`${atk.name} attacked ${opp.name}`, 'attack', false, atk);
 
             const s = gsR.current;
-            let atkPower = CardEngine.getPotentialPower(atk, s.battleZone, s.graveyard, s.mana, s.shields) + (atk.powerBonus || 0);
+            let atkPower = CardEngine.getPotentialPower(atk, s.battleZone, s.graveyard, s.mana, s.shields);
             if (s.turnEffects.swordOfMalevolentDeath) {
                 const darkMana = s.mana.filter(m => m.civilizations?.includes('Darkness')).length;
                 atkPower += (darkMana * 1000);
             }
-            const defPower = CardEngine.getCurrentPower(opp, s.opponent.battleZone, s.opponent.mana, s.opponent.shields) + (opp.powerBonus || 0);
+            const defPower = CardEngine.getCurrentPower(opp, s.opponent.battleZone, s.opponent.mana, s.opponent.shields);
 
             const atkAbs = CardEngine.parseAbilities(atk, s.battleZone, s.mana);
             const defAbs = CardEngine.parseAbilities(opp, s.opponent.battleZone, s.opponent.mana);
@@ -544,9 +579,18 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
         addLog(`${atk.name} is attacking!`, 'attack', false, atk);
         setGs(p => ({ ...p, attackStarted: true, battleZone: p.battleZone.map(c => c.instanceId === atk.instanceId ? { ...c, isTapped: true, attackedThisTurn: true } : c) }));
 
-        triggerEffect("ATTACK_TRIGGERS", atk);
-        net.send("ACTION", { action: "ATTACK_DECLARED", details: { attacker: atk, targetType: tgt, targetId: tid } });
-        setWaitingForBlock({ atk, tgt, tid });
+        let isPaused = false;
+        const pause = () => { isPaused = true; };
+        const resume = () => {
+            net.send("ACTION", { action: "ATTACK_DECLARED", details: { attacker: atk, targetType: tgt, targetId: tid } });
+            setWaitingForBlock({ atk, tgt, tid });
+        };
+
+        const hasTrigger = triggerEffect("ATTACK_TRIGGERS", atk, { pause, resume, sync: true });
+        
+        if (!isPaused) {
+            resume();
+        }
     }, [toast, net, isLocked, triggerEffect, addLog]);
 
     const endTurn = useCallback(() => {
@@ -560,47 +604,85 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
 
         if (mandatoryAtk) { toast(`${mandatoryAtk.name} must attack!`, "error"); return; }
 
-        const returnCards = currentGs.battleZone.filter(c => {
-            const text = (c.text || '').toLowerCase();
-            return text.includes("at the end of your turn, return this creature to your hand");
-        });
+        const untapAllC = currentGs.battleZone.find(c => CardEngine.parseAbilities(c, currentGs.battleZone, currentGs.mana).untapAllAtEnd);
+        const untapSelfC = currentGs.battleZone.filter(c => CardEngine.parseAbilities(c, currentGs.battleZone, currentGs.mana).untapAtEnd && c.isTapped);
 
-        setGs(p => ({
-            ...p,
-            turn: false,
-            hasPlacedMana: false,
-            attackStarted: false,
-            battleZone: p.battleZone.filter(c => !returnCards.some(r => r.instanceId === c.instanceId)).map(c => {
-                let nc = { ...c, chaosStrikeTarget: false };
-                const abs = CardEngine.parseAbilities(c, p.battleZone, p.mana);
-                if (abs.untapAtEnd || abs.untapAllAtEnd) nc.isTapped = false;
-                nc.summonedThisTurn = false;
-                nc.powerBonus = 0;
-                nc.tempDoubleBreaker = false;
-                nc.cantBeBlockedThisTurn = false;
-                nc.canAttackPlayersOverride = false;
-                nc.canAttackUntappedThisTurn = false;
-                nc.tempBlocker = false;
-                nc.tempSlayer = false;
-                if (p.turnEffects.whiskingWhirlwind && nc.attackedThisTurn) nc.isTapped = false;
-                nc.attackedThisTurn = false;
-                return nc;
-            }),
-            hand: [...p.hand, ...returnCards],
+        const finalize = (untapAll = false, untapIds = []) => {
+            const returnCards = currentGs.battleZone.filter(c => {
+                const text = (c.text || '').toLowerCase();
+                return text.includes("at the end of your turn, return this creature to your hand");
+            });
+
+            setGs(p => ({
+                ...p,
+                turn: false,
+                hasPlacedMana: false,
+                attackStarted: false,
+                battleZone: p.battleZone.filter(c => !returnCards.some(r => r.instanceId === c.instanceId)).map(c => {
+                    let nc = { ...c, chaosStrikeTarget: false };
+                    const abs = CardEngine.parseAbilities(c, p.battleZone, p.mana);
+                    if (untapAll || untapIds.includes(c.instanceId)) nc.isTapped = false;
+                    nc.summonedThisTurn = false;
+                    nc.powerBonus = 0;
+                    nc.tempPowerAttacker = 0;
+                    nc.tempDoubleBreaker = false;
+                    nc.cantBeBlockedThisTurn = false;
+                    nc.canAttackPlayersOverride = false;
+                    nc.canAttackUntappedThisTurn = false;
+                    nc.tempBlocker = false;
+                    nc.tempSlayer = false;
+                    if (p.turnEffects.whiskingWhirlwind && nc.attackedThisTurn) nc.isTapped = false;
+                    nc.attackedThisTurn = false;
+                    return nc;
+                }),
+                hand: [...p.hand, ...returnCards],
+                turnEffects: { creepingPlague: false, swordOfMalevolentDeath: false, whiskingWhirlwind: false, miracleQuest: false, brutalCharge: false },
+                shieldsBrokenThisTurn: 0
+            }));
             
-            turnEffects: { creepingPlague: false, swordOfMalevolentDeath: false, whiskingWhirlwind: false, miracleQuest: false, brutalCharge: false },
-            shieldsBrokenThisTurn: 0
-        }));
-        
-        if (currentGs.turnEffects.brutalCharge && currentGs.shieldsBrokenThisTurn > 0) {
-            const map = window.GAME_EFFECTS.SPELL_EFFECTS;
-            if (map["Brutal Charge Trigger"]) map["Brutal Charge Trigger"]({ gsR, setGs, setSearchingDeck, toast, CardEngine });
-        }
-        net.send("ACTION", { action: "END_TURN" });
-        toast("Your turn ended");
-    }, [isLocked, net, toast]);
+            if (currentGs.turnEffects.brutalCharge && currentGs.shieldsBrokenThisTurn > 0) {
+                const map = SPELL_EFFECTS;
+                if (map["Brutal Charge Trigger"]) map["Brutal Charge Trigger"]({ gsR, setGs, setSearchingDeck, toast, CardEngine });
+            }
+            net.send("ACTION", { action: "END_TURN" });
+            toast("Your turn ended");
+        };
 
-    actionsRef.current = { draw, play, attack, triggerEffect };
+        if (untapAllC) {
+            setPendingDecision({
+                card: untapAllC,
+                message: `${untapAllC.name}: Untap all your creatures?`,
+                onYes: () => finalize(true),
+                onNo: () => {
+                    if (untapSelfC.length > 0) processUntapSelf(0, []);
+                    else finalize(false);
+                }
+            });
+            return;
+        }
+
+        const processUntapSelf = (idx, ids) => {
+            if (idx >= untapSelfC.length) {
+                finalize(false, ids);
+                return;
+            }
+            const c = untapSelfC[idx];
+            setPendingDecision({
+                card: c,
+                message: `${c.name}: Untap this creature?`,
+                onYes: () => processUntapSelf(idx + 1, [...ids, c.instanceId]),
+                onNo: () => processUntapSelf(idx + 1, ids)
+            });
+        };
+
+        if (untapSelfC.length > 0) {
+            processUntapSelf(0, []);
+        } else {
+            finalize();
+        }
+    }, [isLocked, net, toast, CardEngine]);
+
+    actionsRef.current = { draw, play, attack, triggerEffect, finishDestruction };
 
     useEffect(() => {
         net.on("SYNC", p => {
@@ -768,7 +850,7 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                     card: details.card,
                     onComplete: () => {}
                 });
-                setTimeout(() => setSearchingDeck(null), 3500);
+                setTimeout(() => setSearchingDeck(null), 2000);
             }
             if (action === "SHIELD_BROKEN") {
                 addLog("One of your shields was broken", 'shield');
@@ -776,7 +858,8 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                     const ns = [...prev.shields];
                     if (!ns.length) return { ...prev, gameOver: 'lose' };
                     const c = ns.pop();
-                    if (c.text?.toLowerCase().includes("shield trigger")) {
+                    const abs = CardEngine.parseAbilities(c, prev.battleZone, prev.mana);
+                    if (abs.shieldTrigger) {
                         const allBz = [...gsR.current.battleZone, ...gsR.current.opponent.battleZone];
                         const hasGigabolver = allBz.some(x => x.name === "Gigabolver");
                         const hasFuReil = allBz.some(x => x.name === "Fu Reil, Seeker of Storms");
@@ -790,7 +873,8 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                             addLog(`Fu Reil prevented shield trigger for ${c.name}`, 'effect');
                             setTimeout(() => setGs(s => ({ ...s, hand: [...s.hand, c] })), 800);
                         } else {
-                            setTrigger(c);
+                            setTrigger(prev => [...prev, c]);
+
                         }
                     }
                     else setTimeout(() => setGs(s => ({ ...s, hand: [...s.hand, c] })), 800);

@@ -1,8 +1,9 @@
 export const ATTACK_TRIGGERS = {
-    "Amber Piercer": ({ gsR, setSearchingDeck, setGs, toast, askMay }) => {
+    "Amber Piercer": ({ gsR, setSearchingDeck, setGs, toast, askMay, pause, resume }) => {
         const s = gsR.current;
         const creatures = s.graveyard.filter(c => c.type === 'Creature');
         if (!creatures.length) return;
+        pause();
         askMay({
             message: "Use Amber Piercer's effect to return a creature from graveyard?",
             onYes: () => {
@@ -19,14 +20,17 @@ export const ATTACK_TRIGGERS = {
                             hand: [...prev.hand, card]
                         }));
                         toast(`${card.name} returned from graveyard!`);
+                        resume();
                     }
                 });
-            }
+            },
+            onNo: resume
         });
     },
-    "Bolzard Dragon": ({ gsR, setSearchingDeck, net, toast }) => {
+    "Bolzard Dragon": ({ gsR, setSearchingDeck, net, toast, pause, resume }) => {
         const s = gsR.current;
         if (!s.opponent.mana.length) return;
+        pause();
         setSearchingDeck({
             message: "Bolzard Dragon: Choose enemy mana to destroy",
             customList: s.opponent.mana,
@@ -34,20 +38,24 @@ export const ATTACK_TRIGGERS = {
             onComplete: (card) => {
                 net.send("ACTION", { action: "DESTROY_MANA", details: { targetId: card.instanceId } });
                 toast("Mana destroyed!");
+                resume();
             }
         });
     },
     "Dark Titan Maginn": ({ net, toast }) => { net.send("ACTION", { action: "DISCARD_RANDOM" }); toast("Dark Titan Maginn: Opponent discards!"); },
     "Horrid Worm": ({ net, toast }) => { net.send("ACTION", { action: "DISCARD_RANDOM" }); toast("Horrid Worm: Opponent discards!"); },
-    "Hypersquid Walter": ({ draw, toast, askMay }) => {
+    "Hypersquid Walter": ({ draw, toast, askMay, pause, resume }) => {
+        pause();
         askMay({
             message: "Use Hypersquid Walter's effect to draw a card?",
-            onYes: () => { draw(); toast("Hypersquid Walter: Draw 1!"); }
+            onYes: () => { draw(); toast("Hypersquid Walter: Draw 1!"); resume(); },
+            onNo: resume
         });
     },
-    "General Dark Fiend": ({ gsR, setGs, setSearchingDeck, toast }) => {
+    "General Dark Fiend": ({ gsR, setGs, setSearchingDeck, toast, pause, resume }) => {
         const s = gsR.current;
         if (!s.shields.length) return;
+        pause();
         setSearchingDeck({
             message: "General Dark Fiend: Select a shield to sacrifice",
             count: 1,
@@ -59,10 +67,12 @@ export const ATTACK_TRIGGERS = {
                     return { ...p, shields: ns, graveyard: [...p.graveyard, shield] };
                 });
                 toast("General Dark Fiend: Sacrificed a shield!");
+                resume();
             }
         });
     },
-    "Laguna, Lightning Enforcer": ({ setSearchingDeck, net, setGs, toast, askMay }) => {
+    "Laguna, Lightning Enforcer": ({ setSearchingDeck, net, setGs, toast, askMay, pause, resume }) => {
+        pause();
         askMay({
             message: "Use Laguna's effect to search for a spell?",
             onYes: () => {
@@ -77,14 +87,17 @@ export const ATTACK_TRIGGERS = {
                             return { ...s, deck: newDeck, hand: [...s.hand, card] };
                         });
                         toast(`${card.name} added to hand!`);
+                        resume();
                     }
                 });
-            }
+            },
+            onNo: resume
         });
     },
-    "Metalwing Skyterror": ({ gsR, setTargeting, net, toast, CardEngine, askMay }) => {
+    "Metalwing Skyterror": ({ gsR, setTargeting, net, toast, CardEngine, askMay, pause, resume }) => {
         const targets = gsR.current.opponent.battleZone.filter(c => CardEngine.parseAbilities(c, gsR.current.opponent.battleZone, gsR.current.opponent.mana).blocker);
         if (!targets.length) return;
+        pause();
         askMay({
             message: "Use Metalwing Skyterror's effect to destroy an enemy blocker?",
             onYes: () => {
@@ -95,23 +108,29 @@ export const ATTACK_TRIGGERS = {
                     onComplete: (selectedIds) => {
                         net.send("ACTION", { action: "DESTROY_TARGET", details: { targetId: selectedIds[0] } });
                         toast("Blocker destroyed!");
+                        resume();
                     }
                 });
-            }
+            },
+            onNo: resume
         });
     },
-    "Plasma Chaser": ({ gsR, draw, toast, askMay }) => {
+    "Plasma Chaser": ({ gsR, draw, toast, askMay, pause, resume }) => {
         const count = gsR.current.opponent.battleZone.length;
         if (count === 0) return;
+        pause();
         askMay({
             message: `Use Plasma Chaser's effect to draw ${count} cards?`,
             onYes: () => {
                 for (let i = 0; i < count; i++) setTimeout(() => draw(), i * 200);
                 toast(`Plasma Chaser: Draw ${count} cards!`);
-            }
+                resume();
+            },
+            onNo: resume
         });
     },
-    "Silver Axe": ({ setGs, toast, askMay }) => {
+    "Silver Axe": ({ setGs, toast, askMay, pause, resume }) => {
+        pause();
         askMay({
             message: "Use Silver Axe's effect to boost mana?",
             onYes: () => {
@@ -122,12 +141,15 @@ export const ATTACK_TRIGGERS = {
                     return { ...p, mana: [...p.mana, { ...c, isTapped: false }], deck: d };
                 });
                 toast("Silver Axe: Mana boost!");
-            }
+                resume();
+            },
+            onNo: resume
         });
     },
-    "Stained Glass": ({ gsR, setTargeting, net, toast, askMay }) => {
+    "Stained Glass": ({ gsR, setTargeting, net, toast, askMay, pause, resume }) => {
         const targets = gsR.current.opponent.battleZone.filter(c => c.civilizations?.some(civ => civ === 'Fire' || civ === 'Nature'));
         if (!targets.length) return;
+        pause();
         askMay({
             message: "Use Stained Glass's effect to bounce a Fire or Nature creature?",
             onYes: () => {
@@ -138,14 +160,17 @@ export const ATTACK_TRIGGERS = {
                     onComplete: (selectedIds) => {
                         net.send("ACTION", { action: "BOUNCE_TARGET", details: { targetId: selectedIds[0] } });
                         toast("Creature bounced!");
+                        resume();
                     }
                 });
-            }
+            },
+            onNo: resume
         });
     },
-    "Wyn, the Oracle": ({ gsR, setSearchingDeck, toast, askMay }) => {
+    "Wyn, the Oracle": ({ gsR, setSearchingDeck, toast, askMay, pause, resume }) => {
         const s = gsR.current;
         if (!s.opponent.shields?.length) return;
+        pause();
         askMay({
             message: "Use Wyn's effect to peek at a shield?",
             onYes: () => {
@@ -156,21 +181,27 @@ export const ATTACK_TRIGGERS = {
                     isViewOnly: true,
                     customList: [shield],
                     filter: () => true,
-                    onComplete: () => {}
+                    onComplete: () => {
+                        resume();
+                    }
                 });
                 toast("Wyn: Peeked at a shield!");
-            }
+            },
+            onNo: resume
         });
     },
-    "Chaos Fish": ({ gsR, draw, toast, askMay }) => {
+    "Chaos Fish": ({ gsR, draw, toast, askMay, pause, resume }) => {
         const count = gsR.current.battleZone.filter(c => c.civilizations?.includes('Water') && c.name !== "Chaos Fish").length;
         if (count === 0) return;
+        pause();
         askMay({
             message: `Use Chaos Fish's effect to draw ${count} cards?`,
             onYes: () => {
                 for (let i = 0; i < count; i++) setTimeout(() => draw(), i * 200);
                 toast(`Chaos Fish: Draw ${count} cards!`);
-            }
+                resume();
+            },
+            onNo: resume
         });
     },
     "Earthstomp Giant": ({ gsR, setGs, toast }) => {
@@ -184,9 +215,10 @@ export const ATTACK_TRIGGERS = {
         }));
         toast("Earthstomp Giant: Creatures returned from mana!");
     },
-    "Flametropus": ({ gsR, setSearchingDeck, setGs, toast, askMay }) => {
+    "Flametropus": ({ card, gsR, setSearchingDeck, setGs, toast, askMay, pause, resume }) => {
         const s = gsR.current;
         if (!s.mana.length) return;
+        pause();
         askMay({
             message: "Use Flametropus's effect to sacrifice mana for a buff?",
             onYes: () => {
@@ -194,24 +226,27 @@ export const ATTACK_TRIGGERS = {
                     message: "Flametropus: Select mana to sacrifice for buff",
                     customList: s.mana,
                     count: 1,
-                    onComplete: (card) => {
+                    onComplete: (manaCard) => {
                         setGs(p => {
                             return {
                                 ...p,
-                                mana: p.mana.filter(m => m.instanceId !== card.instanceId),
-                                graveyard: [...p.graveyard, card],
-                                battleZone: p.battleZone.map(c => c.name === "Flametropus" ? { ...c, powerBonus: (c.powerBonus || 0) + 3000, tempDoubleBreaker: true } : c)
+                                mana: p.mana.filter(m => m.instanceId !== manaCard.instanceId),
+                                graveyard: [...p.graveyard, manaCard],
+                                battleZone: p.battleZone.map(c => c.instanceId === card.instanceId ? { ...c, powerBonus: (c.powerBonus || 0) + 3000, tempDoubleBreaker: true } : c)
                             };
                         });
                         toast("Flametropus: Buffed!");
+                        resume();
                     }
                 });
-            }
+            },
+            onNo: resume
         });
     },
-    "Gamil, Knight of Hatred": ({ gsR, setSearchingDeck, setGs, toast, askMay }) => {
+    "Gamil, Knight of Hatred": ({ gsR, setSearchingDeck, setGs, toast, askMay, pause, resume }) => {
         const darks = gsR.current.graveyard.filter(c => c.civilizations?.includes('Darkness') && c.type === 'Creature');
         if (!darks.length) return;
+        pause();
         askMay({
             message: "Use Gamil's effect to recover a Darkness creature?",
             onYes: () => {
@@ -223,14 +258,17 @@ export const ATTACK_TRIGGERS = {
                     onComplete: (card) => {
                         setGs(p => ({ ...p, graveyard: p.graveyard.filter(x => x.instanceId !== card.instanceId), hand: [...p.hand, card] }));
                         toast("Gamil: Darkness creature recovered!");
+                        resume();
                     }
                 });
-            }
+            },
+            onNo: resume
         });
     },
-    "King Neptas": ({ gsR, setTargeting, net, toast, CardEngine, askMay }) => {
+    "King Neptas": ({ gsR, setTargeting, net, toast, CardEngine, askMay, pause, resume }) => {
         const targets = [...gsR.current.battleZone, ...gsR.current.opponent.battleZone].filter(c => CardEngine.getCurrentPower(c, [], []) <= 2000);
         if (!targets.length) return;
+        pause();
         askMay({
             message: "Use King Neptas's effect to bounce a creature?",
             onYes: () => {
@@ -247,14 +285,17 @@ export const ATTACK_TRIGGERS = {
                             return { ...s, battleZone: s.battleZone.filter(x => x.instanceId !== id), hand: [...s.hand, c] };
                         });
                         toast("King Neptas: Bounced creature!");
+                        resume();
                     }
                 });
-            }
+            },
+            onNo: resume
         });
     },
-    "Muramasa, Duke of Blades": ({ gsR, setTargeting, net, toast, CardEngine, askMay }) => {
+    "Muramasa, Duke of Blades": ({ gsR, setTargeting, net, toast, CardEngine, askMay, pause, resume }) => {
         const targets = gsR.current.opponent.battleZone.filter(c => CardEngine.getCurrentPower(c, gsR.current.opponent.battleZone, gsR.current.opponent.mana) <= 2000);
         if (!targets.length) return;
+        pause();
         askMay({
             message: "Use Muramasa's effect to destroy an enemy creature?",
             onYes: () => {
@@ -265,12 +306,15 @@ export const ATTACK_TRIGGERS = {
                     onComplete: (ids) => {
                         net.send("ACTION", { action: "DESTROY_TARGET", details: { targetId: ids[0] } });
                         toast("Muramasa: Destroyed enemy!");
+                        resume();
                     }
                 });
-            }
+            },
+            onNo: resume
         });
     },
-    "King Ponitas": ({ setSearchingDeck, setGs, toast, askMay }) => {
+    "King Ponitas": ({ setSearchingDeck, setGs, toast, askMay, pause, resume }) => {
+        pause();
         askMay({
             message: "Use King Ponitas's effect to search for a Water card?",
             onYes: () => {
@@ -284,14 +328,17 @@ export const ATTACK_TRIGGERS = {
                             return { ...s, deck: newDeck, hand: [...s.hand, card] };
                         });
                         toast("King Ponitas: Water card added to hand!");
+                        resume();
                     }
                 });
-            }
+            },
+            onNo: resume
         });
     },
-    "Psyshroom": ({ gsR, setSearchingDeck, setGs, toast, askMay }) => {
+    "Psyshroom": ({ gsR, setSearchingDeck, setGs, toast, askMay, pause, resume }) => {
         const natures = gsR.current.graveyard.filter(c => c.civilizations?.includes('Nature'));
         if (!natures.length) return;
+        pause();
         askMay({
             message: "Use Psyshroom's effect to move Nature card from graveyard to mana?",
             onYes: () => {
@@ -303,14 +350,17 @@ export const ATTACK_TRIGGERS = {
                     onComplete: (card) => {
                         setGs(p => ({ ...p, graveyard: p.graveyard.filter(x => x.instanceId !== card.instanceId), mana: [...p.mana, { ...card, isTapped: false }] }));
                         toast("Psyshroom: Nature card moved to mana!");
+                        resume();
                     }
                 });
-            }
+            },
+            onNo: resume
         });
     },
-    "Ra Vu, Seeker of Lightning": ({ gsR, setSearchingDeck, setGs, toast, askMay }) => {
+    "Ra Vu, Seeker of Lightning": ({ gsR, setSearchingDeck, setGs, toast, askMay, pause, resume }) => {
         const lightSpells = gsR.current.graveyard.filter(c => c.civilizations?.includes('Light') && c.type === 'Spell');
         if (!lightSpells.length) return;
+        pause();
         askMay({
             message: "Use Ra Vu's effect to recover a Light spell?",
             onYes: () => {
@@ -322,14 +372,17 @@ export const ATTACK_TRIGGERS = {
                     onComplete: (card) => {
                         setGs(p => ({ ...p, graveyard: p.graveyard.filter(x => x.instanceId !== card.instanceId), hand: [...p.hand, card] }));
                         toast("Ra Vu: Light spell recovered!");
+                        resume();
                     }
                 });
-            }
+            },
+            onNo: resume
         });
     },
-    "Sniper Mosquito": ({ gsR, setSearchingDeck, setGs, toast }) => {
+    "Sniper Mosquito": ({ gsR, setSearchingDeck, setGs, toast, pause, resume }) => {
         const s = gsR.current;
         if (!s.mana.length) return;
+        pause();
         setSearchingDeck({
             message: "Sniper Mosquito: Select mana to return to hand",
             customList: s.mana,
@@ -339,12 +392,14 @@ export const ATTACK_TRIGGERS = {
                     return { ...p, mana: p.mana.filter(m => m.instanceId !== card.instanceId), hand: [...p.hand, card] };
                 });
                 toast("Sniper Mosquito: Mana returned!");
+                resume();
             }
         });
     },
-    "Stinger Ball": ({ gsR, setSearchingDeck, toast, askMay }) => {
+    "Stinger Ball": ({ gsR, setSearchingDeck, toast, askMay, pause, resume }) => {
         const s = gsR.current;
         if (!s.opponent.shields?.length) return;
+        pause();
         askMay({
             message: "Use Stinger Ball's effect to peek at a shield?",
             onYes: () => {
@@ -355,16 +410,20 @@ export const ATTACK_TRIGGERS = {
                     isViewOnly: true,
                     customList: [shield],
                     filter: () => true,
-                    onComplete: () => {}
+                    onComplete: () => {
+                        resume();
+                    }
                 });
                 toast("Stinger Ball: Peeked at a shield!");
-            }
+            },
+            onNo: resume
         });
     },
-    "Armored Warrior Quelos": ({ gsR, setSearchingDeck, setGs, net, toast }) => {
+    "Armored Warrior Quelos": ({ gsR, setSearchingDeck, setGs, net, toast, pause, resume }) => {
         const s = gsR.current;
         const nonFire = s.mana.filter(m => !m.civilizations?.includes('Fire'));
         if (nonFire.length > 0) {
+            pause();
             setSearchingDeck({
                 message: "Quelos: Select a non-Fire mana to sacrifice",
                 customList: nonFire,
@@ -373,15 +432,17 @@ export const ATTACK_TRIGGERS = {
                     setGs(prev => {
                         return { ...prev, mana: prev.mana.filter(m => m.instanceId !== card.instanceId), graveyard: [...prev.graveyard, card] };
                     });
+                    resume();
                 }
             });
         }
         net.send("ACTION", { action: "FORCE_DISCARD_NON_FIRE_MANA" });
         toast("Quelos: Mutual mana destruction!");
     },
-    "Smile Angler": ({ gsR, setSearchingDeck, net, toast, askMay }) => {
+    "Smile Angler": ({ gsR, setSearchingDeck, net, toast, askMay, pause, resume }) => {
         const s = gsR.current;
         if (!s.opponent.mana.length) return;
+        pause();
         askMay({
             message: "Use Smile Angler's effect to bounce enemy mana?",
             onYes: () => {
@@ -392,14 +453,17 @@ export const ATTACK_TRIGGERS = {
                     onComplete: (card) => {
                         net.send("ACTION", { action: "MANA_TO_HAND_TARGET", details: { targetId: card.instanceId } });
                         toast("Mana returned to hand!");
+                        resume();
                     }
                 });
-            }
+            },
+            onNo: resume
         });
     },
-    "Three-Eyed Dragonfly": ({ gsR, setGs, setTargeting, toast, askMay }) => {
+    "Three-Eyed Dragonfly": ({ gsR, setGs, setTargeting, toast, askMay, pause, resume }) => {
         const others = gsR.current.battleZone.filter(c => c.name !== "Three-Eyed Dragonfly");
         if (!others.length) return;
+        pause();
         askMay({
             message: "Use Three-Eyed Dragonfly's effect to sacrifice a creature for a buff?",
             onYes: () => {
@@ -418,14 +482,17 @@ export const ATTACK_TRIGGERS = {
                             };
                         });
                         toast("Three-Eyed Dragonfly: Buffed!");
+                        resume();
                     }
                 });
-            }
+            },
+            onNo: resume
         });
     },
-    "Fu Reil, the Chosen": ({ gsR, setTargeting, setGs, net, toast, askMay }) => {
+    "Fu Reil, the Chosen": ({ gsR, setTargeting, setGs, net, toast, askMay, pause, resume }) => {
         const creatures = gsR.current.battleZone;
         if (!creatures.length) return;
+        pause();
         askMay({
             message: "Use Fu Reil's effect to put one of your creatures into mana?",
             onYes: () => {
@@ -437,14 +504,17 @@ export const ATTACK_TRIGGERS = {
                         const target = gsR.current.battleZone.find(x => x.instanceId === ids[0]);
                         setGs(p => ({ ...p, battleZone: p.battleZone.filter(x => x.instanceId !== ids[0]), mana: [...p.mana, { ...target, isTapped: false }] }));
                         toast("Creature sent to mana zone!");
+                        resume();
                     }
                 });
-            }
+            },
+            onNo: resume
         });
     },
-    "Gulan Rias, Speed Guardian": ({ gsR, setTargeting, net, toast, askMay }) => {
+    "Gulan Rias, Speed Guardian": ({ gsR, setTargeting, net, toast, askMay, pause, resume }) => {
         const oppCreatures = gsR.current.opponent.battleZone;
         if (!oppCreatures.length) return;
+        pause();
         askMay({
             message: "Use Gulan Rias's effect to tap an enemy?",
             onYes: () => {
@@ -455,14 +525,17 @@ export const ATTACK_TRIGGERS = {
                     onComplete: (ids) => {
                         net.send("ACTION", { action: "TAP_TARGET", details: { targetId: ids[0] } });
                         toast("Enemy tapped!");
+                        resume();
                     }
                 });
-            }
+            },
+            onNo: resume
         });
     },
-    "Bloodwing Mantis": ({ gsR, setSearchingDeck, setGs, net, toast }) => {
+    "Bloodwing Mantis": ({ gsR, setSearchingDeck, setGs, net, toast, pause, resume }) => {
         const mana = gsR.current.mana;
         if (!mana.length) return;
+        pause();
         setSearchingDeck({
             message: "Bloodwing Mantis: Select 2 mana to return to hand",
             customList: mana,
@@ -475,12 +548,14 @@ export const ATTACK_TRIGGERS = {
                     return { ...p, mana: p.mana.filter(x => !ids.includes(x.instanceId)), hand: [...p.hand, ...selected] };
                 });
                 toast("Mana returned to hand!");
+                resume();
             }
         });
     },
-    "Le Quist, the Oracle": ({ gsR, setTargeting, net, toast, askMay }) => {
+    "Le Quist, the Oracle": ({ gsR, setTargeting, net, toast, askMay, pause, resume }) => {
         const targets = gsR.current.opponent.battleZone.filter(c => c.civilizations?.includes('Darkness') || c.civilizations?.includes('Fire'));
         if (!targets.length) return;
+        pause();
         askMay({
             message: "Le Quist: Tap a darkness or fire creature?",
             onYes: () => {
@@ -491,14 +566,17 @@ export const ATTACK_TRIGGERS = {
                     onComplete: (ids) => {
                         net.send("ACTION", { action: "TAP_TARGET", details: { targetId: ids[0] } });
                         toast("Enemy tapped!");
+                        resume();
                     }
                 });
-            }
+            },
+            onNo: resume
         });
     },
-    "Rikabu's Screwdriver": ({ gsR, setTargeting, setGs, toast, askMay }) => {
+    "Rikabu's Screwdriver": ({ gsR, setTargeting, setGs, toast, askMay, pause, resume }) => {
         const targets = gsR.current.battleZone;
         if (!targets.length) return;
+        pause();
         askMay({
             message: "Rikabu's Screwdriver Survivor: Untap a creature?",
             onYes: () => {
@@ -512,12 +590,15 @@ export const ATTACK_TRIGGERS = {
                             battleZone: p.battleZone.map(c => c.instanceId === ids[0] ? { ...c, isTapped: false } : c)
                         }));
                         toast("Creature untapped!");
+                        resume();
                     }
                 });
-            }
+            },
+            onNo: resume
         });
     },
-    "Daidalos, General of Fury": ({ gsR, setTargeting, setGs, toast }) => {
+    "Daidalos, General of Fury": ({ gsR, setTargeting, setGs, toast, pause, resume }) => {
+        pause();
         setTargeting({
             message: "Daidalos: Select one of your creatures to destroy",
             count: 1,
@@ -532,6 +613,7 @@ export const ATTACK_TRIGGERS = {
                     }));
                     toast(`${target.name} sacrificed!`);
                 }
+                resume();
             }
         });
     }

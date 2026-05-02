@@ -391,8 +391,8 @@ export const SPELL_EFFECTS = {
         });
     },
     "Aura Blast": ({ setGs, toast }) => {
-        setGs(p => ({ ...p, battleZone: p.battleZone.map(c => ({ ...c, powerBonus: (c.powerBonus || 0) + 2000 })) }));
-        toast("Aura Blast: All creatures +2000!");
+        setGs(p => ({ ...p, battleZone: p.battleZone.map(c => ({ ...c, tempPowerAttacker: (c.tempPowerAttacker || 0) + 2000 })) }));
+        toast("Aura Blast: All creatures +2000 Power Attacker!");
     },
     "Natural Snare": ({ gsR, setTargeting, net, toast }) => {
         if (!gsR.current.opponent.battleZone.length) return;

@@ -365,16 +365,19 @@ body {
 
 /* ===== PLAYER HAND ===== */
 .hand-tray {
-    position: relative;
-    height: 250px;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 160px;
+
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    padding-bottom: 4px;
+    padding-bottom: 20px;
     perspective: 1200px;
-    z-index: 100;
-    background: linear-gradient(0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 50%, transparent 100%);
-    transform: translateY(-140px);
+    z-index: 1000;
     pointer-events: none;
 }
 
@@ -383,16 +386,19 @@ body {
     align-items: flex-end;
     justify-content: center;
     position: relative;
+    width: 100%;
 }
 
 .hand-slot {
-    transition: margin 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
 }
-.hand-cards .hand-slot { margin-left: -38px; }
-.hand-cards .hand-slot:first-child { margin-left: 0; }
-.hand-cards:hover .hand-slot { margin-left: 4px; }
-.hand-cards:hover .hand-slot:first-child { margin-left: 0; }
+
+/* Hover logic: only the hovered card moves, no displacement */
+.hand-slot:hover {
+    z-index: 2000 !important;
+    transform: translateY(-100px) scale(1.3) rotate(0deg) !important;
+}
 
 /* ===== CARDS ===== */
 .card {
@@ -415,7 +421,8 @@ body {
 /* Battle zone cards */
 .card--md  { width: 130px; height: 182px; }
 /* Hand cards */
-.card--lg  { width: 165px; height: 231px; }
+.card--lg  { width: 130px; height: 182px; }
+
 .card--xl  { width: 260px; height: 364px; }
 
 .creature {
@@ -460,7 +467,8 @@ body {
             border-color 0.3s ease;
 }
 .hand-card:hover {
-    transform: translateY(-70px) scale(1.25) !important;
+    transform: translateY(-60px) scale(1.5) !important;
+
     z-index: 90 !important;
     border-color: var(--gold);
     box-shadow:
@@ -864,6 +872,8 @@ body {
 .ctx-item--atk:hover { background: rgba(255,60,60,0.12); color: var(--fire-soft); text-shadow: 0 0 8px rgba(255,87,34,0.3); }
 .ctx-item--summon:hover { background: rgba(102,187,106,0.12); color: var(--nature); }
 .ctx-item--mana:hover { background: rgba(79,195,247,0.12); color: var(--ice); }
+.ctx-item--disabled { opacity: 0.4; cursor: not-allowed; }
+.ctx-item--disabled:hover { background: none; color: var(--cream); text-shadow: none; }
 .ctx-sep { height: 1px; background: rgba(180,130,70,0.15); margin: 3px 12px; }
 
 /* ===== PREVIEW ===== */
@@ -1283,7 +1293,7 @@ body {
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.85);
-    z-index: 2500;
+    z-index: 15000;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1960,12 +1970,19 @@ body {
     }
     .card--md { width: 130px !important; height: 182px !important; }
     .card--lg { width: 150px !important; height: 210px !important; }
-    .card--xl { width: 240px !important; height: 336px !important; }
+    .card--xl { width: 130px !important; height: 182px !important; }
     .card--sm { width: 60px !important; height: 84px !important; }
     .card--xs { width: 32px !important; height: 45px !important; }
     
-    .hand-tray { height: 180px; transform: translateY(-100px); }
-    .hand-card:hover { transform: translateY(-40px) scale(1.15) !important; }
+    .hand-tray { 
+        height: 180px; 
+        bottom: -20px; 
+        left: 0; 
+        right: 0; 
+        width: 100%; 
+        transform: none; 
+    }
+    .hand-card:hover { transform: translateY(-60px) scale(1.4) rotate(0deg) !important; z-index: 2000 !important; }
     
     .battle-row { min-height: 150px; padding: 4px 10px; gap: 6px; }
     .end-turn-wrap { width: 110px; height: 48px; }

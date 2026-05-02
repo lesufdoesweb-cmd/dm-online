@@ -16,7 +16,9 @@ export const OpponentSide = ({ gs, oppAvail, oppShieldRef, oppBzRef, renderCreat
                         <div className="shield-label">Shields ({gs.opponent.shields.length ?? gs.opponent.shields})</div>
                         <div ref={oppShieldRef} className="shield-stack">
                             {(Array.isArray(gs.opponent.shields) ? gs.opponent.shields : Array.from({ length: gs.opponent.shields })).map((_, i) => (
-                                <div key={i} className="shield-gem shield-gem--opp" style={{ backgroundImage: `url(${CARD_BACK})` }} />
+                                <div key={i} className="shield-gem shield-gem--opp" style={{ backgroundImage: `url(${CARD_BACK})` }}>
+                                    <div className="shield-num-badge">{i + 1}</div>
+                                </div>
                             ))}
                             {(gs.opponent.shields.length ?? gs.opponent.shields) === 0 && <span style={{ fontSize: 10, color: 'var(--fire)', fontWeight: 900 }}>OPEN</span>}
                         </div>
@@ -62,17 +64,34 @@ export const PlayerSide = ({ gs, avail, targeting, onTargetClick, renderCreature
             </div>
             <div className="hand-tray">
                 <div className="hand-cards">
-                    {gs.hand.map((c, i) => (
-                        <div key={c.instanceId} className="hand-slot" style={{ zIndex: i + 10 }}>
-                            <div className="card card--lg hand-card" onClick={e => handCtx(e, c)} onContextMenu={e => handCtx(e, c)} onMouseEnter={() => hover(c)} onMouseLeave={unhover}>
-                                <img src={`./cards/${c.set_id || 'dm-01'}/${c.image_file}`} alt={c.name} />
-                                {c.cost != null && (() => { const calcCost = CardEngine.getCost(c, gs.battleZone); const isDiscounted = calcCost < c.cost; return <div className={`cost-gem ${isDiscounted ? 'cost-gem--discounted' : ''}`}>{calcCost}</div>; })()}
-                                {c.power && <div className="power-gem">{c.power}</div>}
-                                {CardEngine.isSpell(c) && <div style={{position:'absolute',top:4,right:30,fontSize:12,filter:'drop-shadow(0 1px 3px rgba(0,0,0,0.8))',zIndex:5}}>✨</div>}
-                                {CardEngine.parseAbilities(c, gs.battleZone, gs.mana).shieldTrigger && <div className="trigger-badge" title="Shield Trigger">⚡</div>}
+                    {gs.hand.map((c, i) => {
+                        const mid = (gs.hand.length - 1) / 2;
+                        const dist = i - mid;
+                        const angle = dist * (gs.hand.length > 5 ? 20 / gs.hand.length : 4);
+                        const ty = Math.abs(dist) * (gs.hand.length > 5 ? 10 / gs.hand.length : 2);
+                        const tx = dist * (gs.hand.length > 8 ? -10 : 0);
+                        
+                        return (
+                            <div key={c.instanceId} className="hand-slot" 
+                                 style={{ 
+                                     zIndex: i + 10,
+                                     transform: `rotate(${angle}deg) translateY(${ty}px) translateX(${tx}px)`,
+                                     marginLeft: i === 0 ? 0 : (gs.hand.length > 6 ? '-60px' : '-30px')
+                                 }}>
+                                <div className="card card--lg hand-card" 
+                                     onClick={e => handCtx(e, c)} 
+                                     onContextMenu={e => handCtx(e, c)} 
+                                     onMouseEnter={() => hover(c)} 
+                                     onMouseLeave={unhover}>
+                                    <img src={`./cards/${c.set_id || 'dm-01'}/${c.image_file}`} alt={c.name} />
+                                    {c.cost != null && (() => { const calcCost = CardEngine.getCost(c, gs.battleZone); const isDiscounted = calcCost < c.cost; return <div className={`cost-gem ${isDiscounted ? 'cost-gem--discounted' : ''}`}>{calcCost}</div>; })()}
+                                    {c.power && <div className="power-gem">{c.power}</div>}
+                                    {CardEngine.isSpell(c) && <div style={{position:'absolute',top:4,right:30,fontSize:12,filter:'drop-shadow(0 1px 3px rgba(0,0,0,0.8))',zIndex:5}}>✨</div>}
+                                    {CardEngine.parseAbilities(c, gs.battleZone, gs.mana).shieldTrigger && <div className="trigger-badge" title="Shield Trigger">⚡</div>}
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             </div>
         </div>
