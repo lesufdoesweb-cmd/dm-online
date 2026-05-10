@@ -54,7 +54,6 @@ const App = () => {
     useEffect(() => { communityDecksRef.current = communityDecks; }, [communityDecks]);
     useEffect(() => { currentFormatRef.current = currentFormat; }, [currentFormat]);
     useEffect(() => { connRef.current = conn; }, [conn]);
-    useEffect(() => { setupConnectionRef.current = setupConnection; }, [setupConnection]);
 
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth <= 932);
@@ -183,6 +182,8 @@ const App = () => {
         });
         c.on('close', () => { toast("Connection lost. Refresh to attempt reconnection.", "error"); });
     }, [exitGame, toast]);
+
+    useEffect(() => { setupConnectionRef.current = setupConnection; }, [setupConnection]);
 
     useEffect(() => {
         const adjectives = ["Brave", "Ancient", "Mystic", "Iron", "Swift", "Wild", "Solar", "Dark"];
