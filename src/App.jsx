@@ -40,7 +40,7 @@ const App = () => {
     const [reconnectPending, setReconnectPending] = useState(null);
     const [currentFormat, setCurrentFormat] = useState(() => localStorage.getItem('dm_preferred_format') || 'CLASSIC');
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 932);
-    
+
     // Refs for stable callbacks
     const playerNameRef = useRef(playerName);
     const selIdxRef = useRef(selIdx);
@@ -58,12 +58,12 @@ const App = () => {
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth <= 932);
         window.addEventListener('resize', handleResize);
-        
+
         const setImmersiveMode = async () => {
             try {
                 await StatusBar.hide();
                 await NavigationBar.hide();
-                
+
                 setTimeout(async () => {
                     await SplashScreen.hide();
                 }, 500);
@@ -199,16 +199,20 @@ const App = () => {
         Promise.all(sets.map(s => fetch(`/cards/${s}/metadata.json`)
             .then(r => r.json())
             .then(data => data.map(c => ({ ...c, set_id: s })))
-        )).then(allSets => { 
+        )).then(allSets => {
             const flat = allSets.flat();
-            setCards(prev => prev.length > 0 ? prev : flat); 
-            setLoading(false); 
+            setCards(prev => prev.length > 0 ? prev : flat);
+            setLoading(false);
         }).catch(() => setLoading(false));
 
-        let savedId = localStorage.getItem('dm_peer_id_v2');
-        if (!savedId) { savedId = Math.random().toString(36).substr(2, 9); localStorage.setItem('dm_peer_id_v2', savedId); }
-        
-        const p = new Peer('dm-' + savedId, {
+        let savedId = localStorage.getItem('dm_peer_id_v3');
+        if (!savedId) { savedId = Math.random().toString(36).substr(2, 12); localStorage.setItem('dm_peer_id_v3', savedId); }
+
+        const p = new Peer(savedId, {
+            host: 'dm-online.fun',
+            port: 443,
+            path: '/',
+            secure: true,
             debug: 2,
             config: {
                 'iceServers': [
@@ -230,14 +234,25 @@ const App = () => {
         });
 
         p.on('disconnected', () => {
-            console.log("Peer server disconnected. Attempting to reconnect...");
-            p.reconnect();
+            console.log("Peer server disconnected. Attempting to reconnect in 3s...");
+            setTimeout(() => { if (!p.destroyed) p.reconnect(); }, 3000);
         });
 
         p.on('error', (err) => {
             console.error("PeerJS error:", err);
-            if (err.type === 'network') {
-                toast("Network error. PeerJS connection lost.", "error");
+            if (err.type === 'unavailable-id') {
+                console.warn("Peer ID taken. Regenerating...");
+                localStorage.removeItem('dm_peer_id_v3');
+                let retries = parseInt(sessionStorage.getItem('peer_retries') || '0');
+                if (retries < 3) {
+                    sessionStorage.setItem('peer_retries', retries + 1);
+                    setTimeout(() => window.location.reload(), 1000);
+                } else {
+                    toast("Peer server error. Please try again later.", "error");
+                }
+            } else if (err.type === 'network' || err.type === 'server-error') {
+                toast("Network error. Retrying connection...", "error");
+                setTimeout(() => { if (!p.destroyed && p.disconnected) p.reconnect(); }, 5000);
             }
         });
 
@@ -247,38 +262,85 @@ const App = () => {
         setPeer(p);
 
         // Fetch Decks
-        gun.get(DECKS_KEY).map().on((data, id) => {
-            if (!data) { setCommunityDecks(prev => prev.filter(d => d.gunId !== id)); return; }
+        const decksRef = {};
+        let decksUpdateTimer = null;
+
+        const updateDecksState = () => {
+            if (decksUpdateTimer) return;
+            decksUpdateTimer = setTimeout(() => {
+                setCommunityDecks(Object.values(decksRef).sort((a, b) => (b.playedCount || 0) - (a.playedCount || 0)));
+                decksUpdateTimer = null;
+            }, 500); // 500ms batching for decks
+        };
+
+        const deckSub = gun.get(DECKS_KEY).map().on((data, id) => {
+            if (!data) {
+                if (decksRef[id]) {
+                    delete decksRef[id];
+                    updateDecksState();
+                }
+                return;
+            }
             const deck = { ...data, gunId: id, format: data.format || 'CLASSIC' };
             try { deck.cards = JSON.parse(data.cards); } catch(e) { deck.cards = []; }
-            setCommunityDecks(prev => {
-                const filtered = prev.filter(d => d.gunId !== id);
-                return [...filtered, deck].sort((a, b) => (b.playedCount || 0) - (a.playedCount || 0));
-            });
+            decksRef[id] = deck;
+            updateDecksState();
         });
 
-        return () => { if (p) { p.destroy(); } };
+        return () => {
+            if (p) p.destroy();
+            if (deckSub) deckSub.off();
+            if (decksUpdateTimer) clearTimeout(decksUpdateTimer);
+        };
     }, [toast]);
 
     useEffect(() => {
         if (!code || view !== 'home') return;
-        const lobby = gun.get(LOBBY_KEY);
+        const lobbyKey = `${LOBBY_KEY}_${currentFormat}`;
+        const lobby = gun.get(lobbyKey);
         const playerRef = lobby.get(code);
+
         const updatePresence = () => playerRef.put({ id: code, name: playerName, isReady: isReady, lastSeen: Date.now(), format: currentFormat });
         updatePresence();
         const heartbeat = setInterval(updatePresence, 5000);
         const handleUnload = () => playerRef.put({ isReady: false, lastSeen: 0 });
         window.addEventListener('beforeunload', handleUnload);
-        lobby.map().on((data, id) => {
-            if (!data || id === code) return;
-            const isStale = !data.lastSeen || (Date.now() - data.lastSeen > 15000);
-            setWaitingPlayers(prev => {
-                const filtered = prev.filter(p => p.id !== id);
-                if (data.isReady && !isStale && data.format === currentFormat) return [...filtered, { ...data, id }];
-                return filtered;
-            });
+
+        const playersRef = {};
+        let playersUpdateTimer = null;
+
+        const updatePlayersState = () => {
+            if (playersUpdateTimer) return;
+            playersUpdateTimer = setTimeout(() => {
+                const now = Date.now();
+                setWaitingPlayers(Object.values(playersRef).filter(p => {
+                    const isStale = !p.lastSeen || (now - p.lastSeen > 15000);
+                    return p.isReady && !isStale && p.format === currentFormat;
+                }));
+                playersUpdateTimer = null;
+            }, 300); // 300ms batching for lobby
+        };
+
+        const lobbySub = lobby.map().on((data, id) => {
+            if (id === code) return;
+            if (!data) {
+                if (playersRef[id]) {
+                    delete playersRef[id];
+                    updatePlayersState();
+                }
+                return;
+            }
+            playersRef[id] = data;
+            updatePlayersState();
         });
-        return () => { clearInterval(heartbeat); window.removeEventListener('beforeunload', handleUnload); playerRef.put({ isReady: false }); };
+
+        return () => {
+            clearInterval(heartbeat);
+            window.removeEventListener('beforeunload', handleUnload);
+            playerRef.put({ isReady: false });
+            if (lobbySub) lobbySub.off();
+            if (playersUpdateTimer) clearTimeout(playersUpdateTimer);
+        };
     }, [code, playerName, isReady, view, currentFormat]);
 
     const saveCommunityDeck = (deck) => {
@@ -322,21 +384,21 @@ const App = () => {
         incrementPlayedCount(communityDecks[selIdx]);
     };
 
-    const join = (targetId = null) => { 
+    const join = (targetId = null) => {
         const tid = (targetId || jc).trim();
         if (!tid || !peer) return;
-        if (tid === code) { toast("You cannot challenge yourself!", "error"); return; } 
+        if (tid === code) { toast("You cannot challenge yourself!", "error"); return; }
         toast("Challenging " + tid.substring(3, 9) + "...", "info");
         const c = peer.connect(tid, {
             reliable: true,
             serialization: 'json'
-        }); 
+        });
         const connTimeout = setTimeout(() => { if (!c.open) { toast("Opponent unavailable", "error"); c.close(); } }, 20000);
-        c.on('open', () => { 
+        c.on('open', () => {
             clearTimeout(connTimeout);
-            c.send({ type: 'CONNECT_REQUEST', payload: { name: playerName, format: currentFormat } }); 
-            toast("Challenge sent!", "success"); 
-        }); 
+            c.send({ type: 'CONNECT_REQUEST', payload: { name: playerName, format: currentFormat } });
+            toast("Challenge sent!", "success");
+        });
         setupConnection(c);
     };
 
@@ -346,25 +408,25 @@ const App = () => {
         const BoardComponent = isMobile ? MobileGameBoard : GameBoard;
         return <BoardComponent cards={cards} deck={communityDecks[selIdx]} conn={conn} isHost={isHost} onLeave={handleLeave} />;
     }
-    
+
     if (view === "deckbuilder") {
         const initialDeck = editingDeckIdx !== null ? communityDecks[editingDeckIdx] : viewOnlyDeck;
-        return <DeckBuilder 
-            cards={cards} 
-            initialDeck={initialDeck} 
+        return <DeckBuilder
+            cards={cards}
+            initialDeck={initialDeck}
             readOnly={!!viewOnlyDeck}
-            onSave={saveCommunityDeck} 
+            onSave={saveCommunityDeck}
             currentFormat={currentFormat}
-            onExit={() => { 
-                setView("home"); 
-                setEditingDeckIdx(null); 
+            onExit={() => {
+                setView("home");
+                setEditingDeckIdx(null);
                 setViewOnlyDeck(null);
-            }} 
+            }}
         />;
     }
 
     const lobbyProps = {
-        code, playerName, setPlayerName, isReady, setIsReady, waitingPlayers, 
+        code, playerName, setPlayerName, isReady, setIsReady, waitingPlayers,
         join, communityDecks, selIdx, setSelIdx, setShowDeckModal, showDeckModal,
         currentFormat, setCurrentFormat, setIsNaming, isNaming, jc, setJc, setView,
         setEditingDeckIdx, setViewOnlyDeck, deleteDeck, toast, reconnectPending,
