@@ -232,7 +232,7 @@ export const ATTACK_TRIGGERS = {
                                 ...p,
                                 mana: p.mana.filter(m => m.instanceId !== manaCard.instanceId),
                                 graveyard: [...p.graveyard, manaCard],
-                                battleZone: p.battleZone.map(c => c.instanceId === card.instanceId ? { ...c, powerBonus: (c.powerBonus || 0) + 3000, tempDoubleBreaker: true } : c)
+                                battleZone: p.battleZone.map(c => c.instanceId === card.instanceId ? { ...c, tempPowerAttacker: (c.tempPowerAttacker || 0) + 3000, tempDoubleBreaker: true } : c)
                             };
                         });
                         toast("Flametropus: Buffed!");

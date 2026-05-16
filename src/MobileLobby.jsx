@@ -22,7 +22,8 @@ const MobileLobby = ({
     setViewOnlyDeck,
     deleteDeck,
     toast,
-    toasts
+    toasts,
+    startSinglePlayer
 }) => {
     const selectedDeck = communityDecks[selIdx];
 
@@ -103,6 +104,10 @@ const MobileLobby = ({
                     >
                         {isReady ? 'READY!' : 'DUEL'}
                     </button>
+
+                    <div style={{marginTop: 10, width: '100%'}}>
+                        <button className="btn-secondary" style={{width: '100%', fontSize: 11, padding: '8px 0'}} onClick={() => typeof startSinglePlayer === 'function' && startSinglePlayer()}>Practice vs Bot 🤖</button>
+                    </div>
 
                     <div className="mobile-join-section">
                         <input 

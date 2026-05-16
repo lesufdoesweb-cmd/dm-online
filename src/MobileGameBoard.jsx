@@ -96,7 +96,7 @@ const MobileGameBoard = (props) => {
         const s = gs;
         const bz = isOpponent ? s.opponent.battleZone : s.battleZone;
         const mz = isOpponent ? s.opponent.mana : s.mana;
-        const currentPower = CardEngine.getCurrentPower(c, bz, mz) + (c.powerBonus || 0);
+        const currentPower = CardEngine.getCurrentPower(c, bz, mz);
         const isTargetable = targeting && targeting.validTargets.includes(c.instanceId);
         const isSelected = targeting && targeting.selected?.includes(c.instanceId);
         const canDragAttack = !isOpponent && !c.isTapped && (!c.summonedThisTurn || CardEngine.parseAbilities(c, bz, mz).speedAttacker) && !isLocked && gs.turn;

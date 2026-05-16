@@ -366,7 +366,7 @@ export const SPELL_EFFECTS = {
             validTargets: gsR.current.battleZone.map(c => c.instanceId),
             onComplete: (selectedIds) => {
                 const id = selectedIds[0];
-                setGs(s => ({ ...s, battleZone: s.battleZone.map(c => c.instanceId === id ? { ...c, powerBonus: (c.powerBonus || 0) + 4000, tempDoubleBreaker: true } : c) }));
+                setGs(s => ({ ...s, battleZone: s.battleZone.map(c => c.instanceId === id ? { ...c, tempPowerAttacker: (c.tempPowerAttacker || 0) + 4000, tempDoubleBreaker: true } : c) }));
                 toast("Power boosted!");
             }
         });
@@ -473,7 +473,7 @@ export const SPELL_EFFECTS = {
         }
         setGs(p => ({
             ...p,
-            battleZone: p.battleZone.map(c => ({ ...c, powerBonus: (c.powerBonus || 0) + 4000, tempDoubleBreaker: true }))
+            battleZone: p.battleZone.map(c => ({ ...c, tempPowerAttacker: (c.tempPowerAttacker || 0) + 4000, tempDoubleBreaker: true }))
         }));
         toast("Blaze Cannon: All units +4000 and Double Breaker!");
     },
@@ -493,6 +493,27 @@ export const SPELL_EFFECTS = {
                     };
                 });
                 toast("Mana returned and spell moved to mana!");
+            }
+        });
+    },
+    "Crisis Boulder": ({ gsR, setGs, setTargeting, toast, finishDestruction }) => {
+        setTargeting({
+            message: "Select a creature or mana to destroy",
+            count: 1,
+            validTargets: [...gsR.current.battleZone.map(x => x.instanceId), ...gsR.current.mana.map(x => x.instanceId)],
+            onComplete: (ids) => {
+                const id = ids[0];
+                const isCreature = gsR.current.battleZone.some(x => x.instanceId === id);
+                if (isCreature) {
+                    finishDestruction(gsR.current.battleZone.find(x => x.instanceId === id));
+                } else {
+                    setGs(p => ({
+                        ...p,
+                        mana: p.mana.filter(x => x.instanceId !== id),
+                        graveyard: [...p.graveyard, p.mana.find(x => x.instanceId === id)]
+                    }));
+                }
+                toast("Crisis Boulder: Target destroyed!");
             }
         });
     },
@@ -927,12 +948,19 @@ export const SPELL_EFFECTS = {
         }));
         toast(`Sword of Benevolent Life: All creatures +${bonus}!`);
     },
-    "Sword of Malevolent Death": ({ setGs, toast }) => {
-        setGs(p => ({
-            ...p,
-            turnEffects: { ...p.turnEffects, swordOfMalevolentDeath: true }
-        }));
-        toast("Sword of Malevolent Death: Power boost while attacking based on Darkness mana!");
+    "Sword of Malevolent Death": ({ gsR, setTargeting, setGs, toast }) => {
+        setTargeting({
+            message: "Sword of Malevolent Death: Select a creature to buff",
+            count: 1,
+            validTargets: gsR.current.battleZone.map(c => c.instanceId),
+            onComplete: (ids) => {
+                setGs(p => ({
+                    ...p,
+                    battleZone: p.battleZone.map(c => c.instanceId === ids[0] ? { ...c, swordBuff: true } : c)
+                }));
+                toast("Creature buffed by Sword of Malevolent Death!");
+            }
+        });
     },
     "Whisking Whirlwind": ({ setGs, toast }) => {
         setGs(p => ({ ...p, turnEffects: { ...p.turnEffects, whiskingWhirlwind: true } }));
@@ -986,10 +1014,6 @@ export const SPELL_EFFECTS = {
                 toast("Blocker destroyed!");
             }
         });
-    },
-    "Crisis Boulder": ({ net, toast }) => {
-        net.send("ACTION", { action: "CRISIS_BOULDER" });
-        toast("Crisis Boulder: Opponent must choose a card to destroy!");
     },
     "Invincible Abyss": ({ gsR, net, toast }) => {
         gsR.current.opponent.battleZone.forEach(c => {

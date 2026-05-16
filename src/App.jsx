@@ -9,6 +9,7 @@ import MobileLobby from './MobileLobby.jsx';
 import DesktopLobby from './DesktopLobby.jsx';
 import LobbyModals from './LobbyModals.jsx';
 import { FORMATS } from './engine.js';
+import { LocalConn, BotEngine } from './bot.js';
 import { StatusBar } from '@capacitor/status-bar';
 import { NavigationBar } from '@hugotomazi/capacitor-navigation-bar';
 import { SplashScreen } from '@capacitor/splash-screen';
@@ -96,7 +97,7 @@ const App = () => {
 
     const exitGame = useCallback(() => {
         const targetPeer = connRef.current?.peer || reconnectPending?.opponentId;
-        if (targetPeer) {
+        if (targetPeer && targetPeer !== 'BOT') {
             localStorage.removeItem(`dm_gs_${targetPeer}`);
             localStorage.removeItem(`dm_logs_${targetPeer}`);
         }
@@ -282,10 +283,13 @@ const App = () => {
                 return;
             }
             const deck = { ...data, gunId: id, format: data.format || 'CLASSIC' };
-            try { deck.cards = JSON.parse(data.cards); } catch(e) { deck.cards = []; }
+            try { deck.cards = typeof data.cards === 'string' ? JSON.parse(data.cards) : data.cards; } catch(e) { deck.cards = []; }
             decksRef[id] = deck;
             updateDecksState();
         });
+
+        // Add local DECKS to state for testing/fallback
+        setCommunityDecks(prev => [...prev, ...DECKS.map((d, i) => ({ ...d, gunId: 'local_' + i, format: 'CLASSIC' }))]);
 
         return () => {
             if (p) p.destroy();
@@ -384,6 +388,34 @@ const App = () => {
         incrementPlayedCount(communityDecks[selIdx]);
     };
 
+    const startSinglePlayer = useCallback(() => {
+        const playerDeck = communityDecksRef.current[selIdxRef.current];
+        if (!playerDeck) {
+            toast("Select a deck first!", "error");
+            return;
+        }
+
+        const botDeck = DECKS[Math.floor(Math.random() * DECKS.length)];
+        const bot = new BotEngine(cards, botDeck);
+        const mockConn = new LocalConn(bot);
+
+        const playerGoesFirst = Math.random() > 0.5;
+        setIsHost(playerGoesFirst);
+        setConn(mockConn);
+        setView("game");
+        
+        incrementPlayedCount(playerDeck);
+
+        setTimeout(() => {
+            bot.initialize();
+            if (!playerGoesFirst) {
+                bot.handleAction("SYNC_TURN", { hostTurn: false });
+            }
+        }, 1000);
+        
+        toast(`Practicing against Bot (${botDeck.name})`);
+    }, [cards, toast]);
+
     const join = (targetId = null) => {
         const tid = (targetId || jc).trim();
         if (!tid || !peer) return;
@@ -431,7 +463,7 @@ const App = () => {
         currentFormat, setCurrentFormat, setIsNaming, isNaming, jc, setJc, setView,
         setEditingDeckIdx, setViewOnlyDeck, deleteDeck, toast, reconnectPending,
         handleResume, handleDiscard, pendingRequest, acceptRequest, setPendingRequest,
-        toasts
+        toasts, startSinglePlayer
     };
 
     return (

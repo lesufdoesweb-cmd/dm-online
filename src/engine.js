@@ -152,6 +152,13 @@ export const CardEngine = {
 
         return abilities;
     },
+    hasSummoningSickness(card, battleZone, manaZone) {
+        if (!card.summonedThisTurn) return false;
+        const abs = this.parseAbilities(card, battleZone, manaZone);
+        if (abs.speedAttacker) return false;
+        if (card.canAttackPlayersOverride) return false; // Diamond Cutter
+        return true;
+    },
     isSpell(card) { return card.type === 'Spell'; },
     isEvolution(card) {
         const text = (card.text || '').toLowerCase();
@@ -248,7 +255,7 @@ export const CardEngine = {
 
         return power;
     },
-    getPotentialPower(card, battleZone, graveyard, manaZone, shields = []) {
+    getPotentialPower(card, battleZone, graveyard, manaZone, shields = [], turnEffects = {}) {
         let power = this.getCurrentPower(card, battleZone, manaZone, shields);
         const abs = this.parseAbilities(card, battleZone, manaZone);
         if (abs.powerAttacker) power += abs.powerAttacker;
@@ -273,6 +280,14 @@ export const CardEngine = {
         }
         if (card.name === "Fatal Attacker Horvath") {
             if (battleZone.some(c => c.instanceId !== card.instanceId && c.subtypes?.some(s => s.toLowerCase().includes('armorloid')))) power += 2000;
+        }
+        if (card.swordBuff) {
+            const darkMana = manaZone.filter(m => m.civilizations?.includes('Darkness')).length;
+            power += (darkMana * 1000);
+        }
+        if (turnEffects?.swordOfMalevolentDeath) {
+            const darkMana = manaZone.filter(m => m.civilizations?.includes('Darkness')).length;
+            power += (darkMana * 1000);
         }
         return power;
     },
@@ -404,6 +419,12 @@ export const CardEngine = {
         }
         if (battleZone?.some(c => c.name === "Jack Viper, Shadow of Doom") && card.civilizations?.includes('Darkness') && card.name !== "Jack Viper, Shadow of Doom") {
             return { type: 'hand', message: "Jack Viper: Return Darkness creature to hand instead?", requiresDiscard: false };
+        }
+        if (card.subtypes?.some(s => s.toLowerCase().includes('armored dragon'))) {
+            const kip = battleZone?.find(c => c.name === "Kip Chippotto");
+            if (kip) {
+                return { type: 'special', message: `Kip Chippotto: Destroy Kip instead of ${card.name}?`, kipId: kip.instanceId };
+            }
         }
         return null;
     },

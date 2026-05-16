@@ -23,7 +23,8 @@ const DesktopLobby = ({
     setIsReady,
     waitingPlayers,
     setIsNaming,
-    playerName
+    playerName,
+    startSinglePlayer
 }) => {
     return (
         <div className="lobby">
@@ -72,6 +73,11 @@ const DesktopLobby = ({
                         {code ? (<div className="lobby-code-box" style={{padding: '8px 0'}}><span className="lobby-code" style={{fontSize: 14}} onClick={() => { navigator.clipboard.writeText(code); toast("Code copied!"); }}>{code}</span></div>) : <p style={{fontSize: 12}}>Generating...</p>}
                     </div>
                     <div style={{marginTop: 15}}><h3 style={{fontSize: 10, color: 'var(--gold)', marginBottom: 8}}>JOIN OPPONENT</h3><div style={{display:'flex', gap: 0}}><input className="lobby-input" style={{fontSize: 12, height: 32, borderRadius: '4px 0 0 4px', borderRight: 'none'}} placeholder="Paste Code..." value={jc} onChange={e => setJc(e.target.value)} /><button className="btn-primary" style={{height: 32, padding: '0 12px', fontSize: 11, borderRadius: '0 4px 4px 0'}} onClick={() => join()}>Connect</button></div></div>
+                    
+                    <div style={{marginTop: 20, paddingTop: 15, borderTop: '1px solid rgba(255,255,255,0.05)'}}>
+                        <button className="btn-secondary" style={{width: '100%', fontSize: 11}} onClick={() => typeof startSinglePlayer === 'function' && startSinglePlayer()}>Practice against Bot 🤖</button>
+                    </div>
+
                     <div style={{marginTop: 'auto', paddingTop: 20, textAlign: 'center'}}>
                         <h2>Duel Status</h2><button className={`ready-btn ${isReady ? 'ready-btn--active' : ''}`} onClick={() => setIsReady(!isReady)} style={{marginTop: 10, width: '100%'}}>{isReady ? 'READY FOR DUEL' : 'MARK AS READY'}</button>
                     </div>

@@ -96,5 +96,24 @@ export const TAP_EFFECTS = {
                 toast("Spell returned to hand!");
             }
         });
+    },
+    "Arc Bine, the Astounding": ({ gsR, setTargeting, setGs, toast, card }) => {
+        const others = gsR.current.battleZone.filter(c => c.instanceId !== card.instanceId && c.civilizations?.includes('Light'));
+        if (!others.length) {
+            toast("No other Light creatures to untap!");
+            return;
+        }
+        setTargeting({
+            message: "Arc Bine: Select a Light creature to untap",
+            count: 1,
+            validTargets: others.map(c => c.instanceId),
+            onComplete: (ids) => {
+                setGs(p => ({
+                    ...p,
+                    battleZone: p.battleZone.map(c => ids.includes(c.instanceId) ? { ...c, isTapped: false } : c)
+                }));
+                toast("Creature untapped!");
+            }
+        });
     }
 };

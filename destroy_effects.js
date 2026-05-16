@@ -56,4 +56,33 @@ export const DESTROY_EFFECTS = {
             }
         });
     },
+    "Ambush Scorpion": ({ gsR, setGs, askMay, card }) => {
+        const other = gsR.current.mana.find(c => c.name === "Ambush Scorpion");
+        if (other) {
+            askMay({
+                message: "Ambush Scorpion: Bring another from mana zone?",
+                onYes: () => {
+                    setGs(s => ({
+                        ...s,
+                        mana: s.mana.filter(m => m.instanceId !== other.instanceId),
+                        battleZone: [...s.battleZone, { ...other, instanceId: Math.random().toString(36).substr(2, 9), summonedThisTurn: true }]
+                    }));
+                }
+            });
+        }
+    },
+    "Jewel Spider": ({ gsR, setGs, askMay, card }) => {
+        if (gsR.current.shields.length > 0) {
+            askMay({
+                message: "Jewel Spider: Return a shield to hand?",
+                onYes: () => {
+                    setGs(s => {
+                        const ns = [...s.shields];
+                        const c = ns.pop();
+                        return { ...s, shields: ns, hand: [...s.hand, c] };
+                    });
+                }
+            });
+        }
+    }
 };

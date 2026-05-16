@@ -4,13 +4,14 @@ import { ATTACK_TRIGGERS } from "../attack_triggers.js";
 import { DESTROY_EFFECTS } from "../destroy_effects.js";
 import { GLOBAL_TRIGGERS } from "../global_triggers.js";
 import { TAP_EFFECTS } from "../tap_effects.js";
+import { AFTER_ATTACK_TRIGGERS } from "../after_attack_triggers.js";
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { CardEngine } from "./engine.js";
 import { useNetwork, useArrowDrag } from "./hooks.js";
 
 export const useGameLogic = ({ cards, deck, conn, isHost }) => {
     // Setup global effects for triggerEffect
-    window.GAME_EFFECTS = { ETB_EFFECTS, SPELL_EFFECTS, ATTACK_TRIGGERS, DESTROY_EFFECTS, TAP_EFFECTS };
+    window.GAME_EFFECTS = { ETB_EFFECTS, SPELL_EFFECTS, ATTACK_TRIGGERS, DESTROY_EFFECTS, TAP_EFFECTS, AFTER_ATTACK_TRIGGERS };
 
     const [gs, setGs] = useState({
         hand: [], mana: [], battleZone: [], shields: [], deck: [], graveyard: [],
@@ -150,7 +151,7 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
     }, [net]);
 
     const triggerEffect = useCallback((type, card, extraParams = {}) => {
-        const maps = { ETB_EFFECTS, SPELL_EFFECTS, ATTACK_TRIGGERS, DESTROY_EFFECTS, TAP_EFFECTS };
+        const maps = { ETB_EFFECTS, SPELL_EFFECTS, ATTACK_TRIGGERS, DESTROY_EFFECTS, TAP_EFFECTS, AFTER_ATTACK_TRIGGERS };
         const map = maps[type];
         if (!map) return false;
         
@@ -203,8 +204,7 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
 
     const triggerTapAbility = useCallback((card) => {
         if (!gsR.current.turn) return;
-        const abs = CardEngine.parseAbilities(card, gsR.current.battleZone, gsR.current.mana);
-        if (card.summonedThisTurn && !abs.speedAttacker && !card.canAttackPlayersOverride) {
+        if (CardEngine.hasSummoningSickness(card, gsR.current.battleZone, gsR.current.mana)) {
             toast("Summoning sickness!", "error");
             return;
         }
@@ -260,6 +260,8 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
             const target = p.battleZone.find(c => c.instanceId === card.instanceId);
             if (!target) return p;
 
+            if (destinationOverride?.type === 'special') return p; // Replacement prevents destruction
+
             const dest = destinationOverride || CardEngine.onDestroyed(target, p.battleZone);
             const filtered = p.battleZone.filter(c => c.instanceId !== card.instanceId);
 
@@ -270,68 +272,20 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                 return { ...p, battleZone: filtered, shields: [...p.shields, target] };
             }
             if (dest === 'hand') {
-                // DM-05 Replacements
-                const abs = CardEngine.parseAbilities(card, p.battleZone, p.mana);
-                if (abs.survivorManaReplacement) {
-                    toast(`${card.name} Survivor: Moved to mana!`);
-                    return { ...p, battleZone: filtered, mana: [...p.mana, { ...target, isTapped: false }] };
-                }
-                if (abs.survivorHandReplacement) {
-                    toast(`${card.name} Survivor: Returned to hand!`);
-                    return { ...p, battleZone: filtered, hand: [...p.hand, target] };
-                }
-                if (card.name === "Ambush Scorpion") {
-                    const other = p.mana.find(c => c.name === "Ambush Scorpion");
-                    if (other) {
-                        askMay({
-                            card,
-
-                            message: "Ambush Scorpion: Bring another from mana zone?",
-                            onYes: () => {
-                                setGs(s => ({
-                                    ...s,
-                                    mana: s.mana.filter(m => m.instanceId !== other.instanceId),
-                                    battleZone: [...s.battleZone, { ...other, instanceId: Math.random().toString(36).substr(2, 9), summonedThisTurn: true }]
-                                }));
-                            }
-                        });
-                    }
-                }
-                if (card.name === "Jewel Spider") {
-                    if (p.shields.length) {
-                        askMay({
-                            card,
-
-                            message: "Jewel Spider: Return a shield to hand?",
-                            onYes: () => {
-                                setGs(s => {
-                                    const ns = [...s.shields];
-                                    const c = ns.pop();
-                                    return { ...s, shields: ns, hand: [...s.hand, c] };
-                                });
-                            }
-                        });
-                    }
-                }
-                if (card.subtypes?.some(s => s.toLowerCase().includes('armored dragon'))) {
-                    const kip = p.battleZone.find(c => c.name === "Kip Chippotto");
-                    if (kip) {
-                        askMay({
-                            card: kip,
-
-                            message: `Kip Chippotto: Destroy Kip instead of ${card.name}?`,
-                            onYes: () => {
-                                finishDestruction(kip);
-                            }
-                        });
-                    }
-                }
                 return { ...p, battleZone: filtered, hand: [...p.hand, target] };
             }
             return { ...p, battleZone: filtered, graveyard: [...p.graveyard, target] };
         });
-        triggerGlobalEffect("ON_DESTROY", { card });
-        net.send("ACTION", { action: "FINISH_DESTRUCTION_SYNC", details: { instanceId: card.instanceId, dest: destinationOverride || CardEngine.onDestroyed(card, gsR.current.battleZone) } });
+
+        if (destinationOverride?.type === 'special' && destinationOverride.kipId) {
+            const kip = gsR.current.battleZone.find(c => c.instanceId === destinationOverride.kipId);
+            if (kip) {
+                setTimeout(() => finishDestruction(kip), 100);
+            }
+        } else {
+            triggerGlobalEffect("ON_DESTROY", { card });
+            net.send("ACTION", { action: "FINISH_DESTRUCTION_SYNC", details: { instanceId: card.instanceId, dest: destinationOverride || CardEngine.onDestroyed(card, gsR.current.battleZone) } });
+        }
     }, [net, triggerGlobalEffect, triggerEffect, CardEngine, askMay]);
 
     useEffect(() => {
@@ -469,28 +423,14 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                 }
                 toast(`Breaking ${actualBreaks} shield${actualBreaks > 1 ? 's' : ''}!`);
             }
-
-            if (atk.name === "Marrow Ooze, the Twister") {
-                setTimeout(() => {
-                    setGs(p => {
-                        const target = p.battleZone.find(x => x.instanceId === atk.instanceId);
-                        if (!target) return p;
-                        return { ...p, battleZone: p.battleZone.filter(x => x.instanceId !== atk.instanceId), graveyard: [...p.graveyard, target] };
-                    });
-                    toast("Marrow Ooze destroyed after attack!");
-                }, 500);
-            }
+            triggerEffect("AFTER_ATTACK_TRIGGERS", atk);
         } else {
             const opp = gsR.current.opponent.battleZone.find(c => c.instanceId === tid);
             if (!opp) return;
             addLog(`${atk.name} attacked ${opp.name}`, 'attack', false, atk);
 
             const s = gsR.current;
-            let atkPower = CardEngine.getPotentialPower(atk, s.battleZone, s.graveyard, s.mana, s.shields);
-            if (s.turnEffects.swordOfMalevolentDeath) {
-                const darkMana = s.mana.filter(m => m.civilizations?.includes('Darkness')).length;
-                atkPower += (darkMana * 1000);
-            }
+            let atkPower = CardEngine.getPotentialPower(atk, s.battleZone, s.graveyard, s.mana, s.shields, s.turnEffects);
             const defPower = CardEngine.getCurrentPower(opp, s.opponent.battleZone, s.opponent.mana, s.opponent.shields);
 
             const atkAbs = CardEngine.parseAbilities(atk, s.battleZone, s.mana);
@@ -538,13 +478,7 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                 net.send("ACTION", { action: "CREATURE_DESTROYED", details: { targetId: tid } });
             }
 
-            if (isBlocked && atk.name === "Avalanche Giant") {
-                setTimeout(() => {
-                    net.send("ACTION", { action: "SHIELD_BROKEN" });
-                    setGs(p => ({ ...p, shieldsBrokenThisTurn: p.shieldsBrokenThisTurn + 1 }));
-                }, 500);
-                toast("Avalanche Giant: Shield broken because blocked!");
-            }
+            triggerEffect("AFTER_ATTACK_TRIGGERS", atk, { isBlocked });
 
             if (isBlocked && defAbs.untapAfterBattle) {
                 setTimeout(() => net.send("ACTION", { action: "UNTAP_TARGET", details: { targetId: tid } }), 600);
@@ -571,8 +505,7 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
 
     const attack = useCallback((atk, tgt, tid) => {
         if (isLocked) return;
-        const abs = CardEngine.parseAbilities(atk, gsR.current.battleZone, gsR.current.mana);
-        if (atk.summonedThisTurn && !abs.speedAttacker && !atk.canAttackPlayersOverride) { toast("Summoning sickness!", "error"); return; }
+        if (CardEngine.hasSummoningSickness(atk, gsR.current.battleZone, gsR.current.mana)) { toast("Summoning sickness!", "error"); return; }
         if (atk.isTapped) { toast("Already tapped", "error"); return; }
         if (!CardEngine.canAttack(atk, gsR.current.battleZone, gsR.current.opponent.battleZone, gsR.current.mana)) { toast("This creature can't attack!", "error"); return; }
 
@@ -631,6 +564,7 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                     nc.canAttackUntappedThisTurn = false;
                     nc.tempBlocker = false;
                     nc.tempSlayer = false;
+                    nc.swordBuff = false;
                     if (p.turnEffects.whiskingWhirlwind && nc.attackedThisTurn) nc.isTapped = false;
                     nc.attackedThisTurn = false;
                     return nc;
@@ -750,31 +684,7 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                 });
                 toast("Shield incinerated!", "error");
             }
-            if (action === "CRISIS_BOULDER") {
-                setPendingDecision({
-                    card: { name: "Crisis Boulder", image_file: "crisis_boulder.png" },
-                    message: "Crisis Boulder: Choose a card to destroy",
-                    onYes: () => {
-                        // Logic for choosing creature or mana...
-                        // For simplicity in this turn, I'll just say "you must choose"
-                        // But I should really trigger a targeting request.
-                        setTargeting({
-                            message: "Select a creature or mana to destroy",
-                            count: 1,
-                            validTargets: [...gsR.current.battleZone.map(x=>x.instanceId), ...gsR.current.mana.map(x=>x.instanceId)],
-                            onComplete: (ids) => {
-                                const id = ids[0];
-                                const isCreature = gsR.current.battleZone.some(x => x.instanceId === id);
-                                if (isCreature) {
-                                    finishDestruction(gsR.current.battleZone.find(x => x.instanceId === id));
-                                } else {
-                                    setGs(p => ({ ...p, mana: p.mana.filter(x => x.instanceId !== id), graveyard: [...p.graveyard, p.mana.find(x => x.instanceId === id)] }));
-                                }
-                            }
-                        });
-                    }
-                });
-            }
+
             if (action === "END_TURN") {
                 setGs(p => ({
                     ...p,
@@ -1239,21 +1149,11 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
             });
         }
         if (a === "TAP") triggerTapAbility(d.a);
-        if (a === "TAP_ARC_BINE") {
-            setGs(p => ({
-                ...p,
-                battleZone: p.battleZone.map(x => x.instanceId === d.a.instanceId ? { ...x, isTapped: true } : x)
-            }));
-            triggerEffect("TAP_EFFECTS", d.arc);
-            addLog(`${d.a.name} uses Arc Bine's ability!`, 'effect', false, d.a);
-            net.send("ACTION", { action: "TAP_TARGET", details: { targetId: d.a.instanceId } });
-        }
     }, [attack, play, triggerTapAbility, gs.battleZone, toast, triggerEffect, net, addLog]);
 
     const onArrowDrop = useCallback((card, pt) => {
         if (isLocked) return;
-        const abs = CardEngine.parseAbilities(card, gsR.current.battleZone, gsR.current.mana);
-        if (card.summonedThisTurn && !abs.speedAttacker && !card.canAttackPlayersOverride) { toast("Summoning sickness!", "error"); return; }
+        if (CardEngine.hasSummoningSickness(card, gsR.current.battleZone, gsR.current.mana)) { toast("Summoning sickness!", "error"); return; }
         if (card.isTapped) { toast("Already tapped", "error"); return; }
         if (!CardEngine.canAttack(card, gsR.current.battleZone, gsR.current.opponent.battleZone, gsR.current.mana)) { toast("Can't attack!", "error"); return; }
 

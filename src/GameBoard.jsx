@@ -28,12 +28,12 @@ const GameBoard = (props) => {
         const bz = isOpponent ? s.opponent.battleZone : s.battleZone;
         const mz = isOpponent ? s.opponent.mana : s.mana;
         const gy = isOpponent ? s.opponent.graveyard : s.graveyard;
-        const currentPower = CardEngine.getCurrentPower(c, bz, mz) + (c.powerBonus || 0);
-        const potentialPower = CardEngine.getPotentialPower(c, bz, gy, mz) + (c.powerBonus || 0);
+        const currentPower = CardEngine.getCurrentPower(c, bz, mz);
+        const potentialPower = CardEngine.getPotentialPower(c, bz, gy, mz);
         const abs = CardEngine.parseAbilities(c, bz, mz);
         const isTargetable = targeting && targeting.validTargets.includes(c.instanceId);
         const isSelected = targeting && targeting.selected?.includes(c.instanceId);
-        const canDragAttack = !isOpponent && !c.isTapped && (!c.summonedThisTurn || c.canAttackPlayersOverride || abs.speedAttacker) && !isLocked && gs.turn;
+        const canDragAttack = !isOpponent && !c.isTapped && !CardEngine.hasSummoningSickness(c, bz, mz) && !isLocked && gs.turn;
         const hasActiveEffect = CardEngine.hasActiveGlobalEffect(c, bz);
         const civColors = { 'Light': '#ffd644', 'Water': '#4fc3f7', 'Darkness': '#9c27b0', 'Fire': '#ff5722', 'Nature': '#66bb6a' };
         const mainCiv = c.civilizations?.[0] || 'Fire';
@@ -106,10 +106,6 @@ const GameBoard = (props) => {
         if (!items.length) {
             const reason = c.summonedThisTurn ? "Summoning sickness" : c.isTapped ? "Already tapped" : !canAtk ? "Can't attack" : !canAtkPlayer ? "Can't attack players" : "No targets";
             items.push({ label: reason, icon: "⚠", action: "_", data: {} });
-        }
-        const arcBine = gs.battleZone.find(x => x.name === "Arc Bine, the Astounding" && !x.isTapped);
-        if (arcBine && c.civilizations?.includes('Light') && !c.isTapped && !c.summonedThisTurn) {
-             items.push({ label: "Use Arc Bine Ability", icon: "✨", cls: "ctx-item--effect", action: "TAP_ARC_BINE", data: { a: c, arc: arcBine } });
         }
         setCtx({ x: e.clientX, y: e.clientY, items });
     };
