@@ -3,7 +3,7 @@ import { CardEngine } from "./engine.js";
 import { Preview, CtxMenu, ArrowOverlay } from "./components.jsx";
 import { useGameLogic } from "./useGameLogic.js";
 import { LogSidebar } from "./LogSidebar.jsx";
-import { SearchOverlay, DecisionModals } from "./GameModals.jsx";
+import { SearchOverlay, DecisionModals, TargetingOverlay } from "./GameModals.jsx";
 import { OpponentSide, PlayerSide } from "./Zones.jsx";
 import { PlayerHUD, OpponentHUD } from "./HUD.jsx";
 
@@ -141,6 +141,7 @@ const GameBoard = (props) => {
     return (
         <div className="board" onClick={() => setCtx(null)}>
             <SearchOverlay searchingDeck={searchingDeck} setSearchingDeck={setSearchingDeck} gs={gs} />
+            <TargetingOverlay targeting={targeting} setTargeting={setTargeting} gs={gs} blockingRequest={blockingRequest} onHover={hover} />
             
             <DecisionModals 
                 targeting={targeting} blockingRequest={blockingRequest} 

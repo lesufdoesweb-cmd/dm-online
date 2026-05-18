@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import Peer from 'peerjs';
-import Gun from 'gun/gun';
+import { io } from 'socket.io-client';
 import { DECKS } from './decks.js';
 import GameBoard from './GameBoard.jsx';
 import MobileGameBoard from './MobileGameBoard.jsx';
@@ -14,13 +13,16 @@ import { StatusBar } from '@capacitor/status-bar';
 import { NavigationBar } from '@hugotomazi/capacitor-navigation-bar';
 import { SplashScreen } from '@capacitor/splash-screen';
 
-const gun = Gun({ peers: ["//dm-online.fun/gun"], localStorage: true });
-const LOBBY_KEY = 'tcg_duel_masters_lobby_v3';
-const DECKS_KEY = 'tcg_dm_community_decks_v2';
+const SOCKET_URL = window.location.hostname === 'localhost' ? 'http://localhost:8765' : 'https://dm-online.fun';
+
+const socket = io(SOCKET_URL, {
+    autoConnect: false,
+    transports: ['websocket', 'polling'], // prefer websocket
+    secure: true
+});
 
 const App = () => {
     const [cards, setCards] = useState([]);
-    const [peer, setPeer] = useState(null);
     const [conn, setConn] = useState(null);
     const [isHost, setIsHost] = useState(false);
     const [code, setCode] = useState("");
@@ -48,7 +50,6 @@ const App = () => {
     const communityDecksRef = useRef(communityDecks);
     const currentFormatRef = useRef(currentFormat);
     const connRef = useRef(null);
-    const setupConnectionRef = useRef(null);
 
     useEffect(() => { playerNameRef.current = playerName; }, [playerName]);
     useEffect(() => { selIdxRef.current = selIdx; }, [selIdx]);
@@ -75,7 +76,6 @@ const App = () => {
         };
         setImmersiveMode();
 
-        // Heartbeat to keep it immersive (prevents bars coming back after keyboard/etc)
         const immersiveInterval = setInterval(async () => {
             try {
                 await StatusBar.hide();
@@ -96,97 +96,51 @@ const App = () => {
     }, []);
 
     const exitGame = useCallback(() => {
-        const targetPeer = connRef.current?.peer || reconnectPending?.opponentId;
-        if (targetPeer && targetPeer !== 'BOT') {
-            localStorage.removeItem(`dm_gs_${targetPeer}`);
-            localStorage.removeItem(`dm_logs_${targetPeer}`);
+        if (connRef.current && !connRef.current.isMock) {
+            connRef.current.emit('leave_room');
         }
         setConn(null);
         setReconnectPending(null);
         setView("home");
+        setIsReady(false); // Make sure they aren't marked as searching anymore
         localStorage.removeItem("dm_active_game");
-    }, [reconnectPending]);
+    }, []);
 
     const handleLeave = () => {
-        if (conn && conn.open) {
-            conn.send({ type: 'LEAVE_GAME' });
-            setTimeout(() => conn.close(), 100);
-        }
         exitGame();
         toast("You left the duel");
     };
 
     const handleDiscard = () => {
-        if (reconnectPending) {
-            localStorage.removeItem(`dm_gs_${reconnectPending.opponentId}`);
-            localStorage.removeItem(`dm_logs_${reconnectPending.opponentId}`);
-        }
         localStorage.removeItem("dm_active_game");
         setReconnectPending(null);
         toast("Saved game discarded");
     };
 
     const handleResume = () => {
-        if (!reconnectPending || !peer) return;
-        const { opponentId, isHost: wasHost } = reconnectPending;
-        setIsHost(wasHost);
-        const c = peer.connect(opponentId);
-        c.on('open', () => { c.send({ type: 'RECONNECT_REQUEST', payload: { name: playerName } }); });
-        setupConnection(c);
-        setView("game");
-        setReconnectPending(null);
+        if (reconnectPending) {
+            setIsHost(reconnectPending.isHost);
+            socket.emit('rejoin_room', reconnectPending.opponentId, reconnectPending.isHost ? 'host' : 'client');
+        } else {
+            handleDiscard();
+        }
     };
 
     const incrementPlayedCount = (deck) => {
         if (!deck || !deck.gunId) return;
-        gun.get(DECKS_KEY).get(deck.gunId).get('playedCount').put((deck.playedCount || 0) + 1);
+        if (!deck.gunId.startsWith('local_')) {
+             socket.emit('increment_deck_play', deck.gunId);
+        }
     };
 
-    const setupConnection = useCallback((c) => {
-        c.on('data', data => {
-            if (data.type === 'CONNECT_REQUEST' || data.type === 'RECONNECT_REQUEST') {
-                const activeGame = JSON.parse(localStorage.getItem('dm_active_game'));
-                if (data.type === 'RECONNECT_REQUEST' && activeGame && activeGame.opponentId === c.peer) {
-                    c.send({ type: 'CONNECT_ACCEPT', payload: { name: playerNameRef.current, isReconnect: true } });
-                    setConn(c); setIsHost(activeGame.isHost); setView("game");
-                    toast("Reconnected to duel!", "success");
-                    return;
-                }
-                if (data.type === 'CONNECT_REQUEST') {
-                    if (data.payload.format && data.payload.format !== currentFormatRef.current) {
-                        toast(`Declined: Opponent is playing ${data.payload.format} format`, "error");
-                        c.send({ type: 'CONNECT_REJECT', payload: { reason: 'FORMAT_MISMATCH' } });
-                        setTimeout(() => c.close(), 500);
-                        return;
-                    }
-                    localStorage.removeItem(`dm_gs_${c.peer}`);
-                    localStorage.removeItem(`dm_logs_${c.peer}`);
-                }
-                setPendingRequest({ conn: c, name: data.payload.name });
-            }
-            if (data.type === 'CONNECT_ACCEPT') {
-                const activeGame = JSON.parse(localStorage.getItem('dm_active_game'));
-                if (!data.payload?.isReconnect) {
-                    localStorage.removeItem(`dm_gs_${c.peer}`);
-                    localStorage.removeItem(`dm_logs_${c.peer}`);
-                    setIsHost(false);
-                    localStorage.setItem("dm_active_game", JSON.stringify({ opponentId: c.peer, isHost: false }));
-                    incrementPlayedCount(communityDecksRef.current[selIdxRef.current]);
-                } else if (activeGame && activeGame.opponentId === c.peer) {
-                    setIsHost(activeGame.isHost);
-                }
-                setConn(c); setView("game");
-                toast(data.payload?.isReconnect ? "Reconnected to duel!" : "Connected to " + data.payload.name, "success");
-            }
-            if (data.type === 'CONNECT_REJECT') { toast("Challenge declined", "error"); c.close(); }
-            if (data.type === 'LEAVE_GAME') { toast("Opponent left the game"); exitGame(); }
-        });
-        c.on('close', () => { toast("Connection lost. Refresh to attempt reconnection.", "error"); });
-    }, [exitGame, toast]);
-
-    useEffect(() => { setupConnectionRef.current = setupConnection; }, [setupConnection]);
-
     useEffect(() => {
+        try {
+            const activeGame = JSON.parse(localStorage.getItem('dm_active_game'));
+            if (activeGame && activeGame.opponentId) {
+                setReconnectPending(activeGame);
+            }
+        } catch (e) {}
+
         const adjectives = ["Brave", "Ancient", "Mystic", "Iron", "Swift", "Wild", "Solar", "Dark"];
         const nouns = ["Duelist", "Guardian", "Dragon", "Warrior", "Mage", "Beast", "Oracle", "Walker"];
         let savedName = localStorage.getItem("dm_player_name");
@@ -206,152 +160,124 @@ const App = () => {
             setLoading(false);
         }).catch(() => setLoading(false));
 
-        let savedId = localStorage.getItem('dm_peer_id_v3');
-        if (!savedId) { savedId = Math.random().toString(36).substr(2, 12); localStorage.setItem('dm_peer_id_v3', savedId); }
-
-        const p = new Peer(savedId, {
-            host: 'dm-online.fun',
-            port: 443,
-            path: '/',
-            secure: true,
-            debug: 2,
-            config: {
-                'iceServers': [
-                    { urls: 'stun:stun.l.google.com:19302' },
-                    { urls: 'stun:stun1.l.google.com:19302' },
-                    { urls: 'stun:stun2.l.google.com:19302' },
-                    { urls: 'stun:stun3.l.google.com:19302' },
-                    { urls: 'stun:stun4.l.google.com:19302' }
-                ]
-            }
+        socket.connect();
+        
+        socket.on('connect', () => {
+             socket.emit('get_rooms');
         });
 
-        p.on('open', id => {
-            setCode(id);
-            const activeGame = JSON.parse(localStorage.getItem('dm_active_game'));
-            if (activeGame && activeGame.opponentId) {
-                setReconnectPending(activeGame);
-            }
+        socket.on('decks_update', (serverDecks) => {
+             const parsedServerDecks = serverDecks.map(d => {
+                 if (typeof d.cards === 'string') {
+                     try {
+                         return { ...d, cards: JSON.parse(d.cards) };
+                     } catch (e) {
+                         console.error("Failed to parse deck cards:", e);
+                     }
+                 }
+                 return d;
+             });
+             const localDecks = DECKS.map((d, i) => ({ ...d, gunId: 'local_' + i, format: 'CLASSIC' }));
+             setCommunityDecks([...parsedServerDecks.sort((a,b) => (b.playedCount||0) - (a.playedCount||0)), ...localDecks]);
         });
 
-        p.on('disconnected', () => {
-            console.log("Peer server disconnected. Attempting to reconnect in 3s...");
-            setTimeout(() => { if (!p.destroyed) p.reconnect(); }, 3000);
+        socket.on('rooms_list', (rooms) => {
+             const formatted = rooms.map(r => ({
+                  id: r.id,
+                  hostId: r.host,
+                  name: r.name,
+                  format: r.format,
+                  isReady: true
+             }));
+             setWaitingPlayers(formatted.filter(p => p.format === currentFormatRef.current && p.hostId !== socket.id));
         });
 
-        p.on('error', (err) => {
-            console.error("PeerJS error:", err);
-            if (err.type === 'unavailable-id') {
-                console.warn("Peer ID taken. Regenerating...");
-                localStorage.removeItem('dm_peer_id_v3');
-                let retries = parseInt(sessionStorage.getItem('peer_retries') || '0');
-                if (retries < 3) {
-                    sessionStorage.setItem('peer_retries', retries + 1);
-                    setTimeout(() => window.location.reload(), 1000);
-                } else {
-                    toast("Peer server error. Please try again later.", "error");
-                }
-            } else if (err.type === 'network' || err.type === 'server-error') {
-                toast("Network error. Retrying connection...", "error");
-                setTimeout(() => { if (!p.destroyed && p.disconnected) p.reconnect(); }, 5000);
-            }
+        socket.on('room_created', (roomId) => {
+             setCode(roomId); // Show room ID
+             toast("Room created! Waiting for opponent...", "success");
         });
 
-        p.on('connection', c => {
-            if (setupConnectionRef.current) setupConnectionRef.current(c);
+        socket.on('room_joined', (roomId) => {
+             setCode(roomId);
+             toast("Waiting for host to accept...", "info");
         });
-        setPeer(p);
 
-        // Fetch Decks
-        const decksRef = {};
-        let decksUpdateTimer = null;
+        socket.on('join_accepted', () => {
+             setIsHost(false);
+             setConn(socket);
+             setView("game");
+             toast("Connected!", "success");
+             incrementPlayedCount(communityDecksRef.current[selIdxRef.current]);
+             localStorage.setItem("dm_active_game", JSON.stringify({ opponentId: code, isHost: false }));
+        });
 
-        const updateDecksState = () => {
-            if (decksUpdateTimer) return;
-            decksUpdateTimer = setTimeout(() => {
-                setCommunityDecks(Object.values(decksRef).sort((a, b) => (b.playedCount || 0) - (a.playedCount || 0)));
-                decksUpdateTimer = null;
-            }, 500); // 500ms batching for decks
+        socket.on('rejoin_accepted', (roomId) => {
+             setCode(roomId);
+             setConn(socket);
+             setView("game");
+             setReconnectPending(null);
+             toast("Reconnected successfully!", "success");
+        });
+
+        socket.on('player_joined', (data) => {
+             setPendingRequest({
+                 id: data.id,
+                 name: data.name,
+                 format: data.format
+             });
+        });
+
+        socket.on('room_error', (err) => {
+             toast(err, "error");
+             if (err === 'Game session expired or invalid.') {
+                 handleDiscard();
+             }
+        });
+        
+        socket.on('join_rejected', (reason) => {
+             toast("Join request rejected: " + reason, "error");
+        });
+        
+        const onOpponentDisconnected = () => {
+             toast("Opponent disconnected or left", "error");
+             exitGame();
         };
 
-        const deckSub = gun.get(DECKS_KEY).map().on((data, id) => {
-            if (!data) {
-                if (decksRef[id]) {
-                    delete decksRef[id];
-                    updateDecksState();
-                }
-                return;
-            }
-            const deck = { ...data, gunId: id, format: data.format || 'CLASSIC' };
-            try { deck.cards = typeof data.cards === 'string' ? JSON.parse(data.cards) : data.cards; } catch(e) { deck.cards = []; }
-            decksRef[id] = deck;
-            updateDecksState();
-        });
+        const onOpponentReconnected = () => {
+             toast("Opponent reconnected!", "success");
+        };
 
-        // Add local DECKS to state for testing/fallback
-        setCommunityDecks(prev => [...prev, ...DECKS.map((d, i) => ({ ...d, gunId: 'local_' + i, format: 'CLASSIC' }))]);
+        socket.on('opponent_disconnected', onOpponentDisconnected);
+        socket.on('opponent_reconnected', onOpponentReconnected);
 
         return () => {
-            if (p) p.destroy();
-            if (deckSub) deckSub.off();
-            if (decksUpdateTimer) clearTimeout(decksUpdateTimer);
+            socket.off('connect');
+            socket.off('decks_update');
+            socket.off('rooms_list');
+            socket.off('room_created');
+            socket.off('room_joined');
+            socket.off('join_accepted');
+            socket.off('rejoin_accepted');
+            socket.off('player_joined');
+            socket.off('room_error');
+            socket.off('join_rejected');
+            socket.off('opponent_disconnected');
+            socket.off('opponent_reconnected');
+            socket.disconnect();
         };
-    }, [toast]);
+    }, [toast, exitGame, reconnectPending]); 
 
     useEffect(() => {
-        if (!code || view !== 'home') return;
-        const lobbyKey = `${LOBBY_KEY}_${currentFormat}`;
-        const lobby = gun.get(lobbyKey);
-        const playerRef = lobby.get(code);
-
-        const updatePresence = () => playerRef.put({ id: code, name: playerName, isReady: isReady, lastSeen: Date.now(), format: currentFormat });
-        updatePresence();
-        const heartbeat = setInterval(updatePresence, 5000);
-        const handleUnload = () => playerRef.put({ isReady: false, lastSeen: 0 });
-        window.addEventListener('beforeunload', handleUnload);
-
-        const playersRef = {};
-        let playersUpdateTimer = null;
-
-        const updatePlayersState = () => {
-            if (playersUpdateTimer) return;
-            playersUpdateTimer = setTimeout(() => {
-                const now = Date.now();
-                setWaitingPlayers(Object.values(playersRef).filter(p => {
-                    const isStale = !p.lastSeen || (now - p.lastSeen > 15000);
-                    return p.isReady && !isStale && p.format === currentFormat;
-                }));
-                playersUpdateTimer = null;
-            }, 300); // 300ms batching for lobby
-        };
-
-        const lobbySub = lobby.map().on((data, id) => {
-            if (id === code) return;
-            if (!data) {
-                if (playersRef[id]) {
-                    delete playersRef[id];
-                    updatePlayersState();
-                }
-                return;
-            }
-            playersRef[id] = data;
-            updatePlayersState();
-        });
-
-        return () => {
-            clearInterval(heartbeat);
-            window.removeEventListener('beforeunload', handleUnload);
-            playerRef.put({ isReady: false });
-            if (lobbySub) lobbySub.off();
-            if (playersUpdateTimer) clearTimeout(playersUpdateTimer);
-        };
-    }, [code, playerName, isReady, view, currentFormat]);
+         if (socket.connected) {
+              socket.emit('get_rooms');
+         }
+    }, [currentFormat]);
 
     const saveCommunityDeck = (deck) => {
         const deckData = {
             name: deck.name,
             color: deck.cards[0]?.civilizations?.[0] || "Neutral",
-            ownerId: code,
+            ownerId: socket.id,
             ownerName: playerName,
             playedCount: 0,
             createdAt: Date.now(),
@@ -362,30 +288,37 @@ const App = () => {
                 return acc;
             }, []))
         };
+        
         if (editingDeckIdx !== null && communityDecks[editingDeckIdx]) {
-            gun.get(DECKS_KEY).get(communityDecks[editingDeckIdx].gunId).put(deckData);
-        } else {
-            gun.get(DECKS_KEY).set(deckData);
+            deckData.gunId = communityDecks[editingDeckIdx].gunId;
         }
+        
+        socket.emit('save_deck', deckData);
         setEditingDeckIdx(null); setView("home"); toast("Deck published!");
     };
 
     const deleteDeck = (deck, e) => {
         e.stopPropagation();
-        if (deck.ownerId !== code) { toast("Only the creator can delete this deck!", "error"); return; }
-        gun.get(DECKS_KEY).get(deck.gunId).put(null);
+        if (deck.ownerId !== socket.id) { toast("Only the creator can delete this deck!", "error"); return; }
+        socket.emit('delete_deck', deck.gunId);
         toast("Deck deleted");
     };
 
     const acceptRequest = () => {
         if (!pendingRequest) return;
-        const { conn: c } = pendingRequest;
-        localStorage.removeItem(`dm_gs_${c.peer}`);
-        localStorage.removeItem(`dm_logs_${c.peer}`);
-        c.send({ type: 'CONNECT_ACCEPT', payload: { name: playerName } });
-        setConn(c); setIsHost(true); setView("game"); setPendingRequest(null);
-        localStorage.setItem("dm_active_game", JSON.stringify({ opponentId: c.peer, isHost: true }));
+        socket.emit('accept_join', pendingRequest.id);
+        setConn(socket);
+        setIsHost(true);
+        setView("game");
+        setPendingRequest(null);
         incrementPlayedCount(communityDecks[selIdx]);
+        localStorage.setItem("dm_active_game", JSON.stringify({ opponentId: code, isHost: true }));
+    };
+    
+    const declineRequest = () => {
+        if (!pendingRequest) return;
+        socket.emit('reject_join', pendingRequest.id, "Declined by host");
+        setPendingRequest(null);
     };
 
     const startSinglePlayer = useCallback(() => {
@@ -416,29 +349,28 @@ const App = () => {
         toast(`Practicing against Bot (${botDeck.name})`);
     }, [cards, toast]);
 
-    const join = (targetId = null) => {
-        const tid = (targetId || jc).trim();
-        if (!tid || !peer) return;
-        if (tid === code) { toast("You cannot challenge yourself!", "error"); return; }
-        toast("Challenging " + tid.substring(3, 9) + "...", "info");
-        const c = peer.connect(tid, {
-            reliable: true,
-            serialization: 'json'
-        });
-        const connTimeout = setTimeout(() => { if (!c.open) { toast("Opponent unavailable", "error"); c.close(); } }, 20000);
-        c.on('open', () => {
-            clearTimeout(connTimeout);
-            c.send({ type: 'CONNECT_REQUEST', payload: { name: playerName, format: currentFormat } });
-            toast("Challenge sent!", "success");
-        });
-        setupConnection(c);
+    const join = (roomId = null) => {
+        const targetId = (roomId || jc).trim();
+        if (!targetId || !socket.connected) return;
+        toast("Joining room...", "info");
+        socket.emit('join_room', targetId, { name: playerName, format: currentFormat });
     };
+
+    useEffect(() => {
+         if (isReady && socket.connected && view === 'home') {
+             socket.emit('create_room', { name: playerName, format: currentFormat });
+         } else if (!isReady && socket.connected && view === 'home') {
+             socket.emit('leave_room');
+             setCode("");
+             setPendingRequest(null);
+         }
+    }, [isReady, playerName, currentFormat, view]);
 
     if (loading || !cards.length) return <div className="loading"><div className="ring" /><p>Loading...</p></div>;
 
     if (view === "game") {
         const BoardComponent = isMobile ? MobileGameBoard : GameBoard;
-        return <BoardComponent cards={cards} deck={communityDecks[selIdx]} conn={conn} isHost={isHost} onLeave={handleLeave} />;
+        return <BoardComponent cards={cards} deck={communityDecks[selIdx]} conn={conn} isHost={isHost} gameId={code} onLeave={handleLeave} />;
     }
 
     if (view === "deckbuilder") {
@@ -462,7 +394,7 @@ const App = () => {
         join, communityDecks, selIdx, setSelIdx, setShowDeckModal, showDeckModal,
         currentFormat, setCurrentFormat, setIsNaming, isNaming, jc, setJc, setView,
         setEditingDeckIdx, setViewOnlyDeck, deleteDeck, toast, reconnectPending,
-        handleResume, handleDiscard, pendingRequest, acceptRequest, setPendingRequest,
+        handleResume, handleDiscard, pendingRequest, acceptRequest, declineRequest, setPendingRequest,
         toasts, startSinglePlayer
     };
 

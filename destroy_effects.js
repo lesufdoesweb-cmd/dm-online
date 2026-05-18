@@ -56,33 +56,88 @@ export const DESTROY_EFFECTS = {
             }
         });
     },
-    "Ambush Scorpion": ({ gsR, setGs, askMay, card }) => {
-        const other = gsR.current.mana.find(c => c.name === "Ambush Scorpion");
-        if (other) {
-            askMay({
-                message: "Ambush Scorpion: Bring another from mana zone?",
-                onYes: () => {
-                    setGs(s => ({
-                        ...s,
-                        mana: s.mana.filter(m => m.instanceId !== other.instanceId),
-                        battleZone: [...s.battleZone, { ...other, instanceId: Math.random().toString(36).substr(2, 9), summonedThisTurn: true }]
-                    }));
-                }
-            });
-        }
+    "Ambush Scorpion": ({ gsR, setSearchingDeck, setGs, toast, askMay }) => {
+        const s = gsR.current;
+        const valid = s.mana.filter(c => c.name === "Ambush Scorpion");
+        if (!valid.length) return;
+        askMay({
+            message: "Use Ambush Scorpion's effect to put an Ambush Scorpion from mana into the battle zone?",
+            onYes: () => {
+                setSearchingDeck({
+                    message: "Select an Ambush Scorpion from mana",
+                    count: 1,
+                    customList: valid,
+                    onComplete: (card) => {
+                        setGs(p => ({
+                            ...p,
+                            mana: p.mana.filter(m => m.instanceId !== card.instanceId),
+                            battleZone: [...p.battleZone, { ...card, summonedThisTurn: true }]
+                        }));
+                        toast("Ambush Scorpion: Summoned from mana!");
+                    }
+                });
+            }
+        });
     },
-    "Jewel Spider": ({ gsR, setGs, askMay, card }) => {
-        if (gsR.current.shields.length > 0) {
-            askMay({
-                message: "Jewel Spider: Return a shield to hand?",
-                onYes: () => {
-                    setGs(s => {
-                        const ns = [...s.shields];
-                        const c = ns.pop();
-                        return { ...s, shields: ns, hand: [...s.hand, c] };
-                    });
-                }
-            });
-        }
+    "Jewel Spider": ({ gsR, setSearchingDeck, setGs, toast, askMay }) => {
+        const s = gsR.current;
+        if (!s.shields.length) return;
+        askMay({
+            message: "Use Jewel Spider's effect to return a shield to your hand?",
+            onYes: () => {
+                setSearchingDeck({
+                    message: "Jewel Spider: Select a shield to take to hand (No trigger)",
+                    count: 1,
+                    customList: s.shields,
+                    isFaceDown: true,
+                    onComplete: (shield) => {
+                        setGs(prev => {
+                            return {
+                                ...prev,
+                                hand: [...prev.hand, shield],
+                                shields: prev.shields.filter(x => x.instanceId !== shield.instanceId)
+                            };
+                        });
+                        toast("Jewel Spider: Shield returned to hand!");
+                    }
+                });
+            }
+        });
+    },
+    "Obsidian Scarab": ({ gsR, setSearchingDeck, setGs, toast, askMay }) => {
+        const s = gsR.current;
+        const valid = s.mana.filter(c => c.name === "Obsidian Scarab");
+        if (!valid.length) return;
+        askMay({
+            message: "Use Obsidian Scarab's effect to put an Obsidian Scarab from mana into the battle zone?",
+            onYes: () => {
+                setSearchingDeck({
+                    message: "Select an Obsidian Scarab from mana",
+                    count: 1,
+                    customList: valid,
+                    onComplete: (card) => {
+                        setGs(p => ({
+                            ...p,
+                            mana: p.mana.filter(m => m.instanceId !== card.instanceId),
+                            battleZone: [...p.battleZone, { ...card, summonedThisTurn: true }]
+                        }));
+                        toast("Obsidian Scarab: Summoned from mana!");
+                    }
+                });
+            }
+        });
+    },
+    "Sinister General Damudo": ({ setGs, net, toast, CardEngine }) => {
+        setGs(p => {
+            const targets = p.battleZone.filter(c => CardEngine.getCurrentPower(c, p.battleZone, p.mana) <= 3000);
+            return { ...p, battleZone: p.battleZone.filter(c => CardEngine.getCurrentPower(c, p.battleZone, p.mana) > 3000), graveyard: [...p.graveyard, ...targets] };
+        });
+        net.send("ACTION", { action: "DESTROY_ALL_WEAK", details: { maxPower: 3000 } });
+        toast("Sinister General Damudo: Destroyed creatures with 3000 power or less!");
+    },
+    "Schuka, Duke of Amnesia": ({ setGs, net, toast }) => {
+        setGs(p => ({ ...p, hand: [] }));
+        net.send("ACTION", { action: "DISCARD_ALL" });
+        toast("Schuka: Each player discards his hand!");
     }
 };

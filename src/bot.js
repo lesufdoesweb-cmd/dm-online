@@ -5,6 +5,7 @@ export class LocalConn {
         this.bot = bot;
         this.handlers = {};
         this.open = true;
+        this.isMock = true;
         this.peer = "BOT";
         bot.setConn(this);
     }
@@ -58,7 +59,8 @@ export class BotEngine {
         this.initialized = true;
 
         const full = [];
-        this.deck.cards.forEach(dc => {
+        const deckCards = typeof this.deck.cards === 'string' ? JSON.parse(this.deck.cards) : this.deck.cards;
+        deckCards.forEach(dc => {
             const info = this.cards.find(c => c.id === dc.id && (!dc.set_id || c.set_id === dc.set_id));
             if (!info) return;
             for (let i = 0; i < dc.count; i++) {

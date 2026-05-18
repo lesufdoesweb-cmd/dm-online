@@ -11,6 +11,7 @@ const LobbyModals = ({
     setIsNaming,
     pendingRequest,
     acceptRequest,
+    declineRequest,
     setPendingRequest,
     showDeckModal,
     setShowDeckModal,
@@ -57,7 +58,7 @@ const LobbyModals = ({
                         <div className="desc"><strong>{pendingRequest.name}</strong> wants to duel!</div>
                         <div className="actions">
                             <button className="btn-primary" onClick={acceptRequest}>Accept</button>
-                            <button className="btn-secondary" onClick={() => { pendingRequest.conn.send({ type: 'CONNECT_REJECT' }); setPendingRequest(null); }}>Decline</button>
+                            <button className="btn-secondary" onClick={declineRequest}>Decline</button>
                         </div>
                     </div>
                 </div>

@@ -4,7 +4,17 @@ export function useNetwork(conn) {
     const handlers = useRef({});
     const pending = useRef(null);
     const on = useCallback((t, h) => { handlers.current[t] = h; }, []);
-    const send = useCallback((t, p) => { if (conn?.open) conn.send({ type: t, payload: p, ts: Date.now() }); }, [conn]);
+    
+    const isSocket = conn && typeof conn.emit === 'function';
+
+    const send = useCallback((t, p) => { 
+        if (isSocket && conn.connected) {
+             conn.emit('game_action', { type: t, payload: p, ts: Date.now() });
+        } else if (conn?.open) { 
+             conn.send({ type: t, payload: p, ts: Date.now() }); 
+        } 
+    }, [conn, isSocket]);
+
     const sync = useCallback((g) => {
         if (pending.current) clearTimeout(pending.current);
         pending.current = setTimeout(() => {
@@ -13,7 +23,8 @@ export function useNetwork(conn) {
             pending.current = null;
         }, 50); // Small 50ms debounce
     }, [send]);
-    const [isOpen, setIsOpen] = useState(conn?.open || false);
+    
+    const [isOpen, setIsOpen] = useState(isSocket ? conn.connected : (conn?.open || false));
 
     useEffect(() => {
         if (!conn) {
@@ -21,25 +32,41 @@ export function useNetwork(conn) {
             return;
         }
         
-        setIsOpen(conn.open);
+        setIsOpen(isSocket ? conn.connected : conn.open);
         
         const h = d => { const fn = handlers.current[d.type]; if (fn) fn(d.payload); };
         const onOpen = () => setIsOpen(true);
         const onClose = () => setIsOpen(false);
 
-        conn.on('data', h);
-        conn.on('open', onOpen);
-        conn.on('close', onClose);
-        conn.on('error', onClose);
-        
-        return () => {
-            conn.off('data', h);
-            conn.off('open', onOpen);
-            conn.off('close', onClose);
-            conn.off('error', onClose);
-            if (pending.current) clearTimeout(pending.current);
-        };
-    }, [conn]);
+        if (isSocket) {
+            conn.on('game_action', h);
+            conn.on('connect', onOpen);
+            conn.on('disconnect', onClose);
+            return () => {
+                conn.off('game_action', h);
+                conn.off('connect', onOpen);
+                conn.off('disconnect', onClose);
+                if (pending.current) clearTimeout(pending.current);
+            };
+        } else {
+            conn.on('data', h);
+            conn.on('open', onOpen);
+            conn.on('close', onClose);
+            if (conn.on) conn.on('error', onClose);
+            
+            return () => {
+                if (conn.off) {
+                    conn.off('data', h);
+                    conn.off('open', onOpen);
+                    conn.off('close', onClose);
+                    conn.off('error', onClose);
+                } else if (conn.removeListener) {
+                    // Just in case
+                }
+                if (pending.current) clearTimeout(pending.current);
+            };
+        }
+    }, [conn, isSocket]);
 
     return useMemo(() => ({ on, send, sync, isOpen }), [on, send, sync, isOpen]);
 }

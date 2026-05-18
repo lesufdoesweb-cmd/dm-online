@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "relay": "node relay.cjs",
+    "relay": "node server.cjs",
     "build:android": "npm run build && npx cap sync android"
   },
   "dependencies": {
@@ -17,10 +17,12 @@
     "@capacitor/splash-screen": "^8.0.1",
     "@capacitor/status-bar": "^8.0.2",
     "@hugotomazi/capacitor-navigation-bar": "^4.0.1",
-    "gun": "^0.2020.1241",
-    "peerjs": "^1.5.2",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3"
   },
   "devDependencies": {
     "@playwright/test": "^1.60.0",

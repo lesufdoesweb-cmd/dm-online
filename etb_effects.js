@@ -1010,6 +1010,176 @@ export const ETB_EFFECTS = {
             }
         });
     },
+    "Aqua Surfer": ({ gsR, setTargeting, net, toast, askMay }) => {
+        const targets = [...gsR.current.battleZone, ...gsR.current.opponent.battleZone];
+        if (!targets.length) return;
+        askMay({
+            message: "Aqua Surfer: Bounce a creature?",
+            onYes: () => {
+                setTargeting({
+                    message: "Select a creature to return to hand",
+                    count: 1,
+                    validTargets: targets.map(c => c.instanceId),
+                    onComplete: (ids) => {
+                        const id = ids[0];
+                        const isMine = gsR.current.battleZone.some(x => x.instanceId === id);
+                        if (isMine) {
+                            setGs(p => {
+                                const target = p.battleZone.find(x => x.instanceId === id);
+                                return { ...p, battleZone: p.battleZone.filter(x => x.instanceId !== id), hand: [...p.hand, target] };
+                            });
+                        } else {
+                            net.send("ACTION", { action: "BOUNCE_TARGET", details: { targetId: id } });
+                        }
+                        toast("Creature returned to hand!");
+                    }
+                });
+            }
+        });
+    },
+    "King Mazelan": ({ gsR, setTargeting, net, toast, askMay }) => {
+        const targets = [...gsR.current.battleZone, ...gsR.current.opponent.battleZone];
+        if (!targets.length) return;
+        askMay({
+            message: "King Mazelan: Bounce a creature?",
+            onYes: () => {
+                setTargeting({
+                    message: "Select a creature to return to hand",
+                    count: 1,
+                    validTargets: targets.map(c => c.instanceId),
+                    onComplete: (ids) => {
+                        const id = ids[0];
+                        const isMine = gsR.current.battleZone.some(x => x.instanceId === id);
+                        if (isMine) {
+                            setGs(p => {
+                                const target = p.battleZone.find(x => x.instanceId === id);
+                                return { ...p, battleZone: p.battleZone.filter(x => x.instanceId !== id), hand: [...p.hand, target] };
+                            });
+                        } else {
+                            net.send("ACTION", { action: "BOUNCE_TARGET", details: { targetId: id } });
+                        }
+                        toast("Creature returned to hand!");
+                    }
+                });
+            }
+        });
+    },
+    "Midnight Crawler": ({ gsR, setTargeting, net, toast }) => {
+        const oppMana = gsR.current.opponent.mana;
+        if (!oppMana.length) return;
+        setTargeting({
+            message: "Midnight Crawler: Select an opponent's mana to return to hand",
+            count: 1,
+            validTargets: oppMana.map(m => m.instanceId),
+            onComplete: (ids) => {
+                net.send("ACTION", { action: "BOUNCE_MANA_TARGET", details: { targetId: ids[0] } });
+                toast("Opponent's mana returned to hand!");
+            }
+        });
+    },
+    "Raptor Fish": ({ gsR, setGs, toast }) => {
+        const hand = gsR.current.hand;
+        const count = hand.length;
+        setGs(p => ({
+            ...p,
+            hand: [],
+            deck: [...p.deck, ...hand].sort(() => Math.random() - 0.5)
+        }));
+        setTimeout(() => {
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => draw(), i * 150);
+            }
+        }, 500);
+        toast(`Raptor Fish: Shuffled ${count} cards and drawing!`);
+    },
+    "Thrash Crawler": ({ gsR, setSearchingDeck, setGs, toast }) => {
+        const mana = gsR.current.mana;
+        if (!mana.length) return;
+        setSearchingDeck({
+            message: "Thrash Crawler: Select a card from mana to return to hand",
+            customList: mana,
+            count: 1,
+            onComplete: (cards) => {
+                const card = cards[0];
+                setGs(p => ({
+                    ...p,
+                    mana: p.mana.filter(m => m.instanceId !== card.instanceId),
+                    hand: [...p.hand, card]
+                }));
+                toast("Mana returned to hand!");
+            }
+        });
+    },
+    "Factory Shell Q": ({ gsR, setSearchingDeck, setGs, toast }) => {
+        setSearchingDeck({
+            message: "Factory Shell Q: Search a Survivor from deck",
+            count: 1,
+            filter: (c) => c.subtypes?.includes('Survivor'),
+            onComplete: (cards) => {
+                const card = cards[0];
+                setGs(p => ({
+                    ...p,
+                    deck: p.deck.filter(c => c.instanceId !== card.instanceId),
+                    hand: [...p.hand, card]
+                }));
+                toast("Survivor added to hand!");
+            }
+        });
+    },
+    "Forbos, Sanctum Guardian Q": ({ gsR, setSearchingDeck, setGs, toast }) => {
+        setSearchingDeck({
+            message: "Forbos: Search a spell from deck",
+            count: 1,
+            filter: (c) => CardEngine.isSpell(c),
+            onComplete: (cards) => {
+                const card = cards[0];
+                setGs(p => ({
+                    ...p,
+                    deck: p.deck.filter(c => c.instanceId !== card.instanceId),
+                    hand: [...p.hand, card]
+                }));
+                toast("Spell added to hand!");
+            }
+        });
+    },
+    "Grave Worm Q": ({ gsR, setSearchingDeck, setGs, toast }) => {
+        const survivors = gsR.current.graveyard.filter(c => c.subtypes?.includes('Survivor'));
+        if (!survivors.length) return;
+        setSearchingDeck({
+            message: "Grave Worm Q: Select a Survivor from graveyard",
+            customList: survivors,
+            count: 1,
+            onComplete: (cards) => {
+                const card = cards[0];
+                setGs(p => ({
+                    ...p,
+                    graveyard: p.graveyard.filter(c => c.instanceId !== card.instanceId),
+                    hand: [...p.hand, card]
+                }));
+                toast("Survivor returned to hand!");
+            }
+        });
+    },
+    "Ripple Lotus Q": ({ gsR, setTargeting, net, toast }) => {
+        const targets = gsR.current.opponent.battleZone;
+        if (!targets.length) return;
+        setTargeting({
+            message: "Ripple Lotus Q: Select an enemy to tap",
+            count: 1,
+            validTargets: targets.map(c => c.instanceId),
+            onComplete: (ids) => {
+                net.send("ACTION", { action: "TAP_TARGET", details: { targetId: ids[0] } });
+                toast("Enemy tapped!");
+            }
+        });
+    },
+    "Q-tronic Hypermind": ({ gsR, draw, toast }) => {
+        const survivors = gsR.current.battleZone.filter(c => c.subtypes?.includes('Survivor')).length;
+        for (let i = 0; i < survivors; i++) {
+            setTimeout(draw, i * 150);
+        }
+        toast(`Q-tronic Hypermind: Drew ${survivors} cards!`);
+    },
     "Phantasm Dragon": ({ gsR, setTargeting, setGs, toast }) => {
         const others = gsR.current.battleZone.filter(c => c.name !== "Phantasm Dragon");
         if (!others.length) return;
@@ -1054,6 +1224,322 @@ export const ETB_EFFECTS = {
             onComplete: (ids) => {
                 ids.forEach(id => net.send("ACTION", { action: "TAP_TARGET", details: { targetId: id } }));
                 toast("Enemies tapped!");
+            }
+        });
+    },
+    // DM-04
+    "Astral Warper": ({ askMay, draw, toast }) => {
+        askMay({
+            message: "Use Astral Warper's effect to draw up to 3 cards?",
+            onYes: () => { draw(); setTimeout(draw, 150); setTimeout(draw, 300); toast("Astral Warper: Drew 3 cards!"); }
+        });
+    },
+    "Ballom, Master of Death": ({ gsR, setGs, net, toast }) => {
+        setGs(p => {
+            const nonDarks = p.battleZone.filter(c => !c.civilizations?.includes('Darkness'));
+            return { ...p, battleZone: p.battleZone.filter(c => c.civilizations?.includes('Darkness')), graveyard: [...p.graveyard, ...nonDarks] };
+        });
+        net.send("ACTION", { action: "DESTROY_ALL_EXCEPT_DARK" });
+        toast("Ballom: All non-darkness creatures destroyed!");
+    },
+    "Doboulgyser, Giant Rock Beast": ({ gsR, setTargeting, net, toast, askMay, CardEngine }) => {
+        const targets = gsR.current.opponent.battleZone.filter(c => CardEngine.getCurrentPower(c, gsR.current.opponent.battleZone, gsR.current.opponent.mana) <= 3000);
+        if (!targets.length) return;
+        askMay({
+            message: "Use Doboulgyser's effect to destroy an opponent's creature (power 3000 or less)?",
+            onYes: () => {
+                setTargeting({
+                    message: "Select an enemy to destroy",
+                    count: 1,
+                    validTargets: targets.map(c => c.instanceId),
+                    onComplete: (ids) => {
+                        net.send("ACTION", { action: "CREATURE_DESTROYED", details: { targetId: ids[0] } });
+                        toast("Enemy destroyed!");
+                    }
+                });
+            }
+        });
+    },
+    "Galklife Dragon": ({ setGs, net, toast }) => {
+        setGs(p => {
+            const targets = p.battleZone.filter(c => c.civilizations?.includes('Light') && CardEngine.getCurrentPower(c, p.battleZone, p.mana) <= 4000);
+            return { ...p, battleZone: p.battleZone.filter(c => !(c.civilizations?.includes('Light') && CardEngine.getCurrentPower(c, p.battleZone, p.mana) <= 4000)), graveyard: [...p.graveyard, ...targets] };
+        });
+        net.send("ACTION", { action: "DESTROY_LIGHT_WEAK", details: { maxPower: 4000 } });
+        toast("Galklife Dragon: Weak light creatures destroyed!");
+    },
+    "King Aquakamui": ({ gsR, setSearchingDeck, setGs, toast, askMay }) => {
+        const s = gsR.current;
+        const validGraveyard = s.graveyard.filter(c => c.subtypes?.some(t => t.toLowerCase().includes('angel command') || t.toLowerCase().includes('demon command')));
+        if (!validGraveyard.length) return;
+        askMay({
+            message: "Use King Aquakamui's effect to return Angel Commands and Demon Commands from your graveyard?",
+            onYes: () => {
+                setGs(p => ({
+                    ...p,
+                    graveyard: p.graveyard.filter(c => !(c.subtypes?.some(t => t.toLowerCase().includes('angel command') || t.toLowerCase().includes('demon command')))),
+                    hand: [...p.hand, ...validGraveyard]
+                }));
+                toast("King Aquakamui: Returned creatures to hand!");
+            }
+        });
+    },
+    "Kolon, the Oracle": ({ gsR, setTargeting, net, toast, askMay }) => {
+        const targets = gsR.current.opponent.battleZone.filter(c => !c.isTapped);
+        if (!targets.length) return;
+        askMay({
+            message: "Use Kolon's effect to tap an opponent's creature?",
+            onYes: () => {
+                setTargeting({
+                    message: "Kolon: Select an enemy to tap",
+                    count: 1,
+                    validTargets: targets.map(c => c.instanceId),
+                    onComplete: (ids) => {
+                        net.send("ACTION", { action: "TAP_TARGET", details: { targetId: ids[0] } });
+                        toast("Enemy tapped!");
+                    }
+                });
+            }
+        });
+    },
+    "Locomotiver": ({ net, toast }) => {
+        net.send("ACTION", { action: "DISCARD_RANDOM" });
+        toast("Locomotiver: Opponent discarded a card!");
+    },
+    "Magmarex": ({ setGs, net, toast }) => {
+        setGs(p => {
+            const targets = p.battleZone.filter(c => CardEngine.getCurrentPower(c, p.battleZone, p.mana) === 1000);
+            return { ...p, battleZone: p.battleZone.filter(c => CardEngine.getCurrentPower(c, p.battleZone, p.mana) !== 1000), graveyard: [...p.graveyard, ...targets] };
+        });
+        net.send("ACTION", { action: "DESTROY_EXACT_POWER", details: { power: 1000 } });
+        toast("Magmarex: Destroyed 1000 power creatures!");
+    },
+    "Marinomancer": ({ gsR, setGs, toast }) => {
+        setGs(p => {
+            if (p.deck.length === 0) return p;
+            const top3 = p.deck.slice(-3).reverse();
+            const rest = p.deck.slice(0, -3);
+            const toHand = top3.filter(c => c.civilizations?.includes('Light') || c.civilizations?.includes('Darkness'));
+            const toGrave = top3.filter(c => !(c.civilizations?.includes('Light') || c.civilizations?.includes('Darkness')));
+            return { ...p, deck: rest, hand: [...p.hand, ...toHand], graveyard: [...p.graveyard, ...toGrave] };
+        });
+        toast("Marinomancer: Revealed top 3 cards!");
+    },
+    "Niofa, Horned Protector": ({ gsR, setSearchingDeck, setGs, toast }) => {
+        const s = gsR.current;
+        const natureCards = s.deck.filter(c => c.civilizations?.includes('Nature') && c.type === 'Creature');
+        if (!natureCards.length) return;
+        setSearchingDeck({
+            message: "Niofa: Select a nature creature from your deck",
+            count: 1,
+            customList: s.deck,
+            onComplete: (selectedCard) => {
+                if (selectedCard && selectedCard.civilizations?.includes('Nature') && selectedCard.type === 'Creature') {
+                    setGs(prev => ({
+                        ...prev,
+                        deck: prev.deck.filter(c => c.instanceId !== selectedCard.instanceId).sort(() => Math.random() - 0.5),
+                        hand: [...prev.hand, selectedCard]
+                    }));
+                    toast("Niofa: Took a nature creature!");
+                } else {
+                    setGs(prev => ({ ...prev, deck: [...prev.deck].sort(() => Math.random() - 0.5) }));
+                    toast("Niofa: Invalid card selected or skipped.", "error");
+                }
+            }
+        });
+    },
+    "Rimuel, Cloudbreak Elemental": ({ gsR, setTargeting, net, toast }) => {
+        const untappedLight = gsR.current.mana.filter(c => !c.isTapped && c.civilizations?.includes('Light')).length;
+        if (untappedLight === 0) return;
+        const targets = gsR.current.opponent.battleZone.filter(c => !c.isTapped);
+        if (!targets.length) return;
+        const count = Math.min(untappedLight, targets.length);
+        setTargeting({
+            message: `Rimuel: Select up to ${count} enemies to tap`,
+            count: count,
+            exact: false,
+            validTargets: targets.map(c => c.instanceId),
+            onComplete: (ids) => {
+                ids.forEach(id => net.send("ACTION", { action: "TAP_TARGET", details: { targetId: id } }));
+                toast("Enemies tapped!");
+            }
+        });
+    },
+    "Skeleton Thief, the Revealer": ({ gsR, setSearchingDeck, setGs, toast, askMay }) => {
+        const s = gsR.current;
+        const valid = s.graveyard.filter(c => c.subtypes?.some(t => t.toLowerCase().includes('living dead')));
+        if (!valid.length) return;
+        askMay({
+            message: "Use Skeleton Thief's effect to return a Living Dead from your graveyard?",
+            onYes: () => {
+                setSearchingDeck({
+                    message: "Select a Living Dead to return",
+                    count: 1,
+                    customList: valid,
+                    onComplete: (card) => {
+                        setGs(p => ({
+                            ...p,
+                            graveyard: p.graveyard.filter(c => c.instanceId !== card.instanceId),
+                            hand: [...p.hand, card]
+                        }));
+                        toast("Skeleton Thief: Returned creature!");
+                    }
+                });
+            }
+        });
+    },
+    "Trox, General of Destruction": ({ gsR, net, toast }) => {
+        const otherDark = gsR.current.battleZone.filter(c => c.name !== "Trox, General of Destruction" && c.civilizations?.includes('Darkness')).length;
+        if (otherDark > 0) {
+            for (let i = 0; i < otherDark; i++) {
+                setTimeout(() => net.send("ACTION", { action: "DISCARD_RANDOM" }), i * 300);
+            }
+            toast(`Trox: Opponent discards ${otherDark} cards!`);
+        }
+    },
+    // DM-05
+    "Aqua Surfer": ({ gsR, setTargeting, net, setGs, toast, askMay }) => {
+        const s = gsR.current;
+        const allCreatures = [...s.battleZone, ...s.opponent.battleZone];
+        if (!allCreatures.length) return;
+        askMay({
+            message: "Use Aqua Surfer's effect to bounce a creature?",
+            onYes: () => {
+                setTargeting({
+                    message: "Select a creature to bounce",
+                    count: 1,
+                    validTargets: allCreatures.map(c => c.instanceId),
+                    onComplete: (selectedIds) => {
+                        const id = selectedIds[0];
+                        net.send("ACTION", { action: "BOUNCE_TARGET", details: { targetId: id } });
+                        setGs(s => {
+                            const c = s.battleZone.find(x => x.instanceId === id);
+                            if (!c) return s;
+                            return { ...s, battleZone: s.battleZone.filter(x => x.instanceId !== id), hand: [...s.hand, c] };
+                        });
+                        toast("Aqua Surfer: Bounced creature!");
+                    }
+                });
+            }
+        });
+    },
+    "Death Cruzer, the Annihilator": ({ setGs, toast }) => {
+        setGs(p => {
+            const others = p.battleZone.filter(c => c.name !== "Death Cruzer, the Annihilator");
+            return {
+                ...p,
+                battleZone: p.battleZone.filter(c => c.name === "Death Cruzer, the Annihilator"),
+                graveyard: [...p.graveyard, ...others]
+            };
+        });
+        toast("Death Cruzer: Destroyed all your other creatures!");
+    },
+    "King Mazelan": ({ gsR, setTargeting, net, setGs, toast, askMay }) => {
+        const s = gsR.current;
+        const allCreatures = [...s.battleZone, ...s.opponent.battleZone];
+        if (!allCreatures.length) return;
+        askMay({
+            message: "Use King Mazelan's effect to bounce a creature?",
+            onYes: () => {
+                setTargeting({
+                    message: "Select a creature to bounce",
+                    count: 1,
+                    validTargets: allCreatures.map(c => c.instanceId),
+                    onComplete: (selectedIds) => {
+                        const id = selectedIds[0];
+                        net.send("ACTION", { action: "BOUNCE_TARGET", details: { targetId: id } });
+                        setGs(s => {
+                            const c = s.battleZone.find(x => x.instanceId === id);
+                            if (!c) return s;
+                            return { ...s, battleZone: s.battleZone.filter(x => x.instanceId !== id), hand: [...s.hand, c] };
+                        });
+                        toast("King Mazelan: Bounced creature!");
+                    }
+                });
+            }
+        });
+    },
+    "King Tsunami": ({ setGs, net, toast }) => {
+        setGs(p => {
+            const others = p.battleZone.filter(c => c.name !== "King Tsunami");
+            return {
+                ...p,
+                battleZone: p.battleZone.filter(c => c.name === "King Tsunami"),
+                hand: [...p.hand, ...others]
+            };
+        });
+        net.send("ACTION", { action: "BOUNCE_ALL" });
+        toast("King Tsunami: Bounced all other creatures!");
+    },
+    "Kulus, Soulshine Enforcer": ({ gsR, setGs, toast }) => {
+        if (gsR.current.opponent.mana.length > gsR.current.mana.length) {
+            setGs(p => {
+                if (p.deck.length === 0) return p;
+                const top = p.deck[p.deck.length - 1];
+                return { ...p, deck: p.deck.slice(0, -1), mana: [...p.mana, { ...top, isTapped: false }] };
+            });
+            toast("Kulus: Opponent has more mana. Put top card into mana zone!");
+        }
+    },
+    "Scissor Scarab": ({ gsR, setSearchingDeck, setGs, toast }) => {
+        const s = gsR.current;
+        const valid = s.deck.filter(c => c.subtypes?.some(t => t.toLowerCase().includes('giant insect')));
+        if (!valid.length) return;
+        setSearchingDeck({
+            message: "Scissor Scarab: Select a Giant Insect from your deck",
+            count: 1,
+            customList: s.deck,
+            onComplete: (selectedCard) => {
+                if (selectedCard && selectedCard.subtypes?.some(t => t.toLowerCase().includes('giant insect'))) {
+                    setGs(prev => ({
+                        ...prev,
+                        deck: prev.deck.filter(c => c.instanceId !== selectedCard.instanceId).sort(() => Math.random() - 0.5),
+                        hand: [...prev.hand, selectedCard]
+                    }));
+                    toast("Scissor Scarab: Took a Giant Insect!");
+                } else {
+                    setGs(prev => ({ ...prev, deck: [...prev.deck].sort(() => Math.random() - 0.5) }));
+                    toast("Invalid card selected or skipped.", "error");
+                }
+            }
+        });
+    },
+    "Solidskin Fish": ({ gsR, setSearchingDeck, setGs, toast }) => {
+        if (!gsR.current.mana.length) return;
+        setSearchingDeck({
+            message: "Solidskin Fish: Select a card from mana to return to hand",
+            count: 1,
+            customList: gsR.current.mana,
+            onComplete: (card) => {
+                setGs(p => ({
+                    ...p,
+                    mana: p.mana.filter(m => m.instanceId !== card.instanceId),
+                    hand: [...p.hand, card]
+                }));
+                toast("Solidskin Fish: Returned to hand!");
+            }
+        });
+    },
+    "Syforce, Aurora Elemental": ({ gsR, setSearchingDeck, setGs, toast, askMay }) => {
+        const s = gsR.current;
+        const valid = s.mana.filter(c => c.type === 'Spell');
+        if (!valid.length) return;
+        askMay({
+            message: "Use Syforce's effect to return a spell from your mana zone?",
+            onYes: () => {
+                setSearchingDeck({
+                    message: "Select a Spell to return",
+                    count: 1,
+                    customList: valid,
+                    onComplete: (card) => {
+                        setGs(p => ({
+                            ...p,
+                            mana: p.mana.filter(c => c.instanceId !== card.instanceId),
+                            hand: [...p.hand, card]
+                        }));
+                        toast("Syforce: Returned spell!");
+                    }
+                });
             }
         });
     }

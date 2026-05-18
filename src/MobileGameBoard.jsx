@@ -3,7 +3,7 @@ import { CardEngine } from "./engine.js";
 import { Preview, CtxMenu, ArrowOverlay } from "./components.jsx";
 import { useGameLogic } from "./useGameLogic.js";
 import { LogSidebar } from "./LogSidebar.jsx";
-import { SearchOverlay, DecisionModals } from "./GameModals.jsx";
+import { SearchOverlay, DecisionModals, TargetingOverlay } from "./GameModals.jsx";
 import { PlayerHUD, OpponentHUD } from "./HUD.jsx";
 import "./mobile_board.css";
 
@@ -147,6 +147,7 @@ const MobileGameBoard = (props) => {
             setSelectedHandCardId(null);
         }}>
             <SearchOverlay searchingDeck={searchingDeck} setSearchingDeck={setSearchingDeck} gs={gs} onHover={hover} />
+            <TargetingOverlay targeting={targeting} setTargeting={setTargeting} gs={gs} blockingRequest={blockingRequest} onHover={hover} />
             <DecisionModals 
                 targeting={targeting} blockingRequest={blockingRequest} 
                 waitingForOpponent={waitingForOpponent} trigger={trigger} 
@@ -212,8 +213,10 @@ const MobileGameBoard = (props) => {
                     </div>
                     {/* Shields in front */}
                     <div className="mobile-shield-grid" style={{marginTop: 15}}>
-                        {Array.from({ length: typeof gs.opponent.shields === 'number' ? gs.opponent.shields : gs.opponent.shields.length }).map((_, i) => (
-                            <div key={i} className="mobile-shield-card" style={{ backgroundImage: `url(${CARD_BACK})` }} />
+                        {(Array.isArray(gs.opponent.shields) ? gs.opponent.shields : Array.from({ length: gs.opponent.shields })).map((s, i) => (
+                            <div key={i} className="mobile-shield-card" style={{ backgroundImage: `url(${CARD_BACK})`, position: 'relative' }}>
+                                <div className="shield-num-badge">{(s && s.shieldNumber) || (i + 1)}</div>
+                            </div>
                         ))}
                     </div>
                 </div>
@@ -246,15 +249,17 @@ const MobileGameBoard = (props) => {
                 <div className="mobile-floating-zone mobile-floating-zone--player">
                     {/* Shields in front */}
                     <div className="mobile-shield-grid" style={{marginBottom: 10}}>
-                        {gs.shields.map((_, i) => {
+                        {gs.shields.map((s, i) => {
                             const isTargetable = targeting && targeting.isShieldTarget && targeting.validTargets.includes(`shield-${i}`);
                             const isSelected = targeting && targeting.selected?.includes(`shield-${i}`);
                             return (
                                 <div key={i} 
                                      className={`mobile-shield-card ${isTargetable ? 'selectable-glow' : ''} ${isSelected ? 'target-selected' : ''}`} 
-                                     style={{ backgroundImage: `url(${CARD_BACK})` }}
+                                     style={{ backgroundImage: `url(${CARD_BACK})`, position: 'relative' }}
                                      onClick={() => isTargetable && onTargetClick({ instanceId: `shield-${i}` })} 
-                                />
+                                >
+                                    <div className="shield-num-badge">{(s && s.shieldNumber) || (i + 1)}</div>
+                                </div>
                             );
                         })}
                     </div>

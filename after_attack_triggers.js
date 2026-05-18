@@ -12,5 +12,12 @@ export const AFTER_ATTACK_TRIGGERS = {
             setGs(p => ({ ...p, shieldsBrokenThisTurn: p.shieldsBrokenThisTurn + 1 }));
             toast("Avalanche Giant: Shield broken because blocked!");
         }
+    },
+    "Splinterclaw Wasp": ({ net, setGs, toast, isBlocked }) => {
+        if (isBlocked) {
+            net.send("ACTION", { action: "SHIELD_BROKEN" });
+            setGs(p => ({ ...p, shieldsBrokenThisTurn: p.shieldsBrokenThisTurn + 1 }));
+            toast("Splinterclaw Wasp: Shield broken because blocked!");
+        }
     }
 };

@@ -97,23 +97,170 @@ export const TAP_EFFECTS = {
             }
         });
     },
-    "Arc Bine, the Astounding": ({ gsR, setTargeting, setGs, toast, card }) => {
-        const others = gsR.current.battleZone.filter(c => c.instanceId !== card.instanceId && c.civilizations?.includes('Light'));
-        if (!others.length) {
-            toast("No other Light creatures to untap!");
-            return;
-        }
+    "Arc Bine, the Astounding": ({ gsR, setTargeting, net, toast }) => {
+        const targets = gsR.current.opponent.battleZone;
+        if (!targets.length) return;
         setTargeting({
-            message: "Arc Bine: Select a Light creature to untap",
+            message: "Arc Bine: Select an enemy to tap",
             count: 1,
-            validTargets: others.map(c => c.instanceId),
+            validTargets: targets.map(c => c.instanceId),
+            onComplete: (ids) => {
+                net.send("ACTION", { action: "TAP_TARGET", details: { targetId: ids[0] } });
+                toast("Enemy tapped!");
+            }
+        });
+    },
+    "Grim Soul, Shadow of Reversal": ({ gsR, setSearchingDeck, setGs, toast }) => {
+        const darks = gsR.current.graveyard.filter(c => c.civilizations?.includes('Darkness'));
+        if (!darks.length) return;
+        setSearchingDeck({
+            message: "Grim Soul: Select a darkness creature from graveyard",
+            customList: darks,
+            count: 1,
+            onComplete: (cards) => {
+                const card = cards[0];
+                setGs(p => ({
+                    ...p,
+                    graveyard: p.graveyard.filter(c => c.instanceId !== card.instanceId),
+                    hand: [...p.hand, card]
+                }));
+                toast("Darkness creature returned to hand!");
+            }
+        });
+    },
+    "Lupa, Poison-Tipped Doll": ({ gsR, setTargeting, setGs, toast }) => {
+        const targets = gsR.current.battleZone;
+        if (!targets.length) return;
+        setTargeting({
+            message: "Lupa: Select a creature to gain Slayer",
+            count: 1,
+            validTargets: targets.map(c => c.instanceId),
             onComplete: (ids) => {
                 setGs(p => ({
                     ...p,
-                    battleZone: p.battleZone.map(c => ids.includes(c.instanceId) ? { ...c, isTapped: false } : c)
+                    battleZone: p.battleZone.map(c => c.instanceId === ids[0] ? { ...c, tempSlayer: true } : c)
                 }));
-                toast("Creature untapped!");
+                toast("Creature gained Slayer!");
             }
         });
+    },
+    "Migasa, Adept of Chaos": ({ gsR, setTargeting, setGs, toast }) => {
+        const fireTargets = gsR.current.battleZone.filter(c => c.civilizations?.includes('Fire'));
+        if (!fireTargets.length) return;
+        setTargeting({
+            message: "Migasa: Select a fire creature to gain Double Breaker",
+            count: 1,
+            validTargets: fireTargets.map(c => c.instanceId),
+            onComplete: (ids) => {
+                setGs(p => ({
+                    ...p,
+                    battleZone: p.battleZone.map(c => c.instanceId === ids[0] ? { ...c, tempDoubleBreaker: true } : c)
+                }));
+                toast("Fire creature gained Double Breaker!");
+            }
+        });
+    },
+    "Mighty Bandit, Ace of Thieves": ({ gsR, setTargeting, setGs, toast }) => {
+        const targets = gsR.current.battleZone;
+        if (!targets.length) return;
+        setTargeting({
+            message: "Mighty Bandit: Select a creature to get +5000 power",
+            count: 1,
+            validTargets: targets.map(c => c.instanceId),
+            onComplete: (ids) => {
+                setGs(p => ({
+                    ...p,
+                    battleZone: p.battleZone.map(c => c.instanceId === ids[0] ? { ...c, powerBonus: (c.powerBonus || 0) + 5000 } : c)
+                }));
+                toast("Creature buffed!");
+            }
+        });
+    },
+    "Neon Cluster": ({ draw, toast }) => {
+        draw();
+        setTimeout(draw, 150);
+        toast("Neon Cluster: Drew 2 cards!");
+    },
+    "Rikabu's Screwdriver": ({ gsR, setTargeting, net, toast, CardEngine }) => {
+        const targets = gsR.current.opponent.battleZone.filter(c => CardEngine.parseAbilities(c, [], []).blocker);
+        if (!targets.length) return;
+        setTargeting({
+            message: "Rikabu: Select a blocker to destroy",
+            count: 1,
+            validTargets: targets.map(c => c.instanceId),
+            onComplete: (ids) => {
+                net.send("ACTION", { action: "CREATURE_DESTROYED", details: { targetId: ids[0] } });
+                toast("Blocker destroyed!");
+            }
+        });
+    },
+    "Sopian": ({ gsR, setTargeting, setGs, toast }) => {
+        const targets = gsR.current.battleZone;
+        if (!targets.length) return;
+        setTargeting({
+            message: "Sopian: Select a creature to be unblockable this turn",
+            count: 1,
+            validTargets: targets.map(c => c.instanceId),
+            onComplete: (ids) => {
+                setGs(p => ({
+                    ...p,
+                    battleZone: p.battleZone.map(c => c.instanceId === ids[0] ? { ...c, cantBeBlockedThisTurn: true } : c)
+                }));
+                toast("Creature is now unblockable!");
+            }
+        });
+    },
+    "Tank Mutant": ({ net, toast }) => {
+        net.send("ACTION", { action: "DESTROY_CHOICE", details: { count: 1 } });
+        toast("Tank Mutant: Opponent must choose a creature to destroy!");
+    },
+    "Legionnaire Lizard": ({ gsR, setTargeting, setGs, toast }) => {
+        const targets = gsR.current.battleZone;
+        if (!targets.length) return;
+        setTargeting({
+            message: "Legionnaire Lizard: Select a creature to gain Speed Attacker",
+            count: 1,
+            validTargets: targets.map(c => c.instanceId),
+            onComplete: (ids) => {
+                setGs(p => ({
+                    ...p,
+                    battleZone: p.battleZone.map(c => c.instanceId === ids[0] ? { ...c, tempSpeedAttacker: true } : c)
+                }));
+                toast("Creature gained Speed Attacker!");
+            }
+        });
+    },
+    "Lava Walker Executo": ({ gsR, setTargeting, setGs, toast }) => {
+        const fireTargets = gsR.current.battleZone.filter(c => c.civilizations?.includes('Fire'));
+        if (!fireTargets.length) return;
+        setTargeting({
+            message: "Lava Walker: Select a fire creature to get +3000 power",
+            count: 1,
+            validTargets: fireTargets.map(c => c.instanceId),
+            onComplete: (ids) => {
+                setGs(p => ({
+                    ...p,
+                    battleZone: p.battleZone.map(c => c.instanceId === ids[0] ? { ...c, powerBonus: (c.powerBonus || 0) + 3000 } : c)
+                }));
+                toast("Fire creature buffed!");
+            }
+        });
+    },
+    "Living Citadel Vosh": ({ gsR, setGs, toast }) => {
+        setGs(p => {
+            if (p.deck.length === 0) return p;
+            const top = p.deck[0];
+            return { ...p, deck: p.deck.slice(1), mana: [...p.mana, { ...top, isTapped: false }] };
+        });
+        toast("Living Citadel: Put top card into mana zone!");
+    },
+    "Fort Megacluster": ({ draw, toast }) => {
+        draw();
+        toast("Fort Megacluster: Drew a card!");
+    },
+    "Phantasmal Horror Gigazald": ({ net, toast }) => {
+        net.send("ACTION", { action: "DISCARD_RANDOM" });
+        toast("Gigazald: Opponent discarded a card!");
     }
 };
+

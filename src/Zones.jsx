@@ -15,9 +15,9 @@ export const OpponentSide = ({ gs, oppAvail, oppShieldRef, oppBzRef, renderCreat
                     <div>
                         <div className="shield-label">Shields ({gs.opponent.shields.length ?? gs.opponent.shields})</div>
                         <div ref={oppShieldRef} className="shield-stack">
-                            {(Array.isArray(gs.opponent.shields) ? gs.opponent.shields : Array.from({ length: gs.opponent.shields })).map((_, i) => (
+                            {(Array.isArray(gs.opponent.shields) ? gs.opponent.shields : Array.from({ length: gs.opponent.shields })).map((s, i) => (
                                 <div key={i} className="shield-gem shield-gem--opp" style={{ backgroundImage: `url(${CARD_BACK})` }}>
-                                    <div className="shield-num-badge">{i + 1}</div>
+                                    <div className="shield-num-badge">{(s && s.shieldNumber) || (i + 1)}</div>
                                 </div>
                             ))}
                             {(gs.opponent.shields.length ?? gs.opponent.shields) === 0 && <span style={{ fontSize: 10, color: 'var(--fire)', fontWeight: 900 }}>OPEN</span>}
@@ -47,9 +47,13 @@ export const PlayerSide = ({ gs, avail, targeting, onTargetClick, renderCreature
                     <div className="shield-zone-player">
                         <div className="shield-label">🛡 Shields ({gs.shields.length})</div>
                         <div className="shield-stack shield-stack--player">
-                            {gs.shields.map((_, i) => {
+                            {gs.shields.map((s, i) => {
                                 const isTargetable = targeting && targeting.isShieldTarget && targeting.validTargets.includes(`shield-${i}`);
-                                return <div key={i} className={`shield-gem shield-gem--self ${isTargetable ? 'selectable-glow' : ''}`} style={{ backgroundImage: `url(${CARD_BACK})`, cursor: isTargetable ? 'crosshair' : 'default' }} onClick={() => isTargetable && onTargetClick({ instanceId: `shield-${i}` })} />;
+                                return (
+                                    <div key={i} className={`shield-gem shield-gem--self ${isTargetable ? 'selectable-glow' : ''}`} style={{ backgroundImage: `url(${CARD_BACK})`, cursor: isTargetable ? 'crosshair' : 'default', position: 'relative' }} onClick={() => isTargetable && onTargetClick({ instanceId: `shield-${i}` })}>
+                                        <div className="shield-num-badge">{(s && s.shieldNumber) || (i + 1)}</div>
+                                    </div>
+                                );
                             })}
                             {gs.shields.length === 0 && <span style={{ fontSize: 10, color: 'var(--fire)', fontWeight: 900 }}>OPEN!</span>}
                         </div>

@@ -9,17 +9,51 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { CardEngine } from "./engine.js";
 import { useNetwork, useArrowDrag } from "./hooks.js";
 
-export const useGameLogic = ({ cards, deck, conn, isHost }) => {
+export const useGameLogic = ({ cards, deck, conn, isHost, gameId }) => {
     // Setup global effects for triggerEffect
     window.GAME_EFFECTS = { ETB_EFFECTS, SPELL_EFFECTS, ATTACK_TRIGGERS, DESTROY_EFFECTS, TAP_EFFECTS, AFTER_ATTACK_TRIGGERS };
 
-    const [gs, setGs] = useState({
+    const [gs, _setGs] = useState({
         hand: [], mana: [], battleZone: [], shields: [], deck: [], graveyard: [],
-        opponent: { handCount: 0, mana: [], battleZone: [], shields: [null, null, null, null, null], graveyard: [] },
+        opponent: { handCount: 0, mana: [], battleZone: [], shields: Array.from({ length: 5 }, (_, i) => ({ shieldNumber: i + 1 })), graveyard: [] },
         turn: isHost, hasPlacedMana: false, attackStarted: false, gameOver: null,
-        turnEffects: { creepingPlague: false, swordOfMalevolentDeath: false, whiskingWhirlwind: false, miracleQuest: false, brutalCharge: false },
+        turnEffects: { creepingPlague: false, swordOfMalevolentDeath: false, whiskingWhirlwind: false, miracleQuest: false, brutalCharge: false, slimeVeil: false, hasCastSpell: false },
         shieldsBrokenThisTurn: 0
     });
+
+    const setGs = useCallback((updater) => {
+        _setGs(prev => {
+            const nextState = typeof updater === 'function' ? updater(prev) : updater;
+            if (!nextState) return prev;
+            
+            const ensureShieldNumbers = (shieldsArray) => {
+                if (!Array.isArray(shieldsArray)) return shieldsArray;
+                let nextNum = 1;
+                const existingNums = shieldsArray.map(s => s?.shieldNumber).filter(Boolean);
+                if (existingNums.length > 0) {
+                    nextNum = Math.max(...existingNums) + 1;
+                }
+                return shieldsArray.map((s, idx) => {
+                    if (!s) return { shieldNumber: idx + 1 };
+                    const newShield = s.shieldNumber !== undefined ? s : { ...s, shieldNumber: nextNum++ };
+                    return newShield;
+                });
+            };
+
+            const updated = { ...nextState };
+            if (updated.shields && updated.shields !== prev.shields) {
+                updated.shields = ensureShieldNumbers(updated.shields);
+            }
+            if (updated.opponent) {
+                const nextOpp = typeof nextState.opponent === 'function' ? nextState.opponent(prev.opponent) : nextState.opponent;
+                updated.opponent = { ...nextOpp };
+                if (updated.opponent.shields && updated.opponent.shields !== prev.opponent.shields) {
+                    updated.opponent.shields = ensureShieldNumbers(updated.opponent.shields);
+                }
+            }
+            return updated;
+        });
+    }, []);
     const [toasts, setToasts] = useState([]);
     const [ctx, setCtx] = useState(null);
     const [preview, setPreview] = useState(null);
@@ -52,7 +86,8 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
     const net = useNetwork(conn);
 
     // Persistence
-    const opponentId = conn?.peer;
+    const persistenceKey = gameId ? `dm_gs_${gameId}_${isHost ? 'host' : 'client'}` : null;
+    const logsKey = gameId ? `dm_logs_${gameId}_${isHost ? 'host' : 'client'}` : null;
 
     useEffect(() => {
         setIsOpponentConnected(net.isOpen);
@@ -63,8 +98,8 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                         card: { name: "System", image_file: "bg.png" },
                         message: "Opponent has been disconnected for 10 seconds. Would you like to leave the game and delete saved data?",
                         onYes: () => {
-                            localStorage.removeItem(`dm_gs_${opponentId}`);
-                            localStorage.removeItem(`dm_logs_${opponentId}`);
+                            if (persistenceKey) localStorage.removeItem(persistenceKey);
+                            if (logsKey) localStorage.removeItem(logsKey);
                             localStorage.removeItem("dm_active_game");
                             window.location.reload();
                         },
@@ -83,22 +118,23 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                 hasPromptedDisconnect.current = false;
             }
         }
-    }, [net.isOpen, gs.gameOver, opponentId]);
+    }, [net.isOpen, gs.gameOver, persistenceKey, logsKey]);
     useEffect(() => {
-        if (!opponentId || gs.gameOver || !initializedRef.current) return;
-        localStorage.setItem(`dm_gs_${opponentId}`, JSON.stringify(gs));
-    }, [gs, opponentId]);
+        if (!persistenceKey || gs.gameOver || !initializedRef.current) return;
+        localStorage.setItem(persistenceKey, JSON.stringify(gs));
+    }, [gs, persistenceKey]);
 
     useEffect(() => {
-        if (!opponentId || !initializedRef.current) return;
-        localStorage.setItem(`dm_logs_${opponentId}`, JSON.stringify(logs));
-    }, [logs, opponentId]);
+        if (!logsKey || !initializedRef.current) return;
+        localStorage.setItem(logsKey, JSON.stringify(logs));
+    }, [logs, logsKey]);
 
     const toast = useCallback((msg, type = "info") => {
         const id = Date.now() + Math.random();
         setToasts(p => [...p, { id, message: msg, type }]);
         setTimeout(() => setToasts(p => p.filter(t => t.id !== id)), 2200);
     }, []);
+
 
     const draw = useCallback(() => {
         setGs(p => {
@@ -149,6 +185,55 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
             net.send("ACTION", { action: "LOG_ENTRY", details: entry });
         }
     }, [net]);
+
+    const prevOpponentShieldsRef = useRef([]);
+    const prevPlayerShieldsRef = useRef([]);
+
+    useEffect(() => {
+        const prevShields = prevOpponentShieldsRef.current;
+        const currShields = gs.opponent.shields || [];
+
+        if (prevShields.length > 0) {
+            if (currShields.length > prevShields.length) {
+                const addedIndex = currShields.length - 1;
+                addLog(`Opponent added Shield #${addedIndex + 1}!`, 'shield', true);
+                toast(`Opponent added Shield #${addedIndex + 1}!`);
+            } else if (currShields.length === prevShields.length) {
+                for (let i = 0; i < currShields.length; i++) {
+                    const prevS = prevShields[i];
+                    const currS = currShields[i];
+                    if (prevS && currS && prevS.instanceId !== currS.instanceId) {
+                        addLog(`Opponent changed Shield #${i + 1}!`, 'shield', true);
+                        toast(`Opponent changed Shield #${i + 1}!`);
+                    }
+                }
+            }
+        }
+
+        prevOpponentShieldsRef.current = currShields;
+    }, [gs.opponent.shields, addLog, toast]);
+
+    useEffect(() => {
+        const prevShields = prevPlayerShieldsRef.current;
+        const currShields = gs.shields || [];
+
+        if (prevShields.length > 0) {
+            if (currShields.length > prevShields.length) {
+                const addedIndex = currShields.length - 1;
+                addLog(`You added Shield #${addedIndex + 1}!`, 'shield', false);
+            } else if (currShields.length === prevShields.length) {
+                for (let i = 0; i < currShields.length; i++) {
+                    const prevS = prevShields[i];
+                    const currS = currShields[i];
+                    if (prevS && currS && prevS.instanceId !== currS.instanceId) {
+                        addLog(`You changed Shield #${i + 1}!`, 'shield', false);
+                    }
+                }
+            }
+        }
+
+        prevPlayerShieldsRef.current = currShields;
+    }, [gs.shields, addLog]);
 
     const triggerEffect = useCallback((type, card, extraParams = {}) => {
         const maps = { ETB_EFFECTS, SPELL_EFFECTS, ATTACK_TRIGGERS, DESTROY_EFFECTS, TAP_EFFECTS, AFTER_ATTACK_TRIGGERS };
@@ -299,12 +384,12 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
             handCount: s.hand.length,
             mana: s.mana.map(c => ({ ...c, isTapped: !!c.isTapped, skipNextUntap: !!c.skipNextUntap })),
             battleZone: s.battleZone.map(c => ({ instanceId: c.instanceId, name: c.name, power: c.power, cost: c.cost, civilizations: c.civilizations, image_file: c.image_file, set_id: c.set_id, isTapped: !!c.isTapped, skipNextUntap: !!c.skipNextUntap, chaosStrikeTarget: !!c.chaosStrikeTarget, text: c.text, type: c.type, subtypes: c.subtypes, powerBonus: c.powerBonus || 0, tempDoubleBreaker: c.tempDoubleBreaker })),
-            shields: s.shields.map(c => ({ instanceId: c.instanceId, name: c.name, image_file: c.image_file, set_id: c.set_id, text: c.text, type: c.type, subtypes: c.subtypes })),
+            shields: s.shields.map(c => ({ instanceId: c.instanceId, name: c.name, image_file: c.image_file, set_id: c.set_id, text: c.text, type: c.type, subtypes: c.subtypes, shieldNumber: c.shieldNumber })),
             graveyard: s.graveyard.map(c => ({ instanceId: c.instanceId, name: c.name, civilizations: c.civilizations, image_file: c.image_file, set_id: c.set_id })),
         });
     }, [net]);
 
-    useEffect(() => { broadcast(gs); }, [gs.hand.length, gs.mana, gs.battleZone, gs.shields.length, gs.graveyard.length, broadcast]);
+    useEffect(() => { broadcast(gs); }, [gs.hand.length, gs.mana, gs.battleZone, gs.shields, gs.graveyard.length, broadcast]);
 
     useEffect(() => {
         if (net.isOpen && isHost) {
@@ -348,6 +433,14 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
         playingRef.current = true;
         const isSpell = CardEngine.isSpell(card);
 
+        if (!isSpell && ["Gariel, Elemental of Sunbeams", "Moontear, Spectral Knight", "Yuluk, the Oracle"].includes(card.name)) {
+            if (!gsR.current.turnEffects.hasCastSpell) {
+                toast(`You can summon ${card.name} only if you have cast a spell this turn!`, "error");
+                playingRef.current = false;
+                return;
+            }
+        }
+
         setGs(p => {
             // Re-check atomic condition inside state update
             if (!p.hand.some(c => c.instanceId === card.instanceId)) return p;
@@ -369,18 +462,21 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
             
             if (target === "evolution") {
                 const filteredBz = p.battleZone.filter(c => c.instanceId !== targetId);
-                return { ...p, hand: newHand, mana: newMana, battleZone: [...filteredBz, { ...card, summonedThisTurn: false, isTapped: false, powerBonus: 0 }] };
+                const hasLuGila = [...p.battleZone, ...gsR.current.opponent.battleZone].some(c => c.name === "Lu Gila, Silver Rift Guardian");
+                return { ...p, hand: newHand, mana: newMana, battleZone: [...filteredBz, { ...card, summonedThisTurn: false, isTapped: hasLuGila, powerBonus: 0 }] };
             }
-            if (isSpell) return { ...p, hand: newHand, mana: newMana, graveyard: [...p.graveyard, card] };
+            if (isSpell) return { ...p, hand: newHand, mana: newMana, graveyard: [...p.graveyard, card], turnEffects: { ...p.turnEffects, hasCastSpell: true } };
             return { ...p, hand: newHand, mana: newMana, battleZone: [...p.battleZone, { ...card, summonedThisTurn: true, isTapped: false, powerBonus: 0 }] };
         });
 
         if (isSpell) {
             addLog(`Cast ${card.name}`, 'spell', false, card);
             net.send("ACTION", { action: "REVEAL_CARD", details: { card } });
+            net.send("ACTION", { action: "CAST_SPELL", details: { card } });
             triggerEffect("SPELL_EFFECTS", card);
         } else {
             addLog(`Summoned ${card.name}`, 'summon', false, card);
+            net.send("ACTION", { action: "SUMMON_CREATURE", details: { card } });
             triggerEffect("ETB_EFFECTS", card);
             triggerGlobalEffect("ON_SUMMON", { card });
             net.send("ACTION", { action: "GLOBAL_EVENT", details: { type: "ON_SUMMON", card } });
@@ -402,28 +498,52 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                 net.send("ACTION", { action: "DIRECT_KILL" });
                 setGs(p => ({ ...p, gameOver: 'win' }));
             } else {
-                const actualBreaks = Math.min(shieldsToBreak, oppShieldCount);
-                const abs = CardEngine.parseAbilities(atk, gsR.current.battleZone, gsR.current.mana);
-                for (let i = 0; i < actualBreaks; i++) {
-                    setTimeout(() => { 
-                        if (abs.incinerate) {
-                            net.send("ACTION", { action: "SHIELD_INCINERATED" });
-                            toast(`${atk.name}: Shield incinerated!`);
-                        } else {
-                            net.send("ACTION", { action: "SHIELD_BROKEN" }); 
-                        }
-                        setGs(p => ({ ...p, shieldsBrokenThisTurn: p.shieldsBrokenThisTurn + 1 }));
-                        if (abs.drawOnShieldBreak) { draw(); toast(`${atk.name} Survivor: Draw a card!`); }
-                        if (abs.discardOnShieldBreak) { net.send("ACTION", { action: "DISCARD_RANDOM" }); toast(`${atk.name} Survivor: Opponent discards a card!`); }
-                        if (gsR.current.turnEffects.miracleQuest) {
-                            setTimeout(() => { draw(); draw(); }, 200);
-                            toast("Miracle Quest: Draw 2 cards!");
-                        }
-                    }, i * 400);
+            const actualBreaks = Math.min(shieldsToBreak, oppShieldCount);
+            const abs = CardEngine.parseAbilities(atk, gsR.current.battleZone, gsR.current.mana);
+            
+            const customShieldsList = (Array.isArray(oppShields) ? oppShields : Array.from({ length: oppShieldCount })).map((c, index) => {
+                const shieldNum = (c && c.shieldNumber) || (index + 1);
+                return {
+                    instanceId: (c && c.instanceId) ? c.instanceId : `opp-shield-${index}`,
+                    name: `Shield #${shieldNum}`,
+                    image_file: 'bg.png',
+                    set_id: 'dm-01',
+                    index: index,
+                    shieldNumber: shieldNum
+                };
+            });
+
+            setSearchingDeck({
+                message: `Select ${actualBreaks} Shield(s) to Break`,
+                customList: customShieldsList,
+                count: actualBreaks,
+                isFaceDown: true,
+                exact: true,
+                onComplete: (selectedShields) => {
+                    const selectedList = Array.isArray(selectedShields) ? selectedShields : [selectedShields];
+                    selectedList.forEach((shield, i) => {
+                        const targetShieldNum = shield.shieldNumber || (shield.index + 1);
+                        setTimeout(() => {
+                            if (abs.incinerate) {
+                                net.send("ACTION", { action: "SHIELD_INCINERATED_BY_INDEX", details: { shieldIndex: shield.index } });
+                                toast(`${atk.name}: Shield #${targetShieldNum} incinerated!`);
+                            } else {
+                                net.send("ACTION", { action: "SHIELD_BROKEN_BY_INDEX", details: { attackerId: atk.instanceId, shieldIndex: shield.index } });
+                                toast(`Broke Opponent's Shield #${targetShieldNum}!`);
+                            }
+                            setGs(p => ({ ...p, shieldsBrokenThisTurn: p.shieldsBrokenThisTurn + 1 }));
+                            if (abs.drawOnShieldBreak) { draw(); toast(`${atk.name} Survivor: Draw a card!`); }
+                            if (abs.discardOnShieldBreak) { net.send("ACTION", { action: "DISCARD_RANDOM" }); toast(`${atk.name} Survivor: Opponent discards a card!`); }
+                            if (gsR.current.turnEffects.miracleQuest) {
+                                setTimeout(() => { draw(); draw(); }, 200);
+                                toast("Miracle Quest: Draw 2 cards!");
+                            }
+                        }, i * 400);
+                    });
                 }
-                toast(`Breaking ${actualBreaks} shield${actualBreaks > 1 ? 's' : ''}!`);
-            }
+            });
             triggerEffect("AFTER_ATTACK_TRIGGERS", atk);
+            }
         } else {
             const opp = gsR.current.opponent.battleZone.find(c => c.instanceId === tid);
             if (!opp) return;
@@ -532,7 +652,7 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
         const mandatoryAtk = currentGs.battleZone.find(c => {
             const abs = CardEngine.parseAbilities(c, currentGs.battleZone, currentGs.mana);
             const canAtk = CardEngine.canAttack(c, currentGs.battleZone, currentGs.opponent.battleZone, currentGs.mana);
-            return abs.mustAttack && !c.isTapped && !c.summonedThisTurn && canAtk;
+            return (abs.mustAttack || currentGs.turnEffects.slimeVeil) && !c.isTapped && !c.summonedThisTurn && canAtk;
         });
 
         if (mandatoryAtk) { toast(`${mandatoryAtk.name} must attack!`, "error"); return; }
@@ -543,7 +663,14 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
         const finalize = (untapAll = false, untapIds = []) => {
             const returnCards = currentGs.battleZone.filter(c => {
                 const text = (c.text || '').toLowerCase();
-                return text.includes("at the end of your turn, return this creature to your hand");
+                const names = ["Bazagazeal Dragon", "Cutthroat Skyterror", "Pyrofighter Magnus"];
+                return text.includes("at the end of your turn, return this creature to your hand") || names.includes(c.name);
+            });
+
+            const destroyCards = currentGs.battleZone.filter(c => {
+                const names = ["Gnarvash, Merchant of Blood", "Lone Tear, Shadow of Solitude", "Skullcutter, Swarm Leader"];
+                if (names.includes(c.name) && currentGs.battleZone.length === 1) return true;
+                return false;
             });
 
             setGs(p => ({
@@ -551,7 +678,7 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                 turn: false,
                 hasPlacedMana: false,
                 attackStarted: false,
-                battleZone: p.battleZone.filter(c => !returnCards.some(r => r.instanceId === c.instanceId)).map(c => {
+                battleZone: p.battleZone.filter(c => !returnCards.some(r => r.instanceId === c.instanceId) && !destroyCards.some(d => d.instanceId === c.instanceId)).map(c => {
                     let nc = { ...c, chaosStrikeTarget: false };
                     const abs = CardEngine.parseAbilities(c, p.battleZone, p.mana);
                     if (untapAll || untapIds.includes(c.instanceId)) nc.isTapped = false;
@@ -565,12 +692,14 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                     nc.tempBlocker = false;
                     nc.tempSlayer = false;
                     nc.swordBuff = false;
+                    nc.tempSpeedAttacker = false;
                     if (p.turnEffects.whiskingWhirlwind && nc.attackedThisTurn) nc.isTapped = false;
                     nc.attackedThisTurn = false;
                     return nc;
                 }),
                 hand: [...p.hand, ...returnCards],
-                turnEffects: { creepingPlague: false, swordOfMalevolentDeath: false, whiskingWhirlwind: false, miracleQuest: false, brutalCharge: false },
+                graveyard: [...p.graveyard, ...destroyCards],
+                turnEffects: { creepingPlague: false, swordOfMalevolentDeath: false, whiskingWhirlwind: false, miracleQuest: false, brutalCharge: false, slimeVeil: false, hasCastSpell: false },
                 shieldsBrokenThisTurn: 0
             }));
             
@@ -617,6 +746,28 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
     }, [isLocked, net, toast, CardEngine]);
 
     actionsRef.current = { draw, play, attack, triggerEffect, finishDestruction };
+
+    const checkSnorkLa = useCallback((destroyedCards) => {
+        if (!destroyedCards || destroyedCards.length === 0) return;
+        const snorkLa = gsR.current.battleZone.find(c => c.name === "Snork La, Shrine Guardian");
+        if (snorkLa) {
+            setTimeout(() => {
+                askMay({
+                    card: snorkLa,
+                    message: `Snork La: Return ${destroyedCards.length} destroyed mana card(s) to mana zone?`,
+                    onYes: () => {
+                        setGs(p => ({
+                            ...p,
+                            graveyard: p.graveyard.filter(c => !destroyedCards.some(d => d.instanceId === c.instanceId)),
+                            mana: [...p.mana, ...destroyedCards.map(d => ({ ...d, isTapped: false }))]
+                        }));
+                        toast("Snork La: Mana recovered!");
+                        net.send("ACTION", { action: "LOG_ENTRY", details: { text: "Snork La: Recovered destroyed mana!" } });
+                    }
+                });
+            }, 600);
+        }
+    }, [askMay, toast, setGs, gsR, net]);
 
     useEffect(() => {
         net.on("SYNC", p => {
@@ -762,35 +913,181 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                 });
                 setTimeout(() => setSearchingDeck(null), 2000);
             }
+            if (action === "SET_SLIME_VEIL") {
+                setGs(p => ({ ...p, turnEffects: { ...p.turnEffects, slimeVeil: true } }));
+                toast("Slime Veil: Your creatures must attack this turn!", "error");
+            }
+            if (action === "SHIELD_TRIGGER_ACTIVATED") {
+                const attackerId = details.attackerId;
+                if (attackerId) {
+                    setGs(p => ({
+                        ...p,
+                        battleZone: p.battleZone.map(c => (c.instanceId === attackerId && c.name === "Pokolul") ? { ...c, isTapped: false } : c)
+                    }));
+                    toast("Pokolul: Untapped because enemy used shield trigger!");
+                }
+            }
+            if (action === "MILL_TARGETS") {
+                setGs(p => {
+                    const toMill = p.deck.filter(c => details.ids.includes(c.instanceId));
+                    return { ...p, deck: p.deck.filter(c => !details.ids.includes(c.instanceId)), graveyard: [...p.graveyard, ...toMill] };
+                });
+                toast("Cards sent from deck to graveyard!", "error");
+            }
+            if (action === "DEEVOLVE_TARGET") {
+                setGs(p => {
+                    const target = p.battleZone.find(c => c.instanceId === details.targetId);
+                    if (!target) return p;
+                    // In this simple implementation, de-evolve just moves the top card to mana (as per Pangaea's Will)
+                    return { ...p, battleZone: p.battleZone.filter(c => c.instanceId !== details.targetId), mana: [...p.mana, { ...target, isTapped: false }] };
+                });
+                toast("Creature de-evolved to mana!", "error");
+            }
+            if (action === "BOUNCE_MANA_TARGET") {
+                setGs(p => {
+                    const target = p.mana.find(m => m.instanceId === details.targetId);
+                    if (!target) return p;
+                    return { ...p, mana: p.mana.filter(m => m.instanceId !== details.targetId), hand: [...p.hand, target] };
+                });
+                toast("Mana returned to hand!", "error");
+            }
+            if (action === "BOUNCE_MANA_RANDOM") {
+                setGs(p => {
+                    if (p.mana.length === 0) return p;
+                    const idx = Math.floor(Math.random() * p.mana.length);
+                    const target = p.mana[idx];
+                    return { ...p, mana: p.mana.filter((_, i) => i !== idx), hand: [...p.hand, target] };
+                });
+                toast("Random mana returned to hand!", "error");
+            }
+            if (action === "DISCARD_ALL") {
+                setGs(p => ({ ...p, hand: [], graveyard: [...p.graveyard, ...p.hand] }));
+                toast("Your whole hand was discarded!", "error");
+            }
+            if (action === "TAP_ALL_EXCEPT_LIGHT") {
+                setGs(p => ({
+                    ...p,
+                    battleZone: p.battleZone.map(c => !c.civilizations?.includes('Light') ? { ...c, isTapped: true } : c)
+                }));
+                toast("Non-light creatures tapped!", "error");
+            }
+            if (action === "DISCARD_FOR_EACH_LIGHT") {
+                const count = gsR.current.battleZone.filter(c => c.civilizations?.includes('Light')).length;
+                for (let i = 0; i < count; i++) {
+                    setTimeout(() => net.send("ACTION", { action: "DISCARD_RANDOM" }), i * 300);
+                }
+                toast(`Discard ${count} cards for light creatures!`);
+            }
+            if (action === "SUMMON_CREATURE" || action === "CAST_SPELL") {
+                setGs(p => ({
+                    ...p,
+                    battleZone: p.battleZone.map(c => {
+                        const name = c.name;
+                        if (name === "Aqua Rider" || name === "King Triumphant" || name === "Overload Cluster") return { ...c, tempBlocker: true };
+                        return c;
+                    })
+                }));
+            }
             if (action === "SHIELD_BROKEN") {
                 addLog("One of your shields was broken", 'shield');
-                setGs(prev => {
-                    const ns = [...prev.shields];
-                    if (!ns.length) return { ...prev, gameOver: 'lose' };
-                    const c = ns.pop();
-                    const abs = CardEngine.parseAbilities(c, prev.battleZone, prev.mana);
+                const attackerId = details?.attackerId;
+                const attacker = gsR.current.opponent.battleZone.find(c => c.instanceId === attackerId);
+
+                const breakShield = (shield) => {
+                    const abs = CardEngine.parseAbilities(shield, gsR.current.battleZone, gsR.current.mana);
                     if (abs.shieldTrigger) {
                         const allBz = [...gsR.current.battleZone, ...gsR.current.opponent.battleZone];
                         const hasGigabolver = allBz.some(x => x.name === "Gigabolver");
                         const hasFuReil = allBz.some(x => x.name === "Fu Reil, Seeker of Storms");
-                        const isLight = c.civilizations?.includes('Light');
-                        const isDarkness = c.civilizations?.includes('Darkness');
+                        const isLight = shield.civilizations?.includes('Light');
+                        const isDarkness = shield.civilizations?.includes('Darkness');
 
                         if (hasGigabolver && isLight) {
-                            addLog(`Gigabolver prevented shield trigger for ${c.name}`, 'effect');
-                            setTimeout(() => setGs(s => ({ ...s, hand: [...s.hand, c] })), 800);
+                            addLog(`Gigabolver prevented shield trigger for ${shield.name}`, 'effect');
+                            setTimeout(() => setGs(s => ({ ...s, hand: [...s.hand, shield] })), 800);
                         } else if (hasFuReil && isDarkness) {
-                            addLog(`Fu Reil prevented shield trigger for ${c.name}`, 'effect');
-                            setTimeout(() => setGs(s => ({ ...s, hand: [...s.hand, c] })), 800);
+                            addLog(`Fu Reil prevented shield trigger for ${shield.name}`, 'effect');
+                            setTimeout(() => setGs(s => ({ ...s, hand: [...s.hand, shield] })), 800);
                         } else {
-                            setTrigger(prev => [...prev, c]);
-
+                            if (attackerId) shield.attackerId = attackerId;
+                            setTrigger(prev => [...prev, shield]);
                         }
+                    } else {
+                        setTimeout(() => setGs(s => ({ ...s, hand: [...s.hand, shield] })), 800);
                     }
-                    else setTimeout(() => setGs(s => ({ ...s, hand: [...s.hand, c] })), 800);
-                    return { ...prev, shields: ns };
-                });
+                    setGs(prev => ({ ...prev, shields: prev.shields.filter(x => x.instanceId !== shield.instanceId) }));
+                };
+
+                const hasKyuroro = gsR.current.battleZone.some(c => c.name === "Kyuroro");
+                if (hasKyuroro && gsR.current.shields.length > 1) {
+                    setTargeting({
+                        message: "Kyuroro: Select which shield to break",
+                        count: 1,
+                        customList: gsR.current.shields,
+                        isFaceDown: true,
+                        onComplete: (selected) => {
+                            const shield = Array.isArray(selected) ? selected[0] : selected;
+                            breakShield(shield);
+                        }
+                    });
+                } else {
+                    const ns = [...gsR.current.shields];
+                    if (!ns.length) { setGs(p => ({ ...p, gameOver: 'lose' })); return; }
+                    const shield = ns.pop();
+                    breakShield(shield);
+                }
                 toast("Shield broken!", "error");
+            }
+            if (action === "SHIELD_BROKEN_BY_INDEX") {
+                const shieldIndex = details?.shieldIndex;
+                const attackerId = details?.attackerId;
+                const ns = [...gsR.current.shields];
+                if (!ns.length) { setGs(p => ({ ...p, gameOver: 'lose' })); return; }
+                const shield = ns[shieldIndex] || ns.pop();
+                const shieldNum = (shield && shield.shieldNumber) || (shieldIndex + 1);
+                addLog(`Your Shield #${shieldNum} was broken`, 'shield');
+
+                const breakShield = (shield) => {
+                    const abs = CardEngine.parseAbilities(shield, gsR.current.battleZone, gsR.current.mana);
+                    if (abs.shieldTrigger) {
+                        const allBz = [...gsR.current.battleZone, ...gsR.current.opponent.battleZone];
+                        const hasGigabolver = allBz.some(x => x.name === "Gigabolver");
+                        const hasFuReil = allBz.some(x => x.name === "Fu Reil, Seeker of Storms");
+                        const isLight = shield.civilizations?.includes('Light');
+                        const isDarkness = shield.civilizations?.includes('Darkness');
+
+                        if (hasGigabolver && isLight) {
+                            addLog(`Gigabolver prevented shield trigger for ${shield.name}`, 'effect');
+                            setTimeout(() => setGs(s => ({ ...s, hand: [...s.hand, shield] })), 800);
+                        } else if (hasFuReil && isDarkness) {
+                            addLog(`Fu Reil prevented shield trigger for ${shield.name}`, 'effect');
+                            setTimeout(() => setGs(s => ({ ...s, hand: [...s.hand, shield] })), 800);
+                        } else {
+                            if (attackerId) shield.attackerId = attackerId;
+                            setTrigger(prev => [...prev, shield]);
+                        }
+                    } else {
+                        setTimeout(() => setGs(s => ({ ...s, hand: [...s.hand, shield] })), 800);
+                    }
+                    setGs(prev => ({ ...prev, shields: prev.shields.filter(x => x.instanceId !== shield.instanceId) }));
+                };
+
+                breakShield(shield);
+                toast(`Shield #${shieldNum} broken!`, "error");
+            }
+            if (action === "SHIELD_INCINERATED_BY_INDEX") {
+                const shieldIndex = details?.shieldIndex;
+                const ns = [...gsR.current.shields];
+                if (ns.length > 0) {
+                    const shield = ns[shieldIndex] || ns.pop();
+                    const shieldNum = (shield && shield.shieldNumber) || (shieldIndex + 1);
+                    addLog(`Your Shield #${shieldNum} was incinerated to graveyard`, 'shield');
+                    setGs(p => {
+                        const filtered = p.shields.filter(x => x.instanceId !== shield.instanceId);
+                        return { ...p, shields: filtered, graveyard: [...p.graveyard, shield] };
+                    });
+                    toast(`Shield #${shieldNum} incinerated!`, "error");
+                }
             }
             if (action === "DECK_OUT" || action === "DIRECT_KILL") { setGs(p => ({ ...p, gameOver: 'win' })); toast("Victory!"); }
             if (action === "CREATURE_DESTROYED") {
@@ -982,6 +1279,14 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                     });
                 }
             }
+            if (action === "DESTROY_MANA_TARGET") {
+                const target = gsR.current.mana.find(m => m.instanceId === details.targetId);
+                if (target) {
+                    addLog(`Opponent destroyed your mana: ${target.name}`, 'effect');
+                    setGs(p => ({ ...p, mana: p.mana.filter(m => m.instanceId !== details.targetId), graveyard: [...p.graveyard, target] }));
+                    checkSnorkLa([target]);
+                }
+            }
             if (action === "DESTROY_MANA_CHOICE") {
                 if (gsR.current.mana.length === 0) {
                     toast("No mana to destroy!", "info");
@@ -1001,6 +1306,7 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                             return { ...s, mana: s.mana.filter(m => !ids.includes(m.instanceId)), graveyard: [...s.graveyard, ...targets] };
                         });
                         toast("Mana destroyed!");
+                        checkSnorkLa(cards);
                     }
                 });
             }
@@ -1030,6 +1336,19 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                         toast("Sacrificed creature!");
                     }
                 });
+            }
+            if (action === "DISCARD_TARGET") {
+                setGs(p => {
+                    const card = p.hand.find(c => c.instanceId === details.targetId);
+                    if (!card) return p;
+                    const abs = CardEngine.parseAbilities(card, p.battleZone, p.mana);
+                    if (abs.discardReplacement && !gsR.current.turn) {
+                        addLog(`${card.name} discarded: Summoned to battle zone!`, 'effect', false, card);
+                        return { ...p, hand: p.hand.filter(c => c.instanceId !== details.targetId), battleZone: [...p.battleZone, { ...card, summonedThisTurn: true }] };
+                    }
+                    return { ...p, hand: p.hand.filter(c => c.instanceId !== details.targetId), graveyard: [...p.graveyard, card] };
+                });
+                toast("Discarded chosen card!", "error");
             }
             if (action === "DISCARD_RANDOM") {
                 setGs(p => {
@@ -1071,6 +1390,7 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
                 setGs(p => {
                     const t = p.mana.find(m => m.instanceId === details.targetId);
                     if (!t) return p;
+                    checkSnorkLa([t]);
                     return { ...p, mana: p.mana.filter(m => m.instanceId !== details.targetId), graveyard: [...p.graveyard, t] };
                 });
                 toast("Mana destroyed!", "error");
@@ -1197,7 +1517,7 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
     useEffect(() => {
         if (initializedRef.current) return;
 
-        let opponentId = conn?.peer;
+        let opponentId = gameId;
         if (!opponentId) {
             try {
                 const activeGame = JSON.parse(localStorage.getItem('dm_active_game'));
@@ -1208,8 +1528,10 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
         }
 
         if (opponentId) {
-            const savedGs = localStorage.getItem(`dm_gs_${opponentId}`);
-            const savedLogs = localStorage.getItem(`dm_logs_${opponentId}`);
+            const pk = `dm_gs_${opponentId}_${isHost ? 'host' : 'client'}`;
+            const lk = `dm_logs_${opponentId}_${isHost ? 'host' : 'client'}`;
+            const savedGs = localStorage.getItem(pk);
+            const savedLogs = localStorage.getItem(lk);
             if (savedGs) {
                 try {
                     const parsed = JSON.parse(savedGs);
@@ -1230,18 +1552,19 @@ export const useGameLogic = ({ cards, deck, conn, isHost }) => {
         if (!deck || !deck.cards || !cards || cards.length === 0) return;
         initializedRef.current = true;
 
+        const deckCards = typeof deck.cards === 'string' ? JSON.parse(deck.cards) : deck.cards;
         const full = [];
-        deck.cards.forEach(dc => {
+        deckCards.forEach(dc => {
             const info = cards.find(c => c.id === dc.id && (!dc.set_id || c.set_id === dc.set_id));
             if (!info) return;
             for (let i = 0; i < dc.count; i++) full.push({ ...info, instanceId: Math.random().toString(36).substr(2, 9) });
         });
         const sh = full.sort(() => Math.random() - 0.5);
-        const shields = sh.splice(0, 5);
+        const shields = sh.splice(0, 5).map((c, i) => ({ ...c, shieldNumber: i + 1 }));
         setGs(p => ({ ...p, deck: sh, shields }));
         
         for (let i = 0; i < 5; i++) setTimeout(() => actionsRef.current.draw(), 500 + i * 200);
-    }, [conn?.peer, deck, cards]);
+    }, [gameId, deck, cards]);
 
 
 

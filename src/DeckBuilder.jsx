@@ -7,7 +7,8 @@ const DeckBuilder = ({ cards, initialDeck, onSave, onExit, readOnly = false, cur
     const [deck, setDeck] = useState(() => {
         if (!initialDeck) return [];
         const full = [];
-        initialDeck.cards.forEach(dc => {
+        const deckCards = typeof initialDeck.cards === 'string' ? JSON.parse(initialDeck.cards) : initialDeck.cards;
+        deckCards.forEach(dc => {
             const info = cards.find(c => c.id === dc.id && c.set_id === dc.set_id);
             if (info) {
                 for (let i = 0; i < dc.count; i++) full.push({ ...info, instanceId: Math.random().toString(36).substr(2, 9) });
@@ -22,7 +23,6 @@ const DeckBuilder = ({ cards, initialDeck, onSave, onExit, readOnly = false, cur
 
     const addCard = (card) => {
         if (readOnly || deck.length >= 40) return;
-        if (['dm-05', 'dm-06'].includes(card.set_id)) return; // Disabled for now
         const count = deck.filter(c => c.name === card.name).length;
         if (count >= 4) return;
         setDeck([...deck, { ...card, instanceId: Math.random().toString(36).substr(2, 9) }]);
@@ -36,10 +36,8 @@ const DeckBuilder = ({ cards, initialDeck, onSave, onExit, readOnly = false, cur
     const formatInfo = FORMATS[selectedFormat];
     const cardsInFormat = cards.filter(c => formatInfo.sets.includes(c.set_id || 'dm-01'));
     
-    // Logic: If "All" is selected, hide Coming Soon sets (dm-05, dm-06)
-    // If a specific set is selected, show it even if it's Coming Soon
     const setFiltered = selectedSet === "All" 
-        ? cardsInFormat.filter(c => !['dm-05', 'dm-06'].includes(c.set_id))
+        ? cardsInFormat
         : cardsInFormat.filter(c => c.set_id === selectedSet);
 
     const filteredCards = filter === "All" 
@@ -103,25 +101,23 @@ const DeckBuilder = ({ cards, initialDeck, onSave, onExit, readOnly = false, cur
                 <div className="db-catalog-grid">
                     {displayCards.map(c => {
                         const count = deck.filter(x => x.name === c.name).length;
-                        const isDisabled = ['dm-05', 'dm-06'].includes(c.set_id);
                         return (
-                            <div key={`${c.set_id}-${c.id}`} className={`card ${isMobile ? 'card--md' : 'card--md'} ${!readOnly && count >= 4 ? 'limit-reached' : ''} ${isDisabled ? 'card--disabled' : ''}`}
+                            <div key={`${c.set_id}-${c.id}-${c.name}`} className={`card ${isMobile ? 'card--md' : 'card--md'} ${!readOnly && count >= 4 ? 'limit-reached' : ''}`}
                                  onClick={() => {
                                      if (isMobile) {
                                          if (preview?.id === c.id) {
-                                             !isDisabled && addCard(c);
+                                             addCard(c);
                                          } else {
                                              setPreview(c);
                                          }
                                      } else {
-                                         !isDisabled && addCard(c);
+                                         addCard(c);
                                      }
                                  }}
                                  onMouseEnter={() => !isMobile && setPreview(c)}
                                  onMouseLeave={() => !isMobile && setPreview(null)}
-                                 style={{cursor: (readOnly || isDisabled) ? 'default' : 'pointer', opacity: isDisabled ? 0.4 : 1, filter: isDisabled ? 'grayscale(1)' : 'none'}}>
+                                 style={{cursor: readOnly ? 'default' : 'pointer', opacity: 1, filter: 'none'}}>
                                 <img src={`./cards/${c.set_id || 'dm-01'}/${c.image_file}`} alt={c.name} />
-                                {isDisabled && <div style={{position:'absolute', top:'50%', left:'50%', transform:'translate(-50%, -50%) rotate(-30deg)', background:'red', color:'white', padding:'2px 8px', fontSize:8, fontWeight:900, borderRadius:4, boxShadow:'0 0 10px black', whiteSpace:'nowrap'}}>SOON</div>}
                                 {count > 0 && <div className="power-gem" style={{background:'var(--gold)', color:'black', top: -5, right: -5, bottom: 'auto', borderRadius: '50%', width: 18, height: 18, fontSize: 9}}>{count}</div>}
                                 {isMobile && <div className="mobile-preview-hint" onClick={(e) => { e.stopPropagation(); setPreview(c); }}>ℹ️</div>}
                             </div>

@@ -2,14 +2,14 @@ export const FORMATS = {
     CLASSIC: {
         id: 'CLASSIC',
         name: "Classic",
-        sets: ['dm-01', 'dm-02', 'dm-03'],
-        description: "Sets 1-3. The foundation of Duel Masters."
+        sets: ['dm-01', 'dm-02', 'dm-03', 'dm-04'],
+        description: "Sets 1-4. The foundation of Duel Masters."
     },
     EXPERIMENTAL: {
         id: 'EXPERIMENTAL',
         name: "Experimental",
         sets: ['dm-01', 'dm-02', 'dm-03', 'dm-04', 'dm-05', 'dm-06'],
-        description: "All available sets including DM-04, DM-05, and DM-06."
+        description: "All available sets including DM-05 and DM-06."
     }
 };
 
@@ -58,8 +58,13 @@ export const CardEngine = {
         if (text.includes("draw a card") && text.includes("whenever this creature breaks a shield")) abilities.drawOnShieldBreak = true;
         if (text.includes("discard a card") && text.includes("whenever this creature breaks a shield")) abilities.discardOnShieldBreak = true;
         if (text.includes("unblockable by creatures that have power 3000 or less")) abilities.unblockableBySmall = true;
+        if ((text.includes("can't be blocked") || text.includes("can\u2019t be blocked")) && !text.includes("blocked by")) abilities.cantBeBlocked = true;
         if (text.includes("when this creature would be destroyed, return it to your hand instead")) abilities.returnToHandOnDeath = true;
         if (text.includes("each of your light creatures may tap instead of attacking to use this creature's ability")) abilities.shareTapToLight = true;
+        if (text.includes("each of your water creatures may tap instead of attacking to use this creature's ability")) abilities.shareTapToWater = true;
+        if (text.includes("each of your fire creatures may tap instead of attacking to use this creature's ability")) abilities.shareTapToFire = true;
+        if (text.includes("each of your nature creatures may tap instead of attacking to use this creature's ability")) abilities.shareTapToNature = true;
+        if (text.includes("each of your darkness creatures may tap instead of attacking to use this creature's ability")) abilities.shareTapToDarkness = true;
 
         return abilities;
     },
@@ -70,22 +75,41 @@ export const CardEngine = {
         if (text.includes("can't attack.") || text.includes("can\u2019t attack.") || (text.includes("can't attack") && !text.includes("can't attack players") && !text.includes("can't attack untapped")))
             if (text.match(/this creature can't attack\b[^p]/i) || text.endsWith("can't attack.") || text.endsWith("can\u2019t attack."))
                 abilities.cantAttack = true;
-        if (text.includes("can't be blocked") || text.includes("can\u2019t be blocked")) abilities.cantBeBlocked = true;
+        if ((text.includes("can't be blocked") || text.includes("can\u2019t be blocked")) && !text.includes("blocked by")) abilities.cantBeBlocked = true;
         if (text.includes("can't be blocked by any creature that has power 3000 or less")) abilities.unblockableByWeak = true;
+        if (text.includes("can't be blocked by any creature that has power 5000 or less")) abilities.unblockableBy5000 = true;
+        if (text.includes("can't be blocked by any creature that has power 8000 or less")) abilities.unblockableBy8000 = true;
         if (text.match(/(^|\n|: |\. )([\w\-]+ )?blocker\b/)) abilities.blocker = true;
         if (text.match(/(^|\n|: |\. )([\w\-]+ )?slayer\b/)) abilities.slayer = true;
         if (text.match(/(^|\n|: |\. )([\w\-]+ )?double breaker\b/)) abilities.doubleBreaker = true;
         if (text.match(/(^|\n|: |\. )([\w\-]+ )?triple breaker\b/)) abilities.tripleBreaker = true;
+        if (text.includes("speed attacker")) abilities.speedAttacker = true;
+        if (text.includes("this creature can't attack creatures") || text.includes("this creature can\u2019t attack creatures")) abilities.cantAttackCreatures = true;
         if (text.includes("attacks each turn if able")) abilities.mustAttack = true;
         if (text.includes("this creature can attack untapped creatures")) abilities.canAttackUntapped = true;
         if (text.includes("this creature can attack untapped darkness creatures")) abilities.canAttackUntappedDarkness = true;
         if (text.includes("this creature can attack untapped light creatures")) abilities.canAttackUntappedLight = true;
+        if (text.includes("this creature can attack only creatures that have \"blocker\"")) abilities.onlyAttackBlockers = true;
         
         if (text.includes("at the end of each of your turns, you may untap this creature")) abilities.untapAtEnd = true;
         if (text.includes("at the end of each of your turns, you may untap all your creatures")) abilities.untapAllAtEnd = true;
         if (text.includes("when this creature wins a battle, destroy it")) abilities.destroyOnWin = true;
+        if (text.includes("when this creature battles, destroy it after the battle")) abilities.destroyAfterBattle = true;
+        if (text.includes("no battle happens")) abilities.noBattleOnBlock = true;
+        if (text.includes("crew breaker - survivor")) abilities.crewBreakerSurvivor = true;
+        if (text.includes("you can put an evolution creature of any race on this creature")) abilities.evolutionBaitAny = true;
+        if (text.includes("discarded from your hand during your opponent's turn, put it into the battle zone instead")) abilities.discardReplacement = true;
+
         const paMatch = text.match(/power attacker \+(\d+)/);
         if (paMatch) abilities.powerAttacker = parseInt(paMatch[1]);
+        if (card.name === "Bolgash Dragon") abilities.powerAttacker = 8000;
+        if (card.name === "Nocturnal Giant") {
+            abilities.powerAttacker = 7000;
+            abilities.cantAttackCreatures = true;
+        }
+        if (card.name === "Avalanche Giant") {
+            abilities.cantAttackCreatures = true;
+        }
         if (card.tempPowerAttacker) abilities.powerAttacker = (abilities.powerAttacker || 0) + card.tempPowerAttacker;
         if (text.match(/(^|\n)shield trigger\b/)) abilities.shieldTrigger = true;
 
@@ -250,7 +274,27 @@ export const CardEngine = {
         }
 
         if (card.name === "Moon Horn") {
-            power += (manaZone.length * 1000);
+            const oppBz = battleZone.filter(c => c.isOpponent);
+            const counts = oppBz.filter(c => c.civilizations?.includes('Water') || c.civilizations?.includes('Darkness')).length;
+            power += (counts * 1000);
+        }
+
+        if (card.subtypes?.includes('Survivor')) {
+            const smashHornCount = battleZone.filter(c => c.name === "Smash Horn Q").length;
+            power += (smashHornCount * 1000);
+        }
+
+        // DM-06 Power Buffs
+        if (card.name === "Razorpine Tree") {
+            power += (shields.length * 2000);
+        }
+        if (card.name === "Torchclencher") {
+            const hasOtherFire = battleZone.some(c => c.instanceId !== card.instanceId && !c.isOpponent && c.civilizations?.includes('Fire'));
+            if (hasOtherFire) power += 3000;
+        }
+        if (card.name === "Armored Scout Gestuchar") {
+            const hasOtherFire = battleZone.some(c => c.instanceId !== card.instanceId && !c.isOpponent && c.civilizations?.includes('Fire'));
+            if (!hasOtherFire) power += 3000;
         }
 
         return power;
@@ -304,6 +348,14 @@ export const CardEngine = {
     },
     shieldsToBreak(card, battleZone, manaZone) {
         const abilities = this.parseAbilities(card, battleZone, manaZone);
+        if (card.name === "Armored Scout Gestuchar") {
+            const hasOtherFire = battleZone.some(c => c.instanceId !== card.instanceId && c.civilizations?.includes('Fire'));
+            if (!hasOtherFire) return 2;
+        }
+        if (abilities.crewBreakerSurvivor) {
+            const others = battleZone.filter(c => c.instanceId !== card.instanceId && c.subtypes?.includes('Survivor')).length;
+            return 1 + others;
+        }
         if (abilities.tripleBreaker) return 3;
         if (abilities.doubleBreaker) return 2;
         if (card.tempDoubleBreaker) return 2;
@@ -314,13 +366,14 @@ export const CardEngine = {
         return 1;
     },
     canAttackPlayer(card, battleZone, manaZone, opponentShieldCount = 0) {
-        if (card.name === "Gigazoul" && opponentShieldCount === 0) return false;
+        if ((card.name === "Gigazoul" || card.name === "Vashuna, Sword Dancer" || card.name === "Bazooka Mutant" || card.name === "Vile Mulder, Wing of the Void") && opponentShieldCount === 0) return false;
         const abilities = this.parseAbilities(card, battleZone, manaZone);
         if (abilities.onlyAttackBlockers) return false;
         if (card.canAttackPlayersOverride) return true;
         if (abilities.cantAttack) return false;
         if (abilities.cantAttackPlayers) return false;
         if (card.name === "Cliffcrush Giant" && !card.canAttackPlayersOverride && battleZone.some(c => c.instanceId !== card.instanceId && !c.isTapped && c.type === 'Creature')) return false;
+        if (card.summonedThisTurn && !abilities.speedAttacker) return false;
         return true;
     },
     canAttack(card, battleZone, opponentBattleZone, manaZone) {
@@ -331,10 +384,14 @@ export const CardEngine = {
             if (opponentBattleZone && opponentBattleZone.length > battleZone.length) return false;
         }
         if (card.name === "Cliffcrush Giant" && !card.canAttackPlayersOverride && battleZone.some(c => c.instanceId !== card.instanceId && !c.isTapped && c.type === 'Creature')) return false;
+        
+        // If it can only attack players, but there are no shields and player is not attackable? 
+        // Actually, just check if it CAN attack something.
         return true;
     },
     canAttackUntapped(card, battleZone, manaZone, targetCard = null) { 
         const abs = this.parseAbilities(card, battleZone, manaZone);
+        if (abs.cantAttackCreatures && targetCard?.type === 'Creature') return false;
         if (abs.canAttackUntapped || card.canAttackUntappedThisTurn) {
             if (abs.onlyAttackBlockers && targetCard && !this.parseAbilities(targetCard, [], []).blocker) return false;
             return true;
@@ -363,6 +420,7 @@ export const CardEngine = {
         if (atk.name === "Clobber Totem" && defPower <= 5000) return false;
         if (atk.name === "Stampeding Longhorn" && defPower <= 3000) return false;
         if (atk.name === "Masked Pomegranate" && defPower <= 4000) return false;
+        if (atk.name === "Ultra Mantis, Scourge of Fate" && defPower <= 8000) return false;
         if (atk.name === "Tropico") {
             const others = atkContext.battleZone.filter(c => c.instanceId !== atk.instanceId).length;
             if (others >= 2) return false;
@@ -380,9 +438,12 @@ export const CardEngine = {
     },
     canBeAttacked(atk, def, bzAtk, bzDef) {
         if (atk.name === "Dawn Giant" && def.type === "Creature") return false;
+        const abs = this.parseAbilities(atk, bzAtk, []);
+        if (abs.cantAttackCreatures && def.type === "Creature") return false;
         if (bzAtk?.some(c => c.canAttackPlayersOverride)) return false; // Diamond Cutter prevents attacking creatures
         if (def.name === "Gulan Rias, Speed Guardian" && atk.civilizations?.includes('Darkness')) return false;
         if (def.name === "Purple Piercer" && atk.civilizations?.includes('Light')) return false;
+        if (def.name === "Steel-Turret Cluster" && (atk.civilizations?.includes('Fire') || atk.civilizations?.includes('Nature'))) return false;
         return true;
     },
     hasSlayer(card, battleZone = []) { 
@@ -399,6 +460,11 @@ export const CardEngine = {
     },
     onDestroyed(card, battleZone) {
         const text = (card.text || '').toLowerCase();
+        const abs = this.parseAbilities(card, battleZone, []);
+        if (abs.survivorManaReplacement) return 'mana';
+        if (abs.survivorHandReplacement) return 'hand';
+        if (abs.returnToHandOnDeath) return 'hand';
+        
         if (text.includes("add it to your shields face down instead") || text.includes("add it to your shields instead")) return 'shield';
         if (text.includes("put it into your mana zone instead") && !text.includes("you may")) return 'mana';
         if (text.includes("return it to your hand instead") && !text.includes("you may")) return 'hand';

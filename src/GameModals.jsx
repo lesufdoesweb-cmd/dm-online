@@ -41,7 +41,7 @@ export const SearchOverlay = ({ searchingDeck, setSearchingDeck, gs, onHover }) 
                                 }}>
                                     <div className="card card--md">
                                         <img src={searchingDeck.isFaceDown ? CARD_BACK : `./cards/${c.set_id || 'dm-01'}/${c.image_file}`} alt={c.name} />
-                                        {searchingDeck.message.toLowerCase().includes('shield') && <div className="shield-num-badge" style={{top:5, left:5, bottom:'auto', right:'auto', background:'var(--fire)', color:'white'}}>{(searchingDeck.customList || gs.deck.filter(searchingDeck.filter)).indexOf(c) + 1}</div>}
+                                        {searchingDeck.message.toLowerCase().includes('shield') && <div className="shield-num-badge">{c.index !== undefined ? c.index + 1 : (searchingDeck.customList || gs.deck.filter(searchingDeck.filter)).indexOf(c) + 1}</div>}
                                         {isSel && <div className="power-gem" style={{background:'var(--gold)', color:'black', top:0, left:0, bottom:'auto', right:'auto'}}>✓</div>}
                                     </div>
                                 </div>
@@ -74,6 +74,221 @@ export const SearchOverlay = ({ searchingDeck, setSearchingDeck, gs, onHover }) 
     );
 };
 
+export const TargetingOverlay = ({ targeting, setTargeting, gs, blockingRequest, onHover }) => {
+    if (!targeting || blockingRequest) return null;
+
+    const selectedIds = targeting.selected || [];
+
+    // Helper to find the card in the game state and classify its zone
+    const resolvedTargets = targeting.validTargets.map(id => {
+        // Check my zones
+        let card = gs.battleZone?.find(c => c.instanceId === id);
+        if (card) return { card, id, zone: 'myBattle' };
+
+        card = gs.mana?.find(c => c.instanceId === id);
+        if (card) return { card, id, zone: 'myMana' };
+
+        card = gs.hand?.find(c => c.instanceId === id);
+        if (card) return { card, id, zone: 'myHand' };
+
+        card = gs.shields?.find(c => c.instanceId === id);
+        if (card) return { card, id, zone: 'myShield' };
+
+        card = gs.graveyard?.find(c => c.instanceId === id);
+        if (card) return { card, id, zone: 'myGrave' };
+
+        // Check opponent's zones
+        card = gs.opponent?.battleZone?.find(c => c.instanceId === id);
+        if (card) return { card, id, zone: 'oppBattle' };
+
+        card = gs.opponent?.mana?.find(c => c.instanceId === id);
+        if (card) return { card, id, zone: 'oppMana' };
+
+        card = gs.opponent?.graveyard?.find(c => c.instanceId === id);
+        if (card) return { card, id, zone: 'oppGrave' };
+
+        if (Array.isArray(gs.opponent?.handCards)) {
+            card = gs.opponent.handCards.find(c => c.instanceId === id);
+            if (card) return { card, id, zone: 'oppHand' };
+        }
+
+        if (Array.isArray(gs.opponent?.shields)) {
+            card = gs.opponent.shields.find(c => c.instanceId === id);
+            if (card) return { card, id, zone: 'oppShield' };
+        }
+
+        // Return a fallback representation if the card object is not found directly
+        return {
+            card: { instanceId: id, name: `Unknown Card (${id})`, image_file: 'bg.png' },
+            id,
+            zone: 'other'
+        };
+    });
+
+    // Grouping the targets
+    const myCreatures = resolvedTargets.filter(t => t.zone === 'myBattle');
+    const oppCreatures = resolvedTargets.filter(t => t.zone === 'oppBattle');
+    const myMana = resolvedTargets.filter(t => t.zone === 'myMana');
+    const oppMana = resolvedTargets.filter(t => t.zone === 'oppMana');
+    const myGrave = resolvedTargets.filter(t => t.zone === 'myGrave');
+    const oppGrave = resolvedTargets.filter(t => t.zone === 'oppGrave');
+    const other = resolvedTargets.filter(t => !['myBattle', 'oppBattle', 'myMana', 'oppMana', 'myGrave', 'oppGrave'].includes(t.zone));
+
+    const handleCardClick = (id) => {
+        const isSel = selectedIds.includes(id);
+        if (targeting.count === 1) {
+            // Click immediately resolves
+            const currentOnComplete = targeting.onComplete;
+            setTargeting(null);
+            currentOnComplete([id]);
+        } else {
+            let nextSelected = [];
+            if (isSel) {
+                nextSelected = selectedIds.filter(x => x !== id);
+            } else {
+                if (selectedIds.length < targeting.count) {
+                    nextSelected = [...selectedIds, id];
+                } else {
+                    return; // Max count reached
+                }
+            }
+            setTargeting({ ...targeting, selected: nextSelected });
+        }
+    };
+
+    const renderCardGrid = (list) => {
+        return (
+            <div className="search-grid">
+                {list.map(t => {
+                    const c = t.card;
+                    const isSel = selectedIds.includes(t.id);
+                    const isShieldTarget = t.id.startsWith('shield-') || t.id.startsWith('opp-shield-') || t.zone?.toLowerCase().includes('shield');
+                    const getShieldNum = () => {
+                        if (t.id.startsWith('shield-')) return parseInt(t.id.split('-')[1]) + 1;
+                        if (t.id.startsWith('opp-shield-')) return parseInt(t.id.split('-')[2]) + 1;
+                        return null;
+                    };
+                    return (
+                        <div 
+                            key={t.id} 
+                            className={`search-card-wrap ${isSel ? 'search-card--selected' : ''}`}
+                            onClick={() => handleCardClick(t.id)}
+                            onMouseEnter={() => onHover && onHover(c)}
+                            onMouseLeave={() => onHover && onHover(null)}
+                        >
+                            <div className="card card--md">
+                                <img src={isShieldTarget ? CARD_BACK : `./cards/${c.set_id || 'dm-01'}/${c.image_file}`} alt={c.name} />
+                                {isShieldTarget && <div className="shield-num-badge">{getShieldNum() || 1}</div>}
+                                {isSel && <div className="power-gem" style={{background:'var(--gold)', color:'black', top:0, left:0, bottom:'auto', right:'auto'}}>✓</div>}
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    };
+
+    // Determine if we should show split columns for Battle Zones
+    const showBattleSplit = myCreatures.length > 0 && oppCreatures.length > 0;
+
+    return (
+        <div className="search-overlay" style={{ zIndex: 15000 }}>
+            <div className="search-container">
+                <div className="search-header">
+                    <h2>{targeting.message}</h2>
+                    <button className="btn-secondary" onClick={() => setTargeting(null)}>Cancel</button>
+                    <div style={{color:'rgba(255,255,255,0.5)', fontSize:12}}>
+                        Selected: {selectedIds.length} / {targeting.count}
+                    </div>
+                </div>
+
+                <div className="search-body" style={{ flex: 1, overflowY: 'auto', padding: '10px 20px' }}>
+                    {/* Battle split or simple list */}
+                    {showBattleSplit ? (
+                        <div className="targeting-split-container">
+                            <div className="targeting-column">
+                                <h3 className="targeting-column-title">Your Creatures</h3>
+                                {renderCardGrid(myCreatures)}
+                            </div>
+                            <div className="targeting-column">
+                                <h3 className="targeting-column-title">Opponent's Creatures</h3>
+                                {renderCardGrid(oppCreatures)}
+                            </div>
+                        </div>
+                    ) : (
+                        <>
+                            {myCreatures.length > 0 && (
+                                <div style={{ marginBottom: 20 }}>
+                                    <h3 className="targeting-column-title" style={{ textAlign: 'left', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: 6 }}>Your Creatures</h3>
+                                    {renderCardGrid(myCreatures)}
+                                </div>
+                            )}
+                            {oppCreatures.length > 0 && (
+                                <div style={{ marginBottom: 20 }}>
+                                    <h3 className="targeting-column-title" style={{ textAlign: 'left', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: 6 }}>Opponent's Creatures</h3>
+                                    {renderCardGrid(oppCreatures)}
+                                </div>
+                            )}
+                        </>
+                    )}
+
+                    {/* Mana Zones */}
+                    {myMana.length > 0 && (
+                        <div style={{ marginBottom: 20 }}>
+                            <h3 className="targeting-column-title" style={{ textAlign: 'left', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: 6 }}>Your Mana</h3>
+                            {renderCardGrid(myMana)}
+                        </div>
+                    )}
+                    {oppMana.length > 0 && (
+                        <div style={{ marginBottom: 20 }}>
+                            <h3 className="targeting-column-title" style={{ textAlign: 'left', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: 6 }}>Opponent's Mana</h3>
+                            {renderCardGrid(oppMana)}
+                        </div>
+                    )}
+
+                    {/* Graveyards */}
+                    {myGrave.length > 0 && (
+                        <div style={{ marginBottom: 20 }}>
+                            <h3 className="targeting-column-title" style={{ textAlign: 'left', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: 6 }}>Your Graveyard</h3>
+                            {renderCardGrid(myGrave)}
+                        </div>
+                    )}
+                    {oppGrave.length > 0 && (
+                        <div style={{ marginBottom: 20 }}>
+                            <h3 className="targeting-column-title" style={{ textAlign: 'left', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: 6 }}>Opponent's Graveyard</h3>
+                            {renderCardGrid(oppGrave)}
+                        </div>
+                    )}
+
+                    {/* Other Targets */}
+                    {other.length > 0 && (
+                        <div style={{ marginBottom: 20 }}>
+                            <h3 className="targeting-column-title" style={{ textAlign: 'left', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: 6 }}>Other Targets</h3>
+                            {renderCardGrid(other)}
+                        </div>
+                    )}
+                </div>
+
+                {targeting.count > 1 && (
+                    <div style={{padding:15, textAlign:'center', borderTop:'1px solid rgba(255,255,255,0.1)'}}>
+                        <button 
+                            className="btn-primary" 
+                            onClick={() => {
+                                const currentOnComplete = targeting.onComplete;
+                                setTargeting(null);
+                                currentOnComplete(selectedIds);
+                            }}
+                            disabled={targeting.exact !== false ? selectedIds.length !== targeting.count : selectedIds.length === 0}
+                        >
+                            Done Selection ({selectedIds.length})
+                        </button>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
 export const DecisionModals = ({ 
     targeting, blockingRequest, waitingForOpponent, trigger, pendingDecision, pendingDestruction,
     setBlockingRequest, setTargeting, setTrigger, setPendingDecision, setPendingDestruction,
@@ -81,13 +296,6 @@ export const DecisionModals = ({
 }) => {
     return (
         <>
-            {targeting && !blockingRequest && (
-                <div className="decision-box">
-                    <h2>🎯 SELECT TARGET</h2>
-                    <div className="desc">{targeting.message}</div>
-                </div>
-            )}
-
             {waitingForOpponent && (
                 <div className="trigger-modal--blocker" style={{ 
                     position: 'fixed', inset: 0, zIndex: 10000, 
@@ -139,6 +347,9 @@ export const DecisionModals = ({
                             const isSpell = CardEngine.isSpell(current);
                             addLog(`Activated Shield Trigger: ${current.name}`, 'effect', false, current);
                             net.send("ACTION", { action: "REVEAL_CARD", details: { card: current } });
+                            if (current.attackerId) {
+                                net.send("ACTION", { action: "SHIELD_TRIGGER_ACTIVATED", details: { attackerId: current.attackerId } });
+                            }
                             if (isSpell) {
                                 setGs(s => ({ ...s, graveyard: [...s.graveyard, current] }));
                                 triggerEffect("SPELL_EFFECTS", current);

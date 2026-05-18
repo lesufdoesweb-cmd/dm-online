@@ -618,20 +618,6 @@
   },
   {
     "civilizations": [
-      "Nature"
-    ],
-    "cost": 3,
-    "name": "Dimension Gate",
-    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nSearch your deck. You may take a creature from your deck, show that creature to your opponent, and put it into your hand. Then shuffle your deck.",
-    "type": "Spell",
-    "image_file": "dimension-gate.webp",
-    "set_id": "dm-06",
-    "id": "93/110",
-    "rarity": "Common",
-    "illustrator": "Jason"
-  },
-  {
-    "civilizations": [
       "Water"
     ],
     "cost": 3,
@@ -1888,20 +1874,6 @@
     "rarity": "Common",
     "illustrator": "Youichi Kai",
     "flavor": "\"It's immune to swords, lasers, flames, cannonballs, acid, missiles, battering rams, bee stings, paper cuts, little wooden sticks...\" — Telitol, the Explorer"
-  },
-  {
-    "civilizations": [
-      "Water"
-    ],
-    "cost": 2,
-    "name": "Spiral Gate",
-    "text": "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it immediately for no cost.)\nChoose a creature in the battle zone and return it to its owner's hand.",
-    "type": "Spell",
-    "image_file": "spiral-gate.webp",
-    "set_id": "dm-06",
-    "id": "40/110",
-    "rarity": "Common",
-    "illustrator": "Tomofumi Ogasawara"
   },
   {
     "civilizations": [

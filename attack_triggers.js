@@ -265,8 +265,16 @@ export const ATTACK_TRIGGERS = {
             onNo: resume
         });
     },
-    "King Neptas": ({ gsR, setTargeting, net, toast, CardEngine, askMay, pause, resume }) => {
-        const targets = [...gsR.current.battleZone, ...gsR.current.opponent.battleZone].filter(c => CardEngine.getCurrentPower(c, [], []) <= 2000);
+    "King Neptas": ({ gsR, setGs, setTargeting, net, toast, CardEngine, askMay, pause, resume }) => {
+        const pBz = gsR.current.battleZone;
+        const oBz = gsR.current.opponent.battleZone;
+        const pMana = gsR.current.mana;
+        const oMana = gsR.current.opponent.mana;
+        
+        const validOwn = pBz.filter(c => CardEngine.getCurrentPower(c, pBz, pMana) <= 2000);
+        const validOpp = oBz.filter(c => CardEngine.getCurrentPower(c, oBz, oMana) <= 2000);
+        const targets = [...validOwn, ...validOpp];
+        
         if (!targets.length) return;
         pause();
         askMay({
@@ -278,17 +286,79 @@ export const ATTACK_TRIGGERS = {
                     validTargets: targets.map(c => c.instanceId),
                     onComplete: (ids) => {
                         const id = ids[0];
-                        net.send("ACTION", { action: "BOUNCE_TARGET", details: { targetId: id } });
-                        setGs(s => {
-                            const c = s.battleZone.find(x => x.instanceId === id);
-                            if (!c) return s;
-                            return { ...s, battleZone: s.battleZone.filter(x => x.instanceId !== id), hand: [...s.hand, c] };
-                        });
-                        toast("King Neptas: Bounced creature!");
+                        if (oBz.some(c => c.instanceId === id)) {
+                            net.send("ACTION", { action: "BOUNCE_TARGET", details: { targetId: id } });
+                            toast("King Neptas: Bounced opponent's creature!");
+                        } else {
+                            setGs(s => {
+                                const c = s.battleZone.find(x => x.instanceId === id);
+                                if (!c) return s;
+                                return { ...s, battleZone: s.battleZone.filter(x => x.instanceId !== id), hand: [...s.hand, c] };
+                            });
+                            toast("King Neptas: Bounced your creature!");
+                            net.send("ACTION", { action: "BOUNCE_OWN_TARGET", details: { targetId: id } });
+                        }
                         resume();
                     }
                 });
             },
+            onNo: resume
+        });
+    },
+    // DM-05
+    "Bloodwing Mantis": ({ gsR, setSearchingDeck, setGs, toast, pause, resume }) => {
+        const s = gsR.current;
+        if (s.mana.length < 2) return;
+        pause();
+        setSearchingDeck({
+            message: "Bloodwing Mantis: Select 2 creatures from your mana zone to return to your hand",
+            count: 2,
+            exact: true,
+            customList: s.mana.filter(c => c.type === 'Creature'),
+            onComplete: (cards) => {
+                if (cards && cards.length > 0) {
+                    const ids = Array.isArray(cards) ? cards.map(c => c.instanceId) : [cards.instanceId];
+                    setGs(p => ({
+                        ...p,
+                        mana: p.mana.filter(m => !ids.includes(m.instanceId)),
+                        hand: [...p.hand, ...Array.isArray(cards) ? cards : [cards]]
+                    }));
+                    toast("Bloodwing Mantis: Returned creatures to hand!");
+                }
+                resume();
+            }
+        });
+    },
+    "Le Quist, the Oracle": ({ gsR, setTargeting, net, toast, askMay, pause, resume }) => {
+        const targets = gsR.current.opponent.battleZone.filter(c => !c.isTapped && (c.civilizations?.includes('Darkness') || c.civilizations?.includes('Fire')));
+        if (!targets.length) return;
+        pause();
+        askMay({
+            message: "Use Le Quist's effect to tap a darkness or fire creature?",
+            onYes: () => {
+                setTargeting({
+                    message: "Le Quist: Select an enemy to tap",
+                    count: 1,
+                    validTargets: targets.map(c => c.instanceId),
+                    onComplete: (ids) => {
+                        net.send("ACTION", { action: "TAP_TARGET", details: { targetId: ids[0] } });
+                        toast("Enemy tapped!");
+                        resume();
+                    }
+                });
+            },
+            onNo: resume
+        });
+    },
+    "Skullsweeper Q": ({ net, toast }) => {
+        net.send("ACTION", { action: "DISCARD_RANDOM" });
+        toast("Skullsweeper Q Survivor: Opponent discarded a card!");
+    },
+    "Split-Head Hydroturtle Q": ({ askMay, draw, toast, pause, resume }) => {
+        pause();
+        askMay({
+            message: "Use Survivor effect to draw a card?",
+            onYes: () => { draw(); toast("Split-Head Hydroturtle Q Survivor: Drew a card!"); resume(); },
             onNo: resume
         });
     },
@@ -532,71 +602,6 @@ export const ATTACK_TRIGGERS = {
             onNo: resume
         });
     },
-    "Bloodwing Mantis": ({ gsR, setSearchingDeck, setGs, net, toast, pause, resume }) => {
-        const mana = gsR.current.mana;
-        if (!mana.length) return;
-        pause();
-        setSearchingDeck({
-            message: "Bloodwing Mantis: Select 2 mana to return to hand",
-            customList: mana,
-            count: 2,
-            exact: false,
-            onComplete: (cards) => {
-                const selected = Array.isArray(cards) ? cards : [cards];
-                setGs(p => {
-                    const ids = selected.map(x => x.instanceId);
-                    return { ...p, mana: p.mana.filter(x => !ids.includes(x.instanceId)), hand: [...p.hand, ...selected] };
-                });
-                toast("Mana returned to hand!");
-                resume();
-            }
-        });
-    },
-    "Le Quist, the Oracle": ({ gsR, setTargeting, net, toast, askMay, pause, resume }) => {
-        const targets = gsR.current.opponent.battleZone.filter(c => c.civilizations?.includes('Darkness') || c.civilizations?.includes('Fire'));
-        if (!targets.length) return;
-        pause();
-        askMay({
-            message: "Le Quist: Tap a darkness or fire creature?",
-            onYes: () => {
-                setTargeting({
-                    message: "Le Quist: Select an enemy to tap",
-                    count: 1,
-                    validTargets: targets.map(c => c.instanceId),
-                    onComplete: (ids) => {
-                        net.send("ACTION", { action: "TAP_TARGET", details: { targetId: ids[0] } });
-                        toast("Enemy tapped!");
-                        resume();
-                    }
-                });
-            },
-            onNo: resume
-        });
-    },
-    "Rikabu's Screwdriver": ({ gsR, setTargeting, setGs, toast, askMay, pause, resume }) => {
-        const targets = gsR.current.battleZone;
-        if (!targets.length) return;
-        pause();
-        askMay({
-            message: "Rikabu's Screwdriver Survivor: Untap a creature?",
-            onYes: () => {
-                setTargeting({
-                    message: "Select a creature to untap",
-                    count: 1,
-                    validTargets: targets.map(c => c.instanceId),
-                    onComplete: (ids) => {
-                        setGs(p => ({
-                            ...p,
-                            battleZone: p.battleZone.map(c => c.instanceId === ids[0] ? { ...c, isTapped: false } : c)
-                        }));
-                        toast("Creature untapped!");
-                        resume();
-                    }
-                });
-            },
-            onNo: resume
-        });
-    },
     "Daidalos, General of Fury": ({ gsR, setTargeting, setGs, toast, pause, resume }) => {
         pause();
         setTargeting({
@@ -618,3 +623,4 @@ export const ATTACK_TRIGGERS = {
         });
     }
 };
+
