@@ -16,7 +16,11 @@
     "illustrator": "Sansyu",
     "flavor": "\"All armies, move out! It's time to make Photocide see the light!\"",
     "image_file": "aeris-flight-elemental.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "cantAttackPlayers": true,
+      "canAttackUntappedDarkness": true
+    }
   },
   {
     "civilizations": [
@@ -38,7 +42,10 @@
     "illustrator": "Seki",
     "flavor": "We have watched and we have waited. Now we act.",
     "image_file": "alcadeias-lord-of-spirits.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -57,7 +64,10 @@
     "illustrator": "Akifumi Yamamoto",
     "flavor": "Each surge of electricity triggers a growth spurt.",
     "image_file": "amber-grass.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -76,7 +86,10 @@
     "illustrator": "Jason",
     "flavor": "\"I don't care how hugely, massively, gigantically big it is! Stop it before it gets to General Trox!\" —Zagaan, Knight of Darkness",
     "image_file": "ancient-giant.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -95,7 +108,11 @@
     "illustrator": "Akifumi Yamamoto",
     "flavor": "This ocean ain't big enough for the two of us!",
     "image_file": "aqua-guard.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "cantAttack": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -114,7 +131,10 @@
     "illustrator": "Daisuke Izuka",
     "flavor": "Saltwater makes me thirsty.",
     "image_file": "aqua-jolter.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -158,7 +178,10 @@
     "illustrator": "Ittoku",
     "flavor": "You see a world. I see a graveyard-to-be.",
     "image_file": "ballom-master-of-death.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -196,7 +219,10 @@
     "illustrator": "Kou1",
     "flavor": "It has hungered for revenge since the Dark Lords invaded.",
     "image_file": "cannon-shell.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -230,7 +256,10 @@
     "illustrator": "Taro Yamazaki",
     "flavor": "I taught Trox and Ballom a trick. Now they breathe fire.",
     "image_file": "chaotic-skyterror.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "powerAttacker": 4000
+    }
   },
   {
     "civilizations": [
@@ -301,7 +330,10 @@
     "illustrator": "Masaki Hirooka",
     "flavor": "It doesn't bleed. It erupts.",
     "image_file": "doboulgyser-giant-rock-beast.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -353,7 +385,10 @@
     "rarity": "Rare",
     "illustrator": "Norikatsu Miyoshi",
     "image_file": "full-defensor.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -372,7 +407,10 @@
     "illustrator": "Jason",
     "flavor": "Let the skies burn.",
     "image_file": "galklife-dragon.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -429,7 +467,10 @@
     "illustrator": "Akira Hamada",
     "flavor": "To a Gregorian worm, the world falls into two categories: things it can eat, and . . . Well, so far there's just the one category.",
     "image_file": "gregorian-worm.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -466,7 +507,11 @@
     "rarity": "Uncommon",
     "illustrator": "Seki",
     "image_file": "hunter-cluster.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "blocker": true,
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -499,7 +544,10 @@
     "illustrator": "D-Suzuki",
     "flavor": "With these chainsaws, shredding a forest is easy. But eating a steak is hard.",
     "image_file": "kamikaze-chainsaw-warrior.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -555,7 +603,10 @@
     "rarity": "Common",
     "illustrator": "Daisuke Izuka",
     "image_file": "kolon-the-oracle.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -574,7 +625,10 @@
     "illustrator": "Atsushi Kawasaki",
     "flavor": "If you think that's scary, you should see the caboose.",
     "image_file": "locomotiver.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -593,7 +647,10 @@
     "illustrator": "Norikatsu Miyoshi",
     "flavor": "Is it hot in here, or is it just me? Oh . . . right.",
     "image_file": "magmarex.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -645,7 +702,10 @@
     "rarity": "Uncommon",
     "illustrator": "Jason",
     "image_file": "milieus-the-daystretcher.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -738,7 +798,10 @@
     "rarity": "Super Rare",
     "illustrator": "Tsuu",
     "image_file": "niofa-horned-protector.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -776,7 +839,11 @@
     "illustrator": "Akifumi Yamamoto",
     "flavor": "\"I will snuff out the sun and the stars! Then I'll move on to the candles and the lanterns. If I have time, I'll take care of those glow sticks people wear around thier necks. But the sun is first!\"",
     "image_file": "photocide-lord-of-the-wastes.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "cantAttackPlayers": true,
+      "canAttackUntappedLight": true
+    }
   },
   {
     "civilizations": [
@@ -833,7 +900,10 @@
     "illustrator": "Eiji Kaneda",
     "flavor": "Bull's-eye!",
     "image_file": "re-bil-seeker-of-archery.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -852,7 +922,10 @@
     "illustrator": "Nottsuo",
     "flavor": "As the sun streams through the clouds, so shall some other poetic stuff happen.",
     "image_file": "rimuel-cloudbreak-elemental.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -871,7 +944,11 @@
     "illustrator": "Hisashi Momose",
     "flavor": "It's got a heart of gold. And a gall bladder of zinc.",
     "image_file": "sarius-vizier-of-suppression.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "cantAttackPlayers": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -977,7 +1054,10 @@
     "illustrator": "Atsushi Kawasaki",
     "flavor": "They only bloom in outer space.",
     "image_file": "supporting-tulip.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "powerAttacker": 4000
+    }
   },
   {
     "civilizations": [
@@ -1045,7 +1125,10 @@
     "illustrator": "Akira Hamada",
     "flavor": "This ritual seeds the sky with lightning, rips infected trees up by the roots, and turns me a rockin' shade of blue.",
     "image_file": "torcon.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -1064,7 +1147,10 @@
     "illustrator": "Hideaki Takamura",
     "flavor": "Say goodbye to the daytime.",
     "image_file": "trox-general-of-destruction.webp",
-    "set_id": "dm-04"
+    "set_id": "dm-04",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [

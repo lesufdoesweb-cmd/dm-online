@@ -979,19 +979,9 @@ export const SPELL_EFFECTS = {
         }));
         toast(`Sword of Benevolent Life: All creatures +${bonus}!`);
     },
-    "Sword of Malevolent Death": ({ gsR, setTargeting, setGs, toast }) => {
-        setTargeting({
-            message: "Sword of Malevolent Death: Select a creature to buff",
-            count: 1,
-            validTargets: gsR.current.battleZone.map(c => c.instanceId),
-            onComplete: (ids) => {
-                setGs(p => ({
-                    ...p,
-                    battleZone: p.battleZone.map(c => c.instanceId === ids[0] ? { ...c, swordBuff: true } : c)
-                }));
-                toast("Creature buffed by Sword of Malevolent Death!");
-            }
-        });
+    "Sword of Malevolent Death": ({ gsR, setGs, toast }) => {
+        setGs(p => ({ ...p, turnEffects: { ...p.turnEffects, swordOfMalevolentDeath: true } }));
+        toast("Sword of Malevolent Death activated!");
     },
     "Whisking Whirlwind": ({ setGs, toast }) => {
         setGs(p => ({ ...p, turnEffects: { ...p.turnEffects, whiskingWhirlwind: true } }));

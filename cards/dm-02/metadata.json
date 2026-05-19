@@ -34,7 +34,10 @@
     "rarity": "Rare",
     "illustrator": "Ryoya Yuki",
     "image_file": "aqua-bouncer.webp",
-    "set_id": "dm-02"
+    "set_id": "dm-02",
+    "abilities": {
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -53,7 +56,10 @@
     "illustrator": "Tsutomu Kawade",
     "flavor": "Liquid People can modify their abilities by reprogramming themselves.",
     "image_file": "aqua-shooter.webp",
-    "set_id": "dm-02"
+    "set_id": "dm-02",
+    "abilities": {
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -71,7 +77,10 @@
     "rarity": "Super Rare",
     "illustrator": "Hisashi Momose",
     "image_file": "armored-blaster-valdios.webp",
-    "set_id": "dm-02"
+    "set_id": "dm-02",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -161,7 +170,10 @@
     "rarity": "Uncommon",
     "illustrator": "Sansyu",
     "image_file": "burst-shot.webp",
-    "set_id": "dm-02"
+    "set_id": "dm-02",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -180,7 +192,10 @@
     "illustrator": "Atsushi Kawasaki",
     "flavor": "\"Doesn't your scooter have a flamethrower, a grenade launcher, a bazooka, and a pair of roto-blades too?\"",
     "image_file": "cavalry-general-curatops.webp",
-    "set_id": "dm-02"
+    "set_id": "dm-02",
+    "abilities": {
+      "canAttackUntapped": true
+    }
   },
   {
     "civilizations": [
@@ -231,7 +246,10 @@
     "rarity": "Common",
     "illustrator": "Nottsuo",
     "image_file": "critical-blade.webp",
-    "set_id": "dm-02"
+    "set_id": "dm-02",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -249,7 +267,11 @@
     "rarity": "Uncommon",
     "illustrator": "Norikatsu Miyoshi",
     "image_file": "crystal-lancer.webp",
-    "set_id": "dm-02"
+    "set_id": "dm-02",
+    "abilities": {
+      "cantBeBlocked": true,
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -300,7 +322,10 @@
     "rarity": "Uncommon",
     "illustrator": "Akifumi Yamamoto",
     "image_file": "diamond-cutter.webp",
-    "set_id": "dm-02"
+    "set_id": "dm-02",
+    "abilities": {
+      "cantAttackPlayers": true
+    }
   },
   {
     "civilizations": [
@@ -395,7 +420,10 @@
     "illustrator": "Seki",
     "flavor": "The glow of the elementals reaches out even to the stars.",
     "image_file": "ethel-star-sea-elemental.webp",
-    "set_id": "dm-02"
+    "set_id": "dm-02",
+    "abilities": {
+      "cantBeBlocked": true
+    }
   },
   {
     "civilizations": [
@@ -413,7 +441,10 @@
     "rarity": "Super Rare",
     "illustrator": "Ryoya Yuki",
     "image_file": "fighter-dual-fang.webp",
-    "set_id": "dm-02"
+    "set_id": "dm-02",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -470,7 +501,10 @@
     "illustrator": "Sansyu",
     "flavor": "The first Liquid People troops to land on the shore evaporated as soon as they touched the ground.",
     "image_file": "galsaur.webp",
-    "set_id": "dm-02"
+    "set_id": "dm-02",
+    "abilities": {
+      "powerAttacker": 4000
+    }
   },
   {
     "civilizations": [
@@ -489,7 +523,10 @@
     "illustrator": "Hideaki Takamura",
     "flavor": "That day, the Dark Lords decided to carry out their long-awaited invasion of the world.",
     "image_file": "general-dark-fiend.webp",
-    "set_id": "dm-02"
+    "set_id": "dm-02",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -527,7 +564,11 @@
     "illustrator": "Nottsuo",
     "flavor": "It's the thing that goes squish in the night.",
     "image_file": "gray-balloon-shadow-of-greed.webp",
-    "set_id": "dm-02"
+    "set_id": "dm-02",
+    "abilities": {
+      "cantAttackPlayers": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -584,7 +625,11 @@
     "illustrator": "Tomofumi Ogasawara",
     "flavor": "Stopping at nothing in their quest for victory, the Cyber Lords transformed even the largest sea creatures into weapons.",
     "image_file": "king-nautilus.webp",
-    "set_id": "dm-02"
+    "set_id": "dm-02",
+    "abilities": {
+      "cantBeBlocked": true,
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -602,7 +647,11 @@
     "rarity": "Super Rare",
     "illustrator": "Kou1",
     "image_file": "ladia-bale-the-inspirational.webp",
-    "set_id": "dm-02"
+    "set_id": "dm-02",
+    "abilities": {
+      "blocker": true,
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -672,7 +721,10 @@
     "rarity": "Common",
     "illustrator": "kou1",
     "image_file": "logic-cube.webp",
-    "set_id": "dm-02"
+    "set_id": "dm-02",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -720,7 +772,10 @@
     "rarity": "Uncommon",
     "illustrator": "Tsutomu Kawade",
     "image_file": "mana-crisis.webp",
-    "set_id": "dm-02"
+    "set_id": "dm-02",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -739,7 +794,10 @@
     "illustrator": "Katsuya",
     "flavor": "The massive cataclysm brought on a night so deep even the forces of Darkness were afraid of it.",
     "image_file": "marrow-ooze-the-twister.webp",
-    "set_id": "dm-02"
+    "set_id": "dm-02",
+    "abilities": {
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -757,7 +815,10 @@
     "rarity": "Rare",
     "illustrator": "Jason",
     "image_file": "metalwing-skyterror.webp",
-    "set_id": "dm-02"
+    "set_id": "dm-02",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -776,7 +837,11 @@
     "illustrator": "Ittoku",
     "flavor": "\"Someday I'll be strong enough to wear battle armor! You'll see!\" â€”Mini Titan Gett",
     "image_file": "mini-titan-gett.webp",
-    "set_id": "dm-02"
+    "set_id": "dm-02",
+    "abilities": {
+      "mustAttack": true,
+      "powerAttacker": 1000
+    }
   },
   {
     "civilizations": [
@@ -970,7 +1035,10 @@
     "illustrator": "Sansyu",
     "flavor": "\"Is one life too high a price to pay to save an entire forest?\"",
     "image_file": "silver-fist.webp",
-    "set_id": "dm-02"
+    "set_id": "dm-02",
+    "abilities": {
+      "powerAttacker": 2000
+    }
   },
   {
     "civilizations": [
@@ -988,7 +1056,11 @@
     "rarity": "Rare",
     "illustrator": "Hisashi Momose",
     "image_file": "spiral-grass.webp",
-    "set_id": "dm-02"
+    "set_id": "dm-02",
+    "abilities": {
+      "blocker": true,
+      "untapAfterBattle": true
+    }
   },
   {
     "civilizations": [
@@ -1021,7 +1093,10 @@
     "rarity": "Uncommon",
     "illustrator": "Dreamwave",
     "image_file": "thought-probe.webp",
-    "set_id": "dm-02"
+    "set_id": "dm-02",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -1040,7 +1115,10 @@
     "illustrator": "Hikaru Ikusa",
     "flavor": "\"Aww. My little Worm is all grown up.\" â€”Ballom, Master of Death",
     "image_file": "ultracide-worm.webp",
-    "set_id": "dm-02"
+    "set_id": "dm-02",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -1078,6 +1156,10 @@
     "illustrator": "Katsuya",
     "flavor": "The invading Worms drained the magical life out of the forest...and the cataclysm began.",
     "image_file": "xeno-mantis.webp",
-    "set_id": "dm-02"
+    "set_id": "dm-02",
+    "abilities": {
+      "unblockableBy5000": true,
+      "doubleBreaker": true
+    }
   }
 ]

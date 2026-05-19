@@ -891,13 +891,6 @@ export const ETB_EFFECTS = {
             }
         });
     },
-    "Purple Piercer": ({ gsR, setGs, toast }) => {
-        setGs(p => ({
-            ...p,
-            battleZone: p.battleZone.map(c => c.name === "Purple Piercer" ? { ...c, tempSlayer: true } : c)
-        }));
-        toast("Purple Piercer: Gained Slayer until end of turn!");
-    },
     "Aqua Surfer": ({ gsR, setTargeting, net, toast, askMay }) => {
         const creatures = [...gsR.current.battleZone, ...gsR.current.opponent.battleZone];
         if (!creatures.length) return;

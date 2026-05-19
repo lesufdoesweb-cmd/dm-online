@@ -148,7 +148,11 @@
     "illustrator": "Yusaku Nakaaki",
     "flavor": "Even the smallest weapon attached to it has enough firepower to lay waste to an entire nation.",
     "image_file": "astrocomet-dragon.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "doubleBreaker": true,
+      "powerAttacker": 4000
+    }
   },
   {
     "civilizations": [
@@ -163,7 +167,10 @@
     "illustrator": "Nottsuo",
     "flavor": "Hear the roar of the mighty Earth!",
     "image_file": "aura-blast.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "powerAttacker": 2000
+    }
   },
   {
     "civilizations": [
@@ -199,7 +206,12 @@
     "rarity": "Common",
     "illustrator": "Atsushi Kawasaki",
     "image_file": "bloody-squito.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "cantAttack": true,
+      "blocker": true,
+      "destroyOnWin": true
+    }
   },
   {
     "civilizations": [
@@ -218,7 +230,10 @@
     "illustrator": "Ryoya Yuki",
     "flavor": "The last city that offended it is now a ruin.",
     "image_file": "bolshack-dragon.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -237,7 +252,10 @@
     "illustrator": "Nottsuo",
     "flavor": "Commanders send them to the front line. It's too dangerous to have them close.",
     "image_file": "bone-assassin-the-ripper.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "slayer": true
+    }
   },
   {
     "civilizations": [
@@ -256,7 +274,10 @@
     "illustrator": "Dai",
     "flavor": "They can wait forever, for they know they will not die alone.",
     "image_file": "bone-spider.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "destroyOnWin": true
+    }
   },
   {
     "civilizations": [
@@ -270,7 +291,10 @@
     "rarity": "Uncommon",
     "illustrator": "Dreamwave",
     "image_file": "brain-serum.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -289,7 +313,10 @@
     "illustrator": "Tsutomu Kawade",
     "flavor": "\"I wouldn't, if I were you. You don't want to get hurt.\"",
     "image_file": "brawler-zyler.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "powerAttacker": 2000
+    }
   },
   {
     "civilizations": [
@@ -341,7 +368,10 @@
     "illustrator": "Miho Midorikawa",
     "flavor": "Witness the power of whirling fire!",
     "image_file": "burning-power.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "powerAttacker": 2000
+    }
   },
   {
     "civilizations": [
@@ -360,7 +390,10 @@
     "illustrator": "Gyokan",
     "flavor": "No mouth. Big bite.",
     "image_file": "candy-drop.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "cantBeBlocked": true
+    }
   },
   {
     "civilizations": [
@@ -457,7 +490,10 @@
     "rarity": "Rare",
     "illustrator": "Ryoya Yuki",
     "image_file": "crystal-memory.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -475,7 +511,12 @@
     "rarity": "Rare",
     "illustrator": "Jason",
     "image_file": "dark-clown.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "cantAttack": true,
+      "blocker": true,
+      "destroyOnWin": true
+    }
   },
   {
     "civilizations": [
@@ -494,7 +535,10 @@
     "illustrator": "Norikatsu Miyoshi",
     "flavor": "If you've ever thought there was something hiding in the dark, you were right.",
     "image_file": "dark-raven-shadow-of-grief.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -508,7 +552,10 @@
     "rarity": "Uncommon",
     "illustrator": "Nottsuo",
     "image_file": "dark-reversal.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -527,7 +574,10 @@
     "illustrator": "Yusaku Nakaaki",
     "flavor": "A Dragonoid's true home is the battlefield.",
     "image_file": "deadly-fighter-braid-claw.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "mustAttack": true
+    }
   },
   {
     "civilizations": [
@@ -561,7 +611,11 @@
     "illustrator": "Dustmoss",
     "flavor": "It devours all.",
     "image_file": "deathblade-beetle.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "doubleBreaker": true,
+      "powerAttacker": 4000
+    }
   },
   {
     "civilizations": [
@@ -580,7 +634,10 @@
     "illustrator": "Atsushi Kawasaki",
     "flavor": "The world is deafened by the roar of the deathliger.",
     "image_file": "deathliger-lion-of-chaos.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -599,7 +656,11 @@
     "illustrator": "Tomofumi Ogasawara",
     "flavor": "Flying is the greatest taboo of any race that has encountered the Guardians.",
     "image_file": "dia-nork-moonlight-guardian.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "cantAttackPlayers": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -613,7 +674,10 @@
     "rarity": "Common",
     "illustrator": "Jason",
     "image_file": "dimension-gate.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -632,7 +696,10 @@
     "illustrator": "Hisashi Momose",
     "flavor": "Colony Beetles feed on the World Tree to build gigantic nests on their backs.",
     "image_file": "dome-shell.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "powerAttacker": 2000
+    }
   },
   {
     "civilizations": [
@@ -651,7 +718,10 @@
     "illustrator": "Ittoku",
     "flavor": "Draglides grow with their mounts. Their bond is their weapon.",
     "image_file": "draglide.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "mustAttack": true
+    }
   },
   {
     "civilizations": [
@@ -669,7 +739,11 @@
     "rarity": "Common",
     "illustrator": "Daisuke Izuka",
     "image_file": "emerald-grass.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "cantAttackPlayers": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -688,7 +762,10 @@
     "illustrator": "Hisanobu Kometani",
     "flavor": "Dragonoid fighters never retreat. They believe that a heroic fighter will become a Dragon in his next life.",
     "image_file": "explosive-fighter-ucarn.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -707,7 +784,10 @@
     "illustrator": "Hisanobu Kometani",
     "flavor": "A school of teeny, tiny points of light. Stopping them all is impossible.",
     "image_file": "faerie-child.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "cantBeBlocked": true
+    }
   },
   {
     "civilizations": [
@@ -763,7 +843,10 @@
     "illustrator": "Sansyu",
     "flavor": "Those who leave battle last are the ones who savor victory the longest.",
     "image_file": "fire-sweeper-burning-hellion.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "powerAttacker": 2000
+    }
   },
   {
     "civilizations": [
@@ -800,7 +883,10 @@
     "illustrator": "Yusaku Nakaaki",
     "flavor": "\"Vizier of Air, arise. Your fingers are sacred swords.\" â€”Hanusa, Radiance Elemental",
     "image_file": "frei-vizier-of-air.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "untapAtEnd": true
+    }
   },
   {
     "civilizations": [
@@ -819,7 +905,11 @@
     "illustrator": "Hisashi Momose",
     "flavor": "Part chopper, part chomper.",
     "image_file": "gatling-skyterror.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "doubleBreaker": true,
+      "canAttackUntapped": true
+    }
   },
   {
     "civilizations": [
@@ -833,7 +923,10 @@
     "rarity": "Common",
     "illustrator": "Soushi Hirose",
     "image_file": "ghost-touch.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -851,7 +944,10 @@
     "rarity": "Rare",
     "illustrator": "Katsuya",
     "image_file": "gigaberos.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -870,7 +966,10 @@
     "illustrator": "Hisashi Momose",
     "flavor": "By assembling parts of different magical beasts, the Dark Lords created a nightmare.",
     "image_file": "gigagiele.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "slayer": true
+    }
   },
   {
     "civilizations": [
@@ -908,7 +1007,10 @@
     "illustrator": "Miho Midorikawa",
     "flavor": "Hawk warriors hunt faster than the wind.",
     "image_file": "golden-wing-striker.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "powerAttacker": 2000
+    }
   },
   {
     "civilizations": [
@@ -927,7 +1029,11 @@
     "illustrator": "D-Suzuki",
     "flavor": "Those who defile the Sky Castle are doomed, for they shall know the wrath of the Guardians.",
     "image_file": "gran-gure-space-guardian.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "cantAttackPlayers": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -946,7 +1052,10 @@
     "illustrator": "Masaki Hirooka",
     "flavor": "The sky was scorched by Dragons' fire, and the earth gouged by elementals' rays. The battle raged for seven nights and seven days.",
     "image_file": "hanusa-radiance-elemental.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -960,7 +1069,10 @@
     "rarity": "Rare",
     "illustrator": "Naoki Saito",
     "image_file": "holy-awe.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -979,7 +1091,11 @@
     "illustrator": "Masateru Ikeda",
     "flavor": "It lies in wait, hidden in coral reefs, lashing out ferociously when it senses prey.",
     "image_file": "hunter-fish.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "cantAttack": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -1052,7 +1168,11 @@
     "rarity": "Uncommon",
     "illustrator": "Naoki Saito",
     "image_file": "iocant-the-oracle.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "cantAttackPlayers": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -1071,7 +1191,10 @@
     "illustrator": "Hideaki Takamura",
     "flavor": "Leviathans mature slowly, eventually growing to become the largest creatures in the world.",
     "image_file": "king-coral.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -1090,7 +1213,11 @@
     "illustrator": "Ryoya Yuki",
     "flavor": "Leviathans are just like storms. All you can do is wait until they pass.",
     "image_file": "king-depthcon.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "cantBeBlocked": true,
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -1128,7 +1255,11 @@
     "illustrator": "Kou1",
     "flavor": "To protect their floating cities, Guardians are gifted with shining wings.",
     "image_file": "la-ura-giga-sky-guardian.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "cantAttackPlayers": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -1161,7 +1292,10 @@
     "illustrator": "Gyokan",
     "flavor": "This is light speed.",
     "image_file": "laser-wing.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "cantBeBlocked": true
+    }
   },
   {
     "civilizations": [
@@ -1193,7 +1327,10 @@
     "rarity": "Rare",
     "illustrator": "Masaki Hirooka",
     "image_file": "magma-gazer.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "powerAttacker": 4000
+    }
   },
   {
     "civilizations": [
@@ -1212,7 +1349,11 @@
     "illustrator": "Hikaru Ikusa",
     "flavor": "It blooms in the ocean depths, far from any light.",
     "image_file": "marine-flower.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "cantAttack": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -1316,7 +1457,10 @@
     "rarity": "Rare",
     "illustrator": "Sansyu",
     "image_file": "natural-snare.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -1335,7 +1479,10 @@
     "illustrator": "Hideaki Takamura",
     "flavor": "Don't turn around. You wouldn't want to see what's behind you.",
     "image_file": "night-master-shadow-of-decay.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -1354,7 +1501,10 @@
     "illustrator": "Eiji Kaneda",
     "flavor": "\"Time to move on. So many unexplored worlds; so much trash to find!\" â€”Nomad Hero Gigio",
     "image_file": "nomad-hero-gigio.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "canAttackUntapped": true
+    }
   },
   {
     "civilizations": [
@@ -1406,7 +1556,11 @@
     "rarity": "Common",
     "illustrator": "Ittoku",
     "image_file": "phantom-fish.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "cantAttack": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -1425,7 +1579,10 @@
     "illustrator": "Hideaki Takamura",
     "flavor": "\"I will never give you up.\" â€”Symbolic meaning of the poisonous dahlia in flower language",
     "image_file": "poisonous-dahlia.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "cantAttackPlayers": true
+    }
   },
   {
     "civilizations": [
@@ -1518,7 +1675,11 @@
     "rarity": "Uncommon",
     "illustrator": "Naoki Saito",
     "image_file": "revolver-fish.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "cantAttack": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -1537,7 +1698,11 @@
     "illustrator": "Ittoku",
     "flavor": "With a mighty, earthshaking roar, the King of Beasts arose.",
     "image_file": "roaring-great-horn.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "doubleBreaker": true,
+      "powerAttacker": 2000
+    }
   },
   {
     "civilizations": [
@@ -1574,7 +1739,12 @@
     "rarity": "Uncommon",
     "illustrator": "Naoki Saito",
     "image_file": "ruby-grass.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "cantAttackPlayers": true,
+      "blocker": true,
+      "untapAtEnd": true
+    }
   },
   {
     "civilizations": [
@@ -1631,7 +1801,10 @@
     "illustrator": "Tomofumi Ogasawara",
     "flavor": "If the last thing in your life you want to see is something beautiful, attack an underwater city.",
     "image_file": "seamine.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -1650,7 +1823,11 @@
     "illustrator": "Norikatsu Miyoshi",
     "flavor": "Floating trees in the sky generate beautiful light from poisoned air.",
     "image_file": "senatine-jade-tree.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "cantAttackPlayers": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -1682,7 +1859,10 @@
     "rarity": "Common",
     "illustrator": "Jason",
     "image_file": "solar-ray.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -1697,7 +1877,10 @@
     "illustrator": "Masaki Hirooka",
     "flavor": "\"Can't catch me!\"",
     "image_file": "sonic-wing.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "cantBeBlocked": true
+    }
   },
   {
     "civilizations": [
@@ -1711,7 +1894,10 @@
     "rarity": "Common",
     "illustrator": "Tomofumi Ogasawara",
     "image_file": "spiral-gate.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -1730,7 +1916,10 @@
     "illustrator": "Norikatsu Miyoshi",
     "flavor": "A stampeding longhorn leaves nothing but dust in its wake.",
     "image_file": "stampeding-longhorn.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "unblockableByWeak": true
+    }
   },
   {
     "civilizations": [
@@ -1749,7 +1938,10 @@
     "illustrator": "Katsuya",
     "flavor": "\"Me big. Me tough. Me smash.\" â€”Iron Hammer, Boar Warrior",
     "image_file": "steel-smasher.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "cantAttackPlayers": true
+    }
   },
   {
     "civilizations": [
@@ -1787,7 +1979,10 @@
     "illustrator": "Miho Midorikawa",
     "flavor": "There is no sanctuary in the Fire Territory. Especially on the featureless, rocky plains.",
     "image_file": "stonesaur.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "powerAttacker": 2000
+    }
   },
   {
     "civilizations": [
@@ -1825,7 +2020,10 @@
     "illustrator": "Naoki Saito",
     "flavor": "After it attacks, the lucky are left with rubble.",
     "image_file": "super-explosive-volcanodon.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "powerAttacker": 4000
+    }
   },
   {
     "civilizations": [
@@ -1863,7 +2061,11 @@
     "illustrator": "Ittoku",
     "flavor": "Those who dwell in the sky towers eradicate all intruders.",
     "image_file": "szubs-kin-twilight-guardian.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "cantAttackPlayers": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -1892,7 +2094,10 @@
     "rarity": "Rare",
     "illustrator": "Yusaku Nakaaki",
     "image_file": "terror-pit.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -1930,7 +2135,10 @@
     "illustrator": "Masaki Hirooka",
     "flavor": "\"Vizier of Hope, arise. Your singing voice is a breeze of dawn.\" â€”Hanusa, Radiance Elemental",
     "image_file": "toel-vizier-of-hope.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "untapAllAtEnd": true
+    }
   },
   {
     "civilizations": [
@@ -1944,7 +2152,10 @@
     "rarity": "Uncommon",
     "illustrator": "Soushi Hirose",
     "image_file": "tornado-flame.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -2000,7 +2211,10 @@
     "illustrator": "Jason",
     "flavor": "\"I will lead you into battle.\"",
     "image_file": "tropico.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "cantBeBlocked": true
+    }
   },
   {
     "civilizations": [
@@ -2053,7 +2267,11 @@
     "illustrator": "Akifumi Yamamoto",
     "flavor": "It is said the destruction of the Ancient Empire was caused by the descent of the elementals.",
     "image_file": "urth-purifying-elemental.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "doubleBreaker": true,
+      "untapAtEnd": true
+    }
   },
   {
     "civilizations": [
@@ -2106,7 +2324,11 @@
     "illustrator": "Youichi Kai",
     "flavor": "Devouring nice, fresh brains is all they know . . . and all they care about.",
     "image_file": "wandering-braineater.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "cantAttack": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -2143,6 +2365,9 @@
     "illustrator": "Tsutomu Kawade",
     "flavor": "\"If I were to send him to the field, he would overwhelm the enemy in an instant. Where is the fun in that?\" â€”Ballom, Master of Death",
     "image_file": "zagaan-knight-of-darkness.jpg",
-    "set_id": "dm-01"
+    "set_id": "dm-01",
+    "abilities": {
+      "doubleBreaker": true
+    }
   }
 ]

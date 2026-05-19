@@ -16,7 +16,10 @@
     "illustrator": "Takesi Kuno",
     "flavor": "\"Hey, you! Get solid!\"",
     "image_file": "alek-solidity-enforcer.webp",
-    "set_id": "dm-03"
+    "set_id": "dm-03",
+    "abilities": {
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -53,7 +56,11 @@
     "rarity": "Common",
     "illustrator": "Kou1",
     "image_file": "angler-cluster.webp",
-    "set_id": "dm-03"
+    "set_id": "dm-03",
+    "abilities": {
+      "cantAttack": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -158,7 +165,10 @@
     "rarity": "Rare",
     "illustrator": "Sansyu",
     "image_file": "blaze-cannon.webp",
-    "set_id": "dm-03"
+    "set_id": "dm-03",
+    "abilities": {
+      "powerAttacker": 4000
+    }
   },
   {
     "civilizations": [
@@ -177,7 +187,10 @@
     "illustrator": "Miho Midorikawa",
     "flavor": "\"Leviathans? I can juggle Leviathans!\"",
     "image_file": "boltail-dragon.webp",
-    "set_id": "dm-03"
+    "set_id": "dm-03",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -210,7 +223,10 @@
     "rarity": "Uncommon",
     "illustrator": "Youichi Kai",
     "image_file": "boomerang-comet.webp",
-    "set_id": "dm-03"
+    "set_id": "dm-03",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -247,7 +263,12 @@
     "illustrator": "Hideaki Takamura",
     "flavor": "That's not the sound of an earthquake. That's just the Dawn Giants snoring.",
     "image_file": "dawn-giant.webp",
-    "set_id": "dm-03"
+    "set_id": "dm-03",
+    "abilities": {
+      "cantAttack": true,
+      "doubleBreaker": true,
+      "cantAttackCreatures": true
+    }
   },
   {
     "civilizations": [
@@ -266,7 +287,10 @@
     "illustrator": "Yoshio Sugiura",
     "flavor": "\"He's doing more damage to the forest than the Parasite Worms! Are you sure he's on our side?\" â€”Fighter Dual Fang",
     "image_file": "earthstomp-giant.webp",
-    "set_id": "dm-03"
+    "set_id": "dm-03",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -280,7 +304,10 @@
     "rarity": "Uncommon",
     "illustrator": "Masaki Hirooka",
     "image_file": "eldritch-poison.webp",
-    "set_id": "dm-03"
+    "set_id": "dm-03",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -335,7 +362,10 @@
     "rarity": "Rare",
     "illustrator": "Dustmoss",
     "image_file": "flametropus.webp",
-    "set_id": "dm-03"
+    "set_id": "dm-03",
+    "abilities": {
+      "powerAttacker": 3000
+    }
   },
   {
     "civilizations": [
@@ -350,7 +380,10 @@
     "illustrator": "Atsushi Kawasaki",
     "flavor": "\"Open up freshwater valve 23D. I'm thirsty.\"",
     "image_file": "flood-valve.webp",
-    "set_id": "dm-03"
+    "set_id": "dm-03",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -388,7 +421,11 @@
     "illustrator": "Nottsuo",
     "flavor": "The more you quiver, the more it smiles.",
     "image_file": "garkago-dragon.webp",
-    "set_id": "dm-03"
+    "set_id": "dm-03",
+    "abilities": {
+      "doubleBreaker": true,
+      "canAttackUntapped": true
+    }
   },
   {
     "civilizations": [
@@ -441,7 +478,10 @@
     "illustrator": "Daisuke Izuka",
     "flavor": "Peasant or king, it cares not who its next victim is. It cares only that its victim is warm...and very, very scared.",
     "image_file": "giriel-ghastly-warrior.webp",
-    "set_id": "dm-03"
+    "set_id": "dm-03",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -535,7 +575,11 @@
     "illustrator": "Seki",
     "flavor": "\"I can see my ocean from here.\"",
     "image_file": "legendary-bynor.webp",
-    "set_id": "dm-03"
+    "set_id": "dm-03",
+    "abilities": {
+      "cantBeBlocked": true,
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -569,7 +613,10 @@
     "illustrator": "Akifumi Yamamoto",
     "flavor": "\"Let's find out if your brain is ticklish.\" â€”Legendary Bynor",
     "image_file": "liquid-scope.webp",
-    "set_id": "dm-03"
+    "set_id": "dm-03",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -584,7 +631,10 @@
     "illustrator": "Dustmoss",
     "flavor": "They're all that's holding the planet's atmosphere together.",
     "image_file": "logic-sphere.webp",
-    "set_id": "dm-03"
+    "set_id": "dm-03",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -598,7 +648,10 @@
     "rarity": "Uncommon",
     "illustrator": "Sansyu",
     "image_file": "mana-nexus.webp",
-    "set_id": "dm-03"
+    "set_id": "dm-03",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -636,7 +689,10 @@
     "illustrator": "Jason",
     "flavor": "\"Everything on this world exists because we Elementals have given it life.\"",
     "image_file": "miar-comet-elemental.webp",
-    "set_id": "dm-03"
+    "set_id": "dm-03",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -783,7 +839,10 @@
     "rarity": "Rare",
     "illustrator": "Akira Hamada",
     "image_file": "raza-vega-thunder-guardian.webp",
-    "set_id": "dm-03"
+    "set_id": "dm-03",
+    "abilities": {
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -798,7 +857,10 @@
     "illustrator": "Taro Yamazaki",
     "flavor": "When danger looms, heroes rise.",
     "image_file": "roar-of-the-earth.webp",
-    "set_id": "dm-03"
+    "set_id": "dm-03",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -817,7 +879,10 @@
     "illustrator": "Seki",
     "flavor": "\"Uh oh. My nose itches!\"",
     "image_file": "scratchclaw.webp",
-    "set_id": "dm-03"
+    "set_id": "dm-03",
+    "abilities": {
+      "slayer": true
+    }
   },
   {
     "civilizations": [
@@ -903,7 +968,10 @@
     "illustrator": "Hisashi Momose",
     "flavor": "\"You're getting more than just a haircut.\"",
     "image_file": "snip-striker-bullraizer.webp",
-    "set_id": "dm-03"
+    "set_id": "dm-03",
+    "abilities": {
+      "cantAttack": false
+    }
   },
   {
     "civilizations": [
@@ -994,7 +1062,10 @@
     "illustrator": "Hikaru Ikusa",
     "flavor": "One snoutful of its pollen can knock out a Horned Beast for a week.",
     "image_file": "sword-butterfly.webp",
-    "set_id": "dm-03"
+    "set_id": "dm-03",
+    "abilities": {
+      "powerAttacker": 3000
+    }
   },
   {
     "civilizations": [
@@ -1027,7 +1098,10 @@
     "rarity": "Common",
     "illustrator": "Seki",
     "image_file": "volcanic-arrows.webp",
-    "set_id": "dm-03"
+    "set_id": "dm-03",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -1046,7 +1120,10 @@
     "illustrator": "Akifumi Yamamoto",
     "flavor": "The faster it runs from its pain, the faster its pain catches others.",
     "image_file": "wailing-shadow-belbetphlo.webp",
-    "set_id": "dm-03"
+    "set_id": "dm-03",
+    "abilities": {
+      "slayer": true
+    }
   },
   {
     "civilizations": [
@@ -1064,6 +1141,10 @@
     "rarity": "Very Rare",
     "illustrator": "Masaki Hirooka",
     "image_file": "ãœberdragon-jabaha.webp",
-    "set_id": "dm-03"
+    "set_id": "dm-03",
+    "abilities": {
+      "doubleBreaker": true,
+      "powerAttacker": 2000
+    }
   }
 ]

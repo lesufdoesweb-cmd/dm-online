@@ -28,6 +28,7 @@ export const CardEngine = {
         let cost = card.cost;
         if (!battleZone) return cost;
         const isSpell = this.isSpell(card);
+        let coccoLupiaReduced = false;
         battleZone.forEach(c => {
             if (isSpell && c.name === "Essence Elf") cost--;
             if (!isSpell && card.civilizations?.includes('Nature') && c.name === "Elf-X") cost--;
@@ -38,8 +39,12 @@ export const CardEngine = {
             if (c.name === "Volcano Smog, Deceptive Shade" && card.civilizations?.includes('Light')) cost += 2;
             if (c.name === "Horned Mutant" && card.civilizations?.includes('Nature')) cost++;
             if (c.name === "Quixotic Puppet" && card.civilizations?.includes('Water')) cost++;
-            if (c.name === "Cocco Lupia" && card.subtypes?.some(s => s.toLowerCase().includes('dragon')) && !card.subtypes?.some(s => s.toLowerCase().includes('dragonoid'))) cost -= 2;
+            if (c.name === "Cocco Lupia" && card.subtypes?.some(s => s.toLowerCase().includes('dragon')) && !card.subtypes?.some(s => s.toLowerCase().includes('dragonoid'))) {
+                cost -= 2;
+                coccoLupiaReduced = true;
+            }
         });
+        if (coccoLupiaReduced) return Math.max(2, cost);
         return Math.max(1, cost);
     },
     parseSurvivorAbilities(card, battleZone, manaZone) {
@@ -69,54 +74,15 @@ export const CardEngine = {
         return abilities;
     },
     parseAbilities(card, battleZone, manaZone) {
-        const text = (card.text || '').toLowerCase();
-        const abilities = {};
-        if (text.includes("can't attack players") || text.includes("can\u2019t attack players")) abilities.cantAttackPlayers = true;
-        if (text.includes("can't attack.") || text.includes("can\u2019t attack.") || (text.includes("can't attack") && !text.includes("can't attack players") && !text.includes("can't attack untapped")))
-            if (text.match(/this creature can't attack\b[^p]/i) || text.endsWith("can't attack.") || text.endsWith("can\u2019t attack."))
-                abilities.cantAttack = true;
-        if ((text.includes("can't be blocked") || text.includes("can\u2019t be blocked")) && !text.includes("blocked by")) abilities.cantBeBlocked = true;
-        if (text.includes("can't be blocked by any creature that has power 3000 or less")) abilities.unblockableByWeak = true;
-        if (text.includes("can't be blocked by any creature that has power 5000 or less")) abilities.unblockableBy5000 = true;
-        if (text.includes("can't be blocked by any creature that has power 8000 or less")) abilities.unblockableBy8000 = true;
-        if (text.match(/(^|\n|: |\. )([\w\-]+ )?blocker\b/)) abilities.blocker = true;
-        if (text.match(/(^|\n|: |\. )([\w\-]+ )?slayer\b/)) abilities.slayer = true;
-        if (text.match(/(^|\n|: |\. )([\w\-]+ )?double breaker\b/)) abilities.doubleBreaker = true;
-        if (text.match(/(^|\n|: |\. )([\w\-]+ )?triple breaker\b/)) abilities.tripleBreaker = true;
-        if (text.includes("speed attacker")) abilities.speedAttacker = true;
-        if (text.includes("this creature can't attack creatures") || text.includes("this creature can\u2019t attack creatures")) abilities.cantAttackCreatures = true;
-        if (text.includes("attacks each turn if able")) abilities.mustAttack = true;
-        if (text.includes("this creature can attack untapped creatures")) abilities.canAttackUntapped = true;
-        if (text.includes("this creature can attack untapped darkness creatures")) abilities.canAttackUntappedDarkness = true;
-        if (text.includes("this creature can attack untapped light creatures")) abilities.canAttackUntappedLight = true;
-        if (text.includes("this creature can attack only creatures that have \"blocker\"")) abilities.onlyAttackBlockers = true;
-        
-        if (text.includes("at the end of each of your turns, you may untap this creature")) abilities.untapAtEnd = true;
-        if (text.includes("at the end of each of your turns, you may untap all your creatures")) abilities.untapAllAtEnd = true;
-        if (text.includes("when this creature wins a battle, destroy it")) abilities.destroyOnWin = true;
-        if (text.includes("when this creature battles, destroy it after the battle")) abilities.destroyAfterBattle = true;
-        if (text.includes("no battle happens")) abilities.noBattleOnBlock = true;
-        if (text.includes("crew breaker - survivor")) abilities.crewBreakerSurvivor = true;
-        if (text.includes("you can put an evolution creature of any race on this creature")) abilities.evolutionBaitAny = true;
-        if (text.includes("discarded from your hand during your opponent's turn, put it into the battle zone instead")) abilities.discardReplacement = true;
+        const abilities = { ...(card.abilities || {}) };
 
-        const paMatch = text.match(/power attacker \+(\d+)/);
-        if (paMatch) abilities.powerAttacker = parseInt(paMatch[1]);
-        if (card.name === "Bolgash Dragon") abilities.powerAttacker = 8000;
-        if (card.name === "Nocturnal Giant") {
-            abilities.powerAttacker = 7000;
-            abilities.cantAttackCreatures = true;
-        }
-        if (card.name === "Avalanche Giant") {
-            abilities.cantAttackCreatures = true;
-        }
+        // Handle dynamic temporary buffs
         if (card.tempPowerAttacker) abilities.powerAttacker = (abilities.powerAttacker || 0) + card.tempPowerAttacker;
-        if (text.match(/(^|\n)shield trigger\b/)) abilities.shieldTrigger = true;
+        if (card.tempBlocker) abilities.blocker = true;
 
-        if (card.name === "Spiral Grass" || text.includes("untap it after it battles")) abilities.untapAfterBattle = true;
-
-        if (card.name === "Angler Cluster") abilities.cantAttack = true;
+        // Handle specific card dynamics
         if (card.name === "Snip Striker Bullraizer") abilities.cantAttack = false;
+
         if (card.name === "Galsaur" && battleZone) {
             const others = battleZone.filter(c => c.instanceId !== card.instanceId).length;
             if (others === 0) abilities.doubleBreaker = true;
@@ -127,8 +93,6 @@ export const CardEngine = {
         if (battleZone?.some(c => c.name === "Sieg Balicula, the Intense" && c.instanceId !== card.instanceId)) {
             if (card.civilizations?.includes('Light')) abilities.blocker = true;
         }
-
-        if (card.tempBlocker) abilities.blocker = true;
 
         // Survivor Sharing
         if (card.subtypes?.includes('Survivor')) {
@@ -167,19 +131,19 @@ export const CardEngine = {
                 abilities.powerAttacker = (abilities.powerAttacker || 0) + 2000;
             }
         }
-        if (text.includes("$tap")) abilities.hasTapAbility = true;
-        if (text.includes("instead of having this creature attack, you may tap it")) abilities.hasTapAbility = true;
-        if (text.includes("whenever this creature would break a shield, your opponent puts that shield into his graveyard instead")) abilities.incinerate = true;
-        if (text.includes("whenever this creature becomes blocked, no battle happens")) abilities.noBattleOnBlock = true;
-        if (text.includes("can attack only creatures that have \"blocker\"")) abilities.onlyAttackBlockers = true;
-        if (text.includes("during your opponent's turn, if this creature would be discarded from your hand, put it into the battle zone instead")) abilities.discardReplacement = true;
+
+        if (battleZone?.some(c => c.name === "Arc Bine, the Astounding") && card.civilizations?.includes('Light')) abilities.hasTapAbility = true;
+        if (battleZone?.some(c => c.name === "Fort Megacluster") && card.civilizations?.includes('Water')) abilities.hasTapAbility = true;
+        if (battleZone?.some(c => c.name === "Lava Walker Executo") && card.civilizations?.includes('Fire')) abilities.hasTapAbility = true;
+        if (battleZone?.some(c => c.name === "Living Citadel Vosh") && card.civilizations?.includes('Nature')) abilities.hasTapAbility = true;
+        if (battleZone?.some(c => c.name === "Phantasmal Horror Gigazald") && card.civilizations?.includes('Darkness')) abilities.hasTapAbility = true;
 
         return abilities;
     },
     hasSummoningSickness(card, battleZone, manaZone) {
         if (!card.summonedThisTurn) return false;
         const abs = this.parseAbilities(card, battleZone, manaZone);
-        if (abs.speedAttacker) return false;
+        if (abs.speedAttacker || card.tempSpeedAttacker) return false;
         if (card.canAttackPlayersOverride) return false; // Diamond Cutter
         return true;
     },
@@ -373,7 +337,7 @@ export const CardEngine = {
         if (abilities.cantAttack) return false;
         if (abilities.cantAttackPlayers) return false;
         if (card.name === "Cliffcrush Giant" && !card.canAttackPlayersOverride && battleZone.some(c => c.instanceId !== card.instanceId && !c.isTapped && c.type === 'Creature')) return false;
-        if (card.summonedThisTurn && !abilities.speedAttacker) return false;
+        if (card.summonedThisTurn && !abilities.speedAttacker && !card.tempSpeedAttacker) return false;
         return true;
     },
     canAttack(card, battleZone, opponentBattleZone, manaZone) {
@@ -399,6 +363,7 @@ export const CardEngine = {
         if (targetCard) {
             if (abs.canAttackUntappedDarkness && targetCard.civilizations?.includes('Darkness')) return true;
             if (abs.canAttackUntappedLight && targetCard.civilizations?.includes('Light')) return true;
+            if (card.name === "Ruthless Skyterror" && targetCard.civilizations?.includes('Water')) return true;
         }
         return false; 
     },
@@ -451,11 +416,11 @@ export const CardEngine = {
         const abs = this.parseAbilities(card, battleZone, []);
         if (abs.slayer) return true;
         // DM-05 specific slayers
-        if (card.name === "Gigakail") return true; // Handled in resolveAttack for specific civs if needed, but usually just slayer
+        if (card.name === "Gigakail" || card.name === "Wisp Howler, Shadow of Tears") return true; 
         return false;
     },
     isSlayerVs(atk, def) {
-        if (atk.name === "Gigakail" && (def.civilizations?.includes('Nature') || def.civilizations?.includes('Light'))) return true;
+        if ((atk.name === "Gigakail" || atk.name === "Wisp Howler, Shadow of Tears") && (def.civilizations?.includes('Nature') || def.civilizations?.includes('Light'))) return true;
         return false;
     },
     onDestroyed(card, battleZone) {

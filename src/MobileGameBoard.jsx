@@ -33,13 +33,14 @@ const MobileGameBoard = (props) => {
         const canAtk = CardEngine.canAttack(c, gs.battleZone, gs.opponent.battleZone, gs.mana);
         const canAtkPlayer = CardEngine.canAttackPlayer(c, gs.battleZone, gs.mana);
         const canAtkUntapped = CardEngine.canAttackUntapped(c, gs.battleZone, gs.mana);
+        const hasSickness = CardEngine.hasSummoningSickness(c, gs.battleZone, gs.mana);
         
         const items = [];
         const abs = CardEngine.parseAbilities(c, gs.battleZone, gs.mana);
-        if (abs.hasTapAbility && !c.isTapped && !c.summonedThisTurn) {
+        if (abs.hasTapAbility && !c.isTapped && !hasSickness) {
             items.push({ label: "Use Tap Ability", icon: "💎", cls: "ctx-item--effect", action: "TAP", data: { a: c } });
         }
-        if (!c.isTapped && !c.summonedThisTurn && canAtk) {
+        if (!c.isTapped && !hasSickness && canAtk) {
             if (canAtkPlayer) {
                 const breaksCount = CardEngine.shieldsToBreak(c, gs.battleZone, gs.mana);
                 items.push({ label: `Attack Shields${breaksCount > 1 ? ` (×${breaksCount})` : ''}`, icon: "🛡", cls: "ctx-item--atk", action: "AS", data: { a: c } });
@@ -55,7 +56,7 @@ const MobileGameBoard = (props) => {
             }
         }
         if (!items.length) {
-            const reason = c.summonedThisTurn ? "Summoning sickness" : c.isTapped ? "Already tapped" : "No targets";
+            const reason = hasSickness ? "Summoning sickness" : c.isTapped ? "Already tapped" : "No targets";
             items.push({ label: reason, icon: "⚠", action: "_", data: {} });
         }
         setCtx({ x: e.clientX, y: e.clientY, items });

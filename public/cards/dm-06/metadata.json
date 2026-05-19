@@ -16,7 +16,10 @@
     "id": "11/110",
     "rarity": "Uncommon",
     "illustrator": "Naoki Saito",
-    "flavor": "\"Aw, man-I got a speck of asteroid in my eye.\""
+    "flavor": "\"Aw, man-I got a speck of asteroid in my eye.\"",
+    "abilities": {
+      "hasTapAbility": true
+    }
   },
   {
     "civilizations": [
@@ -35,7 +38,10 @@
     "id": "3/110",
     "rarity": "Very Rare",
     "illustrator": "Hisashi Momose",
-    "flavor": "\"I'm the garbage collector. You're the garbage.\""
+    "flavor": "\"I'm the garbage collector. You're the garbage.\"",
+    "abilities": {
+      "hasTapAbility": true
+    }
   },
   {
     "civilizations": [
@@ -117,7 +123,11 @@
     "id": "72/110",
     "rarity": "Common",
     "illustrator": "Tomofumi Ogasawara",
-    "flavor": "An Armorloid's career has two stages: fearsome warrior and scrap metal."
+    "flavor": "An Armorloid's career has two stages: fearsome warrior and scrap metal.",
+    "abilities": {
+      "powerAttacker": 12000,
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -136,7 +146,10 @@
     "id": "73/110",
     "rarity": "Common",
     "illustrator": "Imo Kajii",
-    "flavor": "\"Stupid Light creatures-all spheres and blobs and energy clouds. How can I blow their heads off if they don't have any?\""
+    "flavor": "\"Stupid Light creatures-all spheres and blobs and energy clouds. How can I blow their heads off if they don't have any?\"",
+    "abilities": {
+      "mustAttack": true
+    }
   },
   {
     "civilizations": [
@@ -155,7 +168,11 @@
     "id": "74/110",
     "rarity": "Rare",
     "illustrator": "Miho Midorikawa",
-    "flavor": "\"I traded in my sport utility Gecko for a stretch Geckousine.\" — Artisan Picora"
+    "flavor": "\"I traded in my sport utility Gecko for a stretch Geckousine.\" — Artisan Picora",
+    "abilities": {
+      "noBattleOnBlock": true,
+      "powerAttacker": 3000
+    }
   },
   {
     "civilizations": [
@@ -191,7 +208,12 @@
     "set_id": "dm-06",
     "id": "75/110",
     "rarity": "Rare",
-    "illustrator": "Ken Sugawara"
+    "illustrator": "Ken Sugawara",
+    "abilities": {
+      "doubleBreaker": true,
+      "speedAttacker": true,
+      "canAttackUntapped": true
+    }
   },
   {
     "civilizations": [
@@ -210,7 +232,10 @@
     "id": "51/110",
     "rarity": "Uncommon",
     "illustrator": "Naoki Saito",
-    "flavor": "The cannon is covered in slime. It runs on slime. It's fired by slime. Guess what it shoots?"
+    "flavor": "The cannon is covered in slime. It runs on slime. It's fired by slime. Guess what it shoots?",
+    "abilities": {
+      "cantAttackPlayers": true
+    }
   },
   {
     "civilizations": [
@@ -229,7 +254,10 @@
     "id": "91/110",
     "rarity": "Uncommon",
     "illustrator": "Katsuya",
-    "flavor": "\"Someone call a doctor-I've got bongo fever!\""
+    "flavor": "\"Someone call a doctor-I've got bongo fever!\"",
+    "abilities": {
+      "hasTapAbility": true
+    }
   },
   {
     "civilizations": [
@@ -248,7 +276,11 @@
     "id": "S7/110",
     "rarity": "Super Rare",
     "illustrator": "Shishizaru",
-    "flavor": "Part robot. Part Dragon. All robo-Dragon."
+    "flavor": "Part robot. Part Dragon. All robo-Dragon.",
+    "abilities": {
+      "doubleBreaker": true,
+      "incinerate": true
+    }
   },
   {
     "civilizations": [
@@ -263,7 +295,10 @@
     "id": "14/110",
     "rarity": "Rare",
     "illustrator": "Katsuya",
-    "flavor": "\"Need a lift?\" —Kanesill, the Explorer"
+    "flavor": "\"Need a lift?\" —Kanesill, the Explorer",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -282,7 +317,10 @@
     "id": "92/110",
     "rarity": "Uncommon",
     "illustrator": "Hisashi Momose",
-    "flavor": "\"I've been tracking an immense creature across the continent by following its huge footprints. One thing puzzles me, though-since when do footprints have thumbs?\" —Feather Horn, the Tracker"
+    "flavor": "\"I've been tracking an immense creature across the continent by following its huge footprints. One thing puzzles me, though-since when do footprints have thumbs?\" —Feather Horn, the Tracker",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -301,7 +339,10 @@
     "id": "93/110",
     "rarity": "Common",
     "illustrator": "Eiji Kaneda",
-    "flavor": "The rocky plains where Colony Beetles lay their eggs eventually become fertile fields covered in grass and flowers."
+    "flavor": "The rocky plains where Colony Beetles lay their eggs eventually become fertile fields covered in grass and flowers.",
+    "abilities": {
+      "powerAttacker": 3000
+    }
   },
   {
     "civilizations": [
@@ -320,7 +361,10 @@
     "id": "94/110",
     "rarity": "Rare",
     "illustrator": "Jason",
-    "flavor": "\"Hmm. Flurry or blizzard?\""
+    "flavor": "\"Hmm. Flurry or blizzard?\"",
+    "abilities": {
+      "hasTapAbility": true
+    }
   },
   {
     "civilizations": [
@@ -339,7 +383,12 @@
     "id": "15/110",
     "rarity": "Common",
     "illustrator": "Naoki Saito",
-    "flavor": "\"If you don't chill out, I'll start an ice age and make you chill out!\""
+    "flavor": "\"If you don't chill out, I'll start an ice age and make you chill out!\"",
+    "abilities": {
+      "cantAttack": true,
+      "blocker": true,
+      "noBattleOnBlock": true
+    }
   },
   {
     "civilizations": [
@@ -358,7 +407,10 @@
     "id": "16/110",
     "rarity": "Common",
     "illustrator": "Hikaru Ikusa",
-    "flavor": "\"Its blade, forged in the heat of stars, can penetrate any armor.\""
+    "flavor": "\"Its blade, forged in the heat of stars, can penetrate any armor.\"",
+    "abilities": {
+      "hasTapAbility": true
+    }
   },
   {
     "civilizations": [
@@ -377,7 +429,11 @@
     "id": "76/110",
     "rarity": "Common",
     "illustrator": "Dai",
-    "flavor": "\"Dude, check this out.\" SPROING!"
+    "flavor": "\"Dude, check this out.\" SPROING!",
+    "abilities": {
+      "noBattleOnBlock": true,
+      "powerAttacker": 1000
+    }
   },
   {
     "civilizations": [
@@ -396,7 +452,11 @@
     "id": "S9/110",
     "rarity": "Super Rare",
     "illustrator": "Sansyu",
-    "flavor": "\"The last time he high-fived someone, he knocked over a mountain.\""
+    "flavor": "\"The last time he high-fived someone, he knocked over a mountain.\"",
+    "abilities": {
+      "cantAttack": true,
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -414,7 +474,12 @@
     "set_id": "dm-06",
     "id": "95/110",
     "rarity": "Rare",
-    "illustrator": "Youichi Kai"
+    "illustrator": "Youichi Kai",
+    "abilities": {
+      "unblockableBy5000": true,
+      "doubleBreaker": true,
+      "powerAttacker": 2000
+    }
   },
   {
     "civilizations": [
@@ -448,7 +513,10 @@
     "id": "78/110",
     "rarity": "Uncommon",
     "illustrator": "Jason",
-    "flavor": "\"The masters of subtlety are at it again.\" —Craze Valkyrie, the Drastic"
+    "flavor": "\"The masters of subtlety are at it again.\" —Craze Valkyrie, the Drastic",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -467,7 +535,10 @@
     "id": "17/110",
     "rarity": "Rare",
     "illustrator": "Ryoya Yuki",
-    "flavor": "He glows with the reflection of a million stars."
+    "flavor": "He glows with the reflection of a million stars.",
+    "abilities": {
+      "hasTapAbility": true
+    }
   },
   {
     "civilizations": [
@@ -489,7 +560,10 @@
     "id": "S1/110",
     "rarity": "Super Rare",
     "illustrator": "Kou1",
-    "flavor": "\"Time to get Drastic!\""
+    "flavor": "\"Time to get Drastic!\"",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -503,7 +577,10 @@
     "set_id": "dm-06",
     "id": "79/110",
     "rarity": "Rare",
-    "illustrator": "Hideaki Takamura"
+    "illustrator": "Hideaki Takamura",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -525,7 +602,10 @@
     "id": "S3/110",
     "rarity": "Super Rare",
     "illustrator": "Masaki Hirooka",
-    "flavor": "An infinite number of warriors in one."
+    "flavor": "An infinite number of warriors in one.",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -543,7 +623,11 @@
     "set_id": "dm-06",
     "id": "52/110",
     "rarity": "Common",
-    "illustrator": "Akifumi Yamamoto"
+    "illustrator": "Akifumi Yamamoto",
+    "abilities": {
+      "blocker": true,
+      "slayer": true
+    }
   },
   {
     "civilizations": [
@@ -561,7 +645,11 @@
     "set_id": "dm-06",
     "id": "80/110",
     "rarity": "Uncommon",
-    "illustrator": "Takesi Kuno"
+    "illustrator": "Takesi Kuno",
+    "abilities": {
+      "cantAttackPlayers": true,
+      "speedAttacker": true
+    }
   },
   {
     "civilizations": [
@@ -580,7 +668,10 @@
     "id": "S5/110",
     "rarity": "Super Rare",
     "illustrator": "Yarunoca",
-    "flavor": "\"Friend or foe? Dragonoid, Guardian, or Giant? They're all the same. They're all dinner.\""
+    "flavor": "\"Friend or foe? Dragonoid, Guardian, or Giant? They're all the same. They're all dinner.\"",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -599,7 +690,10 @@
     "id": "18/110",
     "rarity": "Uncommon",
     "illustrator": "Norikatsu Miyoshi",
-    "flavor": "\"I refuse to be forgotten.\""
+    "flavor": "\"I refuse to be forgotten.\"",
+    "abilities": {
+      "discardReplacement": true
+    }
   },
   {
     "civilizations": [
@@ -662,7 +756,10 @@
     "set_id": "dm-06",
     "id": "98/110",
     "rarity": "Common",
-    "illustrator": "Tomofumi Ogasawara"
+    "illustrator": "Tomofumi Ogasawara",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -796,7 +893,10 @@
     "id": "101/110",
     "rarity": "Common",
     "illustrator": "Hideaki Takamura",
-    "flavor": "\"Yaaaurgh! Who's up for a snowball fight?\""
+    "flavor": "\"Yaaaurgh! Who's up for a snowball fight?\"",
+    "abilities": {
+      "powerAttacker": 2000
+    }
   },
   {
     "civilizations": [
@@ -815,7 +915,10 @@
     "id": "20/110",
     "rarity": "Rare",
     "illustrator": "Akifumi Yamamoto",
-    "flavor": "\"Elementals can't stand being on the ground instead of in the sky. So when they start a war, they make sure it ends quickly.\""
+    "flavor": "\"Elementals can't stand being on the ground instead of in the sky. So when they start a war, they make sure it ends quickly.\"",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -833,7 +936,12 @@
     "set_id": "dm-06",
     "id": "56/110",
     "rarity": "Uncommon",
-    "illustrator": "Eiji Kaneda"
+    "illustrator": "Eiji Kaneda",
+    "abilities": {
+      "cantAttack": true,
+      "blocker": true,
+      "slayer": true
+    }
   },
   {
     "civilizations": [
@@ -852,7 +960,10 @@
     "id": "57/110",
     "rarity": "Rare",
     "illustrator": "Sansyu",
-    "flavor": "His mother was right. His face did freeze like that."
+    "flavor": "His mother was right. His face did freeze like that.",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -891,7 +1002,10 @@
     "id": "59/110",
     "rarity": "Common",
     "illustrator": "Masaki Hirooka",
-    "flavor": "\"Quit being dead. Your lifetime contract with Ballom hasn't expired yet.\""
+    "flavor": "\"Quit being dead. Your lifetime contract with Ballom hasn't expired yet.\"",
+    "abilities": {
+      "hasTapAbility": true
+    }
   },
   {
     "civilizations": [
@@ -910,7 +1024,10 @@
     "id": "60/110",
     "rarity": "Common",
     "illustrator": "Akifumi Yamamoto",
-    "flavor": "\"That thing looks like it's eating its own face!\" —Mini Titan Gett"
+    "flavor": "\"That thing looks like it's eating its own face!\" —Mini Titan Gett",
+    "abilities": {
+      "slayer": true
+    }
   },
   {
     "civilizations": [
@@ -929,7 +1046,11 @@
     "id": "34/110",
     "rarity": "Uncommon",
     "illustrator": "Tsuu",
-    "flavor": "All life came from the sea. Now the sea's coming to take it back."
+    "flavor": "All life came from the sea. Now the sea's coming to take it back.",
+    "abilities": {
+      "cantAttack": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -966,7 +1087,10 @@
     "id": "103/110",
     "rarity": "Uncommon",
     "illustrator": "Syuichi Obata",
-    "flavor": "His soul is so pure that anywhere he wanders accepts him as a native son. His infinite destinies lie just over the horizon."
+    "flavor": "His soul is so pure that anywhere he wanders accepts him as a native son. His infinite destinies lie just over the horizon.",
+    "abilities": {
+      "evolutionBaitAny": true
+    }
   },
   {
     "civilizations": [
@@ -981,7 +1105,10 @@
     "id": "61/110",
     "rarity": "Rare",
     "illustrator": "Dreamwave",
-    "flavor": "Every soul has a price-and today they're on sale!"
+    "flavor": "Every soul has a price-and today they're on sale!",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -1093,7 +1220,11 @@
     "id": "21/110",
     "rarity": "Common",
     "illustrator": "Akifumi Yamamoto",
-    "flavor": "The Gladiators' only job is to study the science of war. They like their job."
+    "flavor": "The Gladiators' only job is to study the science of war. They like their job.",
+    "abilities": {
+      "cantAttackPlayers": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -1170,7 +1301,12 @@
     "set_id": "dm-06",
     "id": "S2/110",
     "rarity": "Super Rare",
-    "illustrator": "Masaki Hirooka"
+    "illustrator": "Masaki Hirooka",
+    "abilities": {
+      "blocker": true,
+      "doubleBreaker": true,
+      "untapAtEnd": true
+    }
   },
   {
     "civilizations": [
@@ -1188,7 +1324,11 @@
     "set_id": "dm-06",
     "id": "81/110",
     "rarity": "Common",
-    "illustrator": "Yarunoca"
+    "illustrator": "Yarunoca",
+    "abilities": {
+      "speedAttacker": true,
+      "hasTapAbility": true
+    }
   },
   {
     "civilizations": [
@@ -1265,7 +1405,11 @@
     "set_id": "dm-06",
     "id": "2/110",
     "rarity": "Very Rare",
-    "illustrator": "Takesi Kuno"
+    "illustrator": "Takesi Kuno",
+    "abilities": {
+      "cantAttackPlayers": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -1283,7 +1427,10 @@
     "set_id": "dm-06",
     "id": "64/110",
     "rarity": "Uncommon",
-    "illustrator": "Norikatsu Miyoshi"
+    "illustrator": "Norikatsu Miyoshi",
+    "abilities": {
+      "hasTapAbility": true
+    }
   },
   {
     "civilizations": [
@@ -1302,7 +1449,11 @@
     "id": "37/110",
     "rarity": "Common",
     "illustrator": "Akira Hamada",
-    "flavor": "\"I see they've loosened the definition of 'fish.'\" —Cantankerous Giant"
+    "flavor": "\"I see they've loosened the definition of 'fish.'\" —Cantankerous Giant",
+    "abilities": {
+      "cantAttack": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -1320,7 +1471,10 @@
     "set_id": "dm-06",
     "id": "38/110",
     "rarity": "Rare",
-    "illustrator": "Syuichi Obata"
+    "illustrator": "Syuichi Obata",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -1338,7 +1492,10 @@
     "set_id": "dm-06",
     "id": "82/110",
     "rarity": "Uncommon",
-    "illustrator": "Hikaru Ikusa"
+    "illustrator": "Hikaru Ikusa",
+    "abilities": {
+      "hasTapAbility": true
+    }
   },
   {
     "civilizations": [
@@ -1357,7 +1514,10 @@
     "id": "105/110",
     "rarity": "Common",
     "illustrator": "Jason",
-    "flavor": "\"Get real. I've never buckled a swash in my life.\""
+    "flavor": "\"Get real. I've never buckled a swash in my life.\"",
+    "abilities": {
+      "hasTapAbility": true
+    }
   },
   {
     "civilizations": [
@@ -1391,7 +1551,10 @@
     "id": "39/110",
     "rarity": "Uncommon",
     "illustrator": "Imo Kajii",
-    "flavor": "\"Don't worry! No one gets arrested for breaking the laws of nature anymore.\""
+    "flavor": "\"Don't worry! No one gets arrested for breaking the laws of nature anymore.\"",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -1425,7 +1588,10 @@
     "id": "40/110",
     "rarity": "Uncommon",
     "illustrator": "Sansyu",
-    "flavor": "\"You can win more wars by thinking than you can by fighting.\" —Marinomancer"
+    "flavor": "\"You can win more wars by thinking than you can by fighting.\" —Marinomancer",
+    "abilities": {
+      "hasTapAbility": true
+    }
   },
   {
     "civilizations": [
@@ -1457,7 +1623,10 @@
     "set_id": "dm-06",
     "id": "107/110",
     "rarity": "Uncommon",
-    "illustrator": "Masaki Hirooka"
+    "illustrator": "Masaki Hirooka",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -1476,7 +1645,10 @@
     "id": "108/110",
     "rarity": "Uncommon",
     "illustrator": "Imo Kajii",
-    "flavor": "Few places on the planet still know the joy of absolute peace. Paradise Horn makes sure this is one of them."
+    "flavor": "Few places on the planet still know the joy of absolute peace. Paradise Horn makes sure this is one of them.",
+    "abilities": {
+      "powerAttacker": 2000
+    }
   },
   {
     "civilizations": [
@@ -1513,7 +1685,10 @@
     "id": "83/110",
     "rarity": "Common",
     "illustrator": "Taro Yamazaki",
-    "flavor": "\"Would you prefer a real Dragon?\""
+    "flavor": "\"Would you prefer a real Dragon?\"",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -1545,7 +1720,10 @@
     "set_id": "dm-06",
     "id": "65/110",
     "rarity": "Uncommon",
-    "illustrator": "Atsushi Kawasaki"
+    "illustrator": "Atsushi Kawasaki",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -1578,7 +1756,10 @@
     "set_id": "dm-06",
     "id": "24/110",
     "rarity": "Uncommon",
-    "illustrator": "Kou1"
+    "illustrator": "Kou1",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -1597,7 +1778,10 @@
     "id": "85/110",
     "rarity": "Common",
     "illustrator": "Yarunoca",
-    "flavor": "\"At maximum speed, he reaches escape velocity and teleports to a whole new dimension... but which one?\""
+    "flavor": "\"At maximum speed, he reaches escape velocity and teleports to a whole new dimension... but which one?\"",
+    "abilities": {
+      "speedAttacker": true
+    }
   },
   {
     "civilizations": [
@@ -1619,7 +1803,10 @@
     "id": "86/110",
     "rarity": "Rare",
     "illustrator": "Shishizaru",
-    "flavor": "A disaster nearly doomed the Survivors. Now disasters merely fuel their fury."
+    "flavor": "A disaster nearly doomed the Survivors. Now disasters merely fuel their fury.",
+    "abilities": {
+      "crewBreakerSurvivor": true
+    }
   },
   {
     "civilizations": [
@@ -1641,7 +1828,10 @@
     "id": "S4/110",
     "rarity": "Super Rare",
     "illustrator": "Jason",
-    "flavor": "\"Don't let me think too hard. It makes the world explode.\""
+    "flavor": "\"Don't let me think too hard. It makes the world explode.\"",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -1713,7 +1903,10 @@
     "id": "87/110",
     "rarity": "Rare",
     "illustrator": "Atsushi Kawasaki",
-    "flavor": "It's good at putting things together. It's better at taking things apart."
+    "flavor": "It's good at putting things together. It's better at taking things apart.",
+    "abilities": {
+      "hasTapAbility": true
+    }
   },
   {
     "civilizations": [
@@ -1753,7 +1946,10 @@
     "id": "88/110",
     "rarity": "Uncommon",
     "illustrator": "Akira Hamada",
-    "flavor": "\"You'd run fast too, if you were on fire.\""
+    "flavor": "\"You'd run fast too, if you were on fire.\"",
+    "abilities": {
+      "speedAttacker": true
+    }
   },
   {
     "civilizations": [
@@ -1843,7 +2039,11 @@
     "id": "46/110",
     "rarity": "Common",
     "illustrator": "Katsuhiko Kojoh",
-    "flavor": "It doesn't just live inside the Ultracomputer-it's part of the circuitry."
+    "flavor": "It doesn't just live inside the Ultracomputer-it's part of the circuitry.",
+    "abilities": {
+      "cantBeBlocked": true,
+      "hasTapAbility": true
+    }
   },
   {
     "civilizations": [
@@ -1892,7 +2092,11 @@
     "id": "10/110",
     "rarity": "Very Rare",
     "illustrator": "Nottsuo",
-    "flavor": "\"Buzz off.\""
+    "flavor": "\"Buzz off.\"",
+    "abilities": {
+      "doubleBreaker": true,
+      "powerAttacker": 3000
+    }
   },
   {
     "civilizations": [
@@ -1929,7 +2133,10 @@
     "id": "6/110",
     "rarity": "Very Rare",
     "illustrator": "Akira Hamada",
-    "flavor": "\"Fire the Shocktacular Zaptronic Megaparticle Lasoblaster Disruptulating Cannon! No, the other one.\""
+    "flavor": "\"Fire the Shocktacular Zaptronic Megaparticle Lasoblaster Disruptulating Cannon! No, the other one.\"",
+    "abilities": {
+      "hasTapAbility": true
+    }
   },
   {
     "civilizations": [
@@ -1948,7 +2155,11 @@
     "id": "28/110",
     "rarity": "Rare",
     "illustrator": "Asai Genji",
-    "flavor": "\"Wherever I go, daylight follows.\""
+    "flavor": "\"Wherever I go, daylight follows.\"",
+    "abilities": {
+      "cantAttackPlayers": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -1985,7 +2196,11 @@
     "id": "49/110",
     "rarity": "Uncommon",
     "illustrator": "Yoko Tsukamoto",
-    "flavor": "Erosion...with a vengeance."
+    "flavor": "Erosion...with a vengeance.",
+    "abilities": {
+      "cantAttack": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -2004,7 +2219,10 @@
     "id": "90/110",
     "rarity": "Common",
     "illustrator": "Kou1",
-    "flavor": "\"When the Elementals attacked, no one in the Fire realm joined the army. They were all already in it.\""
+    "flavor": "\"When the Elementals attacked, no one in the Fire realm joined the army. They were all already in it.\"",
+    "abilities": {
+      "powerAttacker": 3000
+    }
   },
   {
     "civilizations": [
@@ -2023,7 +2241,11 @@
     "id": "110/110",
     "rarity": "Common",
     "illustrator": "Iron Pot",
-    "flavor": "\"Since their sharp blades are dangerous even to one another, these Insects tend to live alone.\""
+    "flavor": "\"Since their sharp blades are dangerous even to one another, these Insects tend to live alone.\"",
+    "abilities": {
+      "cantAttackPlayers": true,
+      "powerAttacker": 4000
+    }
   },
   {
     "civilizations": [
@@ -2045,7 +2267,11 @@
     "id": "S10/110",
     "rarity": "Super Rare",
     "illustrator": "Seki",
-    "flavor": "It doesn't need a weapon-it is a weapon."
+    "flavor": "It doesn't need a weapon-it is a weapon.",
+    "abilities": {
+      "unblockableBy8000": true,
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -2064,7 +2290,11 @@
     "id": "8/110",
     "rarity": "Very Rare",
     "illustrator": "Seki",
-    "flavor": "\"If you ever want to find me, just look between the explosions.\""
+    "flavor": "\"If you ever want to find me, just look between the explosions.\"",
+    "abilities": {
+      "canAttackUntapped": true,
+      "powerAttacker": 3000
+    }
   },
   {
     "civilizations": [
@@ -2083,7 +2313,11 @@
     "id": "29/110",
     "rarity": "Common",
     "illustrator": "Ken Sugawara",
-    "flavor": "The glow surrounding an Oracle's body is created by the songs of the Elementals."
+    "flavor": "The glow surrounding an Oracle's body is created by the songs of the Elementals.",
+    "abilities": {
+      "cantAttackPlayers": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -2102,7 +2336,13 @@
     "id": "69/110",
     "rarity": "Rare",
     "illustrator": "D-Suzuki",
-    "flavor": "Its heart cries for conquest. Its blood sings a dirge of doom."
+    "flavor": "Its heart cries for conquest. Its blood sings a dirge of doom.",
+    "abilities": {
+      "cantAttack": true,
+      "doubleBreaker": true,
+      "cantAttackCreatures": true,
+      "destroyAfterBattle": true
+    }
   },
   {
     "civilizations": [
@@ -2140,7 +2380,11 @@
     "id": "50/110",
     "rarity": "Common",
     "illustrator": "Naoki Saito",
-    "flavor": "Those used to be nuclear submarines. Now they're bathtub toys."
+    "flavor": "Those used to be nuclear submarines. Now they're bathtub toys.",
+    "abilities": {
+      "cantAttack": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -2158,6 +2402,11 @@
     "set_id": "dm-06",
     "id": "70/110",
     "rarity": "Common",
-    "illustrator": "Hisashi Momose"
+    "illustrator": "Hisashi Momose",
+    "abilities": {
+      "cantAttack": true,
+      "blocker": true,
+      "destroyAfterBattle": true
+    }
   }
 ]

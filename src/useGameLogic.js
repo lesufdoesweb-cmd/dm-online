@@ -267,6 +267,29 @@ export const useGameLogic = ({ cards, deck, conn, isHost, gameId }) => {
             found = true;
         }
 
+        if (type === 'TAP_EFFECTS' && !fx) {
+            const isLight = card.civilizations?.includes('Light');
+            const isWater = card.civilizations?.includes('Water');
+            const isFire = card.civilizations?.includes('Fire');
+            const isNature = card.civilizations?.includes('Nature');
+            const isDarkness = card.civilizations?.includes('Darkness');
+            
+            const bz = gsR.current.battleZone;
+            let grantedFx = null;
+            if (isLight && bz.some(c => c.name === "Arc Bine, the Astounding")) grantedFx = map["Arc Bine, the Astounding"];
+            else if (isWater && bz.some(c => c.name === "Fort Megacluster")) grantedFx = map["Fort Megacluster"];
+            else if (isFire && bz.some(c => c.name === "Lava Walker Executo")) grantedFx = map["Lava Walker Executo"];
+            else if (isNature && bz.some(c => c.name === "Living Citadel Vosh")) grantedFx = map["Living Citadel Vosh"];
+            else if (isDarkness && bz.some(c => c.name === "Phantasmal Horror Gigazald")) grantedFx = map["Phantasmal Horror Gigazald"];
+            
+            if (grantedFx) {
+                console.log(`Triggering granted TAP_EFFECTS for ${card.name}`);
+                if (extraParams.sync) grantedFx(params);
+                else setTimeout(() => grantedFx(params), 400);
+                found = true;
+            }
+        }
+
         // Survivor shared triggers
         if (card.subtypes?.includes('Survivor')) {
             gsR.current.battleZone.forEach(other => {
@@ -628,6 +651,14 @@ export const useGameLogic = ({ cards, deck, conn, isHost, gameId }) => {
         if (CardEngine.hasSummoningSickness(atk, gsR.current.battleZone, gsR.current.mana)) { toast("Summoning sickness!", "error"); return; }
         if (atk.isTapped) { toast("Already tapped", "error"); return; }
         if (!CardEngine.canAttack(atk, gsR.current.battleZone, gsR.current.opponent.battleZone, gsR.current.mana)) { toast("This creature can't attack!", "error"); return; }
+        
+        if (tgt === "SHIELD") {
+            const oppShieldCount = Array.isArray(gsR.current.opponent.shields) ? gsR.current.opponent.shields.length : gsR.current.opponent.shields;
+            if (!CardEngine.canAttackPlayer(atk, gsR.current.battleZone, gsR.current.mana, oppShieldCount)) {
+                toast("Can't attack players!", "error");
+                return;
+            }
+        }
 
         addLog(`${atk.name} is attacking!`, 'attack', false, atk);
         setGs(p => ({ ...p, attackStarted: true, battleZone: p.battleZone.map(c => c.instanceId === atk.instanceId ? { ...c, isTapped: true, attackedThisTurn: true } : c) }));
@@ -847,15 +878,7 @@ export const useGameLogic = ({ cards, deck, conn, isHost, gameId }) => {
                 // Rule: Draw at start of turn
                 setTimeout(() => actionsRef.current.draw(), 800);
             }
-            if (action === "SUMMON_CREATURE" || action === "CAST_SPELL") {
-                setGs(p => ({
-                    ...p,
-                    battleZone: p.battleZone.map(c => {
-                        if (c.name === "Aqua Rider") return { ...c, tempBlocker: true };
-                        return c;
-                    })
-                }));
-            }
+
             if (action === "ATTACK_DECLARED") {
                 const { attacker, targetType, targetId } = details;
                 const blockers = gsR.current.battleZone.filter(c => {

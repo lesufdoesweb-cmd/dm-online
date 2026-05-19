@@ -16,7 +16,10 @@
     "id": "46/55",
     "rarity": "Common",
     "illustrator": "Tomofumi Ogasawara",
-    "flavor": "Its hard outer shell covers up an even harder inner core."
+    "flavor": "Its hard outer shell covers up an even harder inner core.",
+    "abilities": {
+      "powerAttacker": 3000
+    }
   },
   {
     "civilizations": [
@@ -35,7 +38,10 @@
     "id": "16/55",
     "rarity": "Uncommon",
     "illustrator": "Yoshio Sugiura",
-    "flavor": "\"Wave goodbye!\""
+    "flavor": "\"Wave goodbye!\"",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -54,7 +60,12 @@
     "id": "S5/55",
     "rarity": "Super Rare",
     "illustrator": "Nottsuo",
-    "flavor": "Its name is misleading. Mountains tremble in fear at the sight of it, and that causes avalanches. What it actually does to the mountains is much, much worse."
+    "flavor": "Its name is misleading. Mountains tremble in fear at the sight of it, and that causes avalanches. What it actually does to the mountains is much, much worse.",
+    "abilities": {
+      "cantAttack": true,
+      "doubleBreaker": true,
+      "cantAttackCreatures": true
+    }
   },
   {
     "civilizations": [
@@ -113,7 +124,10 @@
     "id": "S4/55",
     "rarity": "Super Rare",
     "illustrator": "Seki",
-    "flavor": "The Megapocalypse woke it from its slumber deep within the molten core of the planet. It is the avenger of the world. It is legendary. And it is very, very cranky."
+    "flavor": "The Megapocalypse woke it from its slumber deep within the molten core of the planet. It is the avenger of the world. It is legendary. And it is very, very cranky.",
+    "abilities": {
+      "tripleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -133,7 +147,10 @@
     "id": "4/55",
     "rarity": "Very Rare",
     "illustrator": "Shishizaru",
-    "flavor": "Its war cry shreds the clouds. Its blades shred everything else."
+    "flavor": "Its war cry shreds the clouds. Its blades shred everything else.",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -153,7 +170,10 @@
     "id": "36/55",
     "rarity": "Common",
     "illustrator": "Sansyu",
-    "flavor": "The Blazosaur's roar echoes in the ears of every Survivor."
+    "flavor": "The Blazosaur's roar echoes in the ears of every Survivor.",
+    "abilities": {
+      "powerAttacker": 1000
+    }
   },
   {
     "civilizations": [
@@ -172,7 +192,10 @@
     "id": "48/55",
     "rarity": "Rare",
     "illustrator": "Sansyu",
-    "flavor": "From the moment it's born to the moment it dies, its wings never stop moving."
+    "flavor": "From the moment it's born to the moment it dies, its wings never stop moving.",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -191,7 +214,11 @@
     "id": "37/110",
     "rarity": "Uncommon",
     "illustrator": "Atsushi Kawasaki",
-    "flavor": "Its suit of armor belches out an electric smog cloud that serves as both camouflage and weapon."
+    "flavor": "Its suit of armor belches out an electric smog cloud that serves as both camouflage and weapon.",
+    "abilities": {
+      "tripleBreaker": true,
+      "powerAttacker": 8000
+    }
   },
   {
     "civilizations": [
@@ -210,7 +237,10 @@
     "id": "38/55",
     "rarity": "Uncommon",
     "illustrator": "Naoki Saito",
-    "flavor": "\"Too slow! Do I have to sit on a rocket to go faster?!\""
+    "flavor": "\"Too slow! Do I have to sit on a rocket to go faster?!\"",
+    "abilities": {
+      "speedAttacker": true
+    }
   },
   {
     "civilizations": [
@@ -263,7 +293,11 @@
     "id": "39/55",
     "rarity": "Rare",
     "illustrator": "Nottsuo",
-    "flavor": "\"Why bother aiming? I just fire in all directions at once.\""
+    "flavor": "\"Why bother aiming? I just fire in all directions at once.\"",
+    "abilities": {
+      "cantAttackPlayers": true,
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -311,7 +345,10 @@
     "set_id": "dm-05",
     "id": "41/55",
     "rarity": "Uncommon",
-    "illustrator": "Eiji Kaneda"
+    "illustrator": "Eiji Kaneda",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -330,7 +367,10 @@
     "id": "S3/55",
     "rarity": "Super Rare",
     "illustrator": "Yoshio Sugiura",
-    "flavor": "Its only friend is the empty echo of death."
+    "flavor": "Its only friend is the empty echo of death.",
+    "abilities": {
+      "tripleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -380,7 +420,10 @@
     "id": "8/55",
     "rarity": "Common",
     "illustrator": "Jason",
-    "flavor": "My true home is not in the Light realm. It is with the Survivors."
+    "flavor": "My true home is not in the Light realm. It is with the Survivors.",
+    "abilities": {
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -419,7 +462,10 @@
     "id": "27/55",
     "rarity": "Common",
     "illustrator": "Ken Sugawara",
-    "flavor": "Did the Megapocalypse create the Survivors, or did it just set them free?"
+    "flavor": "Did the Megapocalypse create the Survivors, or did it just set them free?",
+    "abilities": {
+      "slayer": true
+    }
   },
   {
     "civilizations": [
@@ -438,7 +484,10 @@
     "id": "28/55",
     "rarity": "Common",
     "illustrator": "Katsuya",
-    "flavor": "\"Perhaps I went a little too far with the experiment....\" —Ballom, Master of Death"
+    "flavor": "\"Perhaps I went a little too far with the experiment....\" —Ballom, Master of Death",
+    "abilities": {
+      "cantAttack": true
+    }
   },
   {
     "civilizations": [
@@ -452,7 +501,10 @@
     "set_id": "dm-05",
     "id": "9/55",
     "rarity": "Rare",
-    "illustrator": "Sansyu"
+    "illustrator": "Sansyu",
+    "abilities": {
+      "shieldTrigger": true
+    }
   },
   {
     "civilizations": [
@@ -509,7 +561,10 @@
     "id": "2/55",
     "rarity": "Very Rare",
     "illustrator": "Katsuya",
-    "flavor": "It patrols the Cyber Lords' new undersea city. In exchange, it gets to eat any intruders it finds."
+    "flavor": "It patrols the Cyber Lords' new undersea city. In exchange, it gets to eat any intruders it finds.",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -528,7 +583,10 @@
     "id": "S2/55",
     "rarity": "Super Rare",
     "illustrator": "Akifumi Yamamoto",
-    "flavor": "The last time it did a backflip, the resulting tidal waves sank three islands."
+    "flavor": "The last time it did a backflip, the resulting tidal waves sank three islands.",
+    "abilities": {
+      "tripleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -585,7 +643,11 @@
     "id": "1/55",
     "rarity": "Very Rare",
     "illustrator": "Hisashi Momose",
-    "flavor": "\"Breeze? Nah. Gust? Nah. Tornado? Aw, yeah.\""
+    "flavor": "\"Breeze? Nah. Gust? Nah. Tornado? Aw, yeah.\"",
+    "abilities": {
+      "blocker": true,
+      "untapAfterBattle": true
+    }
   },
   {
     "civilizations": [
@@ -604,7 +666,10 @@
     "id": "11/55",
     "rarity": "Uncommon",
     "illustrator": "Akira Hamada",
-    "flavor": "Today's weather report: partly cloudy, with an 80 percent chance of being blasted from space."
+    "flavor": "Today's weather report: partly cloudy, with an 80 percent chance of being blasted from space.",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -676,7 +741,10 @@
     "id": "52/55",
     "rarity": "Uncommon",
     "illustrator": "Akifumi Yamamoto",
-    "flavor": "\"Sometimes he'll go hog wild at a party and totally pig out. But he's usually such a boar.\" —Fear Fang"
+    "flavor": "\"Sometimes he'll go hog wild at a party and totally pig out. But he's usually such a boar.\" —Fear Fang",
+    "abilities": {
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -695,7 +763,13 @@
     "id": "53/55",
     "rarity": "Rare",
     "illustrator": "Hikaru Ikusa",
-    "flavor": "Does it harness the power of the stars? Does it prefer the cover of night? Or does it just get sunburned really easily?"
+    "flavor": "Does it harness the power of the stars? Does it prefer the cover of night? Or does it just get sunburned really easily?",
+    "abilities": {
+      "cantAttack": true,
+      "tripleBreaker": true,
+      "cantAttackCreatures": true,
+      "powerAttacker": 7000
+    }
   },
   {
     "civilizations": [
@@ -713,7 +787,11 @@
     "set_id": "dm-05",
     "id": "5/55",
     "rarity": "Very Rare",
-    "illustrator": "Masaki Hirooka"
+    "illustrator": "Masaki Hirooka",
+    "abilities": {
+      "doubleBreaker": true,
+      "powerAttacker": 3000
+    }
   },
   {
     "civilizations": [
@@ -751,7 +829,10 @@
     "id": "43/55",
     "rarity": "Common",
     "illustrator": "Syuichi Obata",
-    "flavor": "\"I'll have that ripped apart in no time!\""
+    "flavor": "\"I'll have that ripped apart in no time!\"",
+    "abilities": {
+      "speedAttacker": true
+    }
   },
   {
     "civilizations": [
@@ -770,7 +851,10 @@
     "id": "44/55",
     "rarity": "Common",
     "illustrator": "Yoko Tsukamoto",
-    "flavor": "\"If you don't kneel before my wrath, you'll certainly kneel after it.\""
+    "flavor": "\"If you don't kneel before my wrath, you'll certainly kneel after it.\"",
+    "abilities": {
+      "cantAttackPlayers": true
+    }
   },
   {
     "civilizations": [
@@ -822,7 +906,11 @@
     "id": "21/55",
     "rarity": "Rare",
     "illustrator": "Naoki Saito",
-    "flavor": "The Cyber Lords have high standards of beauty for their creations. They have even higher standards of ugliness."
+    "flavor": "The Cyber Lords have high standards of beauty for their creations. They have even higher standards of ugliness.",
+    "abilities": {
+      "cantBeBlocked": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -914,7 +1002,11 @@
     "set_id": "dm-05",
     "id": "13/55",
     "rarity": "Rare",
-    "illustrator": "Dustmoss"
+    "illustrator": "Dustmoss",
+    "abilities": {
+      "cantAttackPlayers": true,
+      "blocker": true
+    }
   },
   {
     "civilizations": [
@@ -953,7 +1045,10 @@
     "id": "23/55",
     "rarity": "Common",
     "illustrator": "Shishizaru",
-    "flavor": "\"If the Megapocalypse couldn't stop me, what makes you think you can?\""
+    "flavor": "\"If the Megapocalypse couldn't stop me, what makes you think you can?\"",
+    "abilities": {
+      "cantBeBlocked": true
+    }
   },
   {
     "civilizations": [
@@ -1010,7 +1105,11 @@
     "set_id": "dm-05",
     "id": "14/55",
     "rarity": "Rare",
-    "illustrator": "Shishizaru"
+    "illustrator": "Shishizaru",
+    "abilities": {
+      "blocker": true,
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -1029,7 +1128,11 @@
     "id": "S1/55",
     "rarity": "Super Rare",
     "illustrator": "Ryoya Yuki",
-    "flavor": "\"The Megapocalypse is over. But the damage has just begun.\""
+    "flavor": "\"The Megapocalypse is over. But the damage has just begun.\"",
+    "abilities": {
+      "blocker": true,
+      "tripleBreaker": true
+    }
   },
   {
     "civilizations": [
@@ -1063,7 +1166,11 @@
     "id": "45/55",
     "rarity": "Rare",
     "illustrator": "Hideaki Takamura",
-    "flavor": "The first cannon blasts your flesh. The second cannon blasts your soul."
+    "flavor": "The first cannon blasts your flesh. The second cannon blasts your soul.",
+    "abilities": {
+      "doubleBreaker": true,
+      "speedAttacker": true
+    }
   },
   {
     "civilizations": [
@@ -1082,7 +1189,11 @@
     "id": "34/55",
     "rarity": "Rare",
     "illustrator": "Jason",
-    "flavor": "\"Now, you shall see the ancient secrets of the East!\""
+    "flavor": "\"Now, you shall see the ancient secrets of the East!\"",
+    "abilities": {
+      "cantAttack": true,
+      "doubleBreaker": true
+    }
   },
   {
     "civilizations": [
